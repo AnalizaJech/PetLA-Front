@@ -589,6 +589,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
     localStorage.setItem("newsletterEmails", JSON.stringify(newsletterEmails));
   }, [newsletterEmails]);
 
+  useEffect(() => {
+    localStorage.setItem("notificaciones", JSON.stringify(notificaciones));
+  }, [notificaciones]);
+
   // Authentication functions
   const setUser = (newUser: Usuario | null) => {
     setUserState(newUser);
