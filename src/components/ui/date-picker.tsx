@@ -315,7 +315,7 @@ export function DatePicker({
         maxDate={maxDate}
         placeholderText={placeholder}
         disabled={disabled}
-        popperClassName="z-50"
+        popperClassName="z-[9999]"
         popperPlacement="auto"
         calendarClassName="modern-calendar"
         wrapperClassName="w-full"
