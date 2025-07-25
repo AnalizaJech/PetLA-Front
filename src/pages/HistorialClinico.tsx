@@ -204,12 +204,7 @@ export default function HistorialClinico() {
         })
       : mascotas.filter((mascota) => mascota.clienteId === user?.id);
 
-  // Establecer la primera mascota disponible como seleccionada por defecto
-  useEffect(() => {
-    if (availableMascotas.length > 0 && !selectedMascota) {
-      setSelectedMascota(availableMascotas[0].nombre);
-    }
-  }, [availableMascotas, selectedMascota]);
+
 
   // Obtener historial real basado en citas completadas
   const getHistorialReal = (nombreMascota) => {
@@ -411,7 +406,7 @@ export default function HistorialClinico() {
                 </h3>
                 <p className="text-vet-gray-600 mb-6">
                   {user?.rol === "veterinario"
-                    ? "No hay mascotas con citas asignadas a ti. Los historiales aparecerán cuando atiendas consultas."
+                    ? "No hay mascotas con citas asignadas a ti. Los historiales aparecer��n cuando atiendas consultas."
                     : "Primero debes registrar tus mascotas y agendar citas médicas para ver su historial clínico."
                   }
                 </p>
