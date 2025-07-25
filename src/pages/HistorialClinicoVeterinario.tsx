@@ -198,7 +198,7 @@ export default function HistorialClinicoVeterinario() {
           records = records.filter(
             (r) =>
               r.tipoConsulta === "consulta_general" ||
-              r.tipoConsulta === "control" ||
+              r.tipoConsulta === "grooming" ||
               r.tipoConsulta === "emergencia",
           );
           break;
