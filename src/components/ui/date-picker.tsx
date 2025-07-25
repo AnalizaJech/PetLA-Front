@@ -272,12 +272,21 @@ export function DatePicker({
         /* Posicionamiento mejorado */
         .react-datepicker-popper {
           z-index: 9999 !important;
-          position: fixed !important;
+          position: absolute !important;
         }
 
         .react-datepicker-wrapper {
           display: block;
           width: 100%;
+        }
+
+        /* Evitar que el calendario se salga del viewport */
+        .react-datepicker-popper[data-placement^="bottom"] {
+          transform: translateY(8px) !important;
+        }
+
+        .react-datepicker-popper[data-placement^="top"] {
+          transform: translateY(-8px) !important;
         }
 
         /* ANIMACIONES Y TRANSICIONES */
