@@ -330,10 +330,10 @@ export default function NuevaCita() {
         "¡Cita agendada exitosamente! Ahora debes realizar el pago o subir tu comprobante de pago (YAPE, PLIN, Banca Móvil BCP, Interbank u otro banco) en la sección 'Mis Citas'."
       );
 
-      // Redirect after success
+      // Redirect after success (longer delay to read payment instructions)
       setTimeout(() => {
         navigate("/mis-citas");
-      }, 2000);
+      }, 4000);
     } catch (error) {
       setError("Error al agendar la cita");
     } finally {
