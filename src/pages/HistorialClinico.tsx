@@ -166,7 +166,7 @@ const getMascotasNames = (mascotasList) => mascotasList.map((m) => m.nombre);
 
 export default function HistorialClinico() {
   const { user, mascotas, usuarios, citas } = useAppContext();
-  const [selectedMascota, setSelectedMascota] = useState("Max");
+  const [selectedMascota, setSelectedMascota] = useState("");
   const [selectedTab, setSelectedTab] = useState("consultas");
 
   useEffect(() => {
@@ -186,7 +186,43 @@ export default function HistorialClinico() {
         })
       : mascotas.filter((mascota) => mascota.clienteId === user?.id);
 
-  const historialMascota = mockHistorial[selectedMascota] || {
+  // Establecer la primera mascota disponible como seleccionada por defecto
+  useEffect(() => {
+    if (availableMascotas.length > 0 && !selectedMascota) {
+      setSelectedMascota(availableMascotas[0].nombre);
+    }
+  }, [availableMascotas, selectedMascota]);
+
+  // Obtener historial real basado en citas completadas
+  const getHistorialReal = (nombreMascota) => {
+    const citasCompletadas = citas.filter(
+      (cita) =>
+        cita.mascota === nombreMascota &&
+        cita.estado === "Completada" &&
+        cita.consulta // Solo citas que tienen información de consulta registrada
+    );
+
+    const consultas = citasCompletadas.map((cita) => ({
+      id: cita.id,
+      fecha: new Date(cita.fecha),
+      veterinario: cita.veterinario,
+      motivo: cita.motivo || "Consulta general",
+      diagnostico: cita.consulta?.diagnostico || "Sin diagnóstico registrado",
+      tratamiento: cita.consulta?.tratamiento || "Sin tratamiento registrado",
+      medicamentos: cita.consulta?.medicamentos || [],
+      proxima_cita: cita.consulta?.proximaCita ? new Date(cita.consulta.proximaCita) : null,
+      notas: cita.consulta?.notas || "",
+    }));
+
+    // Por ahora, vacunas y exámenes estarán vacíos hasta que se implementen
+    return {
+      consultas,
+      vacunas: [],
+      examenes: [],
+    };
+  };
+
+  const historialMascota = selectedMascota ? getHistorialReal(selectedMascota) : {
     consultas: [],
     vacunas: [],
     examenes: [],
