@@ -539,17 +539,29 @@ export default function NuevaCita() {
                         }
                       >
                         <CardContent className="p-6">
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <h4 className="font-semibold text-vet-gray-900 mb-2">
-                                {tipo.nombre}
-                              </h4>
-                              <Badge className="bg-vet-primary/10 text-vet-primary">
-                                S/. {tipo.precio.toLocaleString()}
-                              </Badge>
+                          <div className="flex items-start justify-between mb-4">
+                            <div className="flex items-start space-x-4">
+                              <div className={`p-3 rounded-xl ${
+                                citaData.tipoConsulta === tipo.id
+                                  ? "bg-vet-primary text-white"
+                                  : "bg-vet-primary/10 text-vet-primary"
+                              }`}>
+                                {getServiceIcon(tipo.icono)}
+                              </div>
+                              <div className="flex-1">
+                                <h4 className="font-semibold text-vet-gray-900 mb-2">
+                                  {tipo.nombre}
+                                </h4>
+                                <p className="text-sm text-vet-gray-600 mb-3 leading-relaxed">
+                                  {tipo.descripcion}
+                                </p>
+                                <Badge className="bg-vet-primary/10 text-vet-primary font-semibold">
+                                  S/. {tipo.precio.toLocaleString()}
+                                </Badge>
+                              </div>
                             </div>
                             {citaData.tipoConsulta === tipo.id && (
-                              <CheckCircle className="w-6 h-6 text-vet-primary" />
+                              <CheckCircle className="w-6 h-6 text-vet-primary flex-shrink-0" />
                             )}
                           </div>
                         </CardContent>
