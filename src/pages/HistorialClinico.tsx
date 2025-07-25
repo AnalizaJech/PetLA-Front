@@ -1024,13 +1024,7 @@ export default function HistorialClinico() {
                               <span>{consulta.motivo}</span>
                             </CardTitle>
                             <CardDescription>
-                              {consulta.fecha.toLocaleDateString("es-ES", {
-                                weekday: "long",
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
-                              })}{" "}
-                              ��� {consulta.veterinario}
+                              {formatDateSafe(consulta.fecha, { weekday: "long" })} • {consulta.veterinario}
                             </CardDescription>
                           </div>
                           <Badge className="bg-vet-primary/10 text-vet-primary">
@@ -1120,7 +1114,7 @@ export default function HistorialClinico() {
                                         </span>
                                       </div>
                                       <p className="text-sm text-vet-gray-600">
-                                        {med.dosis} • {med.duracion}
+                                        {med.dosis} �� {med.duracion}
                                       </p>
                                     </div>
                                   ))}
