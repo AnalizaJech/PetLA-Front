@@ -173,6 +173,19 @@ export default function HistorialClinico() {
     window.scrollTo(0, 0);
   }, []);
 
+  // Filtrar mascotas según el rol
+  const availableMascotas =
+    user?.rol === "veterinario"
+      ? mascotas.filter((mascota) => {
+          // Para veterinarios: mostrar mascotas que tienen citas con este veterinario
+          return citas.some(
+            (cita) =>
+              cita.mascota === mascota.nombre &&
+              cita.veterinario === user.nombre,
+          );
+        })
+      : mascotas.filter((mascota) => mascota.clienteId === user?.id);
+
   // Manejar parámetros URL cuando cambien las mascotas disponibles
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -195,19 +208,6 @@ export default function HistorialClinico() {
       }
     }
   }, [availableMascotas]);
-
-  // Filtrar mascotas según el rol
-  const availableMascotas =
-    user?.rol === "veterinario"
-      ? mascotas.filter((mascota) => {
-          // Para veterinarios: mostrar mascotas que tienen citas con este veterinario
-          return citas.some(
-            (cita) =>
-              cita.mascota === mascota.nombre &&
-              cita.veterinario === user.nombre,
-          );
-        })
-      : mascotas.filter((mascota) => mascota.clienteId === user?.id);
 
 
 
@@ -246,7 +246,7 @@ export default function HistorialClinico() {
     examenes: [],
   };
 
-  // Función para descargar el historial clínico en formato texto
+  // Funci��n para descargar el historial clínico en formato texto
   const descargarHistorial = () => {
     if (!selectedMascota) return;
 
