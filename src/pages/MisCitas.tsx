@@ -502,6 +502,17 @@ export default function MisCitas() {
                                       : "Subir Comprobante"}
                                   </Button>
                                 )}
+                                {(cita.estado === "en_validacion" || cita.estado === "aceptada") && cita.comprobantePago && (
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => handleViewReceipt(cita.id)}
+                                    className="border-vet-primary text-vet-primary hover:bg-vet-primary/10"
+                                  >
+                                    <Eye className="w-4 h-4 mr-2" />
+                                    Ver Comprobante
+                                  </Button>
+                                )}
                                 {cita.estado === "rechazada" && (
                                   <Button
                                     size="sm"
