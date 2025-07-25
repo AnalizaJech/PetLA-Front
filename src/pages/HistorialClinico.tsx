@@ -272,24 +272,26 @@ export default function HistorialClinico() {
               </div>
             </div>
 
-            {/* Selector de mascota */}
-            <div className="flex flex-wrap gap-2 mb-6">
-              {getMascotasNames(availableMascotas).map((mascota) => (
-                <Button
-                  key={mascota}
-                  variant={selectedMascota === mascota ? "default" : "outline"}
-                  onClick={() => setSelectedMascota(mascota)}
-                  className={
-                    selectedMascota === mascota
-                      ? "bg-vet-primary hover:bg-vet-primary-dark"
-                      : ""
-                  }
-                >
-                  <PawPrint className="w-4 h-4 mr-2" />
-                  {mascota}
-                </Button>
-              ))}
-            </div>
+            {/* Selector de mascota - solo mostrar si hay mascotas disponibles */}
+            {availableMascotas.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-6">
+                {getMascotasNames(availableMascotas).map((mascota) => (
+                  <Button
+                    key={mascota}
+                    variant={selectedMascota === mascota ? "default" : "outline"}
+                    onClick={() => setSelectedMascota(mascota)}
+                    className={
+                      selectedMascota === mascota
+                        ? "bg-vet-primary hover:bg-vet-primary-dark"
+                        : ""
+                    }
+                  >
+                    <PawPrint className="w-4 h-4 mr-2" />
+                    {mascota}
+                  </Button>
+                ))}
+              </div>
+            )}
           </div>
 
           <Tabs
