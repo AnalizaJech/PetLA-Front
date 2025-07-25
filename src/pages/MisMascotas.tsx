@@ -403,6 +403,7 @@ export default function MisMascotas() {
                           placeholder="Selecciona fecha"
                           fromYear={1990}
                           toYear={new Date().getFullYear()}
+                          maxDate={new Date()}
                         />
                       </div>
 
