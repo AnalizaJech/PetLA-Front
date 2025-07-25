@@ -64,7 +64,7 @@ const estadoLabels = {
 
 export default function MisCitas() {
   const navigate = useNavigate();
-  const { user, citas, usuarios, mascotas, updateCita, deleteCita } =
+  const { user, citas, usuarios, mascotas, updateCita, deleteCita, saveComprobante, getComprobante } =
     useAppContext();
   const [selectedTab, setSelectedTab] = useState("todas");
   const [uploadingCitaId, setUploadingCitaId] = useState<string | null>(null);
