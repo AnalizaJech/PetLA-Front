@@ -146,6 +146,9 @@ export default function Layout({
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
+  // Hook para mostrar notificaciones toast automáticamente
+  useNotificationToast();
+
   // Use prop user if provided, otherwise use context user
   const user = userProp || contextUser;
 
