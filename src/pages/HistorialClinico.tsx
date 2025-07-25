@@ -273,10 +273,12 @@ export default function HistorialClinico() {
           lote: `LOT-${cita.id}`, // Generar número de lote basado en ID
           proxima: getProximaVacuna(cita.fecha),
         });
-      } else if (tipoConsulta.toLowerCase().includes('examen') ||
-                 tipoConsulta.toLowerCase().includes('laboratorio') ||
-                 tipoConsulta.toLowerCase().includes('radiograf') ||
-                 tipoConsulta.toLowerCase().includes('analisis')) {
+      } else if (textoAnalisis.includes('examen') ||
+                 textoAnalisis.includes('laboratorio') ||
+                 textoAnalisis.includes('radiograf') ||
+                 textoAnalisis.includes('analisis') ||
+                 textoAnalisis.includes('sangre') ||
+                 textoAnalisis.includes('orina')) {
         examenes.push({
           ...baseRecord,
           tipo: tipoConsulta,
