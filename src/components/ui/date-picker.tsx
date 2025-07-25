@@ -76,36 +76,80 @@ export function DatePicker({
           toYear={toYear}
           captionLayout="dropdown-buttons"
           showOutsideDays={false}
+          fixedWeeks={true}
           className="p-3"
-          classNames={{
-            months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
-            month: "space-y-4",
-            caption: "flex justify-center pt-1 relative items-center",
-            caption_label: "text-sm font-medium",
-            nav: "space-x-1 flex items-center",
-            nav_button: "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100 inline-flex items-center justify-center rounded-md border border-input bg-background text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
-            nav_button_previous: "absolute left-1",
-            nav_button_next: "absolute right-1",
-            table: "w-full border-collapse space-y-1",
-            head_row: "flex",
-            head_cell: "text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]",
-            row: "flex w-full mt-2",
-            cell: "h-9 w-9 text-center text-sm p-0 relative focus-within:relative focus-within:z-20",
-            day: "h-9 w-9 p-0 font-normal aria-selected:opacity-100 inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
-            day_selected: "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
-            day_today: "bg-accent text-accent-foreground",
-            day_outside: "text-muted-foreground opacity-50",
-            day_disabled: "text-muted-foreground opacity-50",
-            day_hidden: "invisible",
+          styles={{
+            caption: { display: 'flex', justifyContent: 'center', padding: '0.5rem 0', position: 'relative' },
+            nav: { display: 'flex', gap: '0.25rem' },
+            nav_button: {
+              position: 'absolute',
+              height: '1.75rem',
+              width: '1.75rem',
+              background: 'transparent',
+              opacity: 0.5,
+              border: '1px solid hsl(var(--border))',
+              borderRadius: '0.375rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            },
+            nav_button_previous: { left: '0.25rem' },
+            nav_button_next: { right: '0.25rem' },
+            table: { width: '100%', borderCollapse: 'collapse' },
+            head_row: { display: 'flex' },
+            head_cell: {
+              color: 'hsl(var(--muted-foreground))',
+              borderRadius: '0.375rem',
+              width: '2.25rem',
+              fontWeight: 'normal',
+              fontSize: '0.8rem'
+            },
+            row: { display: 'flex', width: '100%', marginTop: '0.5rem' },
+            cell: {
+              height: '2.25rem',
+              width: '2.25rem',
+              textAlign: 'center',
+              fontSize: '0.875rem',
+              position: 'relative'
+            },
+            day: {
+              height: '2.25rem',
+              width: '2.25rem',
+              fontWeight: 'normal',
+              border: 'none',
+              background: 'transparent',
+              borderRadius: '0.375rem',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            },
+            day_selected: {
+              backgroundColor: 'hsl(var(--primary))',
+              color: 'hsl(var(--primary-foreground))'
+            },
+            day_today: {
+              backgroundColor: 'hsl(var(--accent))',
+              color: 'hsl(var(--accent-foreground))'
+            },
+            day_outside: {
+              color: 'hsl(var(--muted-foreground))',
+              opacity: 0.5
+            },
+            day_disabled: {
+              color: 'hsl(var(--muted-foreground))',
+              opacity: 0.5,
+              cursor: 'not-allowed'
+            }
           }}
           components={{
-            IconLeft: ({ ...props }) => (
-              <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+            IconLeft: () => (
+              <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="m8.842 3.135.308.308-3.233 3.232 3.233 3.232-.308.308-3.54-3.54 3.54-3.54Z" fill="currentColor" fillRule="evenodd" clipRule="evenodd"></path>
               </svg>
             ),
-            IconRight: ({ ...props }) => (
-              <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+            IconRight: () => (
+              <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="m6.158 3.135 3.54 3.54-3.54 3.54-.308-.308 3.233-3.232-3.233-3.232.308-.308Z" fill="currentColor" fillRule="evenodd" clipRule="evenodd"></path>
               </svg>
             ),
