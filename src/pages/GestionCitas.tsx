@@ -1099,7 +1099,15 @@ export default function GestionCitas() {
       />
 
       {/* Voucher Preview Modal */}
-      <Dialog open={showVoucherModal} onOpenChange={setShowVoucherModal}>
+      <Dialog
+        open={showVoucherModal}
+        onOpenChange={(open) => {
+          setShowVoucherModal(open);
+          if (!open) {
+            setCurrentReceiptData(null);
+          }
+        }}
+      >
         <DialogContent className="w-full max-w-3xl max-h-[90vh]">
           <div className="max-h-[calc(90vh-8rem)] overflow-y-auto scrollbar-hide">
             <DialogHeader className="pb-4 border-b border-vet-gray-200">
