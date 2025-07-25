@@ -361,16 +361,18 @@ export default function HistorialClinico() {
   };
 
   const getTratamientoDefecto = (tipoConsulta, estado) => {
-    if (estado === "pendiente_pago") return "Tratamiento será definido tras confirmación";
-    if (estado === "aceptada") return "Plan de tratamiento será establecido durante la consulta";
+    if (estado === "pendiente_pago") return "Tratamiento será aplicado tras confirmación de pago";
+    if (estado === "aceptada") return "Tratamiento programado según servicio seleccionado";
 
     const tipo = tipoConsulta.toLowerCase();
-    if (tipo.includes('general')) return "Mantenimiento preventivo y cuidados generales";
-    if (tipo.includes('dental')) return "Limpieza dental y cuidados bucales";
-    if (tipo.includes('dermatolog')) return "Tratamiento dermatológico específico";
-    if (tipo.includes('cirug')) return "Procedimiento quirúrgico con cuidados post-operatorios";
-    if (tipo.includes('emergencia')) return "Tratamiento de emergencia aplicado";
-    return "Tratamiento especializado según protocolo veterinario";
+    // Tratamientos según los 6 servicios oficiales
+    if (tipo.includes('consulta general')) return "Revisión médica general, peso, temperatura y cuidados preventivos";
+    if (tipo.includes('vacunación') || tipo.includes('vacunacion')) return "Aplicación de vacuna según calendario de inmunización";
+    if (tipo.includes('emergencia')) return "Tratamiento de emergencia inmediato - Estabilización y cuidados críticos";
+    if (tipo.includes('grooming')) return "Baño completo, corte de pelo, limpieza de oídos y corte de uñas";
+    if (tipo.includes('cirugía') || tipo.includes('cirugia')) return "Procedimiento quirúrgico especializado con anestesia y cuidados post-operatorios";
+    if (tipo.includes('diagnóstico') || tipo.includes('diagnostico')) return "Exámenes de laboratorio y estudios diagnósticos especializados";
+    return "Tratamiento veterinario aplicado según protocolo del servicio";
   };
 
   const getNotasDefecto = (tipoConsulta, estado) => {
