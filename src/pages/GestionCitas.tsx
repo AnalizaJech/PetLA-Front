@@ -88,6 +88,7 @@ export default function GestionCitas() {
   const [voucherModalMode, setVoucherModalMode] = useState<"view" | "validate">(
     "view",
   );
+  const [currentReceiptData, setCurrentReceiptData] = useState<any>(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
