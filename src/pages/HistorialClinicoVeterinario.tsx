@@ -62,7 +62,6 @@ import {
   MapPin,
   Weight,
   Thermometer,
-  Heart,
   Plus,
   ChevronRight,
   Info,
