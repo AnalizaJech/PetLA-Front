@@ -372,6 +372,46 @@ export default function HistorialClinico() {
       contenido += `No hay consultas registradas.\n\n`;
     }
 
+    // VACUNAS
+    if (historialMascota.vacunas.length > 0) {
+      contenido += `VACUNAS\n`;
+      contenido += `-`.repeat(30) + `\n`;
+      historialMascota.vacunas.forEach((vacuna, index) => {
+        contenido += `\nVacuna #${index + 1}\n`;
+        contenido += `Fecha: ${vacuna.fecha.toLocaleDateString("es-ES")}\n`;
+        contenido += `Veterinario: ${vacuna.veterinario}\n`;
+        contenido += `Tipo: ${vacuna.nombre}\n`;
+        contenido += `Lote: ${vacuna.lote}\n`;
+        if (vacuna.proxima) {
+          contenido += `Próxima dosis: ${vacuna.proxima.toLocaleDateString("es-ES")}\n`;
+        }
+        contenido += `\n${"·".repeat(40)}\n`;
+      });
+    } else {
+      contenido += `VACUNAS\n`;
+      contenido += `-`.repeat(30) + `\n`;
+      contenido += `No hay vacunas registradas.\n\n`;
+    }
+
+    // EXÁMENES
+    if (historialMascota.examenes.length > 0) {
+      contenido += `EXÁMENES Y LABORATORIOS\n`;
+      contenido += `-`.repeat(30) + `\n`;
+      historialMascota.examenes.forEach((examen, index) => {
+        contenido += `\nExamen #${index + 1}\n`;
+        contenido += `Fecha: ${examen.fecha.toLocaleDateString("es-ES")}\n`;
+        contenido += `Veterinario: ${examen.veterinario}\n`;
+        contenido += `Tipo: ${examen.tipo}\n`;
+        contenido += `Resultados: ${examen.resultados}\n`;
+        contenido += `Archivo: ${examen.archivo}\n`;
+        contenido += `\n${"·".repeat(40)}\n`;
+      });
+    } else {
+      contenido += `EXÁMENES Y LABORATORIOS\n`;
+      contenido += `-`.repeat(30) + `\n`;
+      contenido += `No hay exámenes registrados.\n\n`;
+    }
+
     contenido += `\nDOCUMENTO GENERADO\n`;
     contenido += `-`.repeat(30) + `\n`;
     contenido += `Fecha: ${new Date().toLocaleDateString("es-ES")} ${new Date().toLocaleTimeString("es-ES")}\n`;
