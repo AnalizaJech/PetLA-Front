@@ -222,21 +222,15 @@ export function DatePicker({
           height: 12px;
         }
 
-        /* DROPDOWNS MEJORADOS */
         .react-datepicker__year-dropdown,
         .react-datepicker__month-dropdown {
           background: hsl(var(--background));
-          border: none;
-          border-radius: 0.75rem;
+          border: 1px solid hsl(var(--border));
+          border-radius: 0.5rem;
           color: hsl(var(--foreground));
-          box-shadow:
-            0 20px 25px -5px rgb(0 0 0 / 0.25),
-            0 0 0 1px hsl(var(--border)),
-            0 0 0 1px rgb(255 255 255 / 0.05) inset;
-          max-height: 240px;
-          overflow: hidden;
-          backdrop-filter: blur(12px);
-          margin-top: 0.5rem;
+          box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+          max-height: 200px;
+          overflow-y: auto;
         }
 
         .react-datepicker__year-dropdown-container--scrollable,
