@@ -14,6 +14,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { DatePicker } from "@/components/ui/date-picker";
 import Layout from "@/components/Layout";
 import FeaturesCarousel from "@/components/FeaturesCarousel";
 import NewsletterSection from "@/components/NewsletterSection";
@@ -547,68 +549,55 @@ export default function Index() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
                   <Label htmlFor="tipoMascota">Tipo de mascota *</Label>
-                  <select
-                    id="tipoMascota"
-                    name="tipoMascota"
-                    value={formData.tipoMascota}
-                    onChange={handleInputChange}
-                    required
-                    className="mt-1 w-full px-3 py-2 border border-vet-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-vet-primary focus:border-transparent"
-                  >
-                    <option value="perro">Perro</option>
-                    <option value="gato">Gato</option>
-                    <option value="ave">Ave</option>
-                    <option value="roedor">Roedor</option>
-                    <option value="reptil">Reptil</option>
-                    <option value="otro">Otro</option>
-                  </select>
+                  <Select value={formData.tipoMascota} onValueChange={(value) => setFormData({...formData, tipoMascota: value})} required>
+                    <SelectTrigger className="mt-1 w-full h-10">
+                      <SelectValue placeholder="Selecciona tipo de mascota" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="perro">Perro</SelectItem>
+                      <SelectItem value="gato">Gato</SelectItem>
+                      <SelectItem value="ave">Ave</SelectItem>
+                      <SelectItem value="roedor">Roedor</SelectItem>
+                      <SelectItem value="reptil">Reptil</SelectItem>
+                      <SelectItem value="otro">Otro</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div>
                   <Label htmlFor="fechaPreferida">Fecha preferida *</Label>
-                  <div className="relative mt-1">
-                    <Input
-                      id="fechaPreferida"
-                      name="fechaPreferida"
-                      type="date"
-                      value={formData.fechaPreferida}
-                      onChange={handleInputChange}
+                  <div className="mt-1">
+                    <DatePicker
+                      selected={formData.fechaPreferida ? new Date(formData.fechaPreferida) : null}
+                      onChange={(date) => {
+                        setFormData({
+                          ...formData,
+                          fechaPreferida: date ? date.toISOString().split('T')[0] : ''
+                        });
+                      }}
+                      minDate={new Date()}
+                      placeholderText="Selecciona una fecha"
+                      className="w-full h-10"
                       required
-                      className="w-full pl-10 pr-4 py-2 border border-vet-gray-300 rounded-lg focus:ring-2 focus:ring-vet-primary focus:border-vet-primary transition-all duration-200"
-                      min={new Date().toISOString().split("T")[0]}
                     />
-                    <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-vet-gray-400 pointer-events-none" />
                   </div>
-                  <p className="text-xs text-vet-gray-500 mt-1">
-                    Selecciona tu fecha preferida para la consulta
-                  </p>
                 </div>
                 <div>
                   <Label htmlFor="horaPreferida">Hora preferida *</Label>
-                  <div className="relative mt-1">
-                    <select
-                      id="horaPreferida"
-                      name="horaPreferida"
-                      value={formData.horaPreferida}
-                      onChange={handleInputChange}
-                      required
-                      className="w-full pl-10 pr-8 py-2 border border-vet-gray-300 rounded-lg focus:ring-2 focus:ring-vet-primary focus:border-vet-primary transition-all duration-200 appearance-none bg-white"
-                    >
-                      <option value="">Selecciona una hora</option>
-                      <option value="09:00">🌅 9:00 AM - Temprano</option>
-                      <option value="10:00">☀️ 10:00 AM - Mañana</option>
-                      <option value="11:00">☀️ 11:00 AM - Media Mañana</option>
-                      <option value="12:00">🌞 12:00 PM - Mediodía</option>
-                      <option value="14:00">🌞 2:00 PM - Tarde</option>
-                      <option value="15:00">🌤️ 3:00 PM - Media Tarde</option>
-                      <option value="16:00">🌤️ 4:00 PM - Tarde</option>
-                      <option value="17:00">🌆 5:00 PM - Final del Día</option>
-                    </select>
-                    <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-vet-gray-400 pointer-events-none" />
-                    <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-vet-gray-400 pointer-events-none" />
-                  </div>
-                  <p className="text-xs text-vet-gray-500 mt-1">
-                    Elige el horario que mejor se adapte a ti
-                  </p>
+                  <Select value={formData.horaPreferida} onValueChange={(value) => setFormData({...formData, horaPreferida: value})} required>
+                    <SelectTrigger className="mt-1 w-full h-10">
+                      <SelectValue placeholder="Selecciona una hora" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="09:00">🌅 9:00 AM - Temprano</SelectItem>
+                      <SelectItem value="10:00">☀️ 10:00 AM - Mañana</SelectItem>
+                      <SelectItem value="11:00">☀️ 11:00 AM - Media Mañana</SelectItem>
+                      <SelectItem value="12:00">🌞 12:00 PM - Mediodía</SelectItem>
+                      <SelectItem value="14:00">🌞 2:00 PM - Tarde</SelectItem>
+                      <SelectItem value="15:00">🌤️ 3:00 PM - Media Tarde</SelectItem>
+                      <SelectItem value="16:00">🌤️ 4:00 PM - Tarde</SelectItem>
+                      <SelectItem value="17:00">🌆 5:00 PM - Final del Día</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
 
