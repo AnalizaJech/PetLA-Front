@@ -304,7 +304,7 @@ export function DatePicker({
         showYearDropdown
         showMonthDropdown
         dropdownMode="select"
-        yearDropdownItemNumber={50}
+        yearDropdownItemNumber={60}
         scrollableYearDropdown
         minDate={new Date("1900-01-01")}
         maxDate={new Date()}
@@ -312,6 +312,12 @@ export function DatePicker({
         disabled={disabled}
         popperClassName="z-50"
         popperPlacement="bottom-start"
+        calendarClassName="modern-calendar"
+        wrapperClassName="w-full"
+        showPopperArrow={false}
+        fixedHeight
+        todayButton="Hoy"
+        clearButtonTitle="Limpiar"
       />
     </>
   );
