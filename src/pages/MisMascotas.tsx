@@ -385,7 +385,7 @@ export default function MisMascotas() {
                         />
                       </div>
 
-                      <div className="space-y-2">
+                      <div className="space-y-2 sm:col-span-2">
                         <Label htmlFor="fechaNacimiento">
                           Fecha de nacimiento
                         </Label>
@@ -397,10 +397,10 @@ export default function MisMascotas() {
                               fechaNacimiento: date,
                             })
                           }
-                          placeholder="Selecciona la fecha de nacimiento"
+                          placeholder="Selecciona fecha"
                           fromYear={1990}
                           toYear={new Date().getFullYear()}
-                          className="w-full"
+                          className="w-full max-w-xs"
                         />
                       </div>
 
