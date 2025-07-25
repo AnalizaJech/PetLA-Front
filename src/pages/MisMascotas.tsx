@@ -126,7 +126,7 @@ export default function MisMascotas() {
       nombre: mascota.nombre,
       especie: mascota.especie,
       raza: mascota.raza,
-      fechaNacimiento: mascota.fechaNacimiento.toISOString().split("T")[0],
+      fechaNacimiento: new Date(mascota.fechaNacimiento),
       peso: cleanPeso,
       sexo: mascota.sexo,
       microchip: mascota.microchip,
