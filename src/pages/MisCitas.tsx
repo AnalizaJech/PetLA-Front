@@ -373,7 +373,7 @@ export default function MisCitas() {
                               </Badge>
                             </div>
                             <p className="text-sm text-vet-gray-600 mb-1">
-                              {cita.motivo} • {cita.veterinario}
+                              <span className="font-medium text-vet-primary">{cita.tipoConsulta}</span> • {cita.motivo} • {cita.veterinario}
                             </p>
                             <div className="flex items-center space-x-4 text-sm text-vet-gray-500">
                               <div className="flex items-center space-x-1">
