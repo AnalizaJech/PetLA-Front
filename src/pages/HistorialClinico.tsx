@@ -309,22 +309,36 @@ export default function HistorialClinico() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="mb-6 sm:mb-8">
-            <div className="flex items-center space-x-3 sm:space-x-4 mb-6">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-vet-primary/10 rounded-xl flex items-center justify-center">
-                <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-vet-primary" />
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0 mb-6">
+              <div className="flex items-center space-x-3 sm:space-x-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-vet-primary/10 rounded-xl flex items-center justify-center">
+                  <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-vet-primary" />
+                </div>
+                <div>
+                  <h1 className="text-2xl sm:text-3xl font-bold text-vet-gray-900">
+                    {user?.rol === "veterinario"
+                      ? "Historial de Pacientes"
+                      : "Historial Clínico"}
+                  </h1>
+                  <p className="text-sm sm:text-base text-vet-gray-600">
+                    {user?.rol === "veterinario"
+                      ? "Consulta y gestiona el historial médico de tus pacientes"
+                      : "Consulta el historial médico completo de tus mascotas"}
+                  </p>
+                </div>
               </div>
-              <div>
-                <h1 className="text-2xl sm:text-3xl font-bold text-vet-gray-900">
-                  {user?.rol === "veterinario"
-                    ? "Historial de Pacientes"
-                    : "Historial Clínico"}
-                </h1>
-                <p className="text-sm sm:text-base text-vet-gray-600">
-                  {user?.rol === "veterinario"
-                    ? "Consulta y gestiona el historial médico de tus pacientes"
-                    : "Consulta el historial médico completo de tus mascotas"}
-                </p>
-              </div>
+
+              {/* Botón de descarga - solo mostrar si hay mascota seleccionada */}
+              {selectedMascota && (
+                <Button
+                  onClick={descargarHistorial}
+                  variant="outline"
+                  className="border-vet-primary text-vet-primary hover:bg-vet-primary hover:text-white"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Descargar Historial
+                </Button>
+              )}
             </div>
 
             {/* Selector de mascota - solo mostrar si hay mascotas disponibles */}
