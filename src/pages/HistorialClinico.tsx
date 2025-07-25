@@ -261,24 +261,25 @@ export default function HistorialClinico() {
         estado: cita.estado,
       };
 
-      // Clasificar por tipo de servicio basado en tipoConsulta O motivo
-      const textoAnalisis = `${tipoConsulta} ${cita.motivo || ''}`.toLowerCase();
+      // Clasificar por tipo de servicio usando los 6 servicios oficiales de la veterinaria
+      const tipoId = cita.tipoConsulta?.toLowerCase() || '';
+      const serviceName = tipoConsulta;
 
-      if (textoAnalisis.includes('vacun') ||
-          textoAnalisis.includes('inmuniz') ||
-          textoAnalisis.includes('vacuna')) {
+      // 1. VACUNACIÓN - Servicio oficial de la veterinaria
+      if (tipoId === 'vacunación' ||
+          tipoId === 'vacunacion' ||
+          serviceName.toLowerCase().includes('vacun')) {
         vacunas.push({
           ...baseRecord,
-          nombre: tipoConsulta,
-          lote: `LOT-${cita.id}`, // Generar número de lote basado en ID
+          nombre: serviceName,
+          lote: `LOT-${cita.id}`,
           proxima: getProximaVacuna(cita.fecha),
         });
-      } else if (textoAnalisis.includes('examen') ||
-                 textoAnalisis.includes('laboratorio') ||
-                 textoAnalisis.includes('radiograf') ||
-                 textoAnalisis.includes('analisis') ||
-                 textoAnalisis.includes('sangre') ||
-                 textoAnalisis.includes('orina')) {
+      // 2. DIAGNÓSTICO - Servicio oficial (exámenes y análisis)
+      } else if (tipoId === 'diagnóstico' ||
+                 tipoId === 'diagnostico' ||
+                 serviceName.toLowerCase().includes('diagnóstico') ||
+                 serviceName.toLowerCase().includes('diagnostico')) {
         examenes.push({
           ...baseRecord,
           tipo: tipoConsulta,
