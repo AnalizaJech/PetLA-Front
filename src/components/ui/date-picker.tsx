@@ -61,12 +61,12 @@ export function DatePicker({
         .react-datepicker {
           font-family: inherit;
           border: 1px solid hsl(var(--border));
-          border-radius: 0.75rem;
+          border-radius: 0.5rem;
           background: hsl(var(--background));
           color: hsl(var(--foreground));
           box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05);
           overflow: hidden;
-          min-width: 280px;
+          width: 280px;
         }
 
         .react-datepicker__header {
