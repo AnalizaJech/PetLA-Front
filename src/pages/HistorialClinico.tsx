@@ -222,11 +222,21 @@ export default function HistorialClinico() {
 
   // Obtener historial real basado en citas completadas y atendidas
   const getHistorialReal = (nombreMascota) => {
+    // Debug: Log all appointments for this pet
+    const todasLasCitas = citas.filter(cita => cita.mascota === nombreMascota);
+    console.log(`📋 Citas para ${nombreMascota}:`, todasLasCitas);
+
+    // Include all paid and confirmed appointments for clinical history
     const citasRelevantes = citas.filter(
       (cita) =>
         cita.mascota === nombreMascota &&
-        (cita.estado === "atendida" || cita.estado === "Completada")
+        (cita.estado === "atendida" ||
+         cita.estado === "aceptada" ||
+         cita.estado === "en_validacion" ||
+         cita.estado === "pendiente_pago") // Include all appointments that user has created
     );
+
+    console.log(`🏥 Citas relevantes para historial:`, citasRelevantes);
 
     // Categorizar servicios por tipo
     const consultas = [];
