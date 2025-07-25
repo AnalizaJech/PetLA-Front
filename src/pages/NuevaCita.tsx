@@ -48,12 +48,12 @@ interface NuevaCitaData {
 }
 
 const tiposConsulta = [
-  { id: "consulta_general", nombre: "Consulta General", precio: 350 },
-  { id: "vacunacion", nombre: "Vacunación", precio: 280 },
-  { id: "emergencia", nombre: "Emergencia", precio: 600 },
-  { id: "control", nombre: "Control", precio: 300 },
-  { id: "cirugia", nombre: "Cirugía", precio: 800 },
-  { id: "diagnostico", nombre: "Diagnóstico", precio: 450 },
+  { id: "consulta_general", nombre: "Consulta General", precio: 80 },
+  { id: "vacunacion", nombre: "Vacunación", precio: 65 },
+  { id: "emergencia", nombre: "Emergencia", precio: 150 },
+  { id: "grooming", nombre: "Grooming", precio: 45 },
+  { id: "cirugia", nombre: "Cirugía", precio: 250 },
+  { id: "diagnostico", nombre: "Diagnóstico", precio: 120 },
 ];
 
 const ubicaciones = [
