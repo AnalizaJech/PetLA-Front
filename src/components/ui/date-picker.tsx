@@ -242,44 +242,16 @@ export function DatePicker({
         .react-datepicker__year-option,
         .react-datepicker__month-option {
           color: hsl(var(--foreground));
-          padding: 0.75rem 1.25rem;
-          transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+          padding: 0.5rem 1rem;
+          transition: all 0.2s ease;
           cursor: pointer;
-          font-weight: 500;
-          border-bottom: 1px solid hsl(var(--border)/0.3);
-          position: relative;
-          overflow: hidden;
-        }
-
-        .react-datepicker__year-option::before,
-        .react-datepicker__month-option::before {
-          content: '';
-          position: absolute;
-          left: 0;
-          top: 0;
-          bottom: 0;
-          width: 0;
-          background: linear-gradient(90deg,
-            hsl(var(--primary)/0.1),
-            hsl(var(--primary)/0.05));
-          transition: width 0.3s ease;
+          font-weight: 400;
         }
 
         .react-datepicker__year-option:hover,
         .react-datepicker__month-option:hover {
-          background: linear-gradient(90deg,
-            hsl(var(--accent)) 0%,
-            hsl(var(--accent)/0.9) 100%);
+          background: hsl(var(--accent));
           color: hsl(var(--accent-foreground));
-          transform: translateX(4px);
-          padding-left: 1.5rem;
-          font-weight: 600;
-        }
-
-        .react-datepicker__year-option:hover::before,
-        .react-datepicker__month-option:hover::before {
-          width: 4px;
-          background: hsl(var(--primary));
         }
 
         .react-datepicker__year-option--selected,
