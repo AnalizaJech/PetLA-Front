@@ -186,6 +186,11 @@ interface AppContextType {
   logout: () => void;
   isAuthenticated: boolean;
 
+  // Receipt/Voucher management
+  saveComprobante: (citaId: string, file: File) => Promise<boolean>;
+  getComprobante: (citaId: string) => ComprobanteData | null;
+  deleteComprobante: (citaId: string) => void;
+
   // User management (admin only)
   usuarios: Usuario[];
   addUsuario: (usuario: Omit<Usuario, "id" | "fechaRegistro">) => void;
