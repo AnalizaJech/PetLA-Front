@@ -884,7 +884,7 @@ export default function HistorialClinico() {
 
               {/* Consulta General Tab */}
               <TabsContent value="consulta_general" className="space-y-4">
-                {historialMascota.consultas.length === 0 ? (
+                {historialMascota.consulta_general.length === 0 ? (
                   <Card>
                     <CardContent className="p-12 text-center">
                       <Stethoscope className="w-16 h-16 text-vet-gray-400 mx-auto mb-4" />
