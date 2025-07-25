@@ -72,6 +72,8 @@ export default function MisCitas() {
   const [previewURL, setPreviewURL] = useState<string | null>(null);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [currentCitaId, setCurrentCitaId] = useState<string | null>(null);
+  const [showReceiptModal, setShowReceiptModal] = useState(false);
+  const [currentReceipt, setCurrentReceipt] = useState<any>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [citaToDelete, setCitaToDelete] = useState<string | null>(null);
 
