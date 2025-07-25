@@ -48,12 +48,48 @@ interface NuevaCitaData {
 }
 
 const tiposConsulta = [
-  { id: "consulta_general", nombre: "Consulta General", precio: 80 },
-  { id: "vacunacion", nombre: "Vacunación", precio: 65 },
-  { id: "emergencia", nombre: "Emergencia", precio: 150 },
-  { id: "grooming", nombre: "Grooming", precio: 45 },
-  { id: "cirugia", nombre: "Cirugía", precio: 250 },
-  { id: "diagnostico", nombre: "Diagnóstico", precio: 120 },
+  {
+    id: "consulta_general",
+    nombre: "Consulta General",
+    precio: 80,
+    icono: "Stethoscope",
+    descripcion: "Examen médico rutinario y evaluación de salud general"
+  },
+  {
+    id: "vacunacion",
+    nombre: "Vacunación",
+    precio: 65,
+    icono: "Syringe",
+    descripcion: "Aplicación de vacunas preventivas y refuerzos"
+  },
+  {
+    id: "emergencia",
+    nombre: "Emergencia",
+    precio: 150,
+    icono: "AlertCircle",
+    descripcion: "Atención médica urgente las 24 horas"
+  },
+  {
+    id: "grooming",
+    nombre: "Grooming",
+    precio: 45,
+    icono: "Heart",
+    descripcion: "Baño, corte de pelo, limpieza de oídos y uñas"
+  },
+  {
+    id: "cirugia",
+    nombre: "Cirugía",
+    precio: 250,
+    icono: "Activity",
+    descripcion: "Procedimientos quirúrgicos especializados"
+  },
+  {
+    id: "diagnostico",
+    nombre: "Diagnóstico",
+    precio: 120,
+    icono: "Search",
+    descripcion: "Exámenes y análisis para determinar diagnósticos"
+  },
 ];
 
 const ubicaciones = [
