@@ -176,7 +176,7 @@ const getMascotasNames = (mascotasList) => mascotasList.map((m) => m.nombre);
 export default function HistorialClinico() {
   const { user, mascotas, usuarios, citas } = useAppContext();
   const [selectedMascota, setSelectedMascota] = useState("");
-  const [selectedTab, setSelectedTab] = useState("consultas");
+  const [selectedTab, setSelectedTab] = useState("consulta_general");
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -447,7 +447,7 @@ export default function HistorialClinico() {
         if (vacuna.proxima) {
           contenido += `Próxima dosis: ${vacuna.proxima.toLocaleDateString("es-ES")}\n`;
         }
-        contenido += `\n${"·".repeat(40)}\n`;
+        contenido += `\n${"��".repeat(40)}\n`;
       });
     } else {
       contenido += `VACUNAS\n`;
