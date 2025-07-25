@@ -18,6 +18,8 @@ interface DatePickerProps {
   className?: string;
   fromYear?: number;
   toYear?: number;
+  minDate?: Date;
+  maxDate?: Date;
 }
 
 export function DatePicker({
@@ -28,6 +30,8 @@ export function DatePicker({
   className,
   fromYear = 1990,
   toYear = new Date().getFullYear(),
+  minDate,
+  maxDate,
 }: DatePickerProps) {
   const CustomInput = React.forwardRef<
     HTMLButtonElement,
@@ -265,6 +269,26 @@ export function DatePicker({
           display: none;
         }
 
+        /* Posicionamiento mejorado */
+        .react-datepicker-popper {
+          z-index: 9999 !important;
+          position: absolute !important;
+        }
+
+        .react-datepicker-wrapper {
+          display: block;
+          width: 100%;
+        }
+
+        /* Evitar que el calendario se salga del viewport */
+        .react-datepicker-popper[data-placement^="bottom"] {
+          transform: translateY(8px) !important;
+        }
+
+        .react-datepicker-popper[data-placement^="top"] {
+          transform: translateY(-8px) !important;
+        }
+
         /* ANIMACIONES Y TRANSICIONES */
         .react-datepicker__month-container {
           transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -307,11 +331,11 @@ export function DatePicker({
         dropdownMode="select"
         yearDropdownItemNumber={60}
         scrollableYearDropdown
-        minDate={new Date()}
-        maxDate={new Date(new Date().getFullYear() + 1, 11, 31)}
+        minDate={minDate}
+        maxDate={maxDate}
         placeholderText={placeholder}
         disabled={disabled}
-        popperClassName="z-50"
+        popperClassName="z-[9999]"
         popperPlacement="bottom-start"
         calendarClassName="modern-calendar"
         wrapperClassName="w-full"
@@ -319,6 +343,21 @@ export function DatePicker({
         fixedHeight
         todayButton="Hoy"
         clearButtonTitle="Limpiar"
+        popperModifiers={[
+          {
+            name: "preventOverflow",
+            options: {
+              boundary: "viewport",
+              padding: 8,
+            },
+          },
+          {
+            name: "flip",
+            options: {
+              fallbackPlacements: ["top-start", "bottom-start"],
+            },
+          },
+        ]}
       />
     </>
   );

@@ -5,6 +5,8 @@ import React, {
   useEffect,
   ReactNode,
 } from "react";
+import { compressImage, optimizeStorageSpace } from "@/lib/imageUtils";
+import type { CompressedImage } from "@/lib/imageUtils";
 
 // Types
 interface Mascota {
@@ -23,6 +25,15 @@ interface Mascota {
   foto?: string | null;
 }
 
+interface ComprobanteData {
+  id: string;
+  data: string; // base64
+  originalName: string;
+  size: number;
+  type: string;
+  timestamp: number;
+}
+
 interface Cita {
   id: string;
   mascota: string;
@@ -36,6 +47,7 @@ interface Cita {
   precio: number;
   notas?: string;
   comprobantePago?: string;
+  comprobanteData?: ComprobanteData;
   notasAdmin?: string;
 }
 
@@ -176,6 +188,11 @@ interface AppContextType {
   logout: () => void;
   isAuthenticated: boolean;
 
+  // Receipt/Voucher management
+  saveComprobante: (citaId: string, file: File) => Promise<boolean>;
+  getComprobante: (citaId: string) => ComprobanteData | null;
+  deleteComprobante: (citaId: string) => void;
+
   // User management (admin only)
   usuarios: Usuario[];
   addUsuario: (usuario: Omit<Usuario, "id" | "fechaRegistro">) => void;
@@ -312,16 +329,22 @@ const initialUsuarios: Usuario[] = [
 ];
 
 export function AppProvider({ children }: { children: ReactNode }) {
-  // Clear any existing fictional data on first load
+  // Clear any existing fictional data on first load - DISABLED to prevent data loss
   useEffect(() => {
-    const shouldClearData = localStorage.getItem("fictional_data_cleared");
-    if (!shouldClearData) {
-      localStorage.removeItem("mascotas");
-      localStorage.removeItem("citas");
-      localStorage.removeItem("preCitas");
-      localStorage.removeItem("historialClinico");
-      localStorage.removeItem("suscriptoresNewsletter");
-      localStorage.removeItem("newsletterEmails");
+    // This code was automatically clearing user data, so it's now disabled
+    // const shouldClearData = localStorage.getItem("fictional_data_cleared");
+    // if (!shouldClearData) {
+    //   localStorage.removeItem("mascotas");
+    //   localStorage.removeItem("citas");
+    //   localStorage.removeItem("preCitas");
+    //   localStorage.removeItem("historialClinico");
+    //   localStorage.removeItem("suscriptoresNewsletter");
+    //   localStorage.removeItem("newsletterEmails");
+    //   localStorage.setItem("fictional_data_cleared", "true");
+    // }
+
+    // Set the flag to prevent future clearing
+    if (!localStorage.getItem("fictional_data_cleared")) {
       localStorage.setItem("fictional_data_cleared", "true");
     }
   }, []);
@@ -390,12 +413,32 @@ export function AppProvider({ children }: { children: ReactNode }) {
       const citasStr = localStorage.getItem("citas");
       if (citasStr) {
         const parsedCitas = JSON.parse(citasStr);
-        // Convert date strings back to Date objects
-        return parsedCitas.map((cita: any) => ({
-          ...cita,
-          fecha: new Date(cita.fecha),
-          tipoConsulta: cita.tipoConsulta || "Consulta General", // Default for existing appointments
-        }));
+        // Convert date strings back to Date objects and load receipt data
+        return parsedCitas.map((cita: any) => {
+          const citaWithDate = {
+            ...cita,
+            fecha: new Date(cita.fecha),
+            tipoConsulta: cita.tipoConsulta || "Consulta General",
+          };
+
+          // If cita has comprobantePago but no comprobanteData, try to load it
+          if (cita.comprobantePago && !cita.comprobanteData) {
+            try {
+              const storageKey = `comprobante_${cita.id}`;
+              const stored = localStorage.getItem(storageKey);
+              if (stored) {
+                citaWithDate.comprobanteData = JSON.parse(stored);
+              }
+            } catch (error) {
+              console.warn(
+                `No se pudo cargar comprobante para cita ${cita.id}:`,
+                error,
+              );
+            }
+          }
+
+          return citaWithDate;
+        });
       }
       return [];
     } catch {
@@ -611,7 +654,28 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, [mascotas]);
 
   useEffect(() => {
-    localStorage.setItem("citas", JSON.stringify(citas));
+    try {
+      localStorage.setItem("citas", JSON.stringify(citas));
+      // También asegurar que los comprobantes se persistan por separado
+      citas.forEach((cita) => {
+        if (cita.comprobanteData) {
+          const storageKey = `comprobante_${cita.id}`;
+          try {
+            localStorage.setItem(
+              storageKey,
+              JSON.stringify(cita.comprobanteData),
+            );
+          } catch (error) {
+            console.warn(
+              `No se pudo persistir comprobante para cita ${cita.id}:`,
+              error,
+            );
+          }
+        }
+      });
+    } catch (error) {
+      console.error("Error guardando citas:", error);
+    }
   }, [citas]);
 
   useEffect(() => {
@@ -636,6 +700,98 @@ export function AppProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     localStorage.setItem("notificaciones", JSON.stringify(notificaciones));
   }, [notificaciones]);
+
+  // Receipt/Voucher management functions
+  const saveComprobante = async (
+    citaId: string,
+    file: File,
+  ): Promise<boolean> => {
+    try {
+      // Optimizar espacio antes de guardar
+      optimizeStorageSpace();
+
+      // Comprimir imagen
+      const compressedImage: CompressedImage = await compressImage(file);
+
+      // Crear datos del comprobante
+      const comprobanteData: ComprobanteData = {
+        id: `comprobante_${citaId}_${Date.now()}`,
+        data: compressedImage.data,
+        originalName: compressedImage.originalName,
+        size: compressedImage.size,
+        type: compressedImage.type,
+        timestamp: Date.now(),
+      };
+
+      // Guardar en localStorage
+      const storageKey = `comprobante_${citaId}`;
+      localStorage.setItem(storageKey, JSON.stringify(comprobanteData));
+
+      // Actualizar la cita con la referencia del comprobante
+      updateCita(citaId, {
+        estado: "en_validacion",
+        comprobantePago: comprobanteData.id,
+        comprobanteData: comprobanteData,
+        notasAdmin: "", // Clear previous rejection notes
+      });
+
+      console.log(
+        `✅ Comprobante guardado: ${(comprobanteData.size / 1024).toFixed(1)}KB`,
+      );
+      return true;
+    } catch (error) {
+      console.error("❌ Error guardando comprobante:", error);
+      return false;
+    }
+  };
+
+  const getComprobante = (citaId: string): ComprobanteData | null => {
+    try {
+      // Primero buscar en los datos de la cita
+      const cita = citas.find((c) => c.id === citaId);
+      if (cita?.comprobanteData) {
+        return cita.comprobanteData;
+      }
+
+      // Si no está en la cita, buscar en localStorage
+      const storageKey = `comprobante_${citaId}`;
+      const stored = localStorage.getItem(storageKey);
+
+      if (stored) {
+        const comprobanteData = JSON.parse(stored) as ComprobanteData;
+
+        // Si encontramos el comprobante en localStorage pero no en la cita,
+        // actualizar la cita para incluir los datos
+        if (cita && cita.comprobantePago && !cita.comprobanteData) {
+          updateCita(citaId, { comprobanteData });
+        }
+
+        return comprobanteData;
+      }
+
+      return null;
+    } catch (error) {
+      console.error("❌ Error recuperando comprobante:", error);
+      return null;
+    }
+  };
+
+  const deleteComprobante = (citaId: string): void => {
+    try {
+      const storageKey = `comprobante_${citaId}`;
+      localStorage.removeItem(storageKey);
+
+      // Actualizar la cita para remover el comprobante
+      updateCita(citaId, {
+        comprobantePago: undefined,
+        comprobanteData: undefined,
+      });
+
+      console.log(`🗑️ Comprobante eliminado para cita ${citaId}`);
+    } catch (error) {
+      console.error("❌ Error eliminando comprobante:", error);
+    }
+  };
 
   // Authentication functions
   const setUser = (newUser: Usuario | null) => {
@@ -1164,6 +1320,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setUser,
     logout,
     isAuthenticated: !!user,
+    saveComprobante,
+    getComprobante,
+    deleteComprobante,
     usuarios,
     addUsuario,
     updateUsuario,

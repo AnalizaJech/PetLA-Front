@@ -38,6 +38,7 @@ import {
   X,
   AlertCircle,
   Trash2,
+  Download,
 } from "lucide-react";
 
 const estadoColors = {
@@ -64,14 +65,24 @@ const estadoLabels = {
 
 export default function MisCitas() {
   const navigate = useNavigate();
-  const { user, citas, usuarios, mascotas, updateCita, deleteCita } =
-    useAppContext();
+  const {
+    user,
+    citas,
+    usuarios,
+    mascotas,
+    updateCita,
+    deleteCita,
+    saveComprobante,
+    getComprobante,
+  } = useAppContext();
   const [selectedTab, setSelectedTab] = useState("todas");
   const [uploadingCitaId, setUploadingCitaId] = useState<string | null>(null);
   const [previewFile, setPreviewFile] = useState<File | null>(null);
   const [previewURL, setPreviewURL] = useState<string | null>(null);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [currentCitaId, setCurrentCitaId] = useState<string | null>(null);
+  const [showReceiptModal, setShowReceiptModal] = useState(false);
+  const [currentReceipt, setCurrentReceipt] = useState<any>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [citaToDelete, setCitaToDelete] = useState<string | null>(null);
 
@@ -104,16 +115,30 @@ export default function MisCitas() {
     input.click();
   };
 
-  const handleConfirmUpload = () => {
+  const handleConfirmUpload = async () => {
     if (previewFile && currentCitaId) {
-      // In a real app, you would upload to a server
-      // For now, we'll just update the status to indicate proof was uploaded
-      updateCita(currentCitaId, {
-        estado: "en_validacion",
-        comprobantePago: `uploaded_${previewFile.name}_${Date.now()}`,
-        notasAdmin: "", // Clear previous rejection notes
-      });
-      handleClosePreview();
+      setUploadingCitaId(currentCitaId); // Show loading state
+
+      try {
+        const success = await saveComprobante(currentCitaId, previewFile);
+
+        if (success) {
+          console.log("✅ Comprobante subido exitosamente");
+        } else {
+          console.error("❌ Error al subir comprobante");
+          // Fallback to old method
+          updateCita(currentCitaId, {
+            estado: "en_validacion",
+            comprobantePago: `uploaded_${previewFile.name}_${Date.now()}`,
+            notasAdmin: "",
+          });
+        }
+      } catch (error) {
+        console.error("❌ Error durante la subida:", error);
+      } finally {
+        setUploadingCitaId(null);
+        handleClosePreview();
+      }
     }
   };
 
@@ -125,6 +150,21 @@ export default function MisCitas() {
       setPreviewURL(null);
     }
     setCurrentCitaId(null);
+  };
+
+  const handleViewReceipt = (citaId: string) => {
+    const receiptData = getComprobante(citaId);
+    if (receiptData) {
+      setCurrentReceipt(receiptData);
+      setShowReceiptModal(true);
+    } else {
+      console.warn("No se encontró comprobante para la cita:", citaId);
+    }
+  };
+
+  const handleCloseReceiptModal = () => {
+    setShowReceiptModal(false);
+    setCurrentReceipt(null);
   };
 
   const handleChangeFile = () => {
@@ -488,6 +528,19 @@ export default function MisCitas() {
                                       : "Subir Comprobante"}
                                   </Button>
                                 )}
+                                {(cita.estado === "en_validacion" ||
+                                  cita.estado === "aceptada") &&
+                                  cita.comprobantePago && (
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      onClick={() => handleViewReceipt(cita.id)}
+                                      className="border-vet-primary text-vet-primary hover:bg-vet-primary/10"
+                                    >
+                                      <Eye className="w-4 h-4 mr-2" />
+                                      Ver Comprobante
+                                    </Button>
+                                  )}
                                 {cita.estado === "rechazada" && (
                                   <Button
                                     size="sm"
@@ -641,6 +694,107 @@ export default function MisCitas() {
             >
               <Upload className="w-4 h-4" />
               <span>Confirmar y Enviar</span>
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Modal para mostrar comprobante guardado */}
+      <Dialog open={showReceiptModal} onOpenChange={setShowReceiptModal}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader className="pb-6">
+            <DialogTitle className="flex items-center space-x-2 text-vet-primary">
+              <Eye className="w-5 h-5" />
+              <span>Comprobante de Pago</span>
+            </DialogTitle>
+            <DialogDescription>
+              Comprobante de pago subido para esta cita
+            </DialogDescription>
+          </DialogHeader>
+
+          {currentReceipt && (
+            <div className="space-y-4">
+              {/* Información del archivo */}
+              <div className="border rounded-lg p-4 bg-vet-gray-50">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-medium text-vet-gray-900">
+                      Información del archivo
+                    </h4>
+                    <p className="text-sm text-vet-gray-600">
+                      {currentReceipt.originalName}
+                    </p>
+                    <p className="text-xs text-vet-gray-500">
+                      Tamaño: {(currentReceipt.size / 1024).toFixed(1)} KB
+                    </p>
+                    <p className="text-xs text-vet-gray-500">
+                      Subido:{" "}
+                      {new Date(currentReceipt.timestamp).toLocaleString(
+                        "es-ES",
+                      )}
+                    </p>
+                  </div>
+                  <Badge variant="outline" className="text-xs">
+                    {currentReceipt.type.includes("pdf") ? "PDF" : "Imagen"}
+                  </Badge>
+                </div>
+              </div>
+
+              {/* Visualización del archivo */}
+              <div className="border rounded-lg overflow-hidden bg-white">
+                {currentReceipt.type.startsWith("image/") ? (
+                  <div className="relative">
+                    <img
+                      src={currentReceipt.data}
+                      alt="Comprobante de pago"
+                      className="w-full h-auto max-h-[400px] object-contain"
+                    />
+                  </div>
+                ) : currentReceipt.type === "application/pdf" ? (
+                  <div className="flex flex-col items-center justify-center p-8 text-center">
+                    <FileText className="w-16 h-16 text-vet-gray-400 mb-4" />
+                    <h4 className="font-medium text-vet-gray-900 mb-2">
+                      Documento PDF
+                    </h4>
+                    <p className="text-sm text-vet-gray-600 mb-4">
+                      {currentReceipt.originalName}
+                    </p>
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        const link = document.createElement("a");
+                        link.href = currentReceipt.data;
+                        link.download = currentReceipt.originalName;
+                        link.click();
+                      }}
+                    >
+                      <Download className="w-4 h-4 mr-2" />
+                      Descargar PDF
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center p-8 text-center">
+                    <FileText className="w-16 h-16 text-vet-gray-400 mb-4" />
+                    <h4 className="font-medium text-vet-gray-900 mb-2">
+                      Archivo no compatible
+                    </h4>
+                    <p className="text-sm text-vet-gray-600">
+                      Tipo de archivo: {currentReceipt.type}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={handleCloseReceiptModal}
+              className="flex items-center space-x-2"
+            >
+              <X className="w-4 h-4" />
+              <span>Cerrar</span>
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -674,6 +674,7 @@ export default function NuevaCita() {
                         placeholder="Selecciona fecha"
                         fromYear={new Date().getFullYear()}
                         toYear={new Date().getFullYear() + 1}
+                        minDate={new Date()}
                       />
                     </div>
 

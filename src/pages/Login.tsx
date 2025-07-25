@@ -154,28 +154,6 @@ export default function Login() {
               )}
 
               <form onSubmit={handleLogin} className="space-y-4">
-                <div className="bg-vet-primary/5 border border-vet-primary/20 rounded-lg p-4 mb-4">
-                  <h4 className="font-medium text-vet-gray-900 mb-2">
-                    Credenciales de prueba:
-                  </h4>
-                  <div className="text-sm text-vet-gray-600 space-y-1">
-                    <p>
-                      <strong>Admin:</strong> admin@petla.com / admin123
-                    </p>
-                    <p>
-                      <strong>Veterinarios existentes:</strong>
-                    </p>
-                    <div className="ml-4 space-y-1">
-                      <p>• carlos.ruiz@petla.com / vet123</p>
-                      <p>• ana.lopez@petla.com / vet456</p>
-                    </div>
-                    <p>
-                      <strong>Clientes:</strong> pueden usar su email registrado
-                      con cualquier contraseña
-                    </p>
-                  </div>
-                </div>
-
                 <div className="space-y-2">
                   <Label htmlFor="login-email">Email</Label>
                   <div className="relative">
