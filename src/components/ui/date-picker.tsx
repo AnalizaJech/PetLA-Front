@@ -78,54 +78,30 @@ export function DatePicker({
         }
 
         .react-datepicker__current-month {
-          color: hsl(var(--primary-foreground));
-          font-weight: 800;
-          font-size: 1.125rem;
-          margin-bottom: 0.75rem;
+          color: hsl(var(--foreground));
+          font-weight: 600;
+          font-size: 1rem;
+          margin-bottom: 0.5rem;
           text-align: center;
-          text-shadow: 0 2px 4px rgb(0 0 0 / 0.2);
-          letter-spacing: 0.5px;
-          position: relative;
-          z-index: 10;
         }
 
         .react-datepicker__day-names {
           margin: 0;
-          padding: 0.75rem 0 0.5rem;
+          padding: 0.5rem 0;
           display: flex;
           justify-content: space-around;
-          background: linear-gradient(180deg,
-            hsl(var(--muted)/0.1) 0%,
-            hsl(var(--muted)/0.05) 100%);
-          border-top: 1px solid hsl(var(--border)/0.5);
-          backdrop-filter: blur(4px);
+          background: hsl(var(--muted)/0.5);
+          border-top: 1px solid hsl(var(--border));
         }
 
         .react-datepicker__day-name {
           color: hsl(var(--muted-foreground));
-          font-weight: 700;
+          font-weight: 500;
           font-size: 0.75rem;
-          width: 2.5rem;
+          width: 2rem;
           line-height: 1.5rem;
           text-align: center;
           text-transform: uppercase;
-          letter-spacing: 1px;
-          position: relative;
-        }
-
-        .react-datepicker__day-name::after {
-          content: '';
-          position: absolute;
-          bottom: -2px;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 1rem;
-          height: 2px;
-          background: linear-gradient(90deg,
-            transparent,
-            hsl(var(--primary)/0.3),
-            transparent);
-          border-radius: 1px;
         }
 
         .react-datepicker__month {
