@@ -841,27 +841,48 @@ export default function HistorialClinico() {
               onValueChange={setSelectedTab}
               className="space-y-6"
             >
-              <TabsList className="grid w-full grid-cols-3">
+              <TabsList className="grid w-full grid-cols-6 text-xs">
                 <TabsTrigger
-                  value="consultas"
-                  className="flex items-center space-x-2"
+                  value="consulta_general"
+                  className="flex items-center space-x-1"
                 >
-                  <Stethoscope className="w-4 h-4" />
-                  <span>Consultas</span>
+                  <Stethoscope className="w-3 h-3" />
+                  <span>General</span>
                 </TabsTrigger>
                 <TabsTrigger
-                  value="vacunas"
-                  className="flex items-center space-x-2"
+                  value="vacunacion"
+                  className="flex items-center space-x-1"
                 >
-                  <Syringe className="w-4 h-4" />
+                  <Syringe className="w-3 h-3" />
                   <span>Vacunas</span>
                 </TabsTrigger>
                 <TabsTrigger
-                  value="examenes"
-                  className="flex items-center space-x-2"
+                  value="emergencia"
+                  className="flex items-center space-x-1"
                 >
-                  <Activity className="w-4 h-4" />
-                  <span>Exámenes</span>
+                  <Activity className="w-3 h-3" />
+                  <span>Emergencia</span>
+                </TabsTrigger>
+                <TabsTrigger
+                  value="grooming"
+                  className="flex items-center space-x-1"
+                >
+                  <PawPrint className="w-3 h-3" />
+                  <span>Grooming</span>
+                </TabsTrigger>
+                <TabsTrigger
+                  value="cirugia"
+                  className="flex items-center space-x-1"
+                >
+                  <Pill className="w-3 h-3" />
+                  <span>Cirugía</span>
+                </TabsTrigger>
+                <TabsTrigger
+                  value="diagnostico"
+                  className="flex items-center space-x-1"
+                >
+                  <FileText className="w-3 h-3" />
+                  <span>Diagnóstico</span>
                 </TabsTrigger>
               </TabsList>
 
@@ -906,7 +927,7 @@ export default function HistorialClinico() {
                                 month: "long",
                                 day: "numeric",
                               })}{" "}
-                              • {consulta.veterinario}
+                              ��� {consulta.veterinario}
                             </CardDescription>
                           </div>
                           <Badge className="bg-vet-primary/10 text-vet-primary">
