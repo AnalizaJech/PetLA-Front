@@ -152,6 +152,7 @@ export default function NuevaCita() {
   const navigate = useNavigate();
   const { user, mascotas, usuarios, citas, addCita, fixOrphanedPets } =
     useAppContext();
+  const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
