@@ -623,19 +623,22 @@ export default function NuevaCita() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <Label htmlFor="fecha">Fecha preferida *</Label>
-                      <Input
-                        id="fecha"
-                        type="date"
-                        value={citaData.fecha}
-                        onChange={(e) =>
-                          setCitaData({ ...citaData, fecha: e.target.value })
-                        }
-                        min={getMinDate()}
-                        max={getMaxDate()}
-                        className="mt-2"
-                      />
+                      <div className="relative mt-2">
+                        <Input
+                          id="fecha"
+                          type="date"
+                          value={citaData.fecha}
+                          onChange={(e) =>
+                            setCitaData({ ...citaData, fecha: e.target.value })
+                          }
+                          min={getMinDate()}
+                          max={getMaxDate()}
+                          className="w-full pl-10 pr-4 py-2 border border-vet-gray-300 rounded-lg focus:ring-2 focus:ring-vet-primary focus:border-vet-primary transition-all duration-200"
+                        />
+                        <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-vet-gray-400 pointer-events-none" />
+                      </div>
                       <p className="text-xs text-vet-gray-500 mt-1">
-                        Puedes agendar hasta 3 meses por adelantado
+                        📅 Puedes agendar hasta 3 meses por adelantado
                       </p>
                     </div>
 
