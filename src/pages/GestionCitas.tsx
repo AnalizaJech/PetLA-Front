@@ -65,6 +65,7 @@ import {
   FileText,
   Shield,
   UserCheck,
+  Download,
 } from "lucide-react";
 import ConfirmationModal from "@/components/ConfirmationModal";
 
