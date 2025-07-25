@@ -142,12 +142,22 @@ export default function Layout({
 }: LayoutProps) {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user: contextUser, logout, isAuthenticated } = useAppContext();
+  const {
+    user: contextUser,
+    logout,
+    isAuthenticated,
+    getNotificacionesByUser
+  } = useAppContext();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   // Hook para mostrar notificaciones toast automáticamente
   useNotificationToast();
+
+  // Calcular notificaciones no leídas
+  const unreadNotificationsCount = user
+    ? getNotificacionesByUser(user.id).filter(notif => !notif.leida).length
+    : 0;
 
   // Use prop user if provided, otherwise use context user
   const user = userProp || contextUser;
