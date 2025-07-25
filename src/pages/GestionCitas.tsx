@@ -69,7 +69,7 @@ import {
 import ConfirmationModal from "@/components/ConfirmationModal";
 
 export default function GestionCitas() {
-  const { citas, usuarios, mascotas, updateCita, deleteCita, user } =
+  const { citas, usuarios, mascotas, updateCita, deleteCita, user, getComprobante } =
     useAppContext();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedStatus, setSelectedStatus] = useState<string>("todos");
