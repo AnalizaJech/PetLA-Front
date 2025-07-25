@@ -40,6 +40,7 @@ import { cn } from "@/lib/utils";
 import { UserRole } from "@/lib/types";
 import NewFooter from "@/components/NewFooter";
 import LogoutModal from "@/components/LogoutModal";
+import { useNotificationToast } from "@/hooks/useNotificationToast";
 
 interface LayoutProps {
   children: ReactNode;
