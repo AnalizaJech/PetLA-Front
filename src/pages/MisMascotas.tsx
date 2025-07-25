@@ -42,6 +42,7 @@ import {
   ImageIcon,
 } from "lucide-react";
 import ConfirmationModal from "@/components/ConfirmationModal";
+import { DatePicker } from "@/components/ui/date-picker";
 
 export default function MisMascotas() {
   const { user, mascotas, addMascota, updateMascota, deleteMascota } =
