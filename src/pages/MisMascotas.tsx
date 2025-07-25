@@ -317,7 +317,7 @@ export default function MisMascotas() {
                   </Button>
                 </DialogTrigger>
 
-                <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto sm:max-w-md">
+                <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
                   <DialogHeader>
                     <DialogTitle className="text-lg sm:text-xl">
                       {editingMascota ? "Editar Mascota" : "Nueva Mascota"}
