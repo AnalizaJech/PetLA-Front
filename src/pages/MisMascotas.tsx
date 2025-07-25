@@ -42,6 +42,7 @@ import {
   ImageIcon,
 } from "lucide-react";
 import ConfirmationModal from "@/components/ConfirmationModal";
+import { DatePicker } from "@/components/ui/date-picker";
 
 export default function MisMascotas() {
   const { user, mascotas, addMascota, updateMascota, deleteMascota } =
@@ -58,7 +59,7 @@ export default function MisMascotas() {
     nombre: "",
     especie: "Perro",
     raza: "",
-    fechaNacimiento: "",
+    fechaNacimiento: undefined as Date | undefined,
     peso: "",
     sexo: "",
     microchip: "",
@@ -83,17 +84,21 @@ export default function MisMascotas() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!newMascota.fechaNacimiento) {
+      return; // Don't submit without date
+    }
+
     if (editingMascota) {
       // Edit existing mascota
       updateMascota(editingMascota.id, {
         ...newMascota,
-        fechaNacimiento: new Date(newMascota.fechaNacimiento),
+        fechaNacimiento: newMascota.fechaNacimiento,
       });
     } else {
       // Add new mascota
       addMascota({
         ...newMascota,
-        fechaNacimiento: new Date(newMascota.fechaNacimiento),
+        fechaNacimiento: newMascota.fechaNacimiento,
       });
     }
 
@@ -102,7 +107,7 @@ export default function MisMascotas() {
       nombre: "",
       especie: "Perro",
       raza: "",
-      fechaNacimiento: "",
+      fechaNacimiento: undefined,
       peso: "",
       sexo: "",
       microchip: "",
@@ -121,7 +126,7 @@ export default function MisMascotas() {
       nombre: mascota.nombre,
       especie: mascota.especie,
       raza: mascota.raza,
-      fechaNacimiento: mascota.fechaNacimiento.toISOString().split("T")[0],
+      fechaNacimiento: new Date(mascota.fechaNacimiento),
       peso: cleanPeso,
       sexo: mascota.sexo,
       microchip: mascota.microchip,
@@ -299,7 +304,7 @@ export default function MisMascotas() {
                         nombre: "",
                         especie: "Perro",
                         raza: "",
-                        fechaNacimiento: "",
+                        fechaNacimiento: undefined,
                         peso: "",
                         sexo: "",
                         microchip: "",
@@ -344,24 +349,27 @@ export default function MisMascotas() {
 
                       <div className="space-y-2">
                         <Label htmlFor="especie">Especie</Label>
-                        <select
-                          id="especie"
+                        <Select
                           value={newMascota.especie}
-                          onChange={(e) =>
+                          onValueChange={(value) =>
                             setNewMascota({
                               ...newMascota,
-                              especie: e.target.value,
+                              especie: value,
                             })
                           }
-                          className="w-full px-3 py-2 border border-vet-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-vet-primary"
-                          required
                         >
-                          <option value="Perro">Perro</option>
-                          <option value="Gato">Gato</option>
-                          <option value="Ave">Ave</option>
-                          <option value="Hamster">Hamster</option>
-                          <option value="Otro">Otro</option>
-                        </select>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecciona la especie" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Perro">Perro</SelectItem>
+                            <SelectItem value="Gato">Gato</SelectItem>
+                            <SelectItem value="Ave">Ave</SelectItem>
+                            <SelectItem value="Hamster">Hamster</SelectItem>
+                            <SelectItem value="Conejo">Conejo</SelectItem>
+                            <SelectItem value="Otro">Otro</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </div>
 
                       <div className="space-y-2">
@@ -384,17 +392,17 @@ export default function MisMascotas() {
                         <Label htmlFor="fechaNacimiento">
                           Fecha de nacimiento
                         </Label>
-                        <Input
-                          id="fechaNacimiento"
-                          type="date"
-                          value={newMascota.fechaNacimiento}
-                          onChange={(e) =>
+                        <DatePicker
+                          date={newMascota.fechaNacimiento}
+                          onDateChange={(date) =>
                             setNewMascota({
                               ...newMascota,
-                              fechaNacimiento: e.target.value,
+                              fechaNacimiento: date,
                             })
                           }
-                          required
+                          placeholder="Selecciona fecha"
+                          fromYear={1990}
+                          toYear={new Date().getFullYear()}
                         />
                       </div>
 

@@ -82,6 +82,13 @@ interface HistorialClinico {
   motivo: string;
   diagnostico: string;
   tratamiento: string;
+  servicios?: Array<{
+    nombre: string;
+    descripcion?: string;
+    precio?: number;
+    duracion?: string;
+    notas?: string;
+  }>;
   medicamentos: Array<{
     nombre: string;
     dosis: string;
@@ -138,6 +145,27 @@ interface NewsletterEmail {
   plantilla?: string;
   imagenes?: ArchivoGuardado[];
   archivos?: ArchivoGuardado[];
+}
+
+interface Notificacion {
+  id: string;
+  usuarioId: string;
+  tipo:
+    | "cita_aceptada"
+    | "bienvenida_cliente"
+    | "consulta_registrada"
+    | "sistema";
+  titulo: string;
+  mensaje: string;
+  fechaCreacion: Date;
+  leida: boolean;
+  datos?: {
+    citaId?: string;
+    mascotaNombre?: string;
+    veterinario?: string;
+    fechaCita?: Date;
+    motivo?: string;
+  };
 }
 
 interface AppContextType {
@@ -205,6 +233,16 @@ interface AppContextType {
     updates: Partial<NewsletterEmail>,
   ) => void;
   deleteNewsletterEmail: (id: string) => void;
+
+  // Notificaciones state
+  notificaciones: Notificacion[];
+  addNotificacion: (
+    notificacion: Omit<Notificacion, "id" | "fechaCreacion">,
+  ) => void;
+  markNotificacionAsRead: (id: string) => void;
+  markAllNotificacionesAsRead: (usuarioId: string) => void;
+  getNotificacionesByUser: (usuarioId: string) => Notificacion[];
+  deleteNotificacion: (id: string) => void;
 
   // Authentication helpers
   login: (email: string, password: string) => Promise<Usuario | null>;
@@ -446,6 +484,28 @@ export function AppProvider({ children }: { children: ReactNode }) {
     },
   );
 
+  const [notificaciones, setNotificaciones] = useState<Notificacion[]>(() => {
+    try {
+      const notificacionesStr = localStorage.getItem("notificaciones");
+      if (notificacionesStr) {
+        const parsedNotificaciones = JSON.parse(notificacionesStr);
+        return parsedNotificaciones.map((notif: any) => ({
+          ...notif,
+          fechaCreacion: new Date(notif.fechaCreacion),
+          ...(notif.datos?.fechaCita && {
+            datos: {
+              ...notif.datos,
+              fechaCita: new Date(notif.datos.fechaCita),
+            },
+          }),
+        }));
+      }
+      return [];
+    } catch {
+      return [];
+    }
+  });
+
   // Función para verificar y optimizar localStorage
   const optimizeLocalStorage = () => {
     try {
@@ -542,6 +602,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
     localStorage.setItem("newsletterEmails", JSON.stringify(newsletterEmails));
   }, [newsletterEmails]);
 
+  useEffect(() => {
+    localStorage.setItem("notificaciones", JSON.stringify(notificaciones));
+  }, [notificaciones]);
+
   // Authentication functions
   const setUser = (newUser: Usuario | null) => {
     setUserState(newUser);
@@ -611,6 +675,18 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
     setUsuarios((prev) => [...prev, newUser]);
     setUserState(newUser);
+
+    // Generar notificación de bienvenida para nuevos clientes
+    if (newUser.rol === "cliente") {
+      addNotificacion({
+        usuarioId: newUser.id,
+        tipo: "bienvenida_cliente",
+        titulo: "¡Bienvenido a nuestra clínica veterinaria!",
+        mensaje: `Hola ${newUser.nombre}, nos alegra tenerte en nuestra familia. Aquí podrás gestionar el cuidado de tus mascotas de manera fácil y segura.`,
+        leida: false,
+      });
+    }
+
     return newUser;
   };
 
@@ -734,11 +810,44 @@ export function AppProvider({ children }: { children: ReactNode }) {
       ...updates,
       ...(updates.fecha && { fecha: new Date(updates.fecha) }),
     };
+
+    const citaAnterior = citas.find((c) => c.id === id);
+
     setCitas((prev) =>
       prev.map((cita) =>
         cita.id === id ? { ...cita, ...processedUpdates } : cita,
       ),
     );
+
+    // Generar notificación cuando se acepta una cita
+    if (
+      citaAnterior &&
+      updates.estado === "aceptada" &&
+      citaAnterior.estado !== "aceptada"
+    ) {
+      const mascotaInfo = mascotas.find(
+        (m) => m.nombre === citaAnterior.mascota,
+      );
+      if (mascotaInfo) {
+        const fechaCita = updates.fecha
+          ? new Date(updates.fecha)
+          : new Date(citaAnterior.fecha);
+        addNotificacion({
+          usuarioId: mascotaInfo.clienteId,
+          tipo: "cita_aceptada",
+          titulo: "¡Cita confirmada!",
+          mensaje: `Tu cita para ${citaAnterior.mascota} ha sido aceptada y confirmada.`,
+          leida: false,
+          datos: {
+            citaId: id,
+            mascotaNombre: citaAnterior.mascota,
+            veterinario: citaAnterior.veterinario,
+            fechaCita: fechaCita,
+            motivo: citaAnterior.motivo,
+          },
+        });
+      }
+    }
   };
 
   const deleteCita = (id: string) => {
@@ -819,6 +928,24 @@ export function AppProvider({ children }: { children: ReactNode }) {
       }),
     };
     setHistorialClinico((prev) => [...prev, newEntry]);
+
+    // Generar notificación para el cliente cuando se registra una consulta
+    const mascotaInfo = mascotas.find((m) => m.id === entryData.mascotaId);
+    if (mascotaInfo) {
+      addNotificacion({
+        usuarioId: mascotaInfo.clienteId,
+        tipo: "consulta_registrada",
+        titulo: "Consulta médica registrada",
+        mensaje: `Se ha registrado la consulta médica de ${entryData.mascotaNombre}. Los detalles están disponibles en el historial clínico.`,
+        leida: false,
+        datos: {
+          mascotaNombre: entryData.mascotaNombre,
+          veterinario: entryData.veterinario,
+          fechaCita: new Date(entryData.fecha),
+          motivo: entryData.motivo,
+        },
+      });
+    }
   };
 
   const updateHistorialEntry = (
@@ -934,6 +1061,48 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setNewsletterEmails((prev) => prev.filter((email) => email.id !== id));
   };
 
+  // Funciones de notificaciones
+  const addNotificacion = (
+    notificacionData: Omit<Notificacion, "id" | "fechaCreacion">,
+  ) => {
+    const newNotificacion: Notificacion = {
+      ...notificacionData,
+      id: Date.now().toString(),
+      fechaCreacion: new Date(),
+    };
+    setNotificaciones((prev) => [...prev, newNotificacion]);
+  };
+
+  const markNotificacionAsRead = (id: string) => {
+    setNotificaciones((prev) =>
+      prev.map((notif) =>
+        notif.id === id ? { ...notif, leida: true } : notif,
+      ),
+    );
+  };
+
+  const markAllNotificacionesAsRead = (usuarioId: string) => {
+    setNotificaciones((prev) =>
+      prev.map((notif) =>
+        notif.usuarioId === usuarioId ? { ...notif, leida: true } : notif,
+      ),
+    );
+  };
+
+  const getNotificacionesByUser = (usuarioId: string): Notificacion[] => {
+    return notificaciones
+      .filter((notif) => notif.usuarioId === usuarioId)
+      .sort(
+        (a, b) =>
+          new Date(b.fechaCreacion).getTime() -
+          new Date(a.fechaCreacion).getTime(),
+      );
+  };
+
+  const deleteNotificacion = (id: string) => {
+    setNotificaciones((prev) => prev.filter((notif) => notif.id !== id));
+  };
+
   // Statistics function
   const getStats = () => {
     const totalMascotas = mascotas.length;
@@ -994,6 +1163,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
     addNewsletterEmail,
     updateNewsletterEmail,
     deleteNewsletterEmail,
+    notificaciones,
+    addNotificacion,
+    markNotificacionAsRead,
+    markAllNotificacionesAsRead,
+    getNotificacionesByUser,
+    deleteNotificacion,
     login,
     register,
     getStats,

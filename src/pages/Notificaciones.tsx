@@ -25,7 +25,15 @@ import {
 } from "lucide-react";
 
 export default function Notificaciones() {
-  const { user, citas, preCitas, mascotas } = useAppContext();
+  const {
+    user,
+    citas,
+    preCitas,
+    mascotas,
+    getNotificacionesByUser,
+    markNotificacionAsRead,
+    markAllNotificacionesAsRead,
+  } = useAppContext();
   const [selectedFilter, setSelectedFilter] = useState("todas");
   const [notifications, setNotifications] = useState([]);
 
@@ -38,6 +46,61 @@ export default function Notificaciones() {
     if (!user) return;
 
     const realNotifications = [];
+
+    // Obtener notificaciones del contexto (citas aceptadas, bienvenida, consultas registradas)
+    const contextNotifications = getNotificacionesByUser(user.id);
+
+    // Convertir notificaciones del contexto al formato de la UI
+    contextNotifications.forEach((notif) => {
+      let icon = Bell;
+      let color = "vet-primary";
+      let priority = "normal";
+      let type = notif.tipo;
+
+      switch (notif.tipo) {
+        case "cita_aceptada":
+          icon = CheckCircle;
+          color = "green-500";
+          priority = "high";
+          type = "cita";
+          break;
+        case "bienvenida_cliente":
+          icon = User;
+          color = "vet-primary";
+          priority = "normal";
+          type = "sistema";
+          break;
+        case "consulta_registrada":
+          icon = FileText;
+          color = "blue-500";
+          priority = "normal";
+          type = "historial";
+          break;
+      }
+
+      const hoursAgo = Math.floor(
+        (new Date().getTime() - new Date(notif.fechaCreacion).getTime()) /
+          (1000 * 60 * 60),
+      );
+
+      realNotifications.push({
+        id: notif.id,
+        type: type,
+        title: notif.titulo,
+        message: notif.mensaje,
+        time:
+          hoursAgo === 0
+            ? "Hace menos de 1 hora"
+            : hoursAgo < 24
+              ? `Hace ${hoursAgo} hora${hoursAgo > 1 ? "s" : ""}`
+              : `Hace ${Math.floor(hoursAgo / 24)} día${Math.floor(hoursAgo / 24) > 1 ? "s" : ""}`,
+        read: notif.leida,
+        priority: priority,
+        icon: icon,
+        color: color,
+        contextNotification: true,
+      });
+    });
 
     // For clients: upcoming appointments
     if (user.rol === "cliente") {
@@ -128,7 +191,7 @@ export default function Notificaciones() {
     }
 
     setNotifications(realNotifications);
-  }, [user, citas, preCitas, mascotas]);
+  }, [user, citas, preCitas, mascotas, getNotificacionesByUser]);
 
   const filteredNotifications = notifications.filter((notification) => {
     if (selectedFilter === "todas") return true;
@@ -139,14 +202,28 @@ export default function Notificaciones() {
   const unreadCount = notifications.filter((n) => !n.read).length;
 
   const markAsRead = (id) => {
-    setNotifications((prev) =>
-      prev.map((notification) =>
-        notification.id === id ? { ...notification, read: true } : notification,
-      ),
-    );
+    const notification = notifications.find((n) => n.id === id);
+    if (notification?.contextNotification) {
+      // Es una notificación del contexto, usar la función del contexto
+      markNotificacionAsRead(id);
+    } else {
+      // Es una notificación dinámica, actualizar localmente
+      setNotifications((prev) =>
+        prev.map((notification) =>
+          notification.id === id
+            ? { ...notification, read: true }
+            : notification,
+        ),
+      );
+    }
   };
 
   const markAllAsRead = () => {
+    if (user) {
+      // Marcar todas las notificaciones del contexto como leídas
+      markAllNotificacionesAsRead(user.id);
+    }
+    // Marcar todas las notificaciones dinámicas como leídas
     setNotifications((prev) =>
       prev.map((notification) => ({ ...notification, read: true })),
     );
@@ -236,10 +313,12 @@ export default function Notificaciones() {
 
           {/* Filters */}
           <Tabs value={selectedFilter} onValueChange={setSelectedFilter}>
-            <TabsList className="grid w-full grid-cols-3 lg:grid-cols-5 mb-6">
+            <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6 mb-6">
               <TabsTrigger value="todas">Todas</TabsTrigger>
               <TabsTrigger value="no_leidas">No leídas</TabsTrigger>
               <TabsTrigger value="cita">Citas</TabsTrigger>
+              <TabsTrigger value="historial">Consultas</TabsTrigger>
+              <TabsTrigger value="sistema">Sistema</TabsTrigger>
               {(user.rol === "admin" || user.rol === "veterinario") && (
                 <>
                   <TabsTrigger value="pre-cita">Pre-citas</TabsTrigger>
