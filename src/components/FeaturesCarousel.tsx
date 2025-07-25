@@ -20,7 +20,7 @@ import {
 const features = [
   {
     id: 1,
-    icon: Calendar,
+    icon: Smartphone,
     title: "Citas Inteligentes",
     description:
       "Sistema automatizado que agenda tu cita en menos de 2 minutos con confirmación instantánea.",
@@ -30,7 +30,7 @@ const features = [
   },
   {
     id: 2,
-    icon: Shield,
+    icon: FileText,
     title: "Historial Digital Completo",
     description:
       "Acceso inmediato a todo el historial médico de tu mascota desde cualquier dispositivo.",
@@ -40,7 +40,7 @@ const features = [
   },
   {
     id: 3,
-    icon: Clock,
+    icon: Zap,
     title: "Atención Sin Esperas",
     description:
       "Consultas puntuales de 30 minutos con emergencias atendidas las 24 horas del día.",
@@ -54,7 +54,7 @@ const features = [
   },
   {
     id: 4,
-    icon: Stethoscope,
+    icon: Award,
     title: "Veterinarios Certificados",
     description:
       "Equipo especializado con más de 10 años de experiencia en diferentes áreas médicas.",
@@ -68,7 +68,7 @@ const features = [
   },
   {
     id: 5,
-    icon: Heart,
+    icon: HeartHandshake,
     title: "Cuidado Integral",
     description:
       "Desde medicina preventiva hasta cirugías especializadas para todas las especies.",
