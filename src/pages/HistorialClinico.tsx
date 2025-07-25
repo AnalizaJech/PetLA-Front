@@ -376,10 +376,19 @@ export default function HistorialClinico() {
   };
 
   const getNotasDefecto = (tipoConsulta, estado) => {
-    if (estado === "pendiente_pago") return "Consulta agendada - Awaiting payment confirmation";
-    if (estado === "aceptada") return "Consulta confirmada y programada";
+    if (estado === "pendiente_pago") return "Servicio agendado - Pendiente de confirmación de pago";
+    if (estado === "aceptada") return "Servicio confirmado y programado";
 
-    return `${tipoConsulta} completada exitosamente. Se recomienda seguimiento según plan establecido.`;
+    const tipo = tipoConsulta.toLowerCase();
+    // Notas específicas por servicio
+    if (tipo.includes('consulta general')) return "Consulta general completada. Mascota en buen estado de salud. Continuar con cuidados preventivos.";
+    if (tipo.includes('vacunación') || tipo.includes('vacunacion')) return "Vacunación aplicada exitosamente. Próxima dosis programada según calendario.";
+    if (tipo.includes('emergencia')) return "Emergencia atendida exitosamente. Monitorear evolución en las próximas 24-48 horas.";
+    if (tipo.includes('grooming')) return "Servicio de grooming completado. Mascota limpia y aseada. Recomendar mantenimiento cada 4-6 semanas.";
+    if (tipo.includes('cirugía') || tipo.includes('cirugia')) return "Cirugía realizada exitosamente. Seguir indicaciones post-operatorias estrictamente.";
+    if (tipo.includes('diagnóstico') || tipo.includes('diagnostico')) return "Exámenes diagnósticos completados. Resultados dentro de parámetros normales.";
+
+    return `${tipoConsulta} completada exitosamente. Seguir recomendaciones del veterinario tratante.`;
   };
 
   const historialMascota = selectedMascota
