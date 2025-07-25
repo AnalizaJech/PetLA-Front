@@ -546,6 +546,7 @@ export default function GestionCitas() {
                         </TableCell>
                         <TableCell>
                           <p className="text-sm text-vet-gray-700 max-w-xs">
+                            <span className="font-medium text-vet-primary">{cita.tipoConsulta}</span><br />
                             {cita.motivo}
                           </p>
                         </TableCell>
