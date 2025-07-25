@@ -533,9 +533,51 @@ export default function HistorialClinico() {
                             <h4 className="font-semibold text-vet-gray-900 mb-2">
                               Tratamiento
                             </h4>
-                            <p className="text-vet-gray-700">
+                            <p className="text-vet-gray-700 mb-4">
                               {consulta.tratamiento}
                             </p>
+
+                            {consulta.servicios && consulta.servicios.length > 0 && (
+                              <div>
+                                <h4 className="font-semibold text-vet-gray-900 mb-2">
+                                  Servicios Realizados
+                                </h4>
+                                <div className="space-y-2">
+                                  {consulta.servicios.map((servicio, index) => (
+                                    <div
+                                      key={index}
+                                      className="bg-vet-gray-50 rounded-lg p-3"
+                                    >
+                                      <div className="flex items-center justify-between mb-1">
+                                        <span className="font-medium text-vet-gray-900">
+                                          {servicio.nombre}
+                                        </span>
+                                        {servicio.precio && (
+                                          <span className="text-sm font-medium text-vet-primary">
+                                            ${servicio.precio}
+                                          </span>
+                                        )}
+                                      </div>
+                                      {servicio.descripcion && (
+                                        <p className="text-sm text-vet-gray-600 mb-1">
+                                          {servicio.descripcion}
+                                        </p>
+                                      )}
+                                      {servicio.duracion && (
+                                        <p className="text-xs text-vet-gray-500">
+                                          Duración: {servicio.duracion}
+                                        </p>
+                                      )}
+                                      {servicio.notas && (
+                                        <p className="text-xs text-vet-gray-500 mt-1">
+                                          Notas: {servicio.notas}
+                                        </p>
+                                      )}
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
                           </div>
 
                           <div>
