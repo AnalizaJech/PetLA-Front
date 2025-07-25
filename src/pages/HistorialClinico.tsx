@@ -889,13 +889,11 @@ export default function HistorialClinico() {
                     <CardContent className="p-12 text-center">
                       <Stethoscope className="w-16 h-16 text-vet-gray-400 mx-auto mb-4" />
                       <h3 className="text-lg font-semibold text-vet-gray-900 mb-2">
-                        Sin consultas registradas
+                        Sin consultas generales registradas
                       </h3>
                       <p className="text-vet-gray-600 mb-6">
-                        {selectedMascota} no tiene consultas completadas en su
-                        historial. Las consultas aparecerán aquí después de que
-                        un veterinario las atienda y registre la información
-                        médica.
+                        {selectedMascota} no tiene consultas generales en su
+                        historial. Los servicios de consulta general aparecerán aquí.
                       </p>
                       <Button
                         onClick={() => (window.location.href = "/mis-citas")}
