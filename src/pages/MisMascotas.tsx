@@ -304,7 +304,7 @@ export default function MisMascotas() {
                         nombre: "",
                         especie: "Perro",
                         raza: "",
-                        fechaNacimiento: "",
+                        fechaNacimiento: undefined,
                         peso: "",
                         sexo: "",
                         microchip: "",
