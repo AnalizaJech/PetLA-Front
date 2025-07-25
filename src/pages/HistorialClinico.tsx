@@ -68,7 +68,7 @@ const mockHistorial = {
     vacunas: [
       {
         id: "1",
-        nombre: "Antirr��bica",
+        nombre: "Antirrábica",
         fecha: new Date("2023-11-15"),
         lote: "RAB-2023-456",
         veterinario: "Dr. Carlos Ruiz",
@@ -233,6 +233,54 @@ export default function HistorialClinico() {
     consultas: [],
     vacunas: [],
     examenes: [],
+  };
+
+  // Función para descargar el historial clínico
+  const descargarHistorial = () => {
+    if (!selectedMascota) return;
+
+    const mascotaInfo = availableMascotas.find(m => m.nombre === selectedMascota);
+    if (!mascotaInfo) return;
+
+    const data = {
+      mascota: {
+        nombre: mascotaInfo.nombre,
+        especie: mascotaInfo.especie,
+        raza: mascotaInfo.raza,
+        fechaNacimiento: mascotaInfo.fechaNacimiento.toLocaleDateString('es-ES'),
+        peso: mascotaInfo.peso,
+        sexo: mascotaInfo.sexo,
+        microchip: mascotaInfo.microchip || 'No registrado'
+      },
+      historial: {
+        consultas: historialMascota.consultas.map(c => ({
+          fecha: c.fecha.toLocaleDateString('es-ES'),
+          veterinario: c.veterinario,
+          motivo: c.motivo,
+          diagnostico: c.diagnostico,
+          tratamiento: c.tratamiento,
+          medicamentos: c.medicamentos,
+          proximaCita: c.proxima_cita?.toLocaleDateString('es-ES') || 'No programada',
+          notas: c.notas
+        })),
+        vacunas: historialMascota.vacunas,
+        examenes: historialMascota.examenes
+      },
+      fechaDescarga: new Date().toLocaleDateString('es-ES'),
+      generadoPor: user?.nombre || 'Usuario'
+    };
+
+    const jsonString = JSON.stringify(data, null, 2);
+    const blob = new Blob([jsonString], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `historial_clinico_${selectedMascota.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   if (!user) {
