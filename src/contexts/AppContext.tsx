@@ -31,6 +31,7 @@ interface Cita {
   estado: string;
   veterinario: string;
   motivo: string;
+  tipoConsulta: string;
   ubicacion: string;
   precio: number;
   notas?: string;
