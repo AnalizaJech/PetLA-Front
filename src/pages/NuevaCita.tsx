@@ -223,8 +223,12 @@ export default function NuevaCita() {
   };
 
   const handleSubmit = async () => {
+    // Prevent double submission
+    if (isLoading) return;
+
     setIsLoading(true);
     setError("");
+    setSuccess("");
 
     try {
       // Validations
@@ -322,7 +326,9 @@ export default function NuevaCita() {
       };
 
       addCita(nuevaCita);
-      setSuccess("Cita agendada exitosamente");
+      setSuccess(
+        "¡Cita agendada exitosamente! Ahora debes realizar el pago o subir tu comprobante de pago (YAPE, PLIN, Banca Móvil BCP, Interbank u otro banco) en la sección 'Mis Citas'."
+      );
 
       // Redirect after success
       setTimeout(() => {
@@ -499,7 +505,7 @@ export default function NuevaCita() {
                                   {mascota.especie} • {mascota.raza}
                                 </p>
                                 <p className="text-xs text-vet-gray-500">
-                                  {mascota.peso} kg • {mascota.sexo}
+                                  {mascota.peso} kg �� {mascota.sexo}
                                 </p>
                               </div>
                               {citaData.mascotaId === mascota.id && (
@@ -879,11 +885,25 @@ export default function NuevaCita() {
                 ) : (
                   <Button
                     onClick={handleSubmit}
-                    disabled={isLoading}
-                    className="bg-vet-primary hover:bg-vet-primary-dark flex items-center"
+                    disabled={isLoading || success}
+                    className="bg-vet-primary hover:bg-vet-primary-dark flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {isLoading ? "Agendando..." : "Confirmar Cita"}
-                    <CheckCircle className="w-4 h-4 ml-2" />
+                    {isLoading ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                        Agendando...
+                      </>
+                    ) : success ? (
+                      <>
+                        <CheckCircle className="w-4 h-4 mr-2" />
+                        Cita Agendada
+                      </>
+                    ) : (
+                      <>
+                        Confirmar Cita
+                        <CheckCircle className="w-4 h-4 ml-2" />
+                      </>
+                    )}
                   </Button>
                 )}
               </div>
