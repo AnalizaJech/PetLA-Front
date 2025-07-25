@@ -621,18 +621,7 @@ export default function GestionCitas() {
                                       Ver Comprobante
                                     </DropdownMenuItem>
 
-                                    {cita.estado === "en_validacion" && (
-                                      <DropdownMenuItem
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          openDialog(cita, "validate");
-                                        }}
-                                        className="flex items-center cursor-pointer hover:bg-vet-gray-50"
-                                      >
-                                        <Shield className="w-4 h-4 mr-2 text-orange-600" />
-                                        Validar Comprobante
-                                      </DropdownMenuItem>
-                                    )}
+
                                   </>
                                 )}
 
