@@ -430,7 +430,13 @@ export default function NuevaCita() {
               <Alert className="mb-6 border-green-200 bg-green-50">
                 <CheckCircle className="w-4 h-4 text-green-600" />
                 <AlertDescription className="text-green-800">
-                  {success}
+                  <div className="space-y-2">
+                    <p className="font-semibold">¡Cita agendada exitosamente!</p>
+                    <p>Ahora debes realizar el pago o subir tu comprobante de pago en la sección "Mis Citas".</p>
+                    <p className="text-sm">
+                      <strong>Métodos de pago aceptados:</strong> YAPE, PLIN, Banca Móvil BCP, Interbank u otro banco.
+                    </p>
+                  </div>
                 </AlertDescription>
               </Alert>
             )}
@@ -505,7 +511,7 @@ export default function NuevaCita() {
                                   {mascota.especie} • {mascota.raza}
                                 </p>
                                 <p className="text-xs text-vet-gray-500">
-                                  {mascota.peso} kg �� {mascota.sexo}
+                                  {mascota.peso} kg • {mascota.sexo}
                                 </p>
                               </div>
                               {citaData.mascotaId === mascota.id && (
