@@ -84,17 +84,21 @@ export default function MisMascotas() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!newMascota.fechaNacimiento) {
+      return; // Don't submit without date
+    }
+
     if (editingMascota) {
       // Edit existing mascota
       updateMascota(editingMascota.id, {
         ...newMascota,
-        fechaNacimiento: new Date(newMascota.fechaNacimiento),
+        fechaNacimiento: newMascota.fechaNacimiento,
       });
     } else {
       // Add new mascota
       addMascota({
         ...newMascota,
-        fechaNacimiento: new Date(newMascota.fechaNacimiento),
+        fechaNacimiento: newMascota.fechaNacimiento,
       });
     }
 
@@ -565,7 +569,7 @@ export default function MisMascotas() {
                       {mascota.proximaCita ? (
                         <div className="bg-vet-primary/5 border border-vet-primary/20 rounded-lg p-3 mb-4">
                           <p className="text-sm font-medium text-vet-primary mb-1">
-                            Pr��xima cita
+                            Próxima cita
                           </p>
                           <p className="text-sm text-vet-gray-600">
                             {mascota.proximaCita.toLocaleDateString("es-ES")}
