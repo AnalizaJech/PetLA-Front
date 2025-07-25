@@ -1368,6 +1368,11 @@ export default function GestionCitas() {
                     <Button
                       onClick={() => {
                         setVoucherModalMode("validate");
+                        // Cargar datos del comprobante si no están cargados
+                        if (!currentReceiptData && selectedCita) {
+                          const receiptData = getComprobante(selectedCita.id);
+                          setCurrentReceiptData(receiptData);
+                        }
                       }}
                       className="flex-1 bg-orange-600 hover:bg-orange-700 text-white"
                     >
