@@ -389,17 +389,18 @@ export default function MisMascotas() {
                         <Label htmlFor="fechaNacimiento">
                           Fecha de nacimiento
                         </Label>
-                        <Input
-                          id="fechaNacimiento"
-                          type="date"
-                          value={newMascota.fechaNacimiento}
-                          onChange={(e) =>
+                        <DatePicker
+                          date={newMascota.fechaNacimiento}
+                          onDateChange={(date) =>
                             setNewMascota({
                               ...newMascota,
-                              fechaNacimiento: e.target.value,
+                              fechaNacimiento: date,
                             })
                           }
-                          required
+                          placeholder="Selecciona la fecha de nacimiento"
+                          fromYear={1990}
+                          toYear={new Date().getFullYear()}
+                          className="w-full"
                         />
                       </div>
 
