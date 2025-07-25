@@ -154,30 +154,10 @@ export function DatePicker({
         }
 
         .react-datepicker__day--today {
-          background: linear-gradient(135deg,
-            hsl(var(--accent)) 0%,
-            hsl(var(--accent)/0.8) 100%);
+          background: hsl(var(--accent));
           color: hsl(var(--accent-foreground));
-          font-weight: 700;
-          border: 2px solid hsl(var(--primary)/0.4);
-          position: relative;
-          box-shadow:
-            0 4px 8px rgb(0 0 0 / 0.1),
-            0 0 0 1px hsl(var(--primary)/0.2);
-        }
-
-        .react-datepicker__day--today::after {
-          content: '';
-          position: absolute;
-          bottom: 3px;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 6px;
-          height: 6px;
-          background: hsl(var(--primary));
-          border-radius: 50%;
-          box-shadow: 0 0 8px hsl(var(--primary)/0.6);
-          animation: pulse 2s infinite;
+          font-weight: 500;
+          border: 1px solid hsl(var(--primary));
         }
 
         @keyframes pulse {
