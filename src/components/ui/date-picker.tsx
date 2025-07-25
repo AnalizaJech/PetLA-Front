@@ -18,6 +18,8 @@ interface DatePickerProps {
   className?: string;
   fromYear?: number;
   toYear?: number;
+  minDate?: Date;
+  maxDate?: Date;
 }
 
 export function DatePicker({
