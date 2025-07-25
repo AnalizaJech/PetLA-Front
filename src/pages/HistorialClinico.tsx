@@ -882,8 +882,8 @@ export default function HistorialClinico() {
                 </TabsTrigger>
               </TabsList>
 
-              {/* Consultas Tab */}
-              <TabsContent value="consultas" className="space-y-4">
+              {/* Consulta General Tab */}
+              <TabsContent value="consulta_general" className="space-y-4">
                 {historialMascota.consultas.length === 0 ? (
                   <Card>
                     <CardContent className="p-12 text-center">
