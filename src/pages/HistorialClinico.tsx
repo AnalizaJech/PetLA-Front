@@ -491,9 +491,17 @@ export default function HistorialClinico() {
                     <h3 className="text-lg font-semibold text-vet-gray-900 mb-2">
                       Sin vacunas registradas
                     </h3>
-                    <p className="text-vet-gray-600">
-                      {selectedMascota} no tiene vacunas en su historial
+                    <p className="text-vet-gray-600 mb-6">
+                      {selectedMascota} no tiene vacunas registradas en su historial.
+                      Las vacunas se registrarán durante las consultas veterinarias.
                     </p>
+                    <Button
+                      onClick={() => window.location.href = "/agendar-cita"}
+                      className="bg-vet-primary hover:bg-vet-primary-dark"
+                    >
+                      <Calendar className="w-4 h-4 mr-2" />
+                      Agendar Consulta
+                    </Button>
                   </CardContent>
                 </Card>
               ) : (
