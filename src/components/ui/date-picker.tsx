@@ -48,9 +48,9 @@ export function DatePicker({
           <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
           <span className="truncate">
             {date ? (
-              format(date, "dd/MM/yyyy", { locale: es })
+              format(date, "dd/MM/yyyy")
             ) : (
-              placeholder
+              <span className="text-muted-foreground">{placeholder}</span>
             )}
           </span>
         </Button>
