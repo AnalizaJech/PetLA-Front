@@ -223,6 +223,14 @@ interface AppContextType {
   ) => void;
   deleteNewsletterEmail: (id: string) => void;
 
+  // Notificaciones state
+  notificaciones: Notificacion[];
+  addNotificacion: (notificacion: Omit<Notificacion, "id" | "fechaCreacion">) => void;
+  markNotificacionAsRead: (id: string) => void;
+  markAllNotificacionesAsRead: (usuarioId: string) => void;
+  getNotificacionesByUser: (usuarioId: string) => Notificacion[];
+  deleteNotificacion: (id: string) => void;
+
   // Authentication helpers
   login: (email: string, password: string) => Promise<Usuario | null>;
   register: (
