@@ -68,7 +68,7 @@ const mockHistorial = {
     vacunas: [
       {
         id: "1",
-        nombre: "Antirrábica",
+        nombre: "Antirr��bica",
         fecha: new Date("2023-11-15"),
         lote: "RAB-2023-456",
         veterinario: "Dr. Carlos Ruiz",
@@ -171,6 +171,13 @@ export default function HistorialClinico() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+
+    // Obtener mascota desde parámetros URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const mascotaParam = urlParams.get('mascota');
+    if (mascotaParam) {
+      setSelectedMascota(decodeURIComponent(mascotaParam));
+    }
   }, []);
 
   // Filtrar mascotas según el rol
