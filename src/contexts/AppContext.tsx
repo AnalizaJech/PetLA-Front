@@ -394,6 +394,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         return parsedCitas.map((cita: any) => ({
           ...cita,
           fecha: new Date(cita.fecha),
+          tipoConsulta: cita.tipoConsulta || "Consulta General", // Default for existing appointments
         }));
       }
       return [];
