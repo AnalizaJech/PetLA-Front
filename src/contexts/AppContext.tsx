@@ -329,16 +329,22 @@ const initialUsuarios: Usuario[] = [
 ];
 
 export function AppProvider({ children }: { children: ReactNode }) {
-  // Clear any existing fictional data on first load
+  // Clear any existing fictional data on first load - DISABLED to prevent data loss
   useEffect(() => {
-    const shouldClearData = localStorage.getItem("fictional_data_cleared");
-    if (!shouldClearData) {
-      localStorage.removeItem("mascotas");
-      localStorage.removeItem("citas");
-      localStorage.removeItem("preCitas");
-      localStorage.removeItem("historialClinico");
-      localStorage.removeItem("suscriptoresNewsletter");
-      localStorage.removeItem("newsletterEmails");
+    // This code was automatically clearing user data, so it's now disabled
+    // const shouldClearData = localStorage.getItem("fictional_data_cleared");
+    // if (!shouldClearData) {
+    //   localStorage.removeItem("mascotas");
+    //   localStorage.removeItem("citas");
+    //   localStorage.removeItem("preCitas");
+    //   localStorage.removeItem("historialClinico");
+    //   localStorage.removeItem("suscriptoresNewsletter");
+    //   localStorage.removeItem("newsletterEmails");
+    //   localStorage.setItem("fictional_data_cleared", "true");
+    // }
+
+    // Set the flag to prevent future clearing
+    if (!localStorage.getItem("fictional_data_cleared")) {
       localStorage.setItem("fictional_data_cleared", "true");
     }
   }, []);
