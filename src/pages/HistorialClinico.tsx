@@ -294,6 +294,44 @@ export default function HistorialClinico() {
             )}
           </div>
 
+          {/* Mostrar mensaje si no hay mascotas disponibles */}
+          {availableMascotas.length === 0 ? (
+            <Card>
+              <CardContent className="p-12 text-center">
+                <PawPrint className="w-16 h-16 text-vet-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-vet-gray-900 mb-2">
+                  {user?.rol === "veterinario"
+                    ? "No tienes pacientes asignados"
+                    : "No tienes mascotas registradas"
+                  }
+                </h3>
+                <p className="text-vet-gray-600 mb-6">
+                  {user?.rol === "veterinario"
+                    ? "No hay mascotas con citas asignadas a ti. Los historiales aparecerán cuando atiendas consultas."
+                    : "Primero debes registrar tus mascotas y agendar citas médicas para ver su historial clínico."
+                  }
+                </p>
+                {user?.rol !== "veterinario" && (
+                  <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                    <Button
+                      onClick={() => window.location.href = "/mis-mascotas"}
+                      className="bg-vet-primary hover:bg-vet-primary-dark"
+                    >
+                      <PawPrint className="w-4 h-4 mr-2" />
+                      Registrar Mascota
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => window.location.href = "/agendar-cita"}
+                    >
+                      <Calendar className="w-4 h-4 mr-2" />
+                      Agendar Cita
+                    </Button>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          ) : (
           <Tabs
             value={selectedTab}
             onValueChange={setSelectedTab}
@@ -569,6 +607,7 @@ export default function HistorialClinico() {
               )}
             </TabsContent>
           </Tabs>
+          )}
         </div>
       </div>
     </Layout>
