@@ -47,6 +47,60 @@ export default function Notificaciones() {
 
     const realNotifications = [];
 
+    // Obtener notificaciones del contexto (citas aceptadas, bienvenida, consultas registradas)
+    const contextNotifications = getNotificacionesByUser(user.id);
+
+    // Convertir notificaciones del contexto al formato de la UI
+    contextNotifications.forEach((notif) => {
+      let icon = Bell;
+      let color = "vet-primary";
+      let priority = "normal";
+      let type = notif.tipo;
+
+      switch (notif.tipo) {
+        case "cita_aceptada":
+          icon = CheckCircle;
+          color = "green-500";
+          priority = "high";
+          type = "cita";
+          break;
+        case "bienvenida_cliente":
+          icon = User;
+          color = "vet-primary";
+          priority = "normal";
+          type = "sistema";
+          break;
+        case "consulta_registrada":
+          icon = FileText;
+          color = "blue-500";
+          priority = "normal";
+          type = "historial";
+          break;
+      }
+
+      const hoursAgo = Math.floor(
+        (new Date().getTime() - new Date(notif.fechaCreacion).getTime()) /
+          (1000 * 60 * 60),
+      );
+
+      realNotifications.push({
+        id: notif.id,
+        type: type,
+        title: notif.titulo,
+        message: notif.mensaje,
+        time: hoursAgo === 0
+          ? "Hace menos de 1 hora"
+          : hoursAgo < 24
+            ? `Hace ${hoursAgo} hora${hoursAgo > 1 ? "s" : ""}`
+            : `Hace ${Math.floor(hoursAgo / 24)} día${Math.floor(hoursAgo / 24) > 1 ? "s" : ""}`,
+        read: notif.leida,
+        priority: priority,
+        icon: icon,
+        color: color,
+        contextNotification: true,
+      });
+    });
+
     // For clients: upcoming appointments
     if (user.rol === "cliente") {
       const upcomingCitas = citas.filter((cita) => {
@@ -136,7 +190,7 @@ export default function Notificaciones() {
     }
 
     setNotifications(realNotifications);
-  }, [user, citas, preCitas, mascotas]);
+  }, [user, citas, preCitas, mascotas, getNotificacionesByUser]);
 
   const filteredNotifications = notifications.filter((notification) => {
     if (selectedFilter === "todas") return true;
