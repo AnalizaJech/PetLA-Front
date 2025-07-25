@@ -76,7 +76,7 @@ interface HistorialClinico {
     | "consulta_general"
     | "vacunacion"
     | "emergencia"
-    | "control"
+    | "grooming"
     | "cirugia"
     | "diagnostico";
   motivo: string;
