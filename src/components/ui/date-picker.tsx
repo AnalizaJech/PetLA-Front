@@ -284,37 +284,13 @@ export function DatePicker({
 
         .react-datepicker__year-dropdown::-webkit-scrollbar-thumb,
         .react-datepicker__month-dropdown::-webkit-scrollbar-thumb {
-          background: linear-gradient(180deg,
-            hsl(var(--primary)/0.6),
-            hsl(var(--primary)/0.4));
+          background: hsl(var(--muted-foreground));
           border-radius: 4px;
-          border: 1px solid hsl(var(--background));
         }
 
         .react-datepicker__year-dropdown::-webkit-scrollbar-thumb:hover,
         .react-datepicker__month-dropdown::-webkit-scrollbar-thumb:hover {
-          background: linear-gradient(180deg,
-            hsl(var(--primary)),
-            hsl(var(--primary)/0.8));
-        }
-
-        /* BOTÓN HOY MEJORADO */
-        .react-datepicker__today-button {
-          background: linear-gradient(135deg,
-            hsl(var(--primary)) 0%,
-            hsl(var(--primary)/0.9) 100%);
-          border: none;
-          border-radius: 0.75rem;
-          color: hsl(var(--primary-foreground));
-          padding: 0.75rem 1.5rem;
-          margin: 1rem;
-          font-weight: 700;
-          font-size: 0.875rem;
-          transition: all 0.3s ease;
-          cursor: pointer;
-          box-shadow: 0 4px 6px hsl(var(--primary)/0.3);
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
+          background: hsl(var(--primary));
         }
 
         .react-datepicker__today-button:hover {
