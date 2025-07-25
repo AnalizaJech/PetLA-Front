@@ -171,14 +171,25 @@ export default function HistorialClinico() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+  }, []);
 
-    // Obtener mascota desde parámetros URL
+  // Manejar parámetros URL cuando cambien las mascotas disponibles
+  useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const mascotaParam = urlParams.get('mascota');
-    if (mascotaParam) {
-      setSelectedMascota(decodeURIComponent(mascotaParam));
+
+    if (mascotaParam && availableMascotas.length > 0) {
+      const mascotaName = decodeURIComponent(mascotaParam);
+      // Verificar que la mascota existe en las mascotas disponibles
+      const mascotaExists = availableMascotas.some(m => m.nombre === mascotaName);
+      if (mascotaExists) {
+        setSelectedMascota(mascotaName);
+      } else if (!selectedMascota && availableMascotas.length > 0) {
+        // Si la mascota del URL no existe, seleccionar la primera disponible
+        setSelectedMascota(availableMascotas[0].nombre);
+      }
     }
-  }, []);
+  }, [availableMascotas]);
 
   // Filtrar mascotas según el rol
   const availableMascotas =
