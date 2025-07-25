@@ -23,6 +23,15 @@ interface Mascota {
   foto?: string | null;
 }
 
+interface ComprobanteData {
+  id: string;
+  data: string; // base64
+  originalName: string;
+  size: number;
+  type: string;
+  timestamp: number;
+}
+
 interface Cita {
   id: string;
   mascota: string;
@@ -36,6 +45,7 @@ interface Cita {
   precio: number;
   notas?: string;
   comprobantePago?: string;
+  comprobanteData?: ComprobanteData;
   notasAdmin?: string;
 }
 
