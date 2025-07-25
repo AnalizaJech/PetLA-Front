@@ -39,6 +39,7 @@ import {
   Activity,
   Search,
 } from "lucide-react";
+import { DatePicker } from "@/components/ui/date-picker";
 
 interface NuevaCitaData {
   mascotaId: string;
@@ -629,28 +630,23 @@ export default function NuevaCita() {
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
+                    <div className="space-y-2">
                       <Label htmlFor="fecha">Fecha preferida *</Label>
-                      <div className="relative mt-2">
-                        <Input
-                          id="fecha"
-                          type="date"
-                          value={citaData.fecha}
-                          onChange={(e) =>
-                            setCitaData({ ...citaData, fecha: e.target.value })
-                          }
-                          min={getMinDate()}
-                          max={getMaxDate()}
-                          className="w-full pl-10 pr-4 py-2 border border-vet-gray-300 rounded-lg focus:ring-2 focus:ring-vet-primary focus:border-vet-primary transition-all duration-200"
-                        />
-                        <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-vet-gray-400 pointer-events-none" />
-                      </div>
-                      <p className="text-xs text-vet-gray-500 mt-1">
-                        📅 Puedes agendar hasta 3 meses por adelantado
-                      </p>
+                      <DatePicker
+                        date={citaData.fecha ? new Date(citaData.fecha) : undefined}
+                        onDateChange={(date) => {
+                          setCitaData({
+                            ...citaData,
+                            fecha: date ? date.toISOString().split("T")[0] : "",
+                          });
+                        }}
+                        placeholder="Selecciona fecha"
+                        fromYear={new Date().getFullYear()}
+                        toYear={new Date().getFullYear() + 1}
+                      />
                     </div>
 
-                    <div>
+                    <div className="space-y-2">
                       <Label htmlFor="hora">Hora preferida *</Label>
                       <Select
                         value={citaData.hora}
@@ -658,7 +654,7 @@ export default function NuevaCita() {
                           setCitaData({ ...citaData, hora: value })
                         }
                       >
-                        <SelectTrigger className="mt-2">
+                        <SelectTrigger>
                           <SelectValue placeholder="Selecciona hora" />
                         </SelectTrigger>
                         <SelectContent>
