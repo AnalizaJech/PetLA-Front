@@ -232,13 +232,20 @@ export default function HistorialClinico() {
          cita.estado === "pendiente_pago")
     );
 
-    // Categorizar servicios por tipo
-    const consultas = [];
-    const vacunas = [];
-    const examenes = [];
+    // Agrupar por los 6 servicios específicos de la veterinaria
+    const servicios = {
+      consulta_general: [],
+      vacunacion: [],
+      emergencia: [],
+      grooming: [],
+      cirugia: [],
+      diagnostico: []
+    };
 
     citasRelevantes.forEach((cita) => {
       const tipoConsulta = cita.tipoConsulta || "Consulta General";
+      const diagnosticoDefault = getDiagnosticoDefecto(tipoConsulta, cita.estado);
+      const tratamientoDefault = getTratamientoDefecto(tipoConsulta, cita.estado);
 
       const baseRecord = {
         id: cita.id,
@@ -247,57 +254,43 @@ export default function HistorialClinico() {
         motivo: cita.motivo || "Sin motivo especificado",
         tipoConsulta: tipoConsulta,
         estado: cita.estado,
+        diagnostico: cita.consulta?.diagnostico || diagnosticoDefault,
+        tratamiento: cita.consulta?.tratamiento || tratamientoDefault,
+        medicamentos: cita.consulta?.medicamentos || [],
+        proxima_cita: cita.consulta?.proximaCita
+          ? new Date(cita.consulta.proximaCita)
+          : getProximaConsulta(tipoConsulta, cita.fecha),
+        notas: cita.consulta?.notas || getNotasDefecto(tipoConsulta, cita.estado),
+        precio: cita.precio,
       };
 
-      // Clasificar por tipo de servicio usando los 6 servicios oficiales de la veterinaria
-      const tipoId = cita.tipoConsulta?.toLowerCase() || '';
-      const serviceName = tipoConsulta;
+      // Clasificar según el servicio específico
+      const tipoNormalizado = tipoConsulta.toLowerCase().replace(/\s+/g, '_');
 
-      // 1. VACUNACIÓN - Servicio oficial de la veterinaria
-      if (tipoId === 'vacunación' ||
-          tipoId === 'vacunacion' ||
-          serviceName.toLowerCase().includes('vacun')) {
-        vacunas.push({
-          ...baseRecord,
-          nombre: serviceName,
-          lote: `LOT-${cita.id}`,
-          proxima: getProximaVacuna(cita.fecha),
-        });
-      // 2. DIAGNÓSTICO - Servicio oficial (exámenes y análisis)
-      } else if (tipoId === 'diagnóstico' ||
-                 tipoId === 'diagnostico' ||
-                 serviceName.toLowerCase().includes('diagnóstico') ||
-                 serviceName.toLowerCase().includes('diagnostico')) {
-        examenes.push({
-          ...baseRecord,
-          tipo: serviceName,
-          resultados: cita.consulta?.diagnostico || "Examen completado - Resultados disponibles",
-          archivo: `diagnostico_${cita.mascota.toLowerCase()}_${cita.fecha.toISOString().split('T')[0]}.pdf`,
-        });
+      if (tipoNormalizado.includes('consulta_general') || tipoNormalizado.includes('general')) {
+        servicios.consulta_general.push(baseRecord);
+      } else if (tipoNormalizado.includes('vacunacion') || tipoNormalizado.includes('vacuna')) {
+        servicios.vacunacion.push(baseRecord);
+      } else if (tipoNormalizado.includes('emergencia')) {
+        servicios.emergencia.push(baseRecord);
+      } else if (tipoNormalizado.includes('grooming')) {
+        servicios.grooming.push(baseRecord);
+      } else if (tipoNormalizado.includes('cirugia') || tipoNormalizado.includes('cirugía')) {
+        servicios.cirugia.push(baseRecord);
+      } else if (tipoNormalizado.includes('diagnostico') || tipoNormalizado.includes('diagnóstico')) {
+        servicios.diagnostico.push(baseRecord);
       } else {
-        // 3. CONSULTA GENERAL, 4. EMERGENCIA, 5. CIRUGÍA, 6. GROOMING
-        const diagnosticoDefault = getDiagnosticoDefecto(tipoConsulta, cita.estado);
-        const tratamientoDefault = getTratamientoDefecto(tipoConsulta, cita.estado);
-
-        consultas.push({
-          ...baseRecord,
-          diagnostico: cita.consulta?.diagnostico || diagnosticoDefault,
-          tratamiento: cita.consulta?.tratamiento || tratamientoDefault,
-          medicamentos: cita.consulta?.medicamentos || [],
-          proxima_cita: cita.consulta?.proximaCita
-            ? new Date(cita.consulta.proximaCita)
-            : getProximaConsulta(tipoConsulta, cita.fecha),
-          notas: cita.consulta?.notas || getNotasDefecto(tipoConsulta, cita.estado),
-          precio: cita.precio,
-        });
+        // Si no coincide con ninguno, ponerlo en consulta general por defecto
+        servicios.consulta_general.push(baseRecord);
       }
     });
 
-    return {
-      consultas: consultas.sort((a, b) => b.fecha - a.fecha),
-      vacunas: vacunas.sort((a, b) => b.fecha - a.fecha),
-      examenes: examenes.sort((a, b) => b.fecha - a.fecha),
-    };
+    // Ordenar cada servicio por fecha (más reciente primero)
+    Object.keys(servicios).forEach(key => {
+      servicios[key] = servicios[key].sort((a, b) => b.fecha - a.fecha);
+    });
+
+    return servicios;
   };
 
   // Función auxiliar para calcular próxima vacuna
@@ -447,7 +440,7 @@ export default function HistorialClinico() {
         if (vacuna.proxima) {
           contenido += `Próxima dosis: ${vacuna.proxima.toLocaleDateString("es-ES")}\n`;
         }
-        contenido += `\n${"��".repeat(40)}\n`;
+        contenido += `\n${"·".repeat(40)}\n`;
       });
     } else {
       contenido += `VACUNAS\n`;
