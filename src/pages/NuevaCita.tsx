@@ -328,6 +328,14 @@ export default function NuevaCita() {
       };
 
       addCita(nuevaCita);
+
+      // Show immediate toast notification
+      toast({
+        title: "¡Cita agendada exitosamente!",
+        description: "Serás redirigido a 'Mis Citas' para realizar el pago.",
+        duration: 4000,
+      });
+
       setSuccess(
         "¡Cita agendada exitosamente! Ahora debes realizar el pago o subir tu comprobante de pago (YAPE, PLIN, Banca Móvil BCP, Interbank u otro banco) en la sección 'Mis Citas'."
       );
