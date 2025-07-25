@@ -34,6 +34,7 @@ import {
   ArrowRight,
   TrendingUp,
   FileText,
+  ChevronDown,
 } from "lucide-react";
 import { PreCitaFormData } from "@/lib/types";
 
