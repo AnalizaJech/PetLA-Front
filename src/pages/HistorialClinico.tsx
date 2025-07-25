@@ -239,12 +239,6 @@ export default function HistorialClinico() {
 
     citasRelevantes.forEach((cita) => {
       const tipoConsulta = cita.tipoConsulta || "Consulta General";
-      console.log(`🔍 Procesando cita:`, {
-        id: cita.id,
-        tipoConsulta,
-        motivo: cita.motivo,
-        estado: cita.estado
-      });
 
       const baseRecord = {
         id: cita.id,
