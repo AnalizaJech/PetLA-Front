@@ -729,11 +729,14 @@ function ClientDashboard({ stats }: { stats: any }) {
                   <span className="text-sm font-medium text-vet-gray-900">
                     Vacunación al día
                   </span>
-                  <span className="text-sm text-green-600 font-medium">
-                    85%
+                  <span className={`text-sm font-medium ${
+                    healthStats.vacunacionPorcentaje >= 80 ? 'text-green-600' :
+                    healthStats.vacunacionPorcentaje >= 60 ? 'text-yellow-600' : 'text-red-600'
+                  }`}>
+                    {healthStats.vacunacionPorcentaje}%
                   </span>
                 </div>
-                <Progress value={85} className="h-2" />
+                <Progress value={healthStats.vacunacionPorcentaje} className="h-2" />
               </div>
 
               <div>
@@ -741,19 +744,91 @@ function ClientDashboard({ stats }: { stats: any }) {
                   <span className="text-sm font-medium text-vet-gray-900">
                     Revisiones pendientes
                   </span>
-                  <span className="text-sm text-orange-600 font-medium">2</span>
+                  <span className={`text-sm font-medium ${
+                    healthStats.revisionesPendientes === 0 ? 'text-green-600' :
+                    healthStats.revisionesPendientes <= 2 ? 'text-orange-600' : 'text-red-600'
+                  }`}>
+                    {healthStats.revisionesPendientes}
+                  </span>
                 </div>
-                <Progress value={60} className="h-2" />
+                <Progress value={healthStats.revisionesPendientes === 0 ? 100 :
+                                healthStats.revisionesPendientes <= 2 ? 60 : 30} className="h-2" />
               </div>
 
-              <div className="flex items-center space-x-3 p-3 bg-green-50 rounded-lg border border-green-200">
-                <CheckCircle className="w-5 h-5 text-green-600" />
+              {/* Sección de próxima cita */}
+              {healthStats.proximaCita ? (
+                <div className="flex items-start space-x-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                  <Calendar className="w-5 h-5 text-blue-600 mt-0.5" />
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-blue-800">
+                      Próxima cita programada
+                    </p>
+                    <p className="text-xs text-blue-600 mt-1">
+                      <span className="font-medium">{healthStats.proximaCita.mascota}</span> - {' '}
+                      {new Date(healthStats.proximaCita.fecha).toLocaleDateString('es-ES', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                      })} a las {healthStats.proximaCita.hora}
+                    </p>
+                    <p className="text-xs text-blue-500 mt-1">
+                      {healthStats.proximaCita.tipoConsulta.replace('_', ' ').toUpperCase()} - {healthStats.proximaCita.veterinario}
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-center space-x-3 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+                  <AlertCircle className="w-5 h-5 text-yellow-600" />
+                  <div>
+                    <p className="text-sm font-medium text-yellow-800">
+                      Sin citas programadas
+                    </p>
+                    <p className="text-xs text-yellow-600">
+                      Considera agendar una revisión preventiva
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* Mensaje de estado general */}
+              <div className={`flex items-center space-x-3 p-3 rounded-lg border ${
+                healthStats.estadoGeneral === 'Excelente' ? 'bg-green-50 border-green-200' :
+                healthStats.estadoGeneral === 'Bueno' ? 'bg-blue-50 border-blue-200' :
+                healthStats.estadoGeneral === 'Regular' ? 'bg-yellow-50 border-yellow-200' :
+                'bg-red-50 border-red-200'
+              }`}>
+                {healthStats.estadoGeneral === 'Excelente' ? (
+                  <CheckCircle className="w-5 h-5 text-green-600" />
+                ) : healthStats.estadoGeneral === 'Bueno' ? (
+                  <Heart className="w-5 h-5 text-blue-600" />
+                ) : healthStats.estadoGeneral === 'Regular' ? (
+                  <AlertCircle className="w-5 h-5 text-yellow-600" />
+                ) : (
+                  <AlertCircle className="w-5 h-5 text-red-600" />
+                )}
                 <div>
-                  <p className="text-sm font-medium text-green-800">
-                    ¡Buen trabajo!
+                  <p className={`text-sm font-medium ${
+                    healthStats.estadoGeneral === 'Excelente' ? 'text-green-800' :
+                    healthStats.estadoGeneral === 'Bueno' ? 'text-blue-800' :
+                    healthStats.estadoGeneral === 'Regular' ? 'text-yellow-800' :
+                    'text-red-800'
+                  }`}>
+                    {healthStats.estadoGeneral === 'Excelente' ? '¡Buen trabajo!' :
+                     healthStats.estadoGeneral === 'Bueno' ? '¡Muy bien!' :
+                     healthStats.estadoGeneral === 'Regular' ? 'Mejorable' :
+                     'Necesita atención'}
                   </p>
-                  <p className="text-xs text-green-600">
-                    Tus mascotas están bien cuidadas
+                  <p className={`text-xs ${
+                    healthStats.estadoGeneral === 'Excelente' ? 'text-green-600' :
+                    healthStats.estadoGeneral === 'Bueno' ? 'text-blue-600' :
+                    healthStats.estadoGeneral === 'Regular' ? 'text-yellow-600' :
+                    'text-red-600'
+                  }`}>
+                    {healthStats.estadoGeneral === 'Excelente' ? 'Tus mascotas están muy bien cuidadas' :
+                     healthStats.estadoGeneral === 'Bueno' ? 'Tus mascotas están bien cuidadas' :
+                     healthStats.estadoGeneral === 'Regular' ? 'Algunas mascotas necesitan atención' :
+                     'Programa citas médicas urgentemente'}
                   </p>
                 </div>
               </div>
