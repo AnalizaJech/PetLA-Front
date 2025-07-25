@@ -104,16 +104,30 @@ export default function MisCitas() {
     input.click();
   };
 
-  const handleConfirmUpload = () => {
+  const handleConfirmUpload = async () => {
     if (previewFile && currentCitaId) {
-      // In a real app, you would upload to a server
-      // For now, we'll just update the status to indicate proof was uploaded
-      updateCita(currentCitaId, {
-        estado: "en_validacion",
-        comprobantePago: `uploaded_${previewFile.name}_${Date.now()}`,
-        notasAdmin: "", // Clear previous rejection notes
-      });
-      handleClosePreview();
+      setUploadingCitaId(currentCitaId); // Show loading state
+
+      try {
+        const success = await saveComprobante(currentCitaId, previewFile);
+
+        if (success) {
+          console.log("✅ Comprobante subido exitosamente");
+        } else {
+          console.error("❌ Error al subir comprobante");
+          // Fallback to old method
+          updateCita(currentCitaId, {
+            estado: "en_validacion",
+            comprobantePago: `uploaded_${previewFile.name}_${Date.now()}`,
+            notasAdmin: "",
+          });
+        }
+      } catch (error) {
+        console.error("❌ Error durante la subida:", error);
+      } finally {
+        setUploadingCitaId(null);
+        handleClosePreview();
+      }
     }
   };
 
