@@ -143,7 +143,7 @@ const mockHistorial = {
     vacunas: [
       {
         id: "3",
-        nombre: "Antirr��bica",
+        nombre: "Antirrábica",
         fecha: new Date("2023-09-10"),
         lote: "RAB-2023-123",
         veterinario: "Dra. Ana López",
@@ -332,6 +332,40 @@ export default function HistorialClinico() {
     }
 
     return fecha;
+  };
+
+  // Funciones auxiliares para contenido por defecto
+  const getDiagnosticoDefecto = (tipoConsulta, estado) => {
+    if (estado === "pendiente_pago") return "Consulta pendiente de confirmación";
+    if (estado === "aceptada") return "Consulta confirmada - Pendiente de atención";
+
+    const tipo = tipoConsulta.toLowerCase();
+    if (tipo.includes('general')) return "Evaluación general completada - Estado de salud normal";
+    if (tipo.includes('dental')) return "Evaluación dental realizada";
+    if (tipo.includes('dermatolog')) return "Evaluación dermatológica completada";
+    if (tipo.includes('cirug')) return "Procedimiento quirúrgico realizado exitosamente";
+    if (tipo.includes('emergencia')) return "Atención de emergencia - Estabilizado";
+    return "Evaluación especializada completada";
+  };
+
+  const getTratamientoDefecto = (tipoConsulta, estado) => {
+    if (estado === "pendiente_pago") return "Tratamiento será definido tras confirmación";
+    if (estado === "aceptada") return "Plan de tratamiento será establecido durante la consulta";
+
+    const tipo = tipoConsulta.toLowerCase();
+    if (tipo.includes('general')) return "Mantenimiento preventivo y cuidados generales";
+    if (tipo.includes('dental')) return "Limpieza dental y cuidados bucales";
+    if (tipo.includes('dermatolog')) return "Tratamiento dermatológico específico";
+    if (tipo.includes('cirug')) return "Procedimiento quirúrgico con cuidados post-operatorios";
+    if (tipo.includes('emergencia')) return "Tratamiento de emergencia aplicado";
+    return "Tratamiento especializado según protocolo veterinario";
+  };
+
+  const getNotasDefecto = (tipoConsulta, estado) => {
+    if (estado === "pendiente_pago") return "Consulta agendada - Awaiting payment confirmation";
+    if (estado === "aceptada") return "Consulta confirmada y programada";
+
+    return `${tipoConsulta} completada exitosamente. Se recomienda seguimiento según plan establecido.`;
   };
 
   const historialMascota = selectedMascota
