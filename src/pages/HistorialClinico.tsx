@@ -1192,8 +1192,7 @@ export default function HistorialClinico() {
                               <span>{servicio.tipoConsulta}</span>
                             </CardTitle>
                             <CardDescription>
-                              {servicio.fecha.toLocaleDateString("es-ES")} •{" "}
-                              {servicio.veterinario}
+                              {formatDateSafe(servicio.fecha)} • {servicio.veterinario}
                             </CardDescription>
                           </div>
                           <Badge className="bg-vet-primary/10 text-vet-primary">
@@ -1277,8 +1276,7 @@ export default function HistorialClinico() {
                               <span>{servicio.tipoConsulta}</span>
                             </CardTitle>
                             <CardDescription>
-                              {servicio.fecha.toLocaleDateString("es-ES")} •{" "}
-                              {servicio.veterinario}
+                              {formatDateSafe(servicio.fecha)} • {servicio.veterinario}
                             </CardDescription>
                           </div>
                           <Badge className="bg-red-100 text-red-800">
@@ -1362,8 +1360,7 @@ export default function HistorialClinico() {
                               <span>{servicio.tipoConsulta}</span>
                             </CardTitle>
                             <CardDescription>
-                              {servicio.fecha.toLocaleDateString("es-ES")} •{" "}
-                              {servicio.veterinario}
+                              {formatDateSafe(servicio.fecha)} • {servicio.veterinario}
                             </CardDescription>
                           </div>
                           <Badge className="bg-orange-100 text-orange-800">
@@ -1447,8 +1444,7 @@ export default function HistorialClinico() {
                               <span>{servicio.tipoConsulta}</span>
                             </CardTitle>
                             <CardDescription>
-                              {servicio.fecha.toLocaleDateString("es-ES")} •{" "}
-                              {servicio.veterinario}
+                              {formatDateSafe(servicio.fecha)} • {servicio.veterinario}
                             </CardDescription>
                           </div>
                           <Badge className="bg-purple-100 text-purple-800">
@@ -1532,8 +1528,7 @@ export default function HistorialClinico() {
                               <span>{servicio.tipoConsulta}</span>
                             </CardTitle>
                             <CardDescription>
-                              {servicio.fecha.toLocaleDateString("es-ES")} •{" "}
-                              {servicio.veterinario}
+                              {formatDateSafe(servicio.fecha)} • {servicio.veterinario}
                             </CardDescription>
                           </div>
                           <Badge className="bg-blue-100 text-blue-800">
