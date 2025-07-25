@@ -316,7 +316,7 @@ export function DatePicker({
         placeholderText={placeholder}
         disabled={disabled}
         popperClassName="z-50"
-        popperPlacement="bottom-start"
+        popperPlacement="auto"
         calendarClassName="modern-calendar"
         wrapperClassName="w-full"
         showPopperArrow={false}
