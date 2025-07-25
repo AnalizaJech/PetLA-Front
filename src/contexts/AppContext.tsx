@@ -524,11 +524,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
       }
 
       const maxSize = 5 * 1024 * 1024; // 5MB límite aproximado
-      const currentUsage = (total / maxSize * 100).toFixed(2);
+      const currentUsage = ((total / maxSize) * 100).toFixed(2);
 
       // Log del uso para debugging (solo en desarrollo)
-      if (process.env.NODE_ENV === 'development') {
-        console.log(`📊 LocalStorage: ${currentUsage}% usado (${(total/1024).toFixed(1)}KB)`);
+      if (process.env.NODE_ENV === "development") {
+        console.log(
+          `📊 LocalStorage: ${currentUsage}% usado (${(total / 1024).toFixed(1)}KB)`,
+        );
       }
 
       // Si está cerca del límite (>80%), limpiar datos innecesarios
@@ -542,12 +544,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
           "cache_",
           "preview_",
           "draft_",
-          "old_"
+          "old_",
         ];
 
         let cleanedSpace = 0;
         keysToClean.forEach((keyPrefix) => {
-          Object.keys(localStorage).forEach(key => {
+          Object.keys(localStorage).forEach((key) => {
             if (key === keyPrefix || key.startsWith(keyPrefix)) {
               cleanedSpace += localStorage[key].length;
               localStorage.removeItem(key);
@@ -555,7 +557,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
           });
         });
 
-        console.log(`✅ Liberado ${(cleanedSpace/1024).toFixed(1)}KB de espacio`);
+        console.log(
+          `✅ Liberado ${(cleanedSpace / 1024).toFixed(1)}KB de espacio`,
+        );
       }
     } catch (error) {
       console.error("❌ Error optimizando localStorage:", error);

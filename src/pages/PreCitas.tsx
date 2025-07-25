@@ -761,7 +761,9 @@ export default function PreCitas() {
                             <DatePicker
                               date={newDate ? new Date(newDate) : undefined}
                               onDateChange={(date) => {
-                                setNewDate(date ? date.toISOString().split("T")[0] : "");
+                                setNewDate(
+                                  date ? date.toISOString().split("T")[0] : "",
+                                );
                               }}
                               placeholder="Selecciona fecha"
                               fromYear={new Date().getFullYear()}

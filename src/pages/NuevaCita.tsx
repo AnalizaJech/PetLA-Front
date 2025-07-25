@@ -338,7 +338,7 @@ export default function NuevaCita() {
       });
 
       setSuccess(
-        "¡Cita agendada exitosamente! Ahora debes realizar el pago o subir tu comprobante de pago (YAPE, PLIN, Banca Móvil BCP, Interbank u otro banco) en la sección 'Mis Citas'."
+        "¡Cita agendada exitosamente! Ahora debes realizar el pago o subir tu comprobante de pago (YAPE, PLIN, Banca Móvil BCP, Interbank u otro banco) en la sección 'Mis Citas'.",
       );
 
       // Redirect after success (longer delay to read payment instructions)
@@ -442,10 +442,16 @@ export default function NuevaCita() {
                 <CheckCircle className="w-4 h-4 text-green-600" />
                 <AlertDescription className="text-green-800">
                   <div className="space-y-2">
-                    <p className="font-semibold">¡Cita agendada exitosamente!</p>
-                    <p>Ahora debes realizar el pago o subir tu comprobante de pago en la sección "Mis Citas".</p>
+                    <p className="font-semibold">
+                      ¡Cita agendada exitosamente!
+                    </p>
+                    <p>
+                      Ahora debes realizar el pago o subir tu comprobante de
+                      pago en la sección "Mis Citas".
+                    </p>
                     <p className="text-sm">
-                      <strong>Métodos de pago aceptados:</strong> YAPE, PLIN, Banca Móvil BCP, Interbank u otro banco.
+                      <strong>Métodos de pago aceptados:</strong> YAPE, PLIN,
+                      Banca Móvil BCP, Interbank u otro banco.
                     </p>
                   </div>
                 </AlertDescription>
@@ -656,7 +662,9 @@ export default function NuevaCita() {
                     <div className="space-y-2">
                       <Label htmlFor="fecha">Fecha preferida *</Label>
                       <DatePicker
-                        date={citaData.fecha ? new Date(citaData.fecha) : undefined}
+                        date={
+                          citaData.fecha ? new Date(citaData.fecha) : undefined
+                        }
                         onDateChange={(date) => {
                           setCitaData({
                             ...citaData,
