@@ -56,9 +56,8 @@ export function DatePicker({
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className="w-auto p-0 max-w-[280px]"
+        className="w-auto p-0"
         align="start"
-        side="bottom"
         sideOffset={4}
       >
         <Calendar
@@ -76,7 +75,7 @@ export function DatePicker({
           toYear={toYear}
           captionLayout="dropdown-buttons"
           locale={es}
-          className="rounded-md border-0"
+          className="rounded-md"
         />
       </PopoverContent>
     </Popover>
