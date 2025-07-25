@@ -173,6 +173,24 @@ const mockHistorial = {
 // Use dynamic mascotas from context
 const getMascotasNames = (mascotasList) => mascotasList.map((m) => m.nombre);
 
+// Helper function for UTF-8 safe date formatting
+const formatDateSafe = (date, options = {}) => {
+  try {
+    const defaultOptions = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      weekday: options.weekday || undefined,
+      ...options
+    };
+
+    return new Intl.DateTimeFormat('es-ES', defaultOptions).format(new Date(date));
+  } catch (error) {
+    console.error('Error formatting date:', error);
+    return new Date(date).toLocaleDateString('es-ES');
+  }
+};
+
 export default function HistorialClinico() {
   const { user, mascotas, usuarios, citas } = useAppContext();
   const [selectedMascota, setSelectedMascota] = useState("");
