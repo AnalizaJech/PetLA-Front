@@ -185,41 +185,18 @@ export function DatePicker({
           background: hsl(var(--muted)/0.2);
         }
 
-        /* BOTONES DE NAVEGACIÓN MEJORADOS */
         .react-datepicker__navigation {
-          top: 1.5rem;
-          border: none;
-          background: linear-gradient(135deg,
-            hsl(var(--background)) 0%,
-            hsl(var(--muted)/0.3) 100%);
-          width: 2.5rem;
-          height: 2.5rem;
-          border-radius: 0.75rem;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          box-shadow:
-            0 4px 6px rgb(0 0 0 / 0.1),
-            0 0 0 1px hsl(var(--border)),
-            0 0 0 1px rgb(255 255 255 / 0.1) inset;
-          backdrop-filter: blur(8px);
-          z-index: 20;
+          top: 1rem;
+          border: 1px solid hsl(var(--border));
+          background: hsl(var(--background));
+          width: 2rem;
+          height: 2rem;
+          border-radius: 0.375rem;
+          transition: all 0.2s ease;
         }
 
         .react-datepicker__navigation:hover {
-          background: linear-gradient(135deg,
-            hsl(var(--primary)) 0%,
-            hsl(var(--primary)/0.9) 100%);
-          transform: scale(1.15) translateY(-2px);
-          box-shadow:
-            0 8px 15px hsl(var(--primary)/0.4),
-            0 4px 6px rgb(0 0 0 / 0.1),
-            0 0 0 1px hsl(var(--primary)/0.3);
-        }
-
-        .react-datepicker__navigation:active {
-          transform: scale(1.05) translateY(-1px);
+          background: hsl(var(--accent));
         }
 
         .react-datepicker__navigation--previous {
