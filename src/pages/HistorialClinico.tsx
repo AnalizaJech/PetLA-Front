@@ -557,14 +557,32 @@ export default function HistorialClinico() {
 
               {/* Botón de descarga - solo mostrar si hay mascota seleccionada */}
               {selectedMascota && (
-                <Button
-                  onClick={descargarHistorial}
-                  variant="outline"
-                  className="border-vet-primary text-vet-primary hover:bg-vet-primary hover:text-white"
-                >
-                  <Download className="w-4 h-4 mr-2" />
-                  Descargar Historial
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="border-vet-primary text-vet-primary hover:bg-vet-primary hover:text-white"
+                    >
+                      <Download className="w-4 h-4 mr-2" />
+                      Descargar Historial
+                      <ChevronDown className="w-4 h-4 ml-2" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={descargarHistorialPDF}>
+                      <FileText className="w-4 h-4 mr-2" />
+                      Descargar como PDF
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={descargarHistorialExcel}>
+                      <Download className="w-4 h-4 mr-2" />
+                      Descargar como Excel
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={descargarHistorial}>
+                      <FileText className="w-4 h-4 mr-2" />
+                      Descargar como TXT
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               )}
             </div>
 
