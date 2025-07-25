@@ -178,14 +178,19 @@ export default function HistorialClinico() {
     const urlParams = new URLSearchParams(window.location.search);
     const mascotaParam = urlParams.get('mascota');
 
-    if (mascotaParam && availableMascotas.length > 0) {
-      const mascotaName = decodeURIComponent(mascotaParam);
-      // Verificar que la mascota existe en las mascotas disponibles
-      const mascotaExists = availableMascotas.some(m => m.nombre === mascotaName);
-      if (mascotaExists) {
-        setSelectedMascota(mascotaName);
-      } else if (!selectedMascota && availableMascotas.length > 0) {
-        // Si la mascota del URL no existe, seleccionar la primera disponible
+    if (availableMascotas.length > 0) {
+      if (mascotaParam) {
+        const mascotaName = decodeURIComponent(mascotaParam);
+        // Verificar que la mascota existe en las mascotas disponibles
+        const mascotaExists = availableMascotas.some(m => m.nombre === mascotaName);
+        if (mascotaExists) {
+          setSelectedMascota(mascotaName);
+        } else {
+          // Si la mascota del URL no existe, seleccionar la primera disponible
+          setSelectedMascota(availableMascotas[0].nombre);
+        }
+      } else if (!selectedMascota) {
+        // Si no hay parámetro URL y no hay mascota seleccionada, seleccionar la primera
         setSelectedMascota(availableMascotas[0].nombre);
       }
     }
@@ -406,7 +411,7 @@ export default function HistorialClinico() {
                 </h3>
                 <p className="text-vet-gray-600 mb-6">
                   {user?.rol === "veterinario"
-                    ? "No hay mascotas con citas asignadas a ti. Los historiales aparecer��n cuando atiendas consultas."
+                    ? "No hay mascotas con citas asignadas a ti. Los historiales aparecerán cuando atiendas consultas."
                     : "Primero debes registrar tus mascotas y agendar citas médicas para ver su historial clínico."
                   }
                 </p>
