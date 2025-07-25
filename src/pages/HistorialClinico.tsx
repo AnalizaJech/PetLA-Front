@@ -579,9 +579,17 @@ export default function HistorialClinico() {
                     <h3 className="text-lg font-semibold text-vet-gray-900 mb-2">
                       Sin exámenes registrados
                     </h3>
-                    <p className="text-vet-gray-600">
-                      {selectedMascota} no tiene exámenes en su historial
+                    <p className="text-vet-gray-600 mb-6">
+                      {selectedMascota} no tiene exámenes médicos registrados en su historial.
+                      Los exámenes se agregarán cuando sean solicitados y realizados durante las consultas.
                     </p>
+                    <Button
+                      onClick={() => window.location.href = "/agendar-cita"}
+                      className="bg-vet-primary hover:bg-vet-primary-dark"
+                    >
+                      <Calendar className="w-4 h-4 mr-2" />
+                      Agendar Consulta
+                    </Button>
                   </CardContent>
                 </Card>
               ) : (
