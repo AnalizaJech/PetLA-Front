@@ -366,9 +366,12 @@ export default function HistorialClinico() {
   const historialMascota = selectedMascota
     ? getHistorialReal(selectedMascota)
     : {
-        consultas: [],
-        vacunas: [],
-        examenes: [],
+        consulta_general: [],
+        vacunacion: [],
+        emergencia: [],
+        grooming: [],
+        cirugia: [],
+        diagnostico: []
       };
 
   // Funci��n para descargar el historial clínico en formato texto
