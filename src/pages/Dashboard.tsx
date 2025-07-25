@@ -832,57 +832,6 @@ function ClientDashboard({ stats }: { stats: any }) {
                   </div>
                 </div>
               )}
-
-              {/* Mensaje de estado general */}
-              <div
-                className={`flex items-center space-x-3 p-3 rounded-lg border ${
-                  healthStats.estadoGeneral === "Excelente"
-                    ? "bg-green-50 border-green-200"
-                    : healthStats.estadoGeneral === "Bueno"
-                      ? "bg-blue-50 border-blue-200"
-                      : "bg-yellow-50 border-yellow-200"
-                }`}
-              >
-                {healthStats.estadoGeneral === "Excelente" ? (
-                  <CheckCircle className="w-5 h-5 text-green-600" />
-                ) : healthStats.estadoGeneral === "Bueno" ? (
-                  <Heart className="w-5 h-5 text-blue-600" />
-                ) : (
-                  <AlertCircle className="w-5 h-5 text-yellow-600" />
-                )}
-                <div>
-                  <p
-                    className={`text-sm font-medium ${
-                      healthStats.estadoGeneral === "Excelente"
-                        ? "text-green-800"
-                        : healthStats.estadoGeneral === "Bueno"
-                          ? "text-blue-800"
-                          : "text-yellow-800"
-                    }`}
-                  >
-                    {healthStats.estadoGeneral === "Excelente"
-                      ? "¡Buen trabajo!"
-                      : healthStats.estadoGeneral === "Bueno"
-                        ? "¡Muy bien!"
-                        : "Mejorable"}
-                  </p>
-                  <p
-                    className={`text-xs ${
-                      healthStats.estadoGeneral === "Excelente"
-                        ? "text-green-600"
-                        : healthStats.estadoGeneral === "Bueno"
-                          ? "text-blue-600"
-                          : "text-yellow-600"
-                    }`}
-                  >
-                    {healthStats.estadoGeneral === "Excelente"
-                      ? "Tus mascotas están muy bien cuidadas"
-                      : healthStats.estadoGeneral === "Bueno"
-                        ? "Tus mascotas están bien cuidadas"
-                        : "Considera programar revisiones preventivas"}
-                  </p>
-                </div>
-              </div>
             </div>
           </CardContent>
         </Card>
