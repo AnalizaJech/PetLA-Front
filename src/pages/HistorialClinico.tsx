@@ -21,7 +21,16 @@ import {
   Download,
   Eye,
   Activity,
+  ChevronDown,
 } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import jsPDF from "jspdf";
+import * as XLSX from "xlsx";
 
 // Get user data from localStorage
 const getUserFromStorage = () => {
