@@ -143,6 +143,21 @@ export default function MisCitas() {
     setCurrentCitaId(null);
   };
 
+  const handleViewReceipt = (citaId: string) => {
+    const receiptData = getComprobante(citaId);
+    if (receiptData) {
+      setCurrentReceipt(receiptData);
+      setShowReceiptModal(true);
+    } else {
+      console.warn("No se encontró comprobante para la cita:", citaId);
+    }
+  };
+
+  const handleCloseReceiptModal = () => {
+    setShowReceiptModal(false);
+    setCurrentReceipt(null);
+  };
+
   const handleChangeFile = () => {
     handleClosePreview();
     if (currentCitaId) {
