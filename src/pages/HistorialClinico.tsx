@@ -227,9 +227,9 @@ export default function HistorialClinico() {
       (cita) =>
         cita.mascota === nombreMascota &&
         (cita.estado === "atendida" ||
-          cita.estado === "aceptada" ||
-          cita.estado === "en_validacion" ||
-          cita.estado === "pendiente_pago"),
+         cita.estado === "aceptada" ||
+         cita.estado === "en_validacion" ||
+         cita.estado === "pendiente_pago")
     );
 
     // Agrupar por los 6 servicios específicos de la veterinaria
@@ -239,19 +239,13 @@ export default function HistorialClinico() {
       emergencia: [],
       grooming: [],
       cirugia: [],
-      diagnostico: [],
+      diagnostico: []
     };
 
     citasRelevantes.forEach((cita) => {
       const tipoConsulta = cita.tipoConsulta || "Consulta General";
-      const diagnosticoDefault = getDiagnosticoDefecto(
-        tipoConsulta,
-        cita.estado,
-      );
-      const tratamientoDefault = getTratamientoDefecto(
-        tipoConsulta,
-        cita.estado,
-      );
+      const diagnosticoDefault = getDiagnosticoDefecto(tipoConsulta, cita.estado);
+      const tratamientoDefault = getTratamientoDefecto(tipoConsulta, cita.estado);
 
       const baseRecord = {
         id: cita.id,
@@ -266,46 +260,79 @@ export default function HistorialClinico() {
         proxima_cita: cita.consulta?.proximaCita
           ? new Date(cita.consulta.proximaCita)
           : getProximaConsulta(tipoConsulta, cita.fecha),
-        notas:
-          cita.consulta?.notas || getNotasDefecto(tipoConsulta, cita.estado),
+        notas: cita.consulta?.notas || getNotasDefecto(tipoConsulta, cita.estado),
         precio: cita.precio,
       };
 
-      // Clasificar según el servicio específico
-      const tipoNormalizado = tipoConsulta.toLowerCase().replace(/\s+/g, "_");
+      // Normalizar texto para búsqueda (manejo de UTF-8 y caracteres especiales)
+      const normalizeText = (text) => {
+        return text
+          .toLowerCase()
+          .normalize('NFD') // Descomponer caracteres UTF-8
+          .replace(/[\u0300-\u036f]/g, '') // Remover acentos
+          .replace(/[ñÑ]/g, 'n') // Normalizar ñ
+          .replace(/\s+/g, '_') // Espacios a guiones
+          .trim();
+      };
 
-      if (
-        tipoNormalizado.includes("consulta_general") ||
-        tipoNormalizado.includes("general")
-      ) {
-        servicios.consulta_general.push(baseRecord);
-      } else if (
-        tipoNormalizado.includes("vacunacion") ||
-        tipoNormalizado.includes("vacuna")
-      ) {
+      const tipoNormalizado = normalizeText(tipoConsulta);
+      const motivoNormalizado = normalizeText(cita.motivo || '');
+
+      // Clasificar según el servicio específico (verificar tanto tipo como motivo)
+      const textoCompleto = `${tipoNormalizado} ${motivoNormalizado}`;
+
+      // 1. VACUNACIÓN
+      if (tipoNormalizado.includes('vacunacion') ||
+          tipoNormalizado.includes('vacuna') ||
+          motivoNormalizado.includes('vacuna') ||
+          motivoNormalizado.includes('inmuniz')) {
         servicios.vacunacion.push(baseRecord);
-      } else if (tipoNormalizado.includes("emergencia")) {
+      }
+      // 2. EMERGENCIA
+      else if (tipoNormalizado.includes('emergencia') ||
+               motivoNormalizado.includes('emergencia') ||
+               motivoNormalizado.includes('urgente') ||
+               motivoNormalizado.includes('accidente')) {
         servicios.emergencia.push(baseRecord);
-      } else if (tipoNormalizado.includes("grooming")) {
+      }
+      // 3. GROOMING
+      else if (tipoNormalizado.includes('grooming') ||
+               motivoNormalizado.includes('grooming') ||
+               motivoNormalizado.includes('bano') ||
+               motivoNormalizado.includes('baño') ||
+               motivoNormalizado.includes('corte') ||
+               motivoNormalizado.includes('aseo') ||
+               motivoNormalizado.includes('limpieza') ||
+               motivoNormalizado.includes('estetica')) {
         servicios.grooming.push(baseRecord);
-      } else if (
-        tipoNormalizado.includes("cirugia") ||
-        tipoNormalizado.includes("cirugía")
-      ) {
+      }
+      // 4. CIRUGÍA
+      else if (tipoNormalizado.includes('cirugia') ||
+               tipoNormalizado.includes('cirugia') ||
+               motivoNormalizado.includes('cirugia') ||
+               motivoNormalizado.includes('operacion') ||
+               motivoNormalizado.includes('quirurgico')) {
         servicios.cirugia.push(baseRecord);
-      } else if (
-        tipoNormalizado.includes("diagnostico") ||
-        tipoNormalizado.includes("diagnóstico")
-      ) {
+      }
+      // 5. DIAGNÓSTICO
+      else if (tipoNormalizado.includes('diagnostico') ||
+               tipoNormalizado.includes('diagnostico') ||
+               motivoNormalizado.includes('diagnostico') ||
+               motivoNormalizado.includes('examen') ||
+               motivoNormalizado.includes('analisis') ||
+               motivoNormalizado.includes('laboratorio') ||
+               motivoNormalizado.includes('radiografia') ||
+               motivoNormalizado.includes('ecografia')) {
         servicios.diagnostico.push(baseRecord);
-      } else {
-        // Si no coincide con ninguno, ponerlo en consulta general por defecto
+      }
+      // 6. CONSULTA GENERAL (por defecto y específicos)
+      else {
         servicios.consulta_general.push(baseRecord);
       }
     });
 
     // Ordenar cada servicio por fecha (más reciente primero)
-    Object.keys(servicios).forEach((key) => {
+    Object.keys(servicios).forEach(key => {
       servicios[key] = servicios[key].sort((a, b) => b.fecha - a.fecha);
     });
 
@@ -323,12 +350,10 @@ export default function HistorialClinico() {
   const getProximaConsulta = (tipoConsulta, fechaActual) => {
     const fecha = new Date(fechaActual);
 
-    if (
-      tipoConsulta.toLowerCase().includes("control") ||
-      tipoConsulta.toLowerCase().includes("seguimiento")
-    ) {
+    if (tipoConsulta.toLowerCase().includes('control') ||
+        tipoConsulta.toLowerCase().includes('seguimiento')) {
       fecha.setMonth(fecha.getMonth() + 3); // 3 meses para controles
-    } else if (tipoConsulta.toLowerCase().includes("dental")) {
+    } else if (tipoConsulta.toLowerCase().includes('dental')) {
       fecha.setMonth(fecha.getMonth() + 6); // 6 meses para dental
     } else {
       fecha.setFullYear(fecha.getFullYear() + 1); // 1 año para consultas generales
@@ -339,70 +364,47 @@ export default function HistorialClinico() {
 
   // Funciones auxiliares para contenido por defecto basado en los 6 servicios oficiales
   const getDiagnosticoDefecto = (tipoConsulta, estado) => {
-    if (estado === "pendiente_pago")
-      return "Servicio pendiente de confirmación de pago";
-    if (estado === "aceptada")
-      return "Servicio confirmado - Programado para atención";
+    if (estado === "pendiente_pago") return "Servicio pendiente de confirmación de pago";
+    if (estado === "aceptada") return "Servicio confirmado - Programado para atención";
 
     const tipo = tipoConsulta.toLowerCase();
     // Servicios oficiales de la veterinaria
-    if (tipo.includes("consulta general"))
-      return "Evaluación general completada - Estado de salud óptimo";
-    if (tipo.includes("vacunación") || tipo.includes("vacunacion"))
-      return "Vacunación aplicada exitosamente";
-    if (tipo.includes("emergencia"))
-      return "Atención de emergencia - Paciente estabilizado";
-    if (tipo.includes("grooming"))
-      return "Servicio de grooming completado - Mascota aseada y saludable";
-    if (tipo.includes("cirugía") || tipo.includes("cirugia"))
-      return "Procedimiento quirúrgico realizado exitosamente";
-    if (tipo.includes("diagnóstico") || tipo.includes("diagnostico"))
-      return "Exámenes diagnósticos completados - Resultados disponibles";
+    if (tipo.includes('consulta general')) return "Evaluación general completada - Estado de salud óptimo";
+    if (tipo.includes('vacunación') || tipo.includes('vacunacion')) return "Vacunación aplicada exitosamente";
+    if (tipo.includes('emergencia')) return "Atención de emergencia - Paciente estabilizado";
+    if (tipo.includes('grooming')) return "Servicio de grooming completado - Mascota aseada y saludable";
+    if (tipo.includes('cirugía') || tipo.includes('cirugia')) return "Procedimiento quirúrgico realizado exitosamente";
+    if (tipo.includes('diagnóstico') || tipo.includes('diagnostico')) return "Exámenes diagnósticos completados - Resultados disponibles";
     return "Servicio veterinario completado exitosamente";
   };
 
   const getTratamientoDefecto = (tipoConsulta, estado) => {
-    if (estado === "pendiente_pago")
-      return "Tratamiento será aplicado tras confirmación de pago";
-    if (estado === "aceptada")
-      return "Tratamiento programado según servicio seleccionado";
+    if (estado === "pendiente_pago") return "Tratamiento será aplicado tras confirmación de pago";
+    if (estado === "aceptada") return "Tratamiento programado según servicio seleccionado";
 
     const tipo = tipoConsulta.toLowerCase();
     // Tratamientos según los 6 servicios oficiales
-    if (tipo.includes("consulta general"))
-      return "Revisión médica general, peso, temperatura y cuidados preventivos";
-    if (tipo.includes("vacunación") || tipo.includes("vacunacion"))
-      return "Aplicación de vacuna según calendario de inmunización";
-    if (tipo.includes("emergencia"))
-      return "Tratamiento de emergencia inmediato - Estabilización y cuidados críticos";
-    if (tipo.includes("grooming"))
-      return "Baño completo, corte de pelo, limpieza de oídos y corte de uñas";
-    if (tipo.includes("cirugía") || tipo.includes("cirugia"))
-      return "Procedimiento quirúrgico especializado con anestesia y cuidados post-operatorios";
-    if (tipo.includes("diagnóstico") || tipo.includes("diagnostico"))
-      return "Exámenes de laboratorio y estudios diagnósticos especializados";
+    if (tipo.includes('consulta general')) return "Revisión médica general, peso, temperatura y cuidados preventivos";
+    if (tipo.includes('vacunación') || tipo.includes('vacunacion')) return "Aplicación de vacuna según calendario de inmunización";
+    if (tipo.includes('emergencia')) return "Tratamiento de emergencia inmediato - Estabilización y cuidados críticos";
+    if (tipo.includes('grooming')) return "Baño completo, corte de pelo, limpieza de oídos y corte de uñas";
+    if (tipo.includes('cirugía') || tipo.includes('cirugia')) return "Procedimiento quirúrgico especializado con anestesia y cuidados post-operatorios";
+    if (tipo.includes('diagnóstico') || tipo.includes('diagnostico')) return "Exámenes de laboratorio y estudios diagnósticos especializados";
     return "Tratamiento veterinario aplicado según protocolo del servicio";
   };
 
   const getNotasDefecto = (tipoConsulta, estado) => {
-    if (estado === "pendiente_pago")
-      return "Servicio agendado - Pendiente de confirmación de pago";
+    if (estado === "pendiente_pago") return "Servicio agendado - Pendiente de confirmación de pago";
     if (estado === "aceptada") return "Servicio confirmado y programado";
 
     const tipo = tipoConsulta.toLowerCase();
     // Notas específicas por servicio
-    if (tipo.includes("consulta general"))
-      return "Consulta general completada. Mascota en buen estado de salud. Continuar con cuidados preventivos.";
-    if (tipo.includes("vacunación") || tipo.includes("vacunacion"))
-      return "Vacunación aplicada exitosamente. Próxima dosis programada según calendario.";
-    if (tipo.includes("emergencia"))
-      return "Emergencia atendida exitosamente. Monitorear evolución en las próximas 24-48 horas.";
-    if (tipo.includes("grooming"))
-      return "Servicio de grooming completado. Mascota limpia y aseada. Recomendar mantenimiento cada 4-6 semanas.";
-    if (tipo.includes("cirugía") || tipo.includes("cirugia"))
-      return "Cirugía realizada exitosamente. Seguir indicaciones post-operatorias estrictamente.";
-    if (tipo.includes("diagnóstico") || tipo.includes("diagnostico"))
-      return "Exámenes diagnósticos completados. Resultados dentro de parámetros normales.";
+    if (tipo.includes('consulta general')) return "Consulta general completada. Mascota en buen estado de salud. Continuar con cuidados preventivos.";
+    if (tipo.includes('vacunación') || tipo.includes('vacunacion')) return "Vacunación aplicada exitosamente. Próxima dosis programada según calendario.";
+    if (tipo.includes('emergencia')) return "Emergencia atendida exitosamente. Monitorear evolución en las próximas 24-48 horas.";
+    if (tipo.includes('grooming')) return "Servicio de grooming completado. Mascota limpia y aseada. Recomendar mantenimiento cada 4-6 semanas.";
+    if (tipo.includes('cirugía') || tipo.includes('cirugia')) return "Cirugía realizada exitosamente. Seguir indicaciones post-operatorias estrictamente.";
+    if (tipo.includes('diagnóstico') || tipo.includes('diagnostico')) return "Exámenes diagnósticos completados. Resultados dentro de parámetros normales.";
 
     return `${tipoConsulta} completada exitosamente. Seguir recomendaciones del veterinario tratante.`;
   };
@@ -415,7 +417,7 @@ export default function HistorialClinico() {
         emergencia: [],
         grooming: [],
         cirugia: [],
-        diagnostico: [],
+        diagnostico: []
       };
 
   // Funci��n para descargar el historial clínico en formato texto
@@ -937,8 +939,7 @@ export default function HistorialClinico() {
                       </h3>
                       <p className="text-vet-gray-600 mb-6">
                         {selectedMascota} no tiene consultas generales en su
-                        historial. Los servicios de consulta general aparecerán
-                        aquí.
+                        historial. Los servicios de consulta general aparecerán aquí.
                       </p>
                       <Button
                         onClick={() => (window.location.href = "/mis-citas")}
@@ -1105,8 +1106,7 @@ export default function HistorialClinico() {
                         Sin servicios de vacunación registrados
                       </h3>
                       <p className="text-vet-gray-600 mb-6">
-                        {selectedMascota} no tiene servicios de vacunación en su
-                        historial.
+                        {selectedMascota} no tiene servicios de vacunación en su historial.
                       </p>
                       <Button
                         onClick={() => (window.location.href = "/mis-citas")}
@@ -1128,8 +1128,7 @@ export default function HistorialClinico() {
                               <span>{servicio.tipoConsulta}</span>
                             </CardTitle>
                             <CardDescription>
-                              {servicio.fecha.toLocaleDateString("es-ES")} •{" "}
-                              {servicio.veterinario}
+                              {servicio.fecha.toLocaleDateString("es-ES")} • {servicio.veterinario}
                             </CardDescription>
                           </div>
                           <Badge className="bg-vet-primary/10 text-vet-primary">
@@ -1140,37 +1139,21 @@ export default function HistorialClinico() {
                       <CardContent>
                         <div className="space-y-3">
                           <div>
-                            <span className="font-medium text-vet-gray-700">
-                              Motivo:
-                            </span>
-                            <p className="text-vet-gray-600">
-                              {servicio.motivo}
-                            </p>
+                            <span className="font-medium text-vet-gray-700">Motivo:</span>
+                            <p className="text-vet-gray-600">{servicio.motivo}</p>
                           </div>
                           <div>
-                            <span className="font-medium text-vet-gray-700">
-                              Diagnóstico:
-                            </span>
-                            <p className="text-vet-gray-600">
-                              {servicio.diagnostico}
-                            </p>
+                            <span className="font-medium text-vet-gray-700">Diagnóstico:</span>
+                            <p className="text-vet-gray-600">{servicio.diagnostico}</p>
                           </div>
                           <div>
-                            <span className="font-medium text-vet-gray-700">
-                              Tratamiento:
-                            </span>
-                            <p className="text-vet-gray-600">
-                              {servicio.tratamiento}
-                            </p>
+                            <span className="font-medium text-vet-gray-700">Tratamiento:</span>
+                            <p className="text-vet-gray-600">{servicio.tratamiento}</p>
                           </div>
                           {servicio.notas && (
                             <div>
-                              <span className="font-medium text-vet-gray-700">
-                                Notas:
-                              </span>
-                              <p className="text-vet-gray-600">
-                                {servicio.notas}
-                              </p>
+                              <span className="font-medium text-vet-gray-700">Notas:</span>
+                              <p className="text-vet-gray-600">{servicio.notas}</p>
                             </div>
                           )}
                         </div>
@@ -1190,8 +1173,7 @@ export default function HistorialClinico() {
                         Sin servicios de emergencia registrados
                       </h3>
                       <p className="text-vet-gray-600 mb-6">
-                        {selectedMascota} no tiene servicios de emergencia en su
-                        historial.
+                        {selectedMascota} no tiene servicios de emergencia en su historial.
                       </p>
                       <Button
                         onClick={() => (window.location.href = "/mis-citas")}
@@ -1213,8 +1195,7 @@ export default function HistorialClinico() {
                               <span>{servicio.tipoConsulta}</span>
                             </CardTitle>
                             <CardDescription>
-                              {servicio.fecha.toLocaleDateString("es-ES")} •{" "}
-                              {servicio.veterinario}
+                              {servicio.fecha.toLocaleDateString("es-ES")} • {servicio.veterinario}
                             </CardDescription>
                           </div>
                           <Badge className="bg-red-100 text-red-800">
@@ -1225,37 +1206,21 @@ export default function HistorialClinico() {
                       <CardContent>
                         <div className="space-y-3">
                           <div>
-                            <span className="font-medium text-vet-gray-700">
-                              Motivo:
-                            </span>
-                            <p className="text-vet-gray-600">
-                              {servicio.motivo}
-                            </p>
+                            <span className="font-medium text-vet-gray-700">Motivo:</span>
+                            <p className="text-vet-gray-600">{servicio.motivo}</p>
                           </div>
                           <div>
-                            <span className="font-medium text-vet-gray-700">
-                              Diagnóstico:
-                            </span>
-                            <p className="text-vet-gray-600">
-                              {servicio.diagnostico}
-                            </p>
+                            <span className="font-medium text-vet-gray-700">Diagnóstico:</span>
+                            <p className="text-vet-gray-600">{servicio.diagnostico}</p>
                           </div>
                           <div>
-                            <span className="font-medium text-vet-gray-700">
-                              Tratamiento:
-                            </span>
-                            <p className="text-vet-gray-600">
-                              {servicio.tratamiento}
-                            </p>
+                            <span className="font-medium text-vet-gray-700">Tratamiento:</span>
+                            <p className="text-vet-gray-600">{servicio.tratamiento}</p>
                           </div>
                           {servicio.notas && (
                             <div>
-                              <span className="font-medium text-vet-gray-700">
-                                Notas:
-                              </span>
-                              <p className="text-vet-gray-600">
-                                {servicio.notas}
-                              </p>
+                              <span className="font-medium text-vet-gray-700">Notas:</span>
+                              <p className="text-vet-gray-600">{servicio.notas}</p>
                             </div>
                           )}
                         </div>
@@ -1275,8 +1240,7 @@ export default function HistorialClinico() {
                         Sin servicios de grooming registrados
                       </h3>
                       <p className="text-vet-gray-600 mb-6">
-                        {selectedMascota} no tiene servicios de grooming en su
-                        historial.
+                        {selectedMascota} no tiene servicios de grooming en su historial.
                       </p>
                       <Button
                         onClick={() => (window.location.href = "/mis-citas")}
@@ -1298,8 +1262,7 @@ export default function HistorialClinico() {
                               <span>{servicio.tipoConsulta}</span>
                             </CardTitle>
                             <CardDescription>
-                              {servicio.fecha.toLocaleDateString("es-ES")} •{" "}
-                              {servicio.veterinario}
+                              {servicio.fecha.toLocaleDateString("es-ES")} • {servicio.veterinario}
                             </CardDescription>
                           </div>
                           <Badge className="bg-orange-100 text-orange-800">
@@ -1310,37 +1273,21 @@ export default function HistorialClinico() {
                       <CardContent>
                         <div className="space-y-3">
                           <div>
-                            <span className="font-medium text-vet-gray-700">
-                              Motivo:
-                            </span>
-                            <p className="text-vet-gray-600">
-                              {servicio.motivo}
-                            </p>
+                            <span className="font-medium text-vet-gray-700">Motivo:</span>
+                            <p className="text-vet-gray-600">{servicio.motivo}</p>
                           </div>
                           <div>
-                            <span className="font-medium text-vet-gray-700">
-                              Diagnóstico:
-                            </span>
-                            <p className="text-vet-gray-600">
-                              {servicio.diagnostico}
-                            </p>
+                            <span className="font-medium text-vet-gray-700">Diagnóstico:</span>
+                            <p className="text-vet-gray-600">{servicio.diagnostico}</p>
                           </div>
                           <div>
-                            <span className="font-medium text-vet-gray-700">
-                              Tratamiento:
-                            </span>
-                            <p className="text-vet-gray-600">
-                              {servicio.tratamiento}
-                            </p>
+                            <span className="font-medium text-vet-gray-700">Tratamiento:</span>
+                            <p className="text-vet-gray-600">{servicio.tratamiento}</p>
                           </div>
                           {servicio.notas && (
                             <div>
-                              <span className="font-medium text-vet-gray-700">
-                                Notas:
-                              </span>
-                              <p className="text-vet-gray-600">
-                                {servicio.notas}
-                              </p>
+                              <span className="font-medium text-vet-gray-700">Notas:</span>
+                              <p className="text-vet-gray-600">{servicio.notas}</p>
                             </div>
                           )}
                         </div>
@@ -1360,8 +1307,7 @@ export default function HistorialClinico() {
                         Sin servicios de cirugía registrados
                       </h3>
                       <p className="text-vet-gray-600 mb-6">
-                        {selectedMascota} no tiene servicios de cirugía en su
-                        historial.
+                        {selectedMascota} no tiene servicios de cirugía en su historial.
                       </p>
                       <Button
                         onClick={() => (window.location.href = "/mis-citas")}
@@ -1383,8 +1329,7 @@ export default function HistorialClinico() {
                               <span>{servicio.tipoConsulta}</span>
                             </CardTitle>
                             <CardDescription>
-                              {servicio.fecha.toLocaleDateString("es-ES")} •{" "}
-                              {servicio.veterinario}
+                              {servicio.fecha.toLocaleDateString("es-ES")} • {servicio.veterinario}
                             </CardDescription>
                           </div>
                           <Badge className="bg-purple-100 text-purple-800">
@@ -1395,37 +1340,21 @@ export default function HistorialClinico() {
                       <CardContent>
                         <div className="space-y-3">
                           <div>
-                            <span className="font-medium text-vet-gray-700">
-                              Motivo:
-                            </span>
-                            <p className="text-vet-gray-600">
-                              {servicio.motivo}
-                            </p>
+                            <span className="font-medium text-vet-gray-700">Motivo:</span>
+                            <p className="text-vet-gray-600">{servicio.motivo}</p>
                           </div>
                           <div>
-                            <span className="font-medium text-vet-gray-700">
-                              Diagnóstico:
-                            </span>
-                            <p className="text-vet-gray-600">
-                              {servicio.diagnostico}
-                            </p>
+                            <span className="font-medium text-vet-gray-700">Diagnóstico:</span>
+                            <p className="text-vet-gray-600">{servicio.diagnostico}</p>
                           </div>
                           <div>
-                            <span className="font-medium text-vet-gray-700">
-                              Tratamiento:
-                            </span>
-                            <p className="text-vet-gray-600">
-                              {servicio.tratamiento}
-                            </p>
+                            <span className="font-medium text-vet-gray-700">Tratamiento:</span>
+                            <p className="text-vet-gray-600">{servicio.tratamiento}</p>
                           </div>
                           {servicio.notas && (
                             <div>
-                              <span className="font-medium text-vet-gray-700">
-                                Notas:
-                              </span>
-                              <p className="text-vet-gray-600">
-                                {servicio.notas}
-                              </p>
+                              <span className="font-medium text-vet-gray-700">Notas:</span>
+                              <p className="text-vet-gray-600">{servicio.notas}</p>
                             </div>
                           )}
                         </div>
@@ -1445,8 +1374,7 @@ export default function HistorialClinico() {
                         Sin servicios de diagnóstico registrados
                       </h3>
                       <p className="text-vet-gray-600 mb-6">
-                        {selectedMascota} no tiene servicios de diagnóstico en
-                        su historial.
+                        {selectedMascota} no tiene servicios de diagnóstico en su historial.
                       </p>
                       <Button
                         onClick={() => (window.location.href = "/mis-citas")}
@@ -1468,8 +1396,7 @@ export default function HistorialClinico() {
                               <span>{servicio.tipoConsulta}</span>
                             </CardTitle>
                             <CardDescription>
-                              {servicio.fecha.toLocaleDateString("es-ES")} •{" "}
-                              {servicio.veterinario}
+                              {servicio.fecha.toLocaleDateString("es-ES")} • {servicio.veterinario}
                             </CardDescription>
                           </div>
                           <Badge className="bg-blue-100 text-blue-800">
@@ -1480,37 +1407,21 @@ export default function HistorialClinico() {
                       <CardContent>
                         <div className="space-y-3">
                           <div>
-                            <span className="font-medium text-vet-gray-700">
-                              Motivo:
-                            </span>
-                            <p className="text-vet-gray-600">
-                              {servicio.motivo}
-                            </p>
+                            <span className="font-medium text-vet-gray-700">Motivo:</span>
+                            <p className="text-vet-gray-600">{servicio.motivo}</p>
                           </div>
                           <div>
-                            <span className="font-medium text-vet-gray-700">
-                              Diagnóstico:
-                            </span>
-                            <p className="text-vet-gray-600">
-                              {servicio.diagnostico}
-                            </p>
+                            <span className="font-medium text-vet-gray-700">Diagnóstico:</span>
+                            <p className="text-vet-gray-600">{servicio.diagnostico}</p>
                           </div>
                           <div>
-                            <span className="font-medium text-vet-gray-700">
-                              Tratamiento:
-                            </span>
-                            <p className="text-vet-gray-600">
-                              {servicio.tratamiento}
-                            </p>
+                            <span className="font-medium text-vet-gray-700">Tratamiento:</span>
+                            <p className="text-vet-gray-600">{servicio.tratamiento}</p>
                           </div>
                           {servicio.notas && (
                             <div>
-                              <span className="font-medium text-vet-gray-700">
-                                Notas:
-                              </span>
-                              <p className="text-vet-gray-600">
-                                {servicio.notas}
-                              </p>
+                              <span className="font-medium text-vet-gray-700">Notas:</span>
+                              <p className="text-vet-gray-600">{servicio.notas}</p>
                             </div>
                           )}
                         </div>
