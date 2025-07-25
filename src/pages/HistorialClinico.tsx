@@ -235,48 +235,72 @@ export default function HistorialClinico() {
     examenes: [],
   };
 
-  // Función para descargar el historial clínico
+  // Función para descargar el historial clínico en formato texto
   const descargarHistorial = () => {
     if (!selectedMascota) return;
 
     const mascotaInfo = availableMascotas.find(m => m.nombre === selectedMascota);
     if (!mascotaInfo) return;
 
-    const data = {
-      mascota: {
-        nombre: mascotaInfo.nombre,
-        especie: mascotaInfo.especie,
-        raza: mascotaInfo.raza,
-        fechaNacimiento: mascotaInfo.fechaNacimiento.toLocaleDateString('es-ES'),
-        peso: mascotaInfo.peso,
-        sexo: mascotaInfo.sexo,
-        microchip: mascotaInfo.microchip || 'No registrado'
-      },
-      historial: {
-        consultas: historialMascota.consultas.map(c => ({
-          fecha: c.fecha.toLocaleDateString('es-ES'),
-          veterinario: c.veterinario,
-          motivo: c.motivo,
-          diagnostico: c.diagnostico,
-          tratamiento: c.tratamiento,
-          medicamentos: c.medicamentos,
-          proximaCita: c.proxima_cita?.toLocaleDateString('es-ES') || 'No programada',
-          notas: c.notas
-        })),
-        vacunas: historialMascota.vacunas,
-        examenes: historialMascota.examenes
-      },
-      fechaDescarga: new Date().toLocaleDateString('es-ES'),
-      generadoPor: user?.nombre || 'Usuario'
-    };
+    // Crear contenido en formato texto legible
+    let contenido = `HISTORIAL CLÍNICO VETERINARIO\n`;
+    contenido += `${'='.repeat(50)}\n\n`;
 
-    const jsonString = JSON.stringify(data, null, 2);
-    const blob = new Blob([jsonString], { type: 'application/json' });
+    contenido += `INFORMACIÓN DE LA MASCOTA\n`;
+    contenido += `-`.repeat(30) + `\n`;
+    contenido += `Nombre: ${mascotaInfo.nombre}\n`;
+    contenido += `Especie: ${mascotaInfo.especie}\n`;
+    contenido += `Raza: ${mascotaInfo.raza}\n`;
+    contenido += `Fecha de Nacimiento: ${mascotaInfo.fechaNacimiento.toLocaleDateString('es-ES')}\n`;
+    contenido += `Peso: ${mascotaInfo.peso ? `${mascotaInfo.peso} kg` : 'No registrado'}\n`;
+    contenido += `Sexo: ${mascotaInfo.sexo || 'No registrado'}\n`;
+    contenido += `Microchip: ${mascotaInfo.microchip || 'No registrado'}\n\n`;
+
+    if (historialMascota.consultas.length > 0) {
+      contenido += `CONSULTAS MÉDICAS\n`;
+      contenido += `-`.repeat(30) + `\n`;
+      historialMascota.consultas.forEach((consulta, index) => {
+        contenido += `\nConsulta #${index + 1}\n`;
+        contenido += `Fecha: ${consulta.fecha.toLocaleDateString('es-ES')}\n`;
+        contenido += `Veterinario: ${consulta.veterinario}\n`;
+        contenido += `Motivo: ${consulta.motivo}\n`;
+        contenido += `Diagnóstico: ${consulta.diagnostico}\n`;
+        contenido += `Tratamiento: ${consulta.tratamiento}\n`;
+
+        if (consulta.medicamentos.length > 0) {
+          contenido += `Medicamentos:\n`;
+          consulta.medicamentos.forEach(med => {
+            contenido += `  - ${med.nombre}: ${med.dosis} (${med.duracion})\n`;
+          });
+        }
+
+        if (consulta.proxima_cita) {
+          contenido += `Próxima cita: ${consulta.proxima_cita.toLocaleDateString('es-ES')}\n`;
+        }
+
+        if (consulta.notas) {
+          contenido += `Notas: ${consulta.notas}\n`;
+        }
+        contenido += `\n${'·'.repeat(40)}\n`;
+      });
+    } else {
+      contenido += `CONSULTAS MÉDICAS\n`;
+      contenido += `-`.repeat(30) + `\n`;
+      contenido += `No hay consultas registradas.\n\n`;
+    }
+
+    contenido += `\nDOCUMENTO GENERADO\n`;
+    contenido += `-`.repeat(30) + `\n`;
+    contenido += `Fecha: ${new Date().toLocaleDateString('es-ES')} ${new Date().toLocaleTimeString('es-ES')}\n`;
+    contenido += `Generado por: ${user?.nombre || 'Usuario'}\n`;
+    contenido += `Sistema: Clínica Veterinaria Digital\n`;
+
+    const blob = new Blob([contenido], { type: 'text/plain;charset=utf-8' });
     const url = URL.createObjectURL(blob);
 
     const link = document.createElement('a');
     link.href = url;
-    link.download = `historial_clinico_${selectedMascota.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.json`;
+    link.download = `historial_clinico_${selectedMascota.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.txt`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
