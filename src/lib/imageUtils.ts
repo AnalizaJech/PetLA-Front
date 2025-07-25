@@ -22,7 +22,7 @@ export const compressImage = async (
 ): Promise<CompressedImage> => {
   return new Promise((resolve, reject) => {
     // Si no es una imagen, convertir a base64 directamente
-    if (!file.type.startsWith('image/')) {
+    if (!file.type.startsWith("image/")) {
       const reader = new FileReader();
       reader.onload = () => {
         const result = reader.result as string;
@@ -40,11 +40,11 @@ export const compressImage = async (
     }
 
     const img = new Image();
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
 
     if (!ctx) {
-      reject(new Error('No se pudo crear el contexto del canvas'));
+      reject(new Error("No se pudo crear el contexto del canvas"));
       return;
     }
 
@@ -52,9 +52,9 @@ export const compressImage = async (
       // Calcular nuevas dimensiones manteniendo aspect ratio
       const maxWidth = 1200;
       const maxHeight = 1200;
-      
+
       let { width, height } = img;
-      
+
       if (width > height) {
         if (width > maxWidth) {
           height = (height * maxWidth) / width;
@@ -72,29 +72,29 @@ export const compressImage = async (
       canvas.height = height;
 
       // Dibujar imagen redimensionada
-      ctx.fillStyle = '#ffffff';
+      ctx.fillStyle = "#ffffff";
       ctx.fillRect(0, 0, width, height);
       ctx.drawImage(img, 0, 0, width, height);
 
       // Comprimir iterativamente hasta alcanzar el tamaño deseado
       let currentQuality = quality;
       let compressedData: string;
-      
+
       const compress = () => {
-        compressedData = canvas.toDataURL('image/jpeg', currentQuality);
-        
+        compressedData = canvas.toDataURL("image/jpeg", currentQuality);
+
         // Si es suficientemente pequeño o la calidad es muy baja, usar resultado
         if (compressedData.length <= maxSize || currentQuality <= 0.1) {
           resolve({
             data: compressedData,
             originalName: file.name,
             size: compressedData.length,
-            type: 'image/jpeg',
+            type: "image/jpeg",
             compressed: true,
           });
           return;
         }
-        
+
         // Reducir calidad y intentar de nuevo
         currentQuality -= 0.1;
         compress();
@@ -103,8 +103,8 @@ export const compressImage = async (
       compress();
     };
 
-    img.onerror = () => reject(new Error('Error al cargar la imagen'));
-    
+    img.onerror = () => reject(new Error("Error al cargar la imagen"));
+
     // Cargar imagen
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -118,14 +118,17 @@ export const compressImage = async (
 /**
  * Convierte una imagen comprimida de vuelta a un Blob
  */
-export const base64ToBlob = (base64Data: string, contentType: string = ''): Blob => {
-  const byteCharacters = atob(base64Data.split(',')[1]);
+export const base64ToBlob = (
+  base64Data: string,
+  contentType: string = "",
+): Blob => {
+  const byteCharacters = atob(base64Data.split(",")[1]);
   const byteNumbers = new Array(byteCharacters.length);
-  
+
   for (let i = 0; i < byteCharacters.length; i++) {
     byteNumbers[i] = byteCharacters.charCodeAt(i);
   }
-  
+
   const byteArray = new Uint8Array(byteNumbers);
   return new Blob([byteArray], { type: contentType });
 };
@@ -150,17 +153,21 @@ export const optimizeStorageSpace = (): void => {
     const maxSize = 5 * 1024 * 1024; // 5MB
     const usagePercent = (totalSize / maxSize) * 100;
 
-    console.log(`�� LocalStorage: ${usagePercent.toFixed(1)}% usado (${(totalSize / 1024).toFixed(1)}KB)`);
+    console.log(
+      `�� LocalStorage: ${usagePercent.toFixed(1)}% usado (${(totalSize / 1024).toFixed(1)}KB)`,
+    );
 
     // Si supera el 80%, limpiar comprobantes antiguos
     if (totalSize > maxSize * 0.8) {
-      console.warn('🚨 LocalStorage cerca del límite, limpiando comprobantes antiguos...');
-      
-      // Limpiar comprobantes más antiguos primero
-      const comprobantesKeys = Object.keys(localStorage).filter(key => 
-        key.startsWith('comprobante_') || key.startsWith('receipt_')
+      console.warn(
+        "🚨 LocalStorage cerca del límite, limpiando comprobantes antiguos...",
       );
-      
+
+      // Limpiar comprobantes más antiguos primero
+      const comprobantesKeys = Object.keys(localStorage).filter(
+        (key) => key.startsWith("comprobante_") || key.startsWith("receipt_"),
+      );
+
       // Ordenar por timestamp (los más antiguos primero)
       comprobantesKeys.sort((a, b) => {
         const timestampA = extractTimestamp(a);
@@ -171,10 +178,10 @@ export const optimizeStorageSpace = (): void => {
       // Eliminar hasta liberar al menos 1MB
       let freedSpace = 0;
       const targetFree = 1024 * 1024; // 1MB
-      
+
       for (const key of comprobantesKeys) {
         if (freedSpace >= targetFree) break;
-        
+
         freedSpace += localStorage[key].length;
         localStorage.removeItem(key);
       }
@@ -182,7 +189,7 @@ export const optimizeStorageSpace = (): void => {
       console.log(`✅ Liberado ${(freedSpace / 1024).toFixed(1)}KB de espacio`);
     }
   } catch (error) {
-    console.error('❌ Error optimizando localStorage:', error);
+    console.error("❌ Error optimizando localStorage:", error);
   }
 };
 

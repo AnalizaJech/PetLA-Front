@@ -430,7 +430,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
                 citaWithDate.comprobanteData = JSON.parse(stored);
               }
             } catch (error) {
-              console.warn(`No se pudo cargar comprobante para cita ${cita.id}:`, error);
+              console.warn(
+                `No se pudo cargar comprobante para cita ${cita.id}:`,
+                error,
+              );
             }
           }
 
@@ -654,13 +657,19 @@ export function AppProvider({ children }: { children: ReactNode }) {
     try {
       localStorage.setItem("citas", JSON.stringify(citas));
       // También asegurar que los comprobantes se persistan por separado
-      citas.forEach(cita => {
+      citas.forEach((cita) => {
         if (cita.comprobanteData) {
           const storageKey = `comprobante_${cita.id}`;
           try {
-            localStorage.setItem(storageKey, JSON.stringify(cita.comprobanteData));
+            localStorage.setItem(
+              storageKey,
+              JSON.stringify(cita.comprobanteData),
+            );
           } catch (error) {
-            console.warn(`No se pudo persistir comprobante para cita ${cita.id}:`, error);
+            console.warn(
+              `No se pudo persistir comprobante para cita ${cita.id}:`,
+              error,
+            );
           }
         }
       });
@@ -693,7 +702,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, [notificaciones]);
 
   // Receipt/Voucher management functions
-  const saveComprobante = async (citaId: string, file: File): Promise<boolean> => {
+  const saveComprobante = async (
+    citaId: string,
+    file: File,
+  ): Promise<boolean> => {
     try {
       // Optimizar espacio antes de guardar
       optimizeStorageSpace();
@@ -723,7 +735,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
         notasAdmin: "", // Clear previous rejection notes
       });
 
-      console.log(`✅ Comprobante guardado: ${(comprobanteData.size / 1024).toFixed(1)}KB`);
+      console.log(
+        `✅ Comprobante guardado: ${(comprobanteData.size / 1024).toFixed(1)}KB`,
+      );
       return true;
     } catch (error) {
       console.error("❌ Error guardando comprobante:", error);
@@ -734,7 +748,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const getComprobante = (citaId: string): ComprobanteData | null => {
     try {
       // Primero buscar en los datos de la cita
-      const cita = citas.find(c => c.id === citaId);
+      const cita = citas.find((c) => c.id === citaId);
       if (cita?.comprobanteData) {
         return cita.comprobanteData;
       }

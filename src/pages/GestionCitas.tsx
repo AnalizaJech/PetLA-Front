@@ -70,8 +70,15 @@ import {
 import ConfirmationModal from "@/components/ConfirmationModal";
 
 export default function GestionCitas() {
-  const { citas, usuarios, mascotas, updateCita, deleteCita, user, getComprobante } =
-    useAppContext();
+  const {
+    citas,
+    usuarios,
+    mascotas,
+    updateCita,
+    deleteCita,
+    user,
+    getComprobante,
+  } = useAppContext();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedStatus, setSelectedStatus] = useState<string>("todos");
   const [selectedDate, setSelectedDate] = useState<string>("");
@@ -611,7 +618,9 @@ export default function GestionCitas() {
                                         setSelectedCita(cita);
                                         setVoucherModalMode("view");
                                         // Cargar datos del comprobante
-                                        const receiptData = getComprobante(cita.id);
+                                        const receiptData = getComprobante(
+                                          cita.id,
+                                        );
                                         setCurrentReceiptData(receiptData);
                                         setShowVoucherModal(true);
                                       }}
@@ -620,8 +629,6 @@ export default function GestionCitas() {
                                       <FileText className="w-4 h-4 mr-2 text-purple-600" />
                                       Ver Comprobante
                                     </DropdownMenuItem>
-
-
                                   </>
                                 )}
 
@@ -1181,13 +1188,19 @@ export default function GestionCitas() {
                                 {currentReceiptData.originalName}
                               </p>
                               <p className="text-xs text-vet-gray-500 mt-1">
-                                Tamaño: {(currentReceiptData.size / 1024).toFixed(1)} KB
+                                Tamaño:{" "}
+                                {(currentReceiptData.size / 1024).toFixed(1)} KB
                               </p>
                               <p className="text-xs text-vet-gray-500">
-                                Subido: {new Date(currentReceiptData.timestamp).toLocaleString("es-ES")}
+                                Subido:{" "}
+                                {new Date(
+                                  currentReceiptData.timestamp,
+                                ).toLocaleString("es-ES")}
                               </p>
                               <Badge variant="outline" className="text-xs mt-2">
-                                {currentReceiptData.type.includes("pdf") ? "PDF" : "Imagen"}
+                                {currentReceiptData.type.includes("pdf")
+                                  ? "PDF"
+                                  : "Imagen"}
                               </Badge>
                             </div>
 
@@ -1201,7 +1214,8 @@ export default function GestionCitas() {
                                     className="w-full h-auto max-h-[400px] object-contain"
                                   />
                                 </div>
-                              ) : currentReceiptData.type === "application/pdf" ? (
+                              ) : currentReceiptData.type ===
+                                "application/pdf" ? (
                                 <div className="flex flex-col items-center justify-center p-8 text-center">
                                   <FileText className="w-16 h-16 text-vet-gray-400 mb-4" />
                                   <h4 className="font-medium text-vet-gray-900 mb-2">
@@ -1213,9 +1227,10 @@ export default function GestionCitas() {
                                   <Button
                                     variant="outline"
                                     onClick={() => {
-                                      const link = document.createElement('a');
+                                      const link = document.createElement("a");
                                       link.href = currentReceiptData.data;
-                                      link.download = currentReceiptData.originalName;
+                                      link.download =
+                                        currentReceiptData.originalName;
                                       link.click();
                                     }}
                                   >
@@ -1236,25 +1251,32 @@ export default function GestionCitas() {
                               )}
                             </div>
                           </div>
-                        ) : selectedCita?.comprobantePago?.includes("uploaded_") ? (
+                        ) : selectedCita?.comprobantePago?.includes(
+                            "uploaded_",
+                          ) ? (
                           <div className="px-4 pb-4">
                             <div className="border-2 border-dashed border-vet-gray-300 rounded-lg p-8 text-center">
                               <FileText className="w-16 h-16 text-vet-primary mx-auto mb-4" />
                               <p className="text-sm text-vet-gray-600 mb-4">
-                                Comprobante subido por el cliente (formato anterior)
+                                Comprobante subido por el cliente (formato
+                                anterior)
                               </p>
                               <div className="bg-vet-gray-100 rounded p-4 text-left max-w-md mx-auto">
                                 <p className="text-xs text-vet-gray-600 mb-2">
                                   Información del archivo:
                                 </p>
                                 <p className="text-sm font-mono text-vet-gray-800">
-                                  {selectedCita?.comprobantePago?.split("_")[1] || "comprobante.jpg"}
+                                  {selectedCita?.comprobantePago?.split(
+                                    "_",
+                                  )[1] || "comprobante.jpg"}
                                 </p>
                                 <p className="text-xs text-vet-gray-500 mt-2">
                                   Fecha:{" "}
                                   {new Date(
                                     parseInt(
-                                      selectedCita?.comprobantePago?.split("_")[2] || "0",
+                                      selectedCita?.comprobantePago?.split(
+                                        "_",
+                                      )[2] || "0",
                                     ),
                                   ).toLocaleString("es-ES")}
                                 </p>

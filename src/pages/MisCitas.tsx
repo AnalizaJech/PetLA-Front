@@ -65,8 +65,16 @@ const estadoLabels = {
 
 export default function MisCitas() {
   const navigate = useNavigate();
-  const { user, citas, usuarios, mascotas, updateCita, deleteCita, saveComprobante, getComprobante } =
-    useAppContext();
+  const {
+    user,
+    citas,
+    usuarios,
+    mascotas,
+    updateCita,
+    deleteCita,
+    saveComprobante,
+    getComprobante,
+  } = useAppContext();
   const [selectedTab, setSelectedTab] = useState("todas");
   const [uploadingCitaId, setUploadingCitaId] = useState<string | null>(null);
   const [previewFile, setPreviewFile] = useState<File | null>(null);
@@ -520,17 +528,19 @@ export default function MisCitas() {
                                       : "Subir Comprobante"}
                                   </Button>
                                 )}
-                                {(cita.estado === "en_validacion" || cita.estado === "aceptada") && cita.comprobantePago && (
-                                  <Button
-                                    size="sm"
-                                    variant="outline"
-                                    onClick={() => handleViewReceipt(cita.id)}
-                                    className="border-vet-primary text-vet-primary hover:bg-vet-primary/10"
-                                  >
-                                    <Eye className="w-4 h-4 mr-2" />
-                                    Ver Comprobante
-                                  </Button>
-                                )}
+                                {(cita.estado === "en_validacion" ||
+                                  cita.estado === "aceptada") &&
+                                  cita.comprobantePago && (
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      onClick={() => handleViewReceipt(cita.id)}
+                                      className="border-vet-primary text-vet-primary hover:bg-vet-primary/10"
+                                    >
+                                      <Eye className="w-4 h-4 mr-2" />
+                                      Ver Comprobante
+                                    </Button>
+                                  )}
                                 {cita.estado === "rechazada" && (
                                   <Button
                                     size="sm"
@@ -718,7 +728,10 @@ export default function MisCitas() {
                       Tamaño: {(currentReceipt.size / 1024).toFixed(1)} KB
                     </p>
                     <p className="text-xs text-vet-gray-500">
-                      Subido: {new Date(currentReceipt.timestamp).toLocaleString('es-ES')}
+                      Subido:{" "}
+                      {new Date(currentReceipt.timestamp).toLocaleString(
+                        "es-ES",
+                      )}
                     </p>
                   </div>
                   <Badge variant="outline" className="text-xs">
@@ -749,7 +762,7 @@ export default function MisCitas() {
                     <Button
                       variant="outline"
                       onClick={() => {
-                        const link = document.createElement('a');
+                        const link = document.createElement("a");
                         link.href = currentReceipt.data;
                         link.download = currentReceipt.originalName;
                         link.click();
