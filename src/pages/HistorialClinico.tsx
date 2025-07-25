@@ -344,18 +344,20 @@ export default function HistorialClinico() {
     return fecha;
   };
 
-  // Funciones auxiliares para contenido por defecto
+  // Funciones auxiliares para contenido por defecto basado en los 6 servicios oficiales
   const getDiagnosticoDefecto = (tipoConsulta, estado) => {
-    if (estado === "pendiente_pago") return "Consulta pendiente de confirmación";
-    if (estado === "aceptada") return "Consulta confirmada - Pendiente de atención";
+    if (estado === "pendiente_pago") return "Servicio pendiente de confirmación de pago";
+    if (estado === "aceptada") return "Servicio confirmado - Programado para atención";
 
     const tipo = tipoConsulta.toLowerCase();
-    if (tipo.includes('general')) return "Evaluación general completada - Estado de salud normal";
-    if (tipo.includes('dental')) return "Evaluación dental realizada";
-    if (tipo.includes('dermatolog')) return "Evaluación dermatológica completada";
-    if (tipo.includes('cirug')) return "Procedimiento quirúrgico realizado exitosamente";
-    if (tipo.includes('emergencia')) return "Atención de emergencia - Estabilizado";
-    return "Evaluación especializada completada";
+    // Servicios oficiales de la veterinaria
+    if (tipo.includes('consulta general')) return "Evaluación general completada - Estado de salud óptimo";
+    if (tipo.includes('vacunación') || tipo.includes('vacunacion')) return "Vacunación aplicada exitosamente";
+    if (tipo.includes('emergencia')) return "Atención de emergencia - Paciente estabilizado";
+    if (tipo.includes('grooming')) return "Servicio de grooming completado - Mascota aseada y saludable";
+    if (tipo.includes('cirugía') || tipo.includes('cirugia')) return "Procedimiento quirúrgico realizado exitosamente";
+    if (tipo.includes('diagnóstico') || tipo.includes('diagnostico')) return "Exámenes diagnósticos completados - Resultados disponibles";
+    return "Servicio veterinario completado exitosamente";
   };
 
   const getTratamientoDefecto = (tipoConsulta, estado) => {
