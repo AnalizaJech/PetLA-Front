@@ -57,42 +57,42 @@ const tiposConsulta = [
     nombre: "Consulta General",
     precio: 80,
     icono: "Stethoscope",
-    descripcion: "Examen médico rutinario y evaluación de salud general"
+    descripcion: "Examen médico rutinario y evaluación de salud general",
   },
   {
     id: "vacunacion",
     nombre: "Vacunación",
     precio: 65,
     icono: "Syringe",
-    descripcion: "Aplicación de vacunas preventivas y refuerzos"
+    descripcion: "Aplicación de vacunas preventivas y refuerzos",
   },
   {
     id: "emergencia",
     nombre: "Emergencia",
     precio: 150,
     icono: "AlertCircle",
-    descripcion: "Atención médica urgente las 24 horas"
+    descripcion: "Atención médica urgente las 24 horas",
   },
   {
     id: "grooming",
     nombre: "Grooming",
     precio: 45,
     icono: "Heart",
-    descripcion: "Baño, corte de pelo, limpieza de oídos y uñas"
+    descripcion: "Baño, corte de pelo, limpieza de oídos y uñas",
   },
   {
     id: "cirugia",
     nombre: "Cirugía",
     precio: 250,
     icono: "Activity",
-    descripcion: "Procedimientos quirúrgicos especializados"
+    descripcion: "Procedimientos quirúrgicos especializados",
   },
   {
     id: "diagnostico",
     nombre: "Diagnóstico",
     precio: 120,
     icono: "Search",
-    descripcion: "Exámenes y análisis para determinar diagnósticos"
+    descripcion: "Exámenes y análisis para determinar diagnósticos",
   },
 ];
 
@@ -521,7 +521,8 @@ export default function NuevaCita() {
                       Servicios Veterinarios
                     </h2>
                     <p className="text-vet-gray-600">
-                      Elige el servicio que mejor se adapte a las necesidades de tu mascota
+                      Elige el servicio que mejor se adapte a las necesidades de
+                      tu mascota
                     </p>
                   </div>
 
@@ -541,11 +542,13 @@ export default function NuevaCita() {
                         <CardContent className="p-4">
                           <div className="flex items-start justify-between">
                             <div className="flex items-start space-x-3">
-                              <div className={`p-2 rounded-lg ${
-                                citaData.tipoConsulta === tipo.id
-                                  ? "bg-vet-primary text-white"
-                                  : "bg-vet-primary/10 text-vet-primary"
-                              }`}>
+                              <div
+                                className={`p-2 rounded-lg ${
+                                  citaData.tipoConsulta === tipo.id
+                                    ? "bg-vet-primary text-white"
+                                    : "bg-vet-primary/10 text-vet-primary"
+                                }`}
+                              >
                                 {getServiceIcon(tipo.icono)}
                               </div>
                               <div className="flex-1">
@@ -583,7 +586,8 @@ export default function NuevaCita() {
                           className="w-full min-h-[120px] max-h-[120px] resize-none overflow-y-auto px-3 py-2 border border-vet-gray-300 rounded-lg focus:ring-2 focus:ring-vet-primary focus:border-vet-primary transition-all duration-200"
                         />
                         <p className="text-xs text-vet-gray-500 mt-1">
-                          💬 Describe síntomas, comportamientos o motivos específicos para una mejor atención
+                          💬 Describe síntomas, comportamientos o motivos
+                          específicos para una mejor atención
                         </p>
                       </div>
                     </div>

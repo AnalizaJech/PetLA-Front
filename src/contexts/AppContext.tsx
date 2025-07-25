@@ -460,18 +460,18 @@ export function AppProvider({ children }: { children: ReactNode }) {
       // Si está cerca del límite (>80% de ~5MB), limpiar datos innecesarios
       const maxSize = 5 * 1024 * 1024; // 5MB aproximado
       if (total > maxSize * 0.8) {
-        console.warn('localStorage cerca del límite, optimizando...');
+        console.warn("localStorage cerca del límite, optimizando...");
 
         // Limpiar datos temporales o innecesarios
-        const keysToCheck = ['fictional_data_cleared', 'temp_data'];
-        keysToCheck.forEach(key => {
+        const keysToCheck = ["fictional_data_cleared", "temp_data"];
+        keysToCheck.forEach((key) => {
           if (localStorage.getItem(key)) {
             localStorage.removeItem(key);
           }
         });
       }
     } catch (error) {
-      console.error('Error optimizando localStorage:', error);
+      console.error("Error optimizando localStorage:", error);
     }
   };
 
@@ -482,7 +482,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         optimizeLocalStorage();
         localStorage.setItem("user", JSON.stringify(user));
       } catch (error) {
-        console.error('Error guardando usuario:', error);
+        console.error("Error guardando usuario:", error);
       }
     } else {
       localStorage.removeItem("user");
@@ -493,7 +493,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     try {
       localStorage.setItem("usuarios", JSON.stringify(usuarios));
     } catch (error) {
-      console.error('Error guardando usuarios:', error);
+      console.error("Error guardando usuarios:", error);
     }
   }, [usuarios]);
 
@@ -502,17 +502,19 @@ export function AppProvider({ children }: { children: ReactNode }) {
       optimizeLocalStorage();
       localStorage.setItem("mascotas", JSON.stringify(mascotas));
     } catch (error) {
-      console.error('Error guardando mascotas:', error);
+      console.error("Error guardando mascotas:", error);
       // En caso de error, intentar guardar sin las fotos para preservar datos básicos
       try {
-        const mascotasSinFotos = mascotas.map(mascota => ({
+        const mascotasSinFotos = mascotas.map((mascota) => ({
           ...mascota,
-          foto: null
+          foto: null,
         }));
         localStorage.setItem("mascotas", JSON.stringify(mascotasSinFotos));
-        console.warn('Mascotas guardadas sin fotos para preservar datos básicos');
+        console.warn(
+          "Mascotas guardadas sin fotos para preservar datos básicos",
+        );
       } catch (fallbackError) {
-        console.error('Error crítico guardando mascotas:', fallbackError);
+        console.error("Error crítico guardando mascotas:", fallbackError);
       }
     }
   }, [mascotas]);

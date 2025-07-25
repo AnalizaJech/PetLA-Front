@@ -170,8 +170,8 @@ export default function MisMascotas() {
     if (photoFile && selectedMascotaPhoto && photoPreviewURL) {
       try {
         // Comprimir imagen antes de guardar para optimizar localStorage
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
         const img = new Image();
 
         img.onload = () => {
@@ -198,7 +198,7 @@ export default function MisMascotas() {
           ctx?.drawImage(img, 0, 0, width, height);
 
           // Convertir a base64 con calidad optimizada (0.7 = 70% calidad)
-          const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+          const compressedBase64 = canvas.toDataURL("image/jpeg", 0.7);
 
           // Guardar la imagen optimizada
           updateMascota(selectedMascotaPhoto.id, {
@@ -210,7 +210,7 @@ export default function MisMascotas() {
 
         img.src = photoPreviewURL;
       } catch (error) {
-        console.error('Error al procesar la imagen:', error);
+        console.error("Error al procesar la imagen:", error);
         // Fallback: guardar imagen original si hay error
         updateMascota(selectedMascotaPhoto.id, {
           foto: photoPreviewURL,
@@ -584,7 +584,9 @@ export default function MisMascotas() {
                           variant="outline"
                           size="sm"
                           className="flex-1"
-                          onClick={() => window.location.href = `/historial?mascota=${encodeURIComponent(mascota.nombre)}`}
+                          onClick={() =>
+                            (window.location.href = `/historial?mascota=${encodeURIComponent(mascota.nombre)}`)
+                          }
                         >
                           <FileText className="w-4 h-4 mr-2" />
                           Historial

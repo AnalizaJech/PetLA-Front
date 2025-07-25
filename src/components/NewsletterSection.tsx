@@ -2,7 +2,15 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
-import { Heart, Mail, CheckCircle, ArrowRight, Syringe, Calendar, Gift } from "lucide-react";
+import {
+  Heart,
+  Mail,
+  CheckCircle,
+  ArrowRight,
+  Syringe,
+  Calendar,
+  Gift,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAppContext } from "@/contexts/AppContext";
 

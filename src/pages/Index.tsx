@@ -624,7 +624,8 @@ export default function Index() {
                     className="w-full min-h-[100px] max-h-[100px] resize-none overflow-y-auto px-3 py-2 border border-vet-gray-300 rounded-lg focus:ring-2 focus:ring-vet-primary focus:border-vet-primary transition-all duration-200"
                   />
                   <p className="text-xs text-vet-gray-500 mt-1">
-                    Máximo 500 caracteres. Describe síntomas, comportamientos o motivos de la consulta.
+                    Máximo 500 caracteres. Describe síntomas, comportamientos o
+                    motivos de la consulta.
                   </p>
                 </div>
               </div>
