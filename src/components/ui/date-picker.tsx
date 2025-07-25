@@ -117,47 +117,22 @@ export function DatePicker({
 
         .react-datepicker__day {
           color: hsl(var(--foreground));
-          width: 2.5rem;
-          height: 2.5rem;
-          line-height: 2.5rem;
-          border-radius: 0.75rem;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          width: 2rem;
+          height: 2rem;
+          line-height: 2rem;
+          border-radius: 0.375rem;
+          transition: all 0.2s ease;
           cursor: pointer;
-          font-weight: 600;
+          font-weight: 400;
           text-align: center;
-          position: relative;
           margin: 0.125rem;
-          border: 2px solid transparent;
-          background: hsl(var(--background));
-          box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
-        }
-
-        .react-datepicker__day::before {
-          content: '';
-          position: absolute;
-          inset: 0;
-          border-radius: inherit;
-          background: linear-gradient(135deg,
-            hsl(var(--accent)/0.1),
-            hsl(var(--accent)/0.05));
-          opacity: 0;
-          transition: opacity 0.3s ease;
+          border: none;
+          background: transparent;
         }
 
         .react-datepicker__day:hover {
-          background: linear-gradient(135deg,
-            hsl(var(--accent)) 0%,
-            hsl(var(--accent)/0.9) 100%);
+          background: hsl(var(--accent));
           color: hsl(var(--accent-foreground));
-          transform: scale(1.1) translateY(-2px);
-          box-shadow:
-            0 10px 20px rgb(0 0 0 / 0.15),
-            0 0 0 1px hsl(var(--accent)/0.2);
-          border-color: hsl(var(--accent)/0.3);
-        }
-
-        .react-datepicker__day:hover::before {
-          opacity: 1;
         }
 
         .react-datepicker__day--selected {
