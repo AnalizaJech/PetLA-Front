@@ -370,9 +370,17 @@ export default function HistorialClinico() {
                     <h3 className="text-lg font-semibold text-vet-gray-900 mb-2">
                       Sin consultas registradas
                     </h3>
-                    <p className="text-vet-gray-600">
-                      {selectedMascota} no tiene consultas en su historial
+                    <p className="text-vet-gray-600 mb-6">
+                      {selectedMascota} no tiene consultas completadas en su historial.
+                      Las consultas aparecerán aquí después de que un veterinario las atienda y registre la información médica.
                     </p>
+                    <Button
+                      onClick={() => window.location.href = "/agendar-cita"}
+                      className="bg-vet-primary hover:bg-vet-primary-dark"
+                    >
+                      <Calendar className="w-4 h-4 mr-2" />
+                      Agendar Cita Médica
+                    </Button>
                   </CardContent>
                 </Card>
               ) : (
