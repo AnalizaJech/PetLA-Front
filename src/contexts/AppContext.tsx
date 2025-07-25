@@ -985,6 +985,44 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setNewsletterEmails((prev) => prev.filter((email) => email.id !== id));
   };
 
+  // Funciones de notificaciones
+  const addNotificacion = (notificacionData: Omit<Notificacion, "id" | "fechaCreacion">) => {
+    const newNotificacion: Notificacion = {
+      ...notificacionData,
+      id: Date.now().toString(),
+      fechaCreacion: new Date(),
+    };
+    setNotificaciones((prev) => [...prev, newNotificacion]);
+  };
+
+  const markNotificacionAsRead = (id: string) => {
+    setNotificaciones((prev) =>
+      prev.map((notif) =>
+        notif.id === id ? { ...notif, leida: true } : notif,
+      ),
+    );
+  };
+
+  const markAllNotificacionesAsRead = (usuarioId: string) => {
+    setNotificaciones((prev) =>
+      prev.map((notif) =>
+        notif.usuarioId === usuarioId ? { ...notif, leida: true } : notif,
+      ),
+    );
+  };
+
+  const getNotificacionesByUser = (usuarioId: string): Notificacion[] => {
+    return notificaciones
+      .filter((notif) => notif.usuarioId === usuarioId)
+      .sort(
+        (a, b) => new Date(b.fechaCreacion).getTime() - new Date(a.fechaCreacion).getTime(),
+      );
+  };
+
+  const deleteNotificacion = (id: string) => {
+    setNotificaciones((prev) => prev.filter((notif) => notif.id !== id));
+  };
+
   // Statistics function
   const getStats = () => {
     const totalMascotas = mascotas.length;
