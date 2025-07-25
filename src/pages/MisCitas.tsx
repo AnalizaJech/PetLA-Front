@@ -38,6 +38,7 @@ import {
   X,
   AlertCircle,
   Trash2,
+  Download,
 } from "lucide-react";
 
 const estadoColors = {
@@ -369,7 +370,7 @@ export default function MisCitas() {
                         : selectedTab === "pendientes"
                           ? "No tienes citas pendientes de pago"
                           : selectedTab === "proximas"
-                            ? "No tienes citas pr��ximas confirmadas"
+                            ? "No tienes citas próximas confirmadas"
                             : "No tienes citas completadas aún"}
                     </p>
                     <Button
