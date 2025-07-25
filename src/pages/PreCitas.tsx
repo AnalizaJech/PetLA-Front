@@ -3,6 +3,7 @@ import { useAppContext } from "@/contexts/AppContext";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { DatePicker } from "@/components/ui/date-picker";
 import {
   Card,
   CardContent,
@@ -755,14 +756,18 @@ export default function PreCitas() {
                           Nueva fecha y hora
                         </h4>
                         <div className="grid grid-cols-2 gap-3">
-                          <div>
+                          <div className="space-y-2">
                             <Label htmlFor="nueva-fecha">Nueva fecha *</Label>
-                            <Input
-                              id="nueva-fecha"
-                              type="date"
-                              value={newDate}
-                              onChange={(e) => setNewDate(e.target.value)}
-                              min={new Date().toISOString().split("T")[0]}
+                            <DatePicker
+                              date={newDate ? new Date(newDate) : undefined}
+                              onDateChange={(date) => {
+                                setNewDate(
+                                  date ? date.toISOString().split("T")[0] : "",
+                                );
+                              }}
+                              placeholder="Selecciona fecha"
+                              fromYear={new Date().getFullYear()}
+                              toYear={new Date().getFullYear() + 1}
                             />
                           </div>
                           <div>

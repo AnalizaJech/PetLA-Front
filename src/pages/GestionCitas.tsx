@@ -461,7 +461,7 @@ export default function GestionCitas() {
                       <SelectItem value="atendida">Atendida</SelectItem>
                       <SelectItem value="cancelada">Cancelada</SelectItem>
                       <SelectItem value="rechazada">Rechazada</SelectItem>
-                      <SelectItem value="no_asistio">No Asistió</SelectItem>
+                      <SelectItem value="no_asistio">No Asisti��</SelectItem>
                     </SelectContent>
                   </Select>
                   <Input
@@ -546,6 +546,10 @@ export default function GestionCitas() {
                         </TableCell>
                         <TableCell>
                           <p className="text-sm text-vet-gray-700 max-w-xs">
+                            <span className="font-medium text-vet-primary">
+                              {cita.tipoConsulta}
+                            </span>
+                            <br />
                             {cita.motivo}
                           </p>
                         </TableCell>
@@ -814,6 +818,15 @@ export default function GestionCitas() {
                           </span>
                           <div>{getStatusBadge(selectedCita.estado)}</div>
                         </div>
+                      </div>
+
+                      <div className="mt-4 pt-4 border-t border-vet-gray-200">
+                        <span className="text-xs font-medium text-vet-gray-500 uppercase tracking-wide">
+                          Tipo de Consulta
+                        </span>
+                        <p className="mt-1 font-medium text-vet-primary">
+                          {selectedCita.tipoConsulta}
+                        </p>
                       </div>
 
                       <div className="mt-4 pt-4 border-t border-vet-gray-200">

@@ -31,6 +31,7 @@ interface Cita {
   estado: string;
   veterinario: string;
   motivo: string;
+  tipoConsulta: string;
   ubicacion: string;
   precio: number;
   notas?: string;
@@ -393,6 +394,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         return parsedCitas.map((cita: any) => ({
           ...cita,
           fecha: new Date(cita.fecha),
+          tipoConsulta: cita.tipoConsulta || "Consulta General", // Default for existing appointments
         }));
       }
       return [];
@@ -506,32 +508,61 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
   });
 
-  // Función para verificar y optimizar localStorage
+  // Función mejorada para verificar y optimizar localStorage
   const optimizeLocalStorage = () => {
     try {
       // Calcular uso actual de localStorage
       let total = 0;
+      const storageInfo = {};
+
       for (const key in localStorage) {
         if (localStorage.hasOwnProperty(key)) {
-          total += localStorage[key].length;
+          const size = localStorage[key].length;
+          total += size;
+          storageInfo[key] = size;
         }
       }
 
-      // Si está cerca del límite (>80% de ~5MB), limpiar datos innecesarios
-      const maxSize = 5 * 1024 * 1024; // 5MB aproximado
+      const maxSize = 5 * 1024 * 1024; // 5MB límite aproximado
+      const currentUsage = ((total / maxSize) * 100).toFixed(2);
+
+      // Log del uso para debugging (solo en desarrollo)
+      if (process.env.NODE_ENV === "development") {
+        console.log(
+          `📊 LocalStorage: ${currentUsage}% usado (${(total / 1024).toFixed(1)}KB)`,
+        );
+      }
+
+      // Si está cerca del límite (>80%), limpiar datos innecesarios
       if (total > maxSize * 0.8) {
-        console.warn("localStorage cerca del límite, optimizando...");
+        console.warn("🚨 localStorage cerca del límite, optimizando...");
 
         // Limpiar datos temporales o innecesarios
-        const keysToCheck = ["fictional_data_cleared", "temp_data"];
-        keysToCheck.forEach((key) => {
-          if (localStorage.getItem(key)) {
-            localStorage.removeItem(key);
-          }
+        const keysToClean = [
+          "fictional_data_cleared",
+          "temp_data",
+          "cache_",
+          "preview_",
+          "draft_",
+          "old_",
+        ];
+
+        let cleanedSpace = 0;
+        keysToClean.forEach((keyPrefix) => {
+          Object.keys(localStorage).forEach((key) => {
+            if (key === keyPrefix || key.startsWith(keyPrefix)) {
+              cleanedSpace += localStorage[key].length;
+              localStorage.removeItem(key);
+            }
+          });
         });
+
+        console.log(
+          `✅ Liberado ${(cleanedSpace / 1024).toFixed(1)}KB de espacio`,
+        );
       }
     } catch (error) {
-      console.error("Error optimizando localStorage:", error);
+      console.error("❌ Error optimizando localStorage:", error);
     }
   };
 

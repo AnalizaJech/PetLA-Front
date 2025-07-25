@@ -39,6 +39,8 @@ import {
   Activity,
   Search,
 } from "lucide-react";
+import { DatePicker } from "@/components/ui/date-picker";
+import { useToast } from "@/hooks/use-toast";
 
 interface NuevaCitaData {
   mascotaId: string;
@@ -150,6 +152,7 @@ export default function NuevaCita() {
   const navigate = useNavigate();
   const { user, mascotas, usuarios, citas, addCita, fixOrphanedPets } =
     useAppContext();
+  const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -222,8 +225,12 @@ export default function NuevaCita() {
   };
 
   const handleSubmit = async () => {
+    // Prevent double submission
+    if (isLoading) return;
+
     setIsLoading(true);
     setError("");
+    setSuccess("");
 
     try {
       // Validations
@@ -315,18 +322,29 @@ export default function NuevaCita() {
         estado: "pendiente_pago" as const,
         veterinario: assignedVeterinario || "Veterinario no disponible",
         motivo: citaData.motivo,
+        tipoConsulta: selectedTipoConsulta.nombre,
         ubicacion: citaData.ubicacion,
         precio: selectedTipoConsulta.precio,
         notas: citaData.notas,
       };
 
       addCita(nuevaCita);
-      setSuccess("Cita agendada exitosamente");
 
-      // Redirect after success
+      // Show immediate toast notification
+      toast({
+        title: "¡Cita agendada exitosamente!",
+        description: "Serás redirigido a 'Mis Citas' para realizar el pago.",
+        duration: 4000,
+      });
+
+      setSuccess(
+        "¡Cita agendada exitosamente! Ahora debes realizar el pago o subir tu comprobante de pago (YAPE, PLIN, Banca Móvil BCP, Interbank u otro banco) en la sección 'Mis Citas'.",
+      );
+
+      // Redirect after success (longer delay to read payment instructions)
       setTimeout(() => {
         navigate("/mis-citas");
-      }, 2000);
+      }, 4000);
     } catch (error) {
       setError("Error al agendar la cita");
     } finally {
@@ -423,7 +441,19 @@ export default function NuevaCita() {
               <Alert className="mb-6 border-green-200 bg-green-50">
                 <CheckCircle className="w-4 h-4 text-green-600" />
                 <AlertDescription className="text-green-800">
-                  {success}
+                  <div className="space-y-2">
+                    <p className="font-semibold">
+                      ¡Cita agendada exitosamente!
+                    </p>
+                    <p>
+                      Ahora debes realizar el pago o subir tu comprobante de
+                      pago en la sección "Mis Citas".
+                    </p>
+                    <p className="text-sm">
+                      <strong>Métodos de pago aceptados:</strong> YAPE, PLIN,
+                      Banca Móvil BCP, Interbank u otro banco.
+                    </p>
+                  </div>
                 </AlertDescription>
               </Alert>
             )}
@@ -629,28 +659,25 @@ export default function NuevaCita() {
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
+                    <div className="space-y-2">
                       <Label htmlFor="fecha">Fecha preferida *</Label>
-                      <div className="relative mt-2">
-                        <Input
-                          id="fecha"
-                          type="date"
-                          value={citaData.fecha}
-                          onChange={(e) =>
-                            setCitaData({ ...citaData, fecha: e.target.value })
-                          }
-                          min={getMinDate()}
-                          max={getMaxDate()}
-                          className="w-full pl-10 pr-4 py-2 border border-vet-gray-300 rounded-lg focus:ring-2 focus:ring-vet-primary focus:border-vet-primary transition-all duration-200"
-                        />
-                        <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-vet-gray-400 pointer-events-none" />
-                      </div>
-                      <p className="text-xs text-vet-gray-500 mt-1">
-                        📅 Puedes agendar hasta 3 meses por adelantado
-                      </p>
+                      <DatePicker
+                        date={
+                          citaData.fecha ? new Date(citaData.fecha) : undefined
+                        }
+                        onDateChange={(date) => {
+                          setCitaData({
+                            ...citaData,
+                            fecha: date ? date.toISOString().split("T")[0] : "",
+                          });
+                        }}
+                        placeholder="Selecciona fecha"
+                        fromYear={new Date().getFullYear()}
+                        toYear={new Date().getFullYear() + 1}
+                      />
                     </div>
 
-                    <div>
+                    <div className="space-y-2">
                       <Label htmlFor="hora">Hora preferida *</Label>
                       <Select
                         value={citaData.hora}
@@ -658,7 +685,7 @@ export default function NuevaCita() {
                           setCitaData({ ...citaData, hora: value })
                         }
                       >
-                        <SelectTrigger className="mt-2">
+                        <SelectTrigger>
                           <SelectValue placeholder="Selecciona hora" />
                         </SelectTrigger>
                         <SelectContent>
@@ -883,11 +910,25 @@ export default function NuevaCita() {
                 ) : (
                   <Button
                     onClick={handleSubmit}
-                    disabled={isLoading}
-                    className="bg-vet-primary hover:bg-vet-primary-dark flex items-center"
+                    disabled={isLoading || success}
+                    className="bg-vet-primary hover:bg-vet-primary-dark flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {isLoading ? "Agendando..." : "Confirmar Cita"}
-                    <CheckCircle className="w-4 h-4 ml-2" />
+                    {isLoading ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                        Agendando...
+                      </>
+                    ) : success ? (
+                      <>
+                        <CheckCircle className="w-4 h-4 mr-2" />
+                        Cita Agendada
+                      </>
+                    ) : (
+                      <>
+                        Confirmar Cita
+                        <CheckCircle className="w-4 h-4 ml-2" />
+                      </>
+                    )}
                   </Button>
                 )}
               </div>

@@ -173,10 +173,30 @@ const mockHistorial = {
 // Use dynamic mascotas from context
 const getMascotasNames = (mascotasList) => mascotasList.map((m) => m.nombre);
 
+// Helper function for UTF-8 safe date formatting
+const formatDateSafe = (date, options = {}) => {
+  try {
+    const defaultOptions = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      weekday: options.weekday || undefined,
+      ...options,
+    };
+
+    return new Intl.DateTimeFormat("es-ES", defaultOptions).format(
+      new Date(date),
+    );
+  } catch (error) {
+    console.error("Error formatting date:", error);
+    return new Date(date).toLocaleDateString("es-ES");
+  }
+};
+
 export default function HistorialClinico() {
   const { user, mascotas, usuarios, citas } = useAppContext();
   const [selectedMascota, setSelectedMascota] = useState("");
-  const [selectedTab, setSelectedTab] = useState("consultas");
+  const [selectedTab, setSelectedTab] = useState("consulta_general");
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -220,43 +240,246 @@ export default function HistorialClinico() {
     }
   }, [availableMascotas]);
 
-  // Obtener historial real basado en citas completadas
+  // Obtener historial real basado en citas completadas y atendidas
   const getHistorialReal = (nombreMascota) => {
-    const citasCompletadas = citas.filter(
+    // Include all paid and confirmed appointments for clinical history
+    const citasRelevantes = citas.filter(
       (cita) =>
         cita.mascota === nombreMascota &&
-        cita.estado === "Completada" &&
-        cita.consulta, // Solo citas que tienen información de consulta registrada
+        (cita.estado === "atendida" ||
+          cita.estado === "aceptada" ||
+          cita.estado === "en_validacion" ||
+          cita.estado === "pendiente_pago"),
     );
 
-    const consultas = citasCompletadas.map((cita) => ({
-      id: cita.id,
-      fecha: new Date(cita.fecha),
-      veterinario: cita.veterinario,
-      motivo: cita.motivo || "Consulta general",
-      diagnostico: cita.consulta?.diagnostico || "Sin diagnóstico registrado",
-      tratamiento: cita.consulta?.tratamiento || "Sin tratamiento registrado",
-      medicamentos: cita.consulta?.medicamentos || [],
-      proxima_cita: cita.consulta?.proximaCita
-        ? new Date(cita.consulta.proximaCita)
-        : null,
-      notas: cita.consulta?.notas || "",
-    }));
-
-    // Por ahora, vacunas y exámenes estarán vacíos hasta que se implementen
-    return {
-      consultas,
-      vacunas: [],
-      examenes: [],
+    // Agrupar por los 6 servicios específicos de la veterinaria
+    const servicios = {
+      consulta_general: [],
+      vacunacion: [],
+      emergencia: [],
+      grooming: [],
+      cirugia: [],
+      diagnostico: [],
     };
+
+    citasRelevantes.forEach((cita) => {
+      const tipoConsulta = cita.tipoConsulta || "Consulta General";
+      const diagnosticoDefault = getDiagnosticoDefecto(
+        tipoConsulta,
+        cita.estado,
+      );
+      const tratamientoDefault = getTratamientoDefecto(
+        tipoConsulta,
+        cita.estado,
+      );
+
+      const baseRecord = {
+        id: cita.id,
+        fecha: new Date(cita.fecha),
+        veterinario: cita.veterinario,
+        motivo: cita.motivo || "Sin motivo especificado",
+        tipoConsulta: tipoConsulta,
+        estado: cita.estado,
+        diagnostico: cita.consulta?.diagnostico || diagnosticoDefault,
+        tratamiento: cita.consulta?.tratamiento || tratamientoDefault,
+        medicamentos: cita.consulta?.medicamentos || [],
+        proxima_cita: cita.consulta?.proximaCita
+          ? new Date(cita.consulta.proximaCita)
+          : getProximaConsulta(tipoConsulta, cita.fecha),
+        notas:
+          cita.consulta?.notas || getNotasDefecto(tipoConsulta, cita.estado),
+        precio: cita.precio,
+      };
+
+      // Normalizar texto para búsqueda (manejo de UTF-8 y caracteres especiales)
+      const normalizeText = (text) => {
+        return text
+          .toLowerCase()
+          .normalize("NFD") // Descomponer caracteres UTF-8
+          .replace(/[\u0300-\u036f]/g, "") // Remover acentos
+          .replace(/[ñÑ]/g, "n") // Normalizar ñ
+          .replace(/\s+/g, "_") // Espacios a guiones
+          .trim();
+      };
+
+      const tipoNormalizado = normalizeText(tipoConsulta);
+      const motivoNormalizado = normalizeText(cita.motivo || "");
+
+      // Clasificar según el servicio específico (verificar tanto tipo como motivo)
+      const textoCompleto = `${tipoNormalizado} ${motivoNormalizado}`;
+
+      // 1. VACUNACIÓN
+      if (
+        tipoNormalizado.includes("vacunacion") ||
+        tipoNormalizado.includes("vacuna") ||
+        motivoNormalizado.includes("vacuna") ||
+        motivoNormalizado.includes("inmuniz")
+      ) {
+        servicios.vacunacion.push(baseRecord);
+      }
+      // 2. EMERGENCIA
+      else if (
+        tipoNormalizado.includes("emergencia") ||
+        motivoNormalizado.includes("emergencia") ||
+        motivoNormalizado.includes("urgente") ||
+        motivoNormalizado.includes("accidente")
+      ) {
+        servicios.emergencia.push(baseRecord);
+      }
+      // 3. GROOMING
+      else if (
+        tipoNormalizado.includes("grooming") ||
+        motivoNormalizado.includes("grooming") ||
+        motivoNormalizado.includes("bano") ||
+        motivoNormalizado.includes("baño") ||
+        motivoNormalizado.includes("corte") ||
+        motivoNormalizado.includes("aseo") ||
+        motivoNormalizado.includes("limpieza") ||
+        motivoNormalizado.includes("estetica")
+      ) {
+        servicios.grooming.push(baseRecord);
+      }
+      // 4. CIRUGÍA
+      else if (
+        tipoNormalizado.includes("cirugia") ||
+        tipoNormalizado.includes("cirugia") ||
+        motivoNormalizado.includes("cirugia") ||
+        motivoNormalizado.includes("operacion") ||
+        motivoNormalizado.includes("quirurgico")
+      ) {
+        servicios.cirugia.push(baseRecord);
+      }
+      // 5. DIAGNÓSTICO
+      else if (
+        tipoNormalizado.includes("diagnostico") ||
+        tipoNormalizado.includes("diagnostico") ||
+        motivoNormalizado.includes("diagnostico") ||
+        motivoNormalizado.includes("examen") ||
+        motivoNormalizado.includes("analisis") ||
+        motivoNormalizado.includes("laboratorio") ||
+        motivoNormalizado.includes("radiografia") ||
+        motivoNormalizado.includes("ecografia")
+      ) {
+        servicios.diagnostico.push(baseRecord);
+      }
+      // 6. CONSULTA GENERAL (por defecto y específicos)
+      else {
+        servicios.consulta_general.push(baseRecord);
+      }
+    });
+
+    // Ordenar cada servicio por fecha (más reciente primero)
+    Object.keys(servicios).forEach((key) => {
+      servicios[key] = servicios[key].sort((a, b) => b.fecha - a.fecha);
+    });
+
+    return servicios;
+  };
+
+  // Función auxiliar para calcular próxima vacuna
+  const getProximaVacuna = (fechaActual) => {
+    const fecha = new Date(fechaActual);
+    fecha.setFullYear(fecha.getFullYear() + 1); // Vacunas anuales por defecto
+    return fecha;
+  };
+
+  // Función auxiliar para calcular próxima consulta según tipo
+  const getProximaConsulta = (tipoConsulta, fechaActual) => {
+    const fecha = new Date(fechaActual);
+
+    if (
+      tipoConsulta.toLowerCase().includes("control") ||
+      tipoConsulta.toLowerCase().includes("seguimiento")
+    ) {
+      fecha.setMonth(fecha.getMonth() + 3); // 3 meses para controles
+    } else if (tipoConsulta.toLowerCase().includes("dental")) {
+      fecha.setMonth(fecha.getMonth() + 6); // 6 meses para dental
+    } else {
+      fecha.setFullYear(fecha.getFullYear() + 1); // 1 año para consultas generales
+    }
+
+    return fecha;
+  };
+
+  // Funciones auxiliares para contenido por defecto basado en los 6 servicios oficiales
+  const getDiagnosticoDefecto = (tipoConsulta, estado) => {
+    if (estado === "pendiente_pago")
+      return "Servicio pendiente de confirmación de pago";
+    if (estado === "aceptada")
+      return "Servicio confirmado - Programado para atención";
+
+    const tipo = tipoConsulta.toLowerCase();
+    // Servicios oficiales de la veterinaria
+    if (tipo.includes("consulta general"))
+      return "Evaluación general completada - Estado de salud óptimo";
+    if (tipo.includes("vacunación") || tipo.includes("vacunacion"))
+      return "Vacunación aplicada exitosamente";
+    if (tipo.includes("emergencia"))
+      return "Atención de emergencia - Paciente estabilizado";
+    if (tipo.includes("grooming"))
+      return "Servicio de grooming completado - Mascota aseada y saludable";
+    if (tipo.includes("cirugía") || tipo.includes("cirugia"))
+      return "Procedimiento quirúrgico realizado exitosamente";
+    if (tipo.includes("diagnóstico") || tipo.includes("diagnostico"))
+      return "Exámenes diagnósticos completados - Resultados disponibles";
+    return "Servicio veterinario completado exitosamente";
+  };
+
+  const getTratamientoDefecto = (tipoConsulta, estado) => {
+    if (estado === "pendiente_pago")
+      return "Tratamiento será aplicado tras confirmación de pago";
+    if (estado === "aceptada")
+      return "Tratamiento programado según servicio seleccionado";
+
+    const tipo = tipoConsulta.toLowerCase();
+    // Tratamientos según los 6 servicios oficiales
+    if (tipo.includes("consulta general"))
+      return "Revisión médica general, peso, temperatura y cuidados preventivos";
+    if (tipo.includes("vacunación") || tipo.includes("vacunacion"))
+      return "Aplicación de vacuna según calendario de inmunización";
+    if (tipo.includes("emergencia"))
+      return "Tratamiento de emergencia inmediato - Estabilización y cuidados críticos";
+    if (tipo.includes("grooming"))
+      return "Baño completo, corte de pelo, limpieza de oídos y corte de uñas";
+    if (tipo.includes("cirugía") || tipo.includes("cirugia"))
+      return "Procedimiento quirúrgico especializado con anestesia y cuidados post-operatorios";
+    if (tipo.includes("diagnóstico") || tipo.includes("diagnostico"))
+      return "Exámenes de laboratorio y estudios diagnósticos especializados";
+    return "Tratamiento veterinario aplicado según protocolo del servicio";
+  };
+
+  const getNotasDefecto = (tipoConsulta, estado) => {
+    if (estado === "pendiente_pago")
+      return "Servicio agendado - Pendiente de confirmación de pago";
+    if (estado === "aceptada") return "Servicio confirmado y programado";
+
+    const tipo = tipoConsulta.toLowerCase();
+    // Notas específicas por servicio
+    if (tipo.includes("consulta general"))
+      return "Consulta general completada. Mascota en buen estado de salud. Continuar con cuidados preventivos.";
+    if (tipo.includes("vacunación") || tipo.includes("vacunacion"))
+      return "Vacunación aplicada exitosamente. Próxima dosis programada según calendario.";
+    if (tipo.includes("emergencia"))
+      return "Emergencia atendida exitosamente. Monitorear evolución en las próximas 24-48 horas.";
+    if (tipo.includes("grooming"))
+      return "Servicio de grooming completado. Mascota limpia y aseada. Recomendar mantenimiento cada 4-6 semanas.";
+    if (tipo.includes("cirugía") || tipo.includes("cirugia"))
+      return "Cirugía realizada exitosamente. Seguir indicaciones post-operatorias estrictamente.";
+    if (tipo.includes("diagnóstico") || tipo.includes("diagnostico"))
+      return "Exámenes diagnósticos completados. Resultados dentro de parámetros normales.";
+
+    return `${tipoConsulta} completada exitosamente. Seguir recomendaciones del veterinario tratante.`;
   };
 
   const historialMascota = selectedMascota
     ? getHistorialReal(selectedMascota)
     : {
-        consultas: [],
-        vacunas: [],
-        examenes: [],
+        consulta_general: [],
+        vacunacion: [],
+        emergencia: [],
+        grooming: [],
+        cirugia: [],
+        diagnostico: [],
       };
 
   // Funci��n para descargar el historial clínico en formato texto
@@ -313,6 +536,46 @@ export default function HistorialClinico() {
       contenido += `CONSULTAS MÉDICAS\n`;
       contenido += `-`.repeat(30) + `\n`;
       contenido += `No hay consultas registradas.\n\n`;
+    }
+
+    // VACUNAS
+    if (historialMascota.vacunas.length > 0) {
+      contenido += `VACUNAS\n`;
+      contenido += `-`.repeat(30) + `\n`;
+      historialMascota.vacunas.forEach((vacuna, index) => {
+        contenido += `\nVacuna #${index + 1}\n`;
+        contenido += `Fecha: ${vacuna.fecha.toLocaleDateString("es-ES")}\n`;
+        contenido += `Veterinario: ${vacuna.veterinario}\n`;
+        contenido += `Tipo: ${vacuna.nombre}\n`;
+        contenido += `Lote: ${vacuna.lote}\n`;
+        if (vacuna.proxima) {
+          contenido += `Próxima dosis: ${vacuna.proxima.toLocaleDateString("es-ES")}\n`;
+        }
+        contenido += `\n${"·".repeat(40)}\n`;
+      });
+    } else {
+      contenido += `VACUNAS\n`;
+      contenido += `-`.repeat(30) + `\n`;
+      contenido += `No hay vacunas registradas.\n\n`;
+    }
+
+    // EXÁMENES
+    if (historialMascota.examenes.length > 0) {
+      contenido += `EXÁMENES Y LABORATORIOS\n`;
+      contenido += `-`.repeat(30) + `\n`;
+      historialMascota.examenes.forEach((examen, index) => {
+        contenido += `\nExamen #${index + 1}\n`;
+        contenido += `Fecha: ${examen.fecha.toLocaleDateString("es-ES")}\n`;
+        contenido += `Veterinario: ${examen.veterinario}\n`;
+        contenido += `Tipo: ${examen.tipo}\n`;
+        contenido += `Resultados: ${examen.resultados}\n`;
+        contenido += `Archivo: ${examen.archivo}\n`;
+        contenido += `\n${"·".repeat(40)}\n`;
+      });
+    } else {
+      contenido += `EX��MENES Y LABORATORIOS\n`;
+      contenido += `-`.repeat(30) + `\n`;
+      contenido += `No hay exámenes registrados.\n\n`;
     }
 
     contenido += `\nDOCUMENTO GENERADO\n`;
@@ -682,44 +945,64 @@ export default function HistorialClinico() {
               onValueChange={setSelectedTab}
               className="space-y-6"
             >
-              <TabsList className="grid w-full grid-cols-3">
+              <TabsList className="grid w-full grid-cols-6 text-xs">
                 <TabsTrigger
-                  value="consultas"
-                  className="flex items-center space-x-2"
+                  value="consulta_general"
+                  className="flex items-center space-x-1"
                 >
-                  <Stethoscope className="w-4 h-4" />
-                  <span>Consultas</span>
+                  <Stethoscope className="w-3 h-3" />
+                  <span>General</span>
                 </TabsTrigger>
                 <TabsTrigger
-                  value="vacunas"
-                  className="flex items-center space-x-2"
+                  value="vacunacion"
+                  className="flex items-center space-x-1"
                 >
-                  <Syringe className="w-4 h-4" />
+                  <Syringe className="w-3 h-3" />
                   <span>Vacunas</span>
                 </TabsTrigger>
                 <TabsTrigger
-                  value="examenes"
-                  className="flex items-center space-x-2"
+                  value="emergencia"
+                  className="flex items-center space-x-1"
                 >
-                  <Activity className="w-4 h-4" />
-                  <span>Exámenes</span>
+                  <Activity className="w-3 h-3" />
+                  <span>Emergencia</span>
+                </TabsTrigger>
+                <TabsTrigger
+                  value="grooming"
+                  className="flex items-center space-x-1"
+                >
+                  <PawPrint className="w-3 h-3" />
+                  <span>Grooming</span>
+                </TabsTrigger>
+                <TabsTrigger
+                  value="cirugia"
+                  className="flex items-center space-x-1"
+                >
+                  <Pill className="w-3 h-3" />
+                  <span>Cirugía</span>
+                </TabsTrigger>
+                <TabsTrigger
+                  value="diagnostico"
+                  className="flex items-center space-x-1"
+                >
+                  <FileText className="w-3 h-3" />
+                  <span>Diagnóstico</span>
                 </TabsTrigger>
               </TabsList>
 
-              {/* Consultas Tab */}
-              <TabsContent value="consultas" className="space-y-4">
-                {historialMascota.consultas.length === 0 ? (
+              {/* Consulta General Tab */}
+              <TabsContent value="consulta_general" className="space-y-4">
+                {historialMascota.consulta_general.length === 0 ? (
                   <Card>
                     <CardContent className="p-12 text-center">
                       <Stethoscope className="w-16 h-16 text-vet-gray-400 mx-auto mb-4" />
                       <h3 className="text-lg font-semibold text-vet-gray-900 mb-2">
-                        Sin consultas registradas
+                        Sin consultas generales registradas
                       </h3>
                       <p className="text-vet-gray-600 mb-6">
-                        {selectedMascota} no tiene consultas completadas en su
-                        historial. Las consultas aparecerán aquí después de que
-                        un veterinario las atienda y registre la información
-                        médica.
+                        {selectedMascota} no tiene consultas generales en su
+                        historial. Los servicios de consulta general aparecerán
+                        aquí.
                       </p>
                       <Button
                         onClick={() => (window.location.href = "/mis-citas")}
@@ -731,7 +1014,7 @@ export default function HistorialClinico() {
                     </CardContent>
                   </Card>
                 ) : (
-                  historialMascota.consultas.map((consulta) => (
+                  historialMascota.consulta_general.map((consulta) => (
                     <Card key={consulta.id}>
                       <CardHeader>
                         <div className="flex items-center justify-between">
@@ -741,11 +1024,8 @@ export default function HistorialClinico() {
                               <span>{consulta.motivo}</span>
                             </CardTitle>
                             <CardDescription>
-                              {consulta.fecha.toLocaleDateString("es-ES", {
+                              {formatDateSafe(consulta.fecha, {
                                 weekday: "long",
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
                               })}{" "}
                               • {consulta.veterinario}
                             </CardDescription>
@@ -837,7 +1117,7 @@ export default function HistorialClinico() {
                                         </span>
                                       </div>
                                       <p className="text-sm text-vet-gray-600">
-                                        {med.dosis} • {med.duracion}
+                                        {med.dosis} �� {med.duracion}
                                       </p>
                                     </div>
                                   ))}
@@ -876,150 +1156,424 @@ export default function HistorialClinico() {
                 )}
               </TabsContent>
 
-              {/* Vacunas Tab */}
-              <TabsContent value="vacunas" className="space-y-4">
-                {historialMascota.vacunas.length === 0 ? (
+              {/* Vacunación Tab */}
+              <TabsContent value="vacunacion" className="space-y-4">
+                {historialMascota.vacunacion.length === 0 ? (
                   <Card>
                     <CardContent className="p-12 text-center">
                       <Syringe className="w-16 h-16 text-vet-gray-400 mx-auto mb-4" />
                       <h3 className="text-lg font-semibold text-vet-gray-900 mb-2">
-                        Sin vacunas registradas
+                        Sin servicios de vacunación registrados
                       </h3>
                       <p className="text-vet-gray-600 mb-6">
-                        {selectedMascota} no tiene vacunas registradas en su
-                        historial. Las vacunas se registrarán durante las
-                        consultas veterinarias.
+                        {selectedMascota} no tiene servicios de vacunación en su
+                        historial.
                       </p>
                       <Button
                         onClick={() => (window.location.href = "/mis-citas")}
                         className="bg-vet-primary hover:bg-vet-primary-dark"
                       >
                         <Calendar className="w-4 h-4 mr-2" />
-                        Agendar Consulta
+                        Agendar Vacunación
                       </Button>
                     </CardContent>
                   </Card>
                 ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {historialMascota.vacunas.map((vacuna) => (
-                      <Card key={vacuna.id}>
-                        <CardContent className="p-6">
-                          <div className="flex items-center space-x-3 mb-4">
-                            <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                              <Syringe className="w-5 h-5 text-green-600" />
-                            </div>
+                  historialMascota.vacunacion.map((servicio) => (
+                    <Card key={servicio.id}>
+                      <CardHeader>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <CardTitle className="flex items-center space-x-2">
+                              <Syringe className="w-5 h-5 text-vet-primary" />
+                              <span>{servicio.tipoConsulta}</span>
+                            </CardTitle>
+                            <CardDescription>
+                              {formatDateSafe(servicio.fecha)} •{" "}
+                              {servicio.veterinario}
+                            </CardDescription>
+                          </div>
+                          <Badge className="bg-vet-primary/10 text-vet-primary">
+                            ${servicio.precio}
+                          </Badge>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-3">
+                          <div>
+                            <span className="font-medium text-vet-gray-700">
+                              Motivo:
+                            </span>
+                            <p className="text-vet-gray-600">
+                              {servicio.motivo}
+                            </p>
+                          </div>
+                          <div>
+                            <span className="font-medium text-vet-gray-700">
+                              Diagnóstico:
+                            </span>
+                            <p className="text-vet-gray-600">
+                              {servicio.diagnostico}
+                            </p>
+                          </div>
+                          <div>
+                            <span className="font-medium text-vet-gray-700">
+                              Tratamiento:
+                            </span>
+                            <p className="text-vet-gray-600">
+                              {servicio.tratamiento}
+                            </p>
+                          </div>
+                          {servicio.notas && (
                             <div>
-                              <h3 className="font-semibold text-vet-gray-900">
-                                {vacuna.nombre}
-                              </h3>
-                              <p className="text-sm text-vet-gray-600">
-                                Lote: {vacuna.lote}
+                              <span className="font-medium text-vet-gray-700">
+                                Notas:
+                              </span>
+                              <p className="text-vet-gray-600">
+                                {servicio.notas}
                               </p>
                             </div>
-                          </div>
-
-                          <div className="space-y-2">
-                            <div className="flex justify-between">
-                              <span className="text-vet-gray-600">
-                                Fecha aplicación:
-                              </span>
-                              <span className="font-medium">
-                                {vacuna.fecha.toLocaleDateString("es-ES")}
-                              </span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span className="text-vet-gray-600">
-                                Veterinario:
-                              </span>
-                              <span className="font-medium">
-                                {vacuna.veterinario}
-                              </span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span className="text-vet-gray-600">
-                                Próxima dosis:
-                              </span>
-                              <span className="font-medium text-vet-primary">
-                                {vacuna.proxima.toLocaleDateString("es-ES")}
-                              </span>
-                            </div>
-                          </div>
-
-                          <div className="mt-4">
-                            <Badge
-                              className={
-                                vacuna.proxima > new Date()
-                                  ? "bg-green-100 text-green-800"
-                                  : "bg-yellow-100 text-yellow-800"
-                              }
-                            >
-                              {vacuna.proxima > new Date()
-                                ? "Al día"
-                                : "Requiere refuerzo"}
-                            </Badge>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
+                          )}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))
                 )}
               </TabsContent>
 
-              {/* Exámenes Tab */}
-              <TabsContent value="examenes" className="space-y-4">
-                {historialMascota.examenes.length === 0 ? (
+              {/* Emergencia Tab */}
+              <TabsContent value="emergencia" className="space-y-4">
+                {historialMascota.emergencia.length === 0 ? (
                   <Card>
                     <CardContent className="p-12 text-center">
                       <Activity className="w-16 h-16 text-vet-gray-400 mx-auto mb-4" />
                       <h3 className="text-lg font-semibold text-vet-gray-900 mb-2">
-                        Sin exámenes registrados
+                        Sin servicios de emergencia registrados
                       </h3>
                       <p className="text-vet-gray-600 mb-6">
-                        {selectedMascota} no tiene exámenes médicos registrados
-                        en su historial. Los exámenes se agregarán cuando sean
-                        solicitados y realizados durante las consultas.
+                        {selectedMascota} no tiene servicios de emergencia en su
+                        historial.
                       </p>
                       <Button
                         onClick={() => (window.location.href = "/mis-citas")}
                         className="bg-vet-primary hover:bg-vet-primary-dark"
                       >
                         <Calendar className="w-4 h-4 mr-2" />
-                        Agendar Consulta
+                        Agendar Emergencia
                       </Button>
                     </CardContent>
                   </Card>
                 ) : (
-                  historialMascota.examenes.map((examen) => (
-                    <Card key={examen.id}>
-                      <CardContent className="p-6">
+                  historialMascota.emergencia.map((servicio) => (
+                    <Card key={servicio.id}>
+                      <CardHeader>
                         <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-4">
-                            <div className="w-12 h-12 bg-vet-secondary/10 rounded-full flex items-center justify-center">
-                              <Activity className="w-6 h-6 text-vet-secondary" />
-                            </div>
+                          <div>
+                            <CardTitle className="flex items-center space-x-2">
+                              <Activity className="w-5 h-5 text-red-600" />
+                              <span>{servicio.tipoConsulta}</span>
+                            </CardTitle>
+                            <CardDescription>
+                              {formatDateSafe(servicio.fecha)} •{" "}
+                              {servicio.veterinario}
+                            </CardDescription>
+                          </div>
+                          <Badge className="bg-red-100 text-red-800">
+                            ${servicio.precio}
+                          </Badge>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-3">
+                          <div>
+                            <span className="font-medium text-vet-gray-700">
+                              Motivo:
+                            </span>
+                            <p className="text-vet-gray-600">
+                              {servicio.motivo}
+                            </p>
+                          </div>
+                          <div>
+                            <span className="font-medium text-vet-gray-700">
+                              Diagnóstico:
+                            </span>
+                            <p className="text-vet-gray-600">
+                              {servicio.diagnostico}
+                            </p>
+                          </div>
+                          <div>
+                            <span className="font-medium text-vet-gray-700">
+                              Tratamiento:
+                            </span>
+                            <p className="text-vet-gray-600">
+                              {servicio.tratamiento}
+                            </p>
+                          </div>
+                          {servicio.notas && (
                             <div>
-                              <h3 className="font-semibold text-vet-gray-900">
-                                {examen.tipo}
-                              </h3>
+                              <span className="font-medium text-vet-gray-700">
+                                Notas:
+                              </span>
                               <p className="text-vet-gray-600">
-                                {examen.fecha.toLocaleDateString("es-ES")}
-                              </p>
-                              <p className="text-sm text-vet-gray-600 mt-1">
-                                Resultado: {examen.resultados}
+                                {servicio.notas}
                               </p>
                             </div>
-                          </div>
+                          )}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))
+                )}
+              </TabsContent>
 
-                          <div className="flex space-x-2">
-                            <Button variant="outline" size="sm">
-                              <Eye className="w-4 h-4 mr-2" />
-                              Ver
-                            </Button>
-                            <Button variant="outline" size="sm">
-                              <Download className="w-4 h-4 mr-2" />
-                              Descargar
-                            </Button>
+              {/* Grooming Tab */}
+              <TabsContent value="grooming" className="space-y-4">
+                {historialMascota.grooming.length === 0 ? (
+                  <Card>
+                    <CardContent className="p-12 text-center">
+                      <PawPrint className="w-16 h-16 text-vet-gray-400 mx-auto mb-4" />
+                      <h3 className="text-lg font-semibold text-vet-gray-900 mb-2">
+                        Sin servicios de grooming registrados
+                      </h3>
+                      <p className="text-vet-gray-600 mb-6">
+                        {selectedMascota} no tiene servicios de grooming en su
+                        historial.
+                      </p>
+                      <Button
+                        onClick={() => (window.location.href = "/mis-citas")}
+                        className="bg-vet-primary hover:bg-vet-primary-dark"
+                      >
+                        <Calendar className="w-4 h-4 mr-2" />
+                        Agendar Grooming
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  historialMascota.grooming.map((servicio) => (
+                    <Card key={servicio.id}>
+                      <CardHeader>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <CardTitle className="flex items-center space-x-2">
+                              <PawPrint className="w-5 h-5 text-orange-600" />
+                              <span>{servicio.tipoConsulta}</span>
+                            </CardTitle>
+                            <CardDescription>
+                              {formatDateSafe(servicio.fecha)} •{" "}
+                              {servicio.veterinario}
+                            </CardDescription>
                           </div>
+                          <Badge className="bg-orange-100 text-orange-800">
+                            ${servicio.precio}
+                          </Badge>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-3">
+                          <div>
+                            <span className="font-medium text-vet-gray-700">
+                              Motivo:
+                            </span>
+                            <p className="text-vet-gray-600">
+                              {servicio.motivo}
+                            </p>
+                          </div>
+                          <div>
+                            <span className="font-medium text-vet-gray-700">
+                              Diagnóstico:
+                            </span>
+                            <p className="text-vet-gray-600">
+                              {servicio.diagnostico}
+                            </p>
+                          </div>
+                          <div>
+                            <span className="font-medium text-vet-gray-700">
+                              Tratamiento:
+                            </span>
+                            <p className="text-vet-gray-600">
+                              {servicio.tratamiento}
+                            </p>
+                          </div>
+                          {servicio.notas && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700">
+                                Notas:
+                              </span>
+                              <p className="text-vet-gray-600">
+                                {servicio.notas}
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))
+                )}
+              </TabsContent>
+
+              {/* Cirugía Tab */}
+              <TabsContent value="cirugia" className="space-y-4">
+                {historialMascota.cirugia.length === 0 ? (
+                  <Card>
+                    <CardContent className="p-12 text-center">
+                      <Pill className="w-16 h-16 text-vet-gray-400 mx-auto mb-4" />
+                      <h3 className="text-lg font-semibold text-vet-gray-900 mb-2">
+                        Sin servicios de cirugía registrados
+                      </h3>
+                      <p className="text-vet-gray-600 mb-6">
+                        {selectedMascota} no tiene servicios de cirugía en su
+                        historial.
+                      </p>
+                      <Button
+                        onClick={() => (window.location.href = "/mis-citas")}
+                        className="bg-vet-primary hover:bg-vet-primary-dark"
+                      >
+                        <Calendar className="w-4 h-4 mr-2" />
+                        Agendar Cirugía
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  historialMascota.cirugia.map((servicio) => (
+                    <Card key={servicio.id}>
+                      <CardHeader>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <CardTitle className="flex items-center space-x-2">
+                              <Pill className="w-5 h-5 text-purple-600" />
+                              <span>{servicio.tipoConsulta}</span>
+                            </CardTitle>
+                            <CardDescription>
+                              {formatDateSafe(servicio.fecha)} •{" "}
+                              {servicio.veterinario}
+                            </CardDescription>
+                          </div>
+                          <Badge className="bg-purple-100 text-purple-800">
+                            ${servicio.precio}
+                          </Badge>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-3">
+                          <div>
+                            <span className="font-medium text-vet-gray-700">
+                              Motivo:
+                            </span>
+                            <p className="text-vet-gray-600">
+                              {servicio.motivo}
+                            </p>
+                          </div>
+                          <div>
+                            <span className="font-medium text-vet-gray-700">
+                              Diagnóstico:
+                            </span>
+                            <p className="text-vet-gray-600">
+                              {servicio.diagnostico}
+                            </p>
+                          </div>
+                          <div>
+                            <span className="font-medium text-vet-gray-700">
+                              Tratamiento:
+                            </span>
+                            <p className="text-vet-gray-600">
+                              {servicio.tratamiento}
+                            </p>
+                          </div>
+                          {servicio.notas && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700">
+                                Notas:
+                              </span>
+                              <p className="text-vet-gray-600">
+                                {servicio.notas}
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))
+                )}
+              </TabsContent>
+
+              {/* Diagnóstico Tab */}
+              <TabsContent value="diagnostico" className="space-y-4">
+                {historialMascota.diagnostico.length === 0 ? (
+                  <Card>
+                    <CardContent className="p-12 text-center">
+                      <FileText className="w-16 h-16 text-vet-gray-400 mx-auto mb-4" />
+                      <h3 className="text-lg font-semibold text-vet-gray-900 mb-2">
+                        Sin servicios de diagnóstico registrados
+                      </h3>
+                      <p className="text-vet-gray-600 mb-6">
+                        {selectedMascota} no tiene servicios de diagnóstico en
+                        su historial.
+                      </p>
+                      <Button
+                        onClick={() => (window.location.href = "/mis-citas")}
+                        className="bg-vet-primary hover:bg-vet-primary-dark"
+                      >
+                        <Calendar className="w-4 h-4 mr-2" />
+                        Agendar Diagnóstico
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  historialMascota.diagnostico.map((servicio) => (
+                    <Card key={servicio.id}>
+                      <CardHeader>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <CardTitle className="flex items-center space-x-2">
+                              <FileText className="w-5 h-5 text-blue-600" />
+                              <span>{servicio.tipoConsulta}</span>
+                            </CardTitle>
+                            <CardDescription>
+                              {formatDateSafe(servicio.fecha)} •{" "}
+                              {servicio.veterinario}
+                            </CardDescription>
+                          </div>
+                          <Badge className="bg-blue-100 text-blue-800">
+                            ${servicio.precio}
+                          </Badge>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-3">
+                          <div>
+                            <span className="font-medium text-vet-gray-700">
+                              Motivo:
+                            </span>
+                            <p className="text-vet-gray-600">
+                              {servicio.motivo}
+                            </p>
+                          </div>
+                          <div>
+                            <span className="font-medium text-vet-gray-700">
+                              Diagnóstico:
+                            </span>
+                            <p className="text-vet-gray-600">
+                              {servicio.diagnostico}
+                            </p>
+                          </div>
+                          <div>
+                            <span className="font-medium text-vet-gray-700">
+                              Tratamiento:
+                            </span>
+                            <p className="text-vet-gray-600">
+                              {servicio.tratamiento}
+                            </p>
+                          </div>
+                          {servicio.notas && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700">
+                                Notas:
+                              </span>
+                              <p className="text-vet-gray-600">
+                                {servicio.notas}
+                              </p>
+                            </div>
+                          )}
                         </div>
                       </CardContent>
                     </Card>

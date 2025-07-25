@@ -409,6 +409,10 @@ export default function DashboardVeterinario() {
                                   <TableCell>
                                     <div className="space-y-1">
                                       <p className="text-sm">
+                                        <span className="font-medium text-vet-primary">
+                                          {cita.tipoConsulta}
+                                        </span>
+                                        <br />
                                         {cita.motivo.length > 40
                                           ? `${cita.motivo.substring(0, 40)}...`
                                           : cita.motivo}
@@ -516,6 +520,10 @@ export default function DashboardVeterinario() {
                                     </span>
                                   </div>
                                   <p className="text-sm text-vet-gray-600">
+                                    <span className="font-medium text-vet-primary">
+                                      {cita.tipoConsulta}
+                                    </span>
+                                    <br />
                                     {cita.motivo.length > 40
                                       ? `${cita.motivo.substring(0, 40)}...`
                                       : cita.motivo}

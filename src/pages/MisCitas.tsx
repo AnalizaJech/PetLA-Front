@@ -359,9 +359,22 @@ export default function MisCitas() {
                     <CardContent className="p-6">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-4">
-                          <div className="w-12 h-12 bg-vet-primary/10 rounded-full flex items-center justify-center">
-                            <PawPrint className="w-6 h-6 text-vet-primary" />
-                          </div>
+                          {(() => {
+                            const mascota = mascotas.find(
+                              (m) => m.nombre === cita.mascota,
+                            );
+                            return mascota?.foto ? (
+                              <img
+                                src={mascota.foto}
+                                alt={cita.mascota}
+                                className="w-12 h-12 rounded-full object-cover border-2 border-vet-primary/20"
+                              />
+                            ) : (
+                              <div className="w-12 h-12 bg-vet-primary/10 rounded-full flex items-center justify-center">
+                                <PawPrint className="w-6 h-6 text-vet-primary" />
+                              </div>
+                            );
+                          })()}
                           <div>
                             <div className="flex items-center space-x-2 mb-1">
                               <h4 className="font-semibold text-vet-gray-900">
@@ -373,7 +386,10 @@ export default function MisCitas() {
                               </Badge>
                             </div>
                             <p className="text-sm text-vet-gray-600 mb-1">
-                              {cita.motivo} • {cita.veterinario}
+                              <span className="font-medium text-vet-primary">
+                                {cita.tipoConsulta}
+                              </span>{" "}
+                              • {cita.motivo} • {cita.veterinario}
                             </p>
                             <div className="flex items-center space-x-4 text-sm text-vet-gray-500">
                               <div className="flex items-center space-x-1">
