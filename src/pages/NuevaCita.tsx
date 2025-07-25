@@ -34,6 +34,10 @@ import {
   Stethoscope,
   MapPin,
   CreditCard,
+  Syringe,
+  Heart,
+  Activity,
+  Search,
 } from "lucide-react";
 
 interface NuevaCitaData {
