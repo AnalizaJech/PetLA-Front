@@ -662,6 +662,18 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
     setUsuarios((prev) => [...prev, newUser]);
     setUserState(newUser);
+
+    // Generar notificación de bienvenida para nuevos clientes
+    if (newUser.rol === "cliente") {
+      addNotificacion({
+        usuarioId: newUser.id,
+        tipo: "bienvenida_cliente",
+        titulo: "¡Bienvenido a nuestra clínica veterinaria!",
+        mensaje: `Hola ${newUser.nombre}, nos alegra tenerte en nuestra familia. Aquí podrás gestionar el cuidado de tus mascotas de manera fácil y segura.`,
+        leida: false,
+      });
+    }
+
     return newUser;
   };
 
