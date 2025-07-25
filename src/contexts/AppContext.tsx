@@ -82,6 +82,13 @@ interface HistorialClinico {
   motivo: string;
   diagnostico: string;
   tratamiento: string;
+  servicios?: Array<{
+    nombre: string;
+    descripcion?: string;
+    precio?: number;
+    duracion?: string;
+    notas?: string;
+  }>;
   medicamentos: Array<{
     nombre: string;
     dosis: string;
