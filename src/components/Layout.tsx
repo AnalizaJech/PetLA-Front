@@ -475,7 +475,9 @@ export default function Layout({
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" size="sm" className="relative">
                         <Bell className="w-4 h-4" />
-                        <span className="absolute -top-1 -right-1 bg-vet-secondary w-2 h-2 rounded-full animate-pulse"></span>
+                        {unreadNotificationsCount > 0 && (
+                          <span className="absolute -top-1 -right-1 bg-vet-secondary w-2 h-2 rounded-full animate-pulse"></span>
+                        )}
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-80 sm:w-96">
