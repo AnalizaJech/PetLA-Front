@@ -293,20 +293,11 @@ export default function HistorialClinico() {
       }
     });
 
-    const resultado = {
+    return {
       consultas: consultas.sort((a, b) => b.fecha - a.fecha),
       vacunas: vacunas.sort((a, b) => b.fecha - a.fecha),
       examenes: examenes.sort((a, b) => b.fecha - a.fecha),
     };
-
-    console.log(`📊 Historial final para ${nombreMascota}:`, {
-      totalConsultas: resultado.consultas.length,
-      totalVacunas: resultado.vacunas.length,
-      totalExamenes: resultado.examenes.length,
-      resultado
-    });
-
-    return resultado;
   };
 
   // Función auxiliar para calcular próxima vacuna
@@ -478,7 +469,7 @@ export default function HistorialClinico() {
         contenido += `\n${"·".repeat(40)}\n`;
       });
     } else {
-      contenido += `EXÁMENES Y LABORATORIOS\n`;
+      contenido += `EX��MENES Y LABORATORIOS\n`;
       contenido += `-`.repeat(30) + `\n`;
       contenido += `No hay exámenes registrados.\n\n`;
     }
