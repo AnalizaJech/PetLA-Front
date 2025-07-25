@@ -39,21 +39,28 @@ export function DatePicker({
         <Button
           variant="outline"
           className={cn(
-            "w-full justify-start text-left font-normal",
+            "w-full justify-start text-left font-normal h-10 px-3 py-2 text-sm",
             !date && "text-muted-foreground",
             className
           )}
           disabled={disabled}
         >
-          <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? (
-            format(date, "dd 'de' MMMM 'de' yyyy", { locale: es })
-          ) : (
-            <span>{placeholder}</span>
-          )}
+          <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
+          <span className="truncate">
+            {date ? (
+              format(date, "dd/MM/yyyy", { locale: es })
+            ) : (
+              placeholder
+            )}
+          </span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="start">
+      <PopoverContent
+        className="w-auto p-0 max-w-[280px]"
+        align="start"
+        side="bottom"
+        sideOffset={4}
+      >
         <Calendar
           mode="single"
           selected={date}
@@ -69,7 +76,7 @@ export function DatePicker({
           toYear={toYear}
           captionLayout="dropdown-buttons"
           locale={es}
-          className="rounded-md border"
+          className="rounded-md border-0"
         />
       </PopoverContent>
     </Popover>
