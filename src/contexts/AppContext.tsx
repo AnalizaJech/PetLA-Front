@@ -712,16 +712,29 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const getComprobante = (citaId: string): ComprobanteData | null => {
     try {
+      // Primero buscar en los datos de la cita
+      const cita = citas.find(c => c.id === citaId);
+      if (cita?.comprobanteData) {
+        return cita.comprobanteData;
+      }
+
+      // Si no está en la cita, buscar en localStorage
       const storageKey = `comprobante_${citaId}`;
       const stored = localStorage.getItem(storageKey);
 
       if (stored) {
-        return JSON.parse(stored) as ComprobanteData;
+        const comprobanteData = JSON.parse(stored) as ComprobanteData;
+
+        // Si encontramos el comprobante en localStorage pero no en la cita,
+        // actualizar la cita para incluir los datos
+        if (cita && cita.comprobantePago && !cita.comprobanteData) {
+          updateCita(citaId, { comprobanteData });
+        }
+
+        return comprobanteData;
       }
 
-      // También buscar en los datos de la cita
-      const cita = citas.find(c => c.id === citaId);
-      return cita?.comprobanteData || null;
+      return null;
     } catch (error) {
       console.error("❌ Error recuperando comprobante:", error);
       return null;
