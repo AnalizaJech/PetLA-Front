@@ -333,6 +333,183 @@ export default function HistorialClinico() {
     URL.revokeObjectURL(url);
   };
 
+  // Función para descargar el historial clínico en formato PDF
+  const descargarHistorialPDF = () => {
+    if (!selectedMascota) return;
+
+    const mascotaInfo = availableMascotas.find(
+      (m) => m.nombre === selectedMascota,
+    );
+    if (!mascotaInfo) return;
+
+    const pdf = new jsPDF();
+    const margin = 20;
+    let yPosition = margin;
+    const lineHeight = 6;
+    const pageHeight = pdf.internal.pageSize.height;
+
+    // Función para agregar nueva página si es necesario
+    const checkNewPage = (requiredSpace = 20) => {
+      if (yPosition + requiredSpace > pageHeight - margin) {
+        pdf.addPage();
+        yPosition = margin;
+      }
+    };
+
+    // Función para agregar texto con salto de línea automático
+    const addText = (text: string, fontSize = 11, style = "normal") => {
+      pdf.setFontSize(fontSize);
+      if (style === "bold") pdf.setFont("helvetica", "bold");
+      else pdf.setFont("helvetica", "normal");
+
+      const lines = pdf.splitTextToSize(text, 170);
+      checkNewPage(lines.length * lineHeight);
+
+      lines.forEach((line: string) => {
+        pdf.text(line, margin, yPosition);
+        yPosition += lineHeight;
+      });
+    };
+
+    // Título principal
+    addText("HISTORIAL CLÍNICO VETERINARIO", 16, "bold");
+    yPosition += 5;
+
+    // Información de la mascota
+    addText("INFORMACIÓN DE LA MASCOTA", 14, "bold");
+    yPosition += 2;
+    addText(`Nombre: ${mascotaInfo.nombre}`);
+    addText(`Especie: ${mascotaInfo.especie}`);
+    addText(`Raza: ${mascotaInfo.raza}`);
+    addText(`Fecha de Nacimiento: ${mascotaInfo.fechaNacimiento.toLocaleDateString("es-ES")}`);
+    addText(`Peso: ${mascotaInfo.peso ? `${mascotaInfo.peso} kg` : "No registrado"}`);
+    addText(`Sexo: ${mascotaInfo.sexo || "No registrado"}`);
+    addText(`Microchip: ${mascotaInfo.microchip || "No registrado"}`);
+    yPosition += 5;
+
+    // Consultas médicas
+    addText("CONSULTAS MÉDICAS", 14, "bold");
+    yPosition += 2;
+
+    if (historialMascota.consultas.length > 0) {
+      historialMascota.consultas.forEach((consulta, index) => {
+        checkNewPage(40);
+        addText(`Consulta #${index + 1}`, 12, "bold");
+        addText(`Fecha: ${consulta.fecha.toLocaleDateString("es-ES")}`);
+        addText(`Veterinario: ${consulta.veterinario}`);
+        addText(`Motivo: ${consulta.motivo}`);
+        addText(`Diagnóstico: ${consulta.diagnostico}`);
+        addText(`Tratamiento: ${consulta.tratamiento}`);
+
+        if (consulta.medicamentos.length > 0) {
+          addText("Medicamentos:", 11, "bold");
+          consulta.medicamentos.forEach((med) => {
+            addText(`  • ${med.nombre}: ${med.dosis} (${med.duracion})`);
+          });
+        }
+
+        if (consulta.proxima_cita) {
+          addText(`Próxima cita: ${consulta.proxima_cita.toLocaleDateString("es-ES")}`);
+        }
+
+        if (consulta.notas) {
+          addText(`Notas: ${consulta.notas}`);
+        }
+        yPosition += 8;
+      });
+    } else {
+      addText("No hay consultas registradas.");
+    }
+
+    // Información del documento
+    checkNewPage(20);
+    yPosition += 10;
+    addText("DOCUMENTO GENERADO", 12, "bold");
+    addText(`Fecha: ${new Date().toLocaleDateString("es-ES")} ${new Date().toLocaleTimeString("es-ES")}`);
+    addText(`Generado por: ${user?.nombre || "Usuario"}`);
+    addText("Sistema: Clínica Veterinaria Digital");
+
+    // Descargar PDF
+    pdf.save(`historial_clinico_${selectedMascota.replace(/\s+/g, "_")}_${new Date().toISOString().split("T")[0]}.pdf`);
+  };
+
+  // Función para descargar el historial clínico en formato Excel
+  const descargarHistorialExcel = () => {
+    if (!selectedMascota) return;
+
+    const mascotaInfo = availableMascotas.find(
+      (m) => m.nombre === selectedMascota,
+    );
+    if (!mascotaInfo) return;
+
+    // Crear workbook
+    const wb = XLSX.utils.book_new();
+
+    // Hoja 1: Información de la mascota
+    const mascotaData = [
+      ["INFORMACIÓN DE LA MASCOTA"],
+      [""],
+      ["Nombre", mascotaInfo.nombre],
+      ["Especie", mascotaInfo.especie],
+      ["Raza", mascotaInfo.raza],
+      ["Fecha de Nacimiento", mascotaInfo.fechaNacimiento.toLocaleDateString("es-ES")],
+      ["Peso", mascotaInfo.peso ? `${mascotaInfo.peso} kg` : "No registrado"],
+      ["Sexo", mascotaInfo.sexo || "No registrado"],
+      ["Microchip", mascotaInfo.microchip || "No registrado"],
+    ];
+
+    const wsMascota = XLSX.utils.aoa_to_sheet(mascotaData);
+    XLSX.utils.book_append_sheet(wb, wsMascota, "Información");
+
+    // Hoja 2: Consultas médicas
+    if (historialMascota.consultas.length > 0) {
+      const consultasData = [
+        ["CONSULTAS MÉDICAS"],
+        [""],
+        ["Fecha", "Veterinario", "Motivo", "Diagnóstico", "Tratamiento", "Medicamentos", "Próxima Cita", "Notas"]
+      ];
+
+      historialMascota.consultas.forEach((consulta) => {
+        const medicamentos = consulta.medicamentos.map(med =>
+          `${med.nombre}: ${med.dosis} (${med.duracion})`
+        ).join("; ");
+
+        consultasData.push([
+          consulta.fecha.toLocaleDateString("es-ES"),
+          consulta.veterinario,
+          consulta.motivo,
+          consulta.diagnostico,
+          consulta.tratamiento,
+          medicamentos || "Ninguno",
+          consulta.proxima_cita ? consulta.proxima_cita.toLocaleDateString("es-ES") : "No programada",
+          consulta.notas || "Sin notas"
+        ]);
+      });
+
+      const wsConsultas = XLSX.utils.aoa_to_sheet(consultasData);
+      XLSX.utils.book_append_sheet(wb, wsConsultas, "Consultas");
+    }
+
+    // Hoja 3: Resumen
+    const resumenData = [
+      ["RESUMEN DEL HISTORIAL"],
+      [""],
+      ["Total de consultas", historialMascota.consultas.length.toString()],
+      ["Última consulta", historialMascota.consultas.length > 0 ?
+        historialMascota.consultas[0].fecha.toLocaleDateString("es-ES") : "No hay consultas"],
+      [""],
+      ["Documento generado el", new Date().toLocaleDateString("es-ES")],
+      ["Generado por", user?.nombre || "Usuario"],
+      ["Sistema", "Clínica Veterinaria Digital"]
+    ];
+
+    const wsResumen = XLSX.utils.aoa_to_sheet(resumenData);
+    XLSX.utils.book_append_sheet(wb, wsResumen, "Resumen");
+
+    // Descargar Excel
+    XLSX.writeFile(wb, `historial_clinico_${selectedMascota.replace(/\s+/g, "_")}_${new Date().toISOString().split("T")[0]}.xlsx`);
+  };
+
   if (!user) {
     return (
       <Layout>
