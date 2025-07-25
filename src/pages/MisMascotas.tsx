@@ -349,24 +349,27 @@ export default function MisMascotas() {
 
                       <div className="space-y-2">
                         <Label htmlFor="especie">Especie</Label>
-                        <select
-                          id="especie"
+                        <Select
                           value={newMascota.especie}
-                          onChange={(e) =>
+                          onValueChange={(value) =>
                             setNewMascota({
                               ...newMascota,
-                              especie: e.target.value,
+                              especie: value,
                             })
                           }
-                          className="w-full px-3 py-2 border border-vet-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-vet-primary"
-                          required
                         >
-                          <option value="Perro">Perro</option>
-                          <option value="Gato">Gato</option>
-                          <option value="Ave">Ave</option>
-                          <option value="Hamster">Hamster</option>
-                          <option value="Otro">Otro</option>
-                        </select>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecciona la especie" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Perro">Perro</SelectItem>
+                            <SelectItem value="Gato">Gato</SelectItem>
+                            <SelectItem value="Ave">Ave</SelectItem>
+                            <SelectItem value="Hamster">Hamster</SelectItem>
+                            <SelectItem value="Conejo">Conejo</SelectItem>
+                            <SelectItem value="Otro">Otro</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </div>
 
                       <div className="space-y-2">
