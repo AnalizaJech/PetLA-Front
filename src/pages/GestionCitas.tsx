@@ -1172,31 +1172,91 @@ export default function GestionCitas() {
                         <h4 className="font-medium text-vet-gray-900 mb-4 px-4 pt-4">
                           Vista previa del comprobante
                         </h4>
-                        {selectedCita?.comprobantePago?.includes(
-                          "uploaded_",
-                        ) ? (
+                        {currentReceiptData ? (
+                          <div className="px-4 pb-4">
+                            {/* Información del archivo */}
+                            <div className="bg-vet-gray-100 rounded p-4 mb-4 text-left">
+                              <p className="text-xs text-vet-gray-600 mb-2">
+                                Información del archivo:
+                              </p>
+                              <p className="text-sm font-mono text-vet-gray-800">
+                                {currentReceiptData.originalName}
+                              </p>
+                              <p className="text-xs text-vet-gray-500 mt-1">
+                                Tamaño: {(currentReceiptData.size / 1024).toFixed(1)} KB
+                              </p>
+                              <p className="text-xs text-vet-gray-500">
+                                Subido: {new Date(currentReceiptData.timestamp).toLocaleString("es-ES")}
+                              </p>
+                              <Badge variant="outline" className="text-xs mt-2">
+                                {currentReceiptData.type.includes("pdf") ? "PDF" : "Imagen"}
+                              </Badge>
+                            </div>
+
+                            {/* Visualización del archivo */}
+                            <div className="border rounded-lg overflow-hidden bg-white">
+                              {currentReceiptData.type.startsWith("image/") ? (
+                                <div className="relative">
+                                  <img
+                                    src={currentReceiptData.data}
+                                    alt="Comprobante de pago"
+                                    className="w-full h-auto max-h-[400px] object-contain"
+                                  />
+                                </div>
+                              ) : currentReceiptData.type === "application/pdf" ? (
+                                <div className="flex flex-col items-center justify-center p-8 text-center">
+                                  <FileText className="w-16 h-16 text-vet-gray-400 mb-4" />
+                                  <h4 className="font-medium text-vet-gray-900 mb-2">
+                                    Documento PDF
+                                  </h4>
+                                  <p className="text-sm text-vet-gray-600 mb-4">
+                                    {currentReceiptData.originalName}
+                                  </p>
+                                  <Button
+                                    variant="outline"
+                                    onClick={() => {
+                                      const link = document.createElement('a');
+                                      link.href = currentReceiptData.data;
+                                      link.download = currentReceiptData.originalName;
+                                      link.click();
+                                    }}
+                                  >
+                                    <Download className="w-4 h-4 mr-2" />
+                                    Descargar PDF
+                                  </Button>
+                                </div>
+                              ) : (
+                                <div className="flex flex-col items-center justify-center p-8 text-center">
+                                  <FileText className="w-16 h-16 text-vet-gray-400 mb-4" />
+                                  <h4 className="font-medium text-vet-gray-900 mb-2">
+                                    Archivo no compatible
+                                  </h4>
+                                  <p className="text-sm text-vet-gray-600">
+                                    Tipo de archivo: {currentReceiptData.type}
+                                  </p>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        ) : selectedCita?.comprobantePago?.includes("uploaded_") ? (
                           <div className="px-4 pb-4">
                             <div className="border-2 border-dashed border-vet-gray-300 rounded-lg p-8 text-center">
                               <FileText className="w-16 h-16 text-vet-primary mx-auto mb-4" />
                               <p className="text-sm text-vet-gray-600 mb-4">
-                                Comprobante subido por el cliente
+                                Comprobante subido por el cliente (formato anterior)
                               </p>
                               <div className="bg-vet-gray-100 rounded p-4 text-left max-w-md mx-auto">
                                 <p className="text-xs text-vet-gray-600 mb-2">
                                   Información del archivo:
                                 </p>
                                 <p className="text-sm font-mono text-vet-gray-800">
-                                  {selectedCita?.comprobantePago?.split(
-                                    "_",
-                                  )[1] || "comprobante.jpg"}
+                                  {selectedCita?.comprobantePago?.split("_")[1] || "comprobante.jpg"}
                                 </p>
                                 <p className="text-xs text-vet-gray-500 mt-2">
                                   Fecha:{" "}
                                   {new Date(
                                     parseInt(
-                                      selectedCita?.comprobantePago?.split(
-                                        "_",
-                                      )[2] || "0",
+                                      selectedCita?.comprobantePago?.split("_")[2] || "0",
                                     ),
                                   ).toLocaleString("es-ES")}
                                 </p>
