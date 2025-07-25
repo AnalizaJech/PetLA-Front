@@ -415,7 +415,7 @@ export default function HistorialClinico() {
                     </Button>
                     <Button
                       variant="outline"
-                      onClick={() => window.location.href = "/agendar-cita"}
+                      onClick={() => window.location.href = "/mis-citas"}
                     >
                       <Calendar className="w-4 h-4 mr-2" />
                       Agendar Cita
