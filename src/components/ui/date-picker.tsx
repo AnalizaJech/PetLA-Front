@@ -269,6 +269,17 @@ export function DatePicker({
           display: none;
         }
 
+        /* Posicionamiento mejorado */
+        .react-datepicker-popper {
+          z-index: 9999 !important;
+          position: fixed !important;
+        }
+
+        .react-datepicker-wrapper {
+          display: block;
+          width: 100%;
+        }
+
         /* ANIMACIONES Y TRANSICIONES */
         .react-datepicker__month-container {
           transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
