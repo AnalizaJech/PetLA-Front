@@ -10,6 +10,11 @@ import {
   ArrowLeft,
   ArrowRight,
   CheckCircle,
+  Smartphone,
+  FileText,
+  Zap,
+  Award,
+  HeartHandshake,
 } from "lucide-react";
 
 const features = [
