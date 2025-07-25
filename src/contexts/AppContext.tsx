@@ -654,6 +654,80 @@ export function AppProvider({ children }: { children: ReactNode }) {
     localStorage.setItem("notificaciones", JSON.stringify(notificaciones));
   }, [notificaciones]);
 
+  // Receipt/Voucher management functions
+  const saveComprobante = async (citaId: string, file: File): Promise<boolean> => {
+    try {
+      // Optimizar espacio antes de guardar
+      optimizeStorageSpace();
+
+      // Comprimir imagen
+      const compressedImage: CompressedImage = await compressImage(file);
+
+      // Crear datos del comprobante
+      const comprobanteData: ComprobanteData = {
+        id: `comprobante_${citaId}_${Date.now()}`,
+        data: compressedImage.data,
+        originalName: compressedImage.originalName,
+        size: compressedImage.size,
+        type: compressedImage.type,
+        timestamp: Date.now(),
+      };
+
+      // Guardar en localStorage
+      const storageKey = `comprobante_${citaId}`;
+      localStorage.setItem(storageKey, JSON.stringify(comprobanteData));
+
+      // Actualizar la cita con la referencia del comprobante
+      updateCita(citaId, {
+        estado: "en_validacion",
+        comprobantePago: comprobanteData.id,
+        comprobanteData: comprobanteData,
+        notasAdmin: "", // Clear previous rejection notes
+      });
+
+      console.log(`✅ Comprobante guardado: ${(comprobanteData.size / 1024).toFixed(1)}KB`);
+      return true;
+    } catch (error) {
+      console.error("❌ Error guardando comprobante:", error);
+      return false;
+    }
+  };
+
+  const getComprobante = (citaId: string): ComprobanteData | null => {
+    try {
+      const storageKey = `comprobante_${citaId}`;
+      const stored = localStorage.getItem(storageKey);
+
+      if (stored) {
+        return JSON.parse(stored) as ComprobanteData;
+      }
+
+      // También buscar en los datos de la cita
+      const cita = citas.find(c => c.id === citaId);
+      return cita?.comprobanteData || null;
+    } catch (error) {
+      console.error("❌ Error recuperando comprobante:", error);
+      return null;
+    }
+  };
+
+  const deleteComprobante = (citaId: string): void => {
+    try {
+      const storageKey = `comprobante_${citaId}`;
+      localStorage.removeItem(storageKey);
+
+      // Actualizar la cita para remover el comprobante
+      updateCita(citaId, {
+        comprobantePago: undefined,
+        comprobanteData: undefined,
+      });
+
+      console.log(`🗑️ Comprobante eliminado para cita ${citaId}`);
+    } catch (error) {
+      console.error("❌ Error eliminando comprobante:", error);
+    }
+  };
+
   // Authentication functions
   const setUser = (newUser: Usuario | null) => {
     setUserState(newUser);
