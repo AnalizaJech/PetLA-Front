@@ -14,7 +14,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { DatePicker } from "@/components/ui/date-picker";
 import Layout from "@/components/Layout";
 import FeaturesCarousel from "@/components/FeaturesCarousel";
@@ -549,7 +555,13 @@ export default function Index() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
                   <Label htmlFor="tipoMascota">Tipo de mascota *</Label>
-                  <Select value={formData.tipoMascota} onValueChange={(value) => setFormData({...formData, tipoMascota: value})} required>
+                  <Select
+                    value={formData.tipoMascota}
+                    onValueChange={(value) =>
+                      setFormData({ ...formData, tipoMascota: value })
+                    }
+                    required
+                  >
                     <SelectTrigger className="mt-1 w-full h-10">
                       <SelectValue placeholder="Selecciona tipo de mascota" />
                     </SelectTrigger>
@@ -567,11 +579,17 @@ export default function Index() {
                   <Label htmlFor="fechaPreferida">Fecha preferida *</Label>
                   <div className="mt-1">
                     <DatePicker
-                      selected={formData.fechaPreferida ? new Date(formData.fechaPreferida) : null}
+                      selected={
+                        formData.fechaPreferida
+                          ? new Date(formData.fechaPreferida)
+                          : null
+                      }
                       onChange={(date) => {
                         setFormData({
                           ...formData,
-                          fechaPreferida: date ? date.toISOString().split('T')[0] : ''
+                          fechaPreferida: date
+                            ? date.toISOString().split("T")[0]
+                            : "",
                         });
                       }}
                       minDate={new Date()}
@@ -583,19 +601,37 @@ export default function Index() {
                 </div>
                 <div>
                   <Label htmlFor="horaPreferida">Hora preferida *</Label>
-                  <Select value={formData.horaPreferida} onValueChange={(value) => setFormData({...formData, horaPreferida: value})} required>
+                  <Select
+                    value={formData.horaPreferida}
+                    onValueChange={(value) =>
+                      setFormData({ ...formData, horaPreferida: value })
+                    }
+                    required
+                  >
                     <SelectTrigger className="mt-1 w-full h-10">
                       <SelectValue placeholder="Selecciona una hora" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="09:00">🌅 9:00 AM - Temprano</SelectItem>
-                      <SelectItem value="10:00">☀️ 10:00 AM - Mañana</SelectItem>
-                      <SelectItem value="11:00">☀️ 11:00 AM - Media Mañana</SelectItem>
-                      <SelectItem value="12:00">🌞 12:00 PM - Mediodía</SelectItem>
+                      <SelectItem value="09:00">
+                        🌅 9:00 AM - Temprano
+                      </SelectItem>
+                      <SelectItem value="10:00">
+                        ☀️ 10:00 AM - Mañana
+                      </SelectItem>
+                      <SelectItem value="11:00">
+                        ☀️ 11:00 AM - Media Mañana
+                      </SelectItem>
+                      <SelectItem value="12:00">
+                        🌞 12:00 PM - Mediodía
+                      </SelectItem>
                       <SelectItem value="14:00">🌞 2:00 PM - Tarde</SelectItem>
-                      <SelectItem value="15:00">🌤️ 3:00 PM - Media Tarde</SelectItem>
+                      <SelectItem value="15:00">
+                        🌤️ 3:00 PM - Media Tarde
+                      </SelectItem>
                       <SelectItem value="16:00">🌤️ 4:00 PM - Tarde</SelectItem>
-                      <SelectItem value="17:00">🌆 5:00 PM - Final del Día</SelectItem>
+                      <SelectItem value="17:00">
+                        🌆 5:00 PM - Final del Día
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
