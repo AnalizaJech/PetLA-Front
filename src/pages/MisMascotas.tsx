@@ -59,7 +59,7 @@ export default function MisMascotas() {
     nombre: "",
     especie: "Perro",
     raza: "",
-    fechaNacimiento: "",
+    fechaNacimiento: undefined as Date | undefined,
     peso: "",
     sexo: "",
     microchip: "",
@@ -565,7 +565,7 @@ export default function MisMascotas() {
                       {mascota.proximaCita ? (
                         <div className="bg-vet-primary/5 border border-vet-primary/20 rounded-lg p-3 mb-4">
                           <p className="text-sm font-medium text-vet-primary mb-1">
-                            Próxima cita
+                            Pr��xima cita
                           </p>
                           <p className="text-sm text-vet-gray-600">
                             {mascota.proximaCita.toLocaleDateString("es-ES")}
