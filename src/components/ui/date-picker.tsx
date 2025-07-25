@@ -343,6 +343,21 @@ export function DatePicker({
         fixedHeight
         todayButton="Hoy"
         clearButtonTitle="Limpiar"
+        popperModifiers={[
+          {
+            name: "preventOverflow",
+            options: {
+              boundary: "viewport",
+              padding: 8,
+            },
+          },
+          {
+            name: "flip",
+            options: {
+              fallbackPlacements: ["top-start", "bottom-start"],
+            },
+          },
+        ]}
       />
     </>
   );
