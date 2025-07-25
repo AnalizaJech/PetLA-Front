@@ -256,22 +256,9 @@ export function DatePicker({
 
         .react-datepicker__year-option--selected,
         .react-datepicker__month-option--selected {
-          background: linear-gradient(90deg,
-            hsl(var(--primary)) 0%,
-            hsl(var(--primary)/0.9) 100%);
+          background: hsl(var(--primary));
           color: hsl(var(--primary-foreground));
-          font-weight: 700;
-          position: relative;
-          box-shadow: 0 2px 4px hsl(var(--primary)/0.3);
-        }
-
-        .react-datepicker__year-option--selected::after,
-        .react-datepicker__month-option--selected::after {
-          content: '✓';
-          position: absolute;
-          right: 1rem;
-          font-weight: 800;
-          font-size: 0.875rem;
+          font-weight: 500;
         }
 
         .react-datepicker__triangle {
