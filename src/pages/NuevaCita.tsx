@@ -125,6 +125,27 @@ const horasDisponibles = [
   "18:00",
 ];
 
+// Función para obtener el icono del servicio
+const getServiceIcon = (iconName) => {
+  const iconProps = { className: "w-8 h-8" };
+  switch (iconName) {
+    case "Stethoscope":
+      return <Stethoscope {...iconProps} />;
+    case "Syringe":
+      return <Syringe {...iconProps} />;
+    case "AlertCircle":
+      return <AlertCircle {...iconProps} />;
+    case "Heart":
+      return <Heart {...iconProps} />;
+    case "Activity":
+      return <Activity {...iconProps} />;
+    case "Search":
+      return <Search {...iconProps} />;
+    default:
+      return <Stethoscope {...iconProps} />;
+  }
+};
+
 export default function NuevaCita() {
   const navigate = useNavigate();
   const { user, mascotas, usuarios, citas, addCita, fixOrphanedPets } =
