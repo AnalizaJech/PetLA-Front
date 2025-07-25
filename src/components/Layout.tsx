@@ -91,7 +91,7 @@ const navigationItems: NavItem[] = [
     roles: ["veterinario"],
   },
   {
-    label: "Historial Médico",
+    label: "Historial Clínico",
     path: "/historial",
     icon: FileText,
     roles: ["cliente"],
@@ -356,7 +356,7 @@ export default function Layout({
                         )}
                       >
                         <FileText className="w-4 h-4" />
-                        <span>Historial Médico</span>
+                        <span>Historial Clínico</span>
                       </Link>
                     </>
                   )}
