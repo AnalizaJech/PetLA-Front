@@ -311,8 +311,8 @@ export function DatePicker({
         dropdownMode="select"
         yearDropdownItemNumber={60}
         scrollableYearDropdown
-        minDate={new Date()}
-        maxDate={new Date(new Date().getFullYear() + 1, 11, 31)}
+        minDate={minDate}
+        maxDate={maxDate}
         placeholderText={placeholder}
         disabled={disabled}
         popperClassName="z-50"
