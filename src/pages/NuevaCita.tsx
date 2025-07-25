@@ -572,16 +572,20 @@ export default function NuevaCita() {
                   <div className="space-y-4">
                     <div>
                       <Label htmlFor="motivo">Motivo de la consulta *</Label>
-                      <Textarea
-                        id="motivo"
-                        value={citaData.motivo}
-                        onChange={(e) =>
-                          setCitaData({ ...citaData, motivo: e.target.value })
-                        }
-                        placeholder="Describe los síntomas o el motivo de la consulta..."
-                        className="mt-2"
-                        rows={4}
-                      />
+                      <div className="mt-2">
+                        <Textarea
+                          id="motivo"
+                          value={citaData.motivo}
+                          onChange={(e) =>
+                            setCitaData({ ...citaData, motivo: e.target.value })
+                          }
+                          placeholder="Describe los síntomas o el motivo de la consulta..."
+                          className="w-full min-h-[120px] max-h-[120px] resize-none overflow-y-auto px-3 py-2 border border-vet-gray-300 rounded-lg focus:ring-2 focus:ring-vet-primary focus:border-vet-primary transition-all duration-200"
+                        />
+                        <p className="text-xs text-vet-gray-500 mt-1">
+                          💬 Describe síntomas, comportamientos o motivos específicos para una mejor atención
+                        </p>
+                      </div>
                     </div>
 
                     <div>
