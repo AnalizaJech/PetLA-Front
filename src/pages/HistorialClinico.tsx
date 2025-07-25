@@ -589,7 +589,7 @@ export default function HistorialClinico() {
                       Las vacunas se registrarán durante las consultas veterinarias.
                     </p>
                     <Button
-                      onClick={() => window.location.href = "/agendar-cita"}
+                      onClick={() => window.location.href = "/mis-citas"}
                       className="bg-vet-primary hover:bg-vet-primary-dark"
                     >
                       <Calendar className="w-4 h-4 mr-2" />
@@ -677,7 +677,7 @@ export default function HistorialClinico() {
                       Los exámenes se agregarán cuando sean solicitados y realizados durante las consultas.
                     </p>
                     <Button
-                      onClick={() => window.location.href = "/agendar-cita"}
+                      onClick={() => window.location.href = "/mis-citas"}
                       className="bg-vet-primary hover:bg-vet-primary-dark"
                     >
                       <Calendar className="w-4 h-4 mr-2" />
