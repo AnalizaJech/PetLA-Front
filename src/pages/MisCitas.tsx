@@ -369,7 +369,7 @@ export default function MisCitas() {
                         : selectedTab === "pendientes"
                           ? "No tienes citas pendientes de pago"
                           : selectedTab === "proximas"
-                            ? "No tienes citas próximas confirmadas"
+                            ? "No tienes citas pr��ximas confirmadas"
                             : "No tienes citas completadas aún"}
                     </p>
                     <Button
@@ -683,6 +683,104 @@ export default function MisCitas() {
             >
               <Upload className="w-4 h-4" />
               <span>Confirmar y Enviar</span>
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Modal para mostrar comprobante guardado */}
+      <Dialog open={showReceiptModal} onOpenChange={setShowReceiptModal}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader className="pb-6">
+            <DialogTitle className="flex items-center space-x-2 text-vet-primary">
+              <Eye className="w-5 h-5" />
+              <span>Comprobante de Pago</span>
+            </DialogTitle>
+            <DialogDescription>
+              Comprobante de pago subido para esta cita
+            </DialogDescription>
+          </DialogHeader>
+
+          {currentReceipt && (
+            <div className="space-y-4">
+              {/* Información del archivo */}
+              <div className="border rounded-lg p-4 bg-vet-gray-50">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-medium text-vet-gray-900">
+                      Información del archivo
+                    </h4>
+                    <p className="text-sm text-vet-gray-600">
+                      {currentReceipt.originalName}
+                    </p>
+                    <p className="text-xs text-vet-gray-500">
+                      Tamaño: {(currentReceipt.size / 1024).toFixed(1)} KB
+                    </p>
+                    <p className="text-xs text-vet-gray-500">
+                      Subido: {new Date(currentReceipt.timestamp).toLocaleString('es-ES')}
+                    </p>
+                  </div>
+                  <Badge variant="outline" className="text-xs">
+                    {currentReceipt.type.includes("pdf") ? "PDF" : "Imagen"}
+                  </Badge>
+                </div>
+              </div>
+
+              {/* Visualización del archivo */}
+              <div className="border rounded-lg overflow-hidden bg-white">
+                {currentReceipt.type.startsWith("image/") ? (
+                  <div className="relative">
+                    <img
+                      src={currentReceipt.data}
+                      alt="Comprobante de pago"
+                      className="w-full h-auto max-h-[400px] object-contain"
+                    />
+                  </div>
+                ) : currentReceipt.type === "application/pdf" ? (
+                  <div className="flex flex-col items-center justify-center p-8 text-center">
+                    <FileText className="w-16 h-16 text-vet-gray-400 mb-4" />
+                    <h4 className="font-medium text-vet-gray-900 mb-2">
+                      Documento PDF
+                    </h4>
+                    <p className="text-sm text-vet-gray-600 mb-4">
+                      {currentReceipt.originalName}
+                    </p>
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        const link = document.createElement('a');
+                        link.href = currentReceipt.data;
+                        link.download = currentReceipt.originalName;
+                        link.click();
+                      }}
+                    >
+                      <Download className="w-4 h-4 mr-2" />
+                      Descargar PDF
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center p-8 text-center">
+                    <FileText className="w-16 h-16 text-vet-gray-400 mb-4" />
+                    <h4 className="font-medium text-vet-gray-900 mb-2">
+                      Archivo no compatible
+                    </h4>
+                    <p className="text-sm text-vet-gray-600">
+                      Tipo de archivo: {currentReceipt.type}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={handleCloseReceiptModal}
+              className="flex items-center space-x-2"
+            >
+              <X className="w-4 h-4" />
+              <span>Cerrar</span>
             </Button>
           </DialogFooter>
         </DialogContent>
