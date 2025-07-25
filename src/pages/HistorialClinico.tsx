@@ -905,7 +905,7 @@ export default function HistorialClinico() {
                     </CardContent>
                   </Card>
                 ) : (
-                  historialMascota.consultas.map((consulta) => (
+                  historialMascota.consulta_general.map((consulta) => (
                     <Card key={consulta.id}>
                       <CardHeader>
                         <div className="flex items-center justify-between">
