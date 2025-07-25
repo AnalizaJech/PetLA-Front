@@ -540,7 +540,7 @@ export default function MisMascotas() {
                           variant="outline"
                           size="sm"
                           className="flex-1"
-                          onClick={() => {}}
+                          onClick={() => window.location.href = `/historial-clinico?mascota=${encodeURIComponent(mascota.nombre)}`}
                         >
                           <FileText className="w-4 h-4 mr-2" />
                           Historial
