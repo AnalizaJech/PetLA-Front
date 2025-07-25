@@ -168,11 +168,55 @@ export default function MisMascotas() {
 
   const handleConfirmPhoto = () => {
     if (photoFile && selectedMascotaPhoto && photoPreviewURL) {
-      // Save the Base64 string which persists across navigation
-      updateMascota(selectedMascotaPhoto.id, {
-        foto: photoPreviewURL,
-      });
-      handleClosePhotoModal();
+      try {
+        // Comprimir imagen antes de guardar para optimizar localStorage
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        const img = new Image();
+
+        img.onload = () => {
+          // Redimensionar a un tamaño máximo de 400x400 para optimizar almacenamiento
+          const maxSize = 400;
+          let { width, height } = img;
+
+          if (width > height) {
+            if (width > maxSize) {
+              height = (height * maxSize) / width;
+              width = maxSize;
+            }
+          } else {
+            if (height > maxSize) {
+              width = (width * maxSize) / height;
+              height = maxSize;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+
+          // Dibujar imagen redimensionada
+          ctx?.drawImage(img, 0, 0, width, height);
+
+          // Convertir a base64 con calidad optimizada (0.7 = 70% calidad)
+          const compressedBase64 = canvas.toDataURL("image/jpeg", 0.7);
+
+          // Guardar la imagen optimizada
+          updateMascota(selectedMascotaPhoto.id, {
+            foto: compressedBase64,
+          });
+
+          handleClosePhotoModal();
+        };
+
+        img.src = photoPreviewURL;
+      } catch (error) {
+        console.error("Error al procesar la imagen:", error);
+        // Fallback: guardar imagen original si hay error
+        updateMascota(selectedMascotaPhoto.id, {
+          foto: photoPreviewURL,
+        });
+        handleClosePhotoModal();
+      }
     }
   };
 
@@ -540,7 +584,9 @@ export default function MisMascotas() {
                           variant="outline"
                           size="sm"
                           className="flex-1"
-                          onClick={() => {}}
+                          onClick={() =>
+                            (window.location.href = `/historial?mascota=${encodeURIComponent(mascota.nombre)}`)
+                          }
                         >
                           <FileText className="w-4 h-4 mr-2" />
                           Historial

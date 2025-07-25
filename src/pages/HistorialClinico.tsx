@@ -166,7 +166,7 @@ const getMascotasNames = (mascotasList) => mascotasList.map((m) => m.nombre);
 
 export default function HistorialClinico() {
   const { user, mascotas, usuarios, citas } = useAppContext();
-  const [selectedMascota, setSelectedMascota] = useState("Max");
+  const [selectedMascota, setSelectedMascota] = useState("");
   const [selectedTab, setSelectedTab] = useState("consultas");
 
   useEffect(() => {
@@ -186,10 +186,142 @@ export default function HistorialClinico() {
         })
       : mascotas.filter((mascota) => mascota.clienteId === user?.id);
 
-  const historialMascota = mockHistorial[selectedMascota] || {
-    consultas: [],
-    vacunas: [],
-    examenes: [],
+  // Manejar parámetros URL cuando cambien las mascotas disponibles
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const mascotaParam = urlParams.get("mascota");
+
+    if (availableMascotas.length > 0) {
+      if (mascotaParam) {
+        const mascotaName = decodeURIComponent(mascotaParam);
+        // Verificar que la mascota existe en las mascotas disponibles
+        const mascotaExists = availableMascotas.some(
+          (m) => m.nombre === mascotaName,
+        );
+        if (mascotaExists) {
+          setSelectedMascota(mascotaName);
+        } else {
+          // Si la mascota del URL no existe, seleccionar la primera disponible
+          setSelectedMascota(availableMascotas[0].nombre);
+        }
+      } else if (!selectedMascota) {
+        // Si no hay parámetro URL y no hay mascota seleccionada, seleccionar la primera
+        setSelectedMascota(availableMascotas[0].nombre);
+      }
+    }
+  }, [availableMascotas]);
+
+  // Obtener historial real basado en citas completadas
+  const getHistorialReal = (nombreMascota) => {
+    const citasCompletadas = citas.filter(
+      (cita) =>
+        cita.mascota === nombreMascota &&
+        cita.estado === "Completada" &&
+        cita.consulta, // Solo citas que tienen información de consulta registrada
+    );
+
+    const consultas = citasCompletadas.map((cita) => ({
+      id: cita.id,
+      fecha: new Date(cita.fecha),
+      veterinario: cita.veterinario,
+      motivo: cita.motivo || "Consulta general",
+      diagnostico: cita.consulta?.diagnostico || "Sin diagnóstico registrado",
+      tratamiento: cita.consulta?.tratamiento || "Sin tratamiento registrado",
+      medicamentos: cita.consulta?.medicamentos || [],
+      proxima_cita: cita.consulta?.proximaCita
+        ? new Date(cita.consulta.proximaCita)
+        : null,
+      notas: cita.consulta?.notas || "",
+    }));
+
+    // Por ahora, vacunas y exámenes estarán vacíos hasta que se implementen
+    return {
+      consultas,
+      vacunas: [],
+      examenes: [],
+    };
+  };
+
+  const historialMascota = selectedMascota
+    ? getHistorialReal(selectedMascota)
+    : {
+        consultas: [],
+        vacunas: [],
+        examenes: [],
+      };
+
+  // Funci��n para descargar el historial clínico en formato texto
+  const descargarHistorial = () => {
+    if (!selectedMascota) return;
+
+    const mascotaInfo = availableMascotas.find(
+      (m) => m.nombre === selectedMascota,
+    );
+    if (!mascotaInfo) return;
+
+    // Crear contenido en formato texto legible
+    let contenido = `HISTORIAL CLÍNICO VETERINARIO\n`;
+    contenido += `${"=".repeat(50)}\n\n`;
+
+    contenido += `INFORMACIÓN DE LA MASCOTA\n`;
+    contenido += `-`.repeat(30) + `\n`;
+    contenido += `Nombre: ${mascotaInfo.nombre}\n`;
+    contenido += `Especie: ${mascotaInfo.especie}\n`;
+    contenido += `Raza: ${mascotaInfo.raza}\n`;
+    contenido += `Fecha de Nacimiento: ${mascotaInfo.fechaNacimiento.toLocaleDateString("es-ES")}\n`;
+    contenido += `Peso: ${mascotaInfo.peso ? `${mascotaInfo.peso} kg` : "No registrado"}\n`;
+    contenido += `Sexo: ${mascotaInfo.sexo || "No registrado"}\n`;
+    contenido += `Microchip: ${mascotaInfo.microchip || "No registrado"}\n\n`;
+
+    if (historialMascota.consultas.length > 0) {
+      contenido += `CONSULTAS MÉDICAS\n`;
+      contenido += `-`.repeat(30) + `\n`;
+      historialMascota.consultas.forEach((consulta, index) => {
+        contenido += `\nConsulta #${index + 1}\n`;
+        contenido += `Fecha: ${consulta.fecha.toLocaleDateString("es-ES")}\n`;
+        contenido += `Veterinario: ${consulta.veterinario}\n`;
+        contenido += `Motivo: ${consulta.motivo}\n`;
+        contenido += `Diagnóstico: ${consulta.diagnostico}\n`;
+        contenido += `Tratamiento: ${consulta.tratamiento}\n`;
+
+        if (consulta.medicamentos.length > 0) {
+          contenido += `Medicamentos:\n`;
+          consulta.medicamentos.forEach((med) => {
+            contenido += `  - ${med.nombre}: ${med.dosis} (${med.duracion})\n`;
+          });
+        }
+
+        if (consulta.proxima_cita) {
+          contenido += `Próxima cita: ${consulta.proxima_cita.toLocaleDateString("es-ES")}\n`;
+        }
+
+        if (consulta.notas) {
+          contenido += `Notas: ${consulta.notas}\n`;
+        }
+        contenido += `\n${"·".repeat(40)}\n`;
+      });
+    } else {
+      contenido += `CONSULTAS MÉDICAS\n`;
+      contenido += `-`.repeat(30) + `\n`;
+      contenido += `No hay consultas registradas.\n\n`;
+    }
+
+    contenido += `\nDOCUMENTO GENERADO\n`;
+    contenido += `-`.repeat(30) + `\n`;
+    contenido += `Fecha: ${new Date().toLocaleDateString("es-ES")} ${new Date().toLocaleTimeString("es-ES")}\n`;
+    contenido += `Generado por: ${user?.nombre || "Usuario"}\n`;
+    contenido += `Sistema: Clínica Veterinaria Digital\n`;
+
+    const blob = new Blob([contenido], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `historial_clinico_${selectedMascota.replace(/\s+/g, "_")}_${new Date().toISOString().split("T")[0]}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   if (!user) {
@@ -218,319 +350,404 @@ export default function HistorialClinico() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="mb-6 sm:mb-8">
-            <div className="flex items-center space-x-3 sm:space-x-4 mb-6">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-vet-primary/10 rounded-xl flex items-center justify-center">
-                <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-vet-primary" />
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0 mb-6">
+              <div className="flex items-center space-x-3 sm:space-x-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-vet-primary/10 rounded-xl flex items-center justify-center">
+                  <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-vet-primary" />
+                </div>
+                <div>
+                  <h1 className="text-2xl sm:text-3xl font-bold text-vet-gray-900">
+                    {user?.rol === "veterinario"
+                      ? "Historial de Pacientes"
+                      : "Historial Clínico"}
+                  </h1>
+                  <p className="text-sm sm:text-base text-vet-gray-600">
+                    {user?.rol === "veterinario"
+                      ? "Consulta y gestiona el historial médico de tus pacientes"
+                      : "Consulta el historial médico completo de tus mascotas"}
+                  </p>
+                </div>
               </div>
-              <div>
-                <h1 className="text-2xl sm:text-3xl font-bold text-vet-gray-900">
-                  {user?.rol === "veterinario"
-                    ? "Historial de Pacientes"
-                    : "Historial Clínico"}
-                </h1>
-                <p className="text-sm sm:text-base text-vet-gray-600">
-                  {user?.rol === "veterinario"
-                    ? "Consulta y gestiona el historial médico de tus pacientes"
-                    : "Consulta el historial médico completo de tus mascotas"}
-                </p>
-              </div>
+
+              {/* Botón de descarga - solo mostrar si hay mascota seleccionada */}
+              {selectedMascota && (
+                <Button
+                  onClick={descargarHistorial}
+                  variant="outline"
+                  className="border-vet-primary text-vet-primary hover:bg-vet-primary hover:text-white"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Descargar Historial
+                </Button>
+              )}
             </div>
 
-            {/* Selector de mascota */}
-            <div className="flex flex-wrap gap-2 mb-6">
-              {getMascotasNames(availableMascotas).map((mascota) => (
-                <Button
-                  key={mascota}
-                  variant={selectedMascota === mascota ? "default" : "outline"}
-                  onClick={() => setSelectedMascota(mascota)}
-                  className={
-                    selectedMascota === mascota
-                      ? "bg-vet-primary hover:bg-vet-primary-dark"
-                      : ""
-                  }
-                >
-                  <PawPrint className="w-4 h-4 mr-2" />
-                  {mascota}
-                </Button>
-              ))}
-            </div>
+            {/* Selector de mascota - solo mostrar si hay mascotas disponibles */}
+            {availableMascotas.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-6">
+                {getMascotasNames(availableMascotas).map((mascota) => (
+                  <Button
+                    key={mascota}
+                    variant={
+                      selectedMascota === mascota ? "default" : "outline"
+                    }
+                    onClick={() => setSelectedMascota(mascota)}
+                    className={
+                      selectedMascota === mascota
+                        ? "bg-vet-primary hover:bg-vet-primary-dark"
+                        : ""
+                    }
+                  >
+                    <PawPrint className="w-4 h-4 mr-2" />
+                    {mascota}
+                  </Button>
+                ))}
+              </div>
+            )}
           </div>
 
-          <Tabs
-            value={selectedTab}
-            onValueChange={setSelectedTab}
-            className="space-y-6"
-          >
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger
-                value="consultas"
-                className="flex items-center space-x-2"
-              >
-                <Stethoscope className="w-4 h-4" />
-                <span>Consultas</span>
-              </TabsTrigger>
-              <TabsTrigger
-                value="vacunas"
-                className="flex items-center space-x-2"
-              >
-                <Syringe className="w-4 h-4" />
-                <span>Vacunas</span>
-              </TabsTrigger>
-              <TabsTrigger
-                value="examenes"
-                className="flex items-center space-x-2"
-              >
-                <Activity className="w-4 h-4" />
-                <span>Exámenes</span>
-              </TabsTrigger>
-            </TabsList>
+          {/* Mostrar mensaje si no hay mascotas disponibles */}
+          {availableMascotas.length === 0 ? (
+            <Card>
+              <CardContent className="p-12 text-center">
+                <PawPrint className="w-16 h-16 text-vet-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-vet-gray-900 mb-2">
+                  {user?.rol === "veterinario"
+                    ? "No tienes pacientes asignados"
+                    : "No tienes mascotas registradas"}
+                </h3>
+                <p className="text-vet-gray-600 mb-6">
+                  {user?.rol === "veterinario"
+                    ? "No hay mascotas con citas asignadas a ti. Los historiales aparecerán cuando atiendas consultas."
+                    : "Primero debes registrar tus mascotas y agendar citas médicas para ver su historial clínico."}
+                </p>
+                {user?.rol !== "veterinario" && (
+                  <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                    <Button
+                      onClick={() => (window.location.href = "/mis-mascotas")}
+                      className="bg-vet-primary hover:bg-vet-primary-dark"
+                    >
+                      <PawPrint className="w-4 h-4 mr-2" />
+                      Registrar Mascota
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => (window.location.href = "/mis-citas")}
+                    >
+                      <Calendar className="w-4 h-4 mr-2" />
+                      Agendar Cita
+                    </Button>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          ) : (
+            <Tabs
+              value={selectedTab}
+              onValueChange={setSelectedTab}
+              className="space-y-6"
+            >
+              <TabsList className="grid w-full grid-cols-3">
+                <TabsTrigger
+                  value="consultas"
+                  className="flex items-center space-x-2"
+                >
+                  <Stethoscope className="w-4 h-4" />
+                  <span>Consultas</span>
+                </TabsTrigger>
+                <TabsTrigger
+                  value="vacunas"
+                  className="flex items-center space-x-2"
+                >
+                  <Syringe className="w-4 h-4" />
+                  <span>Vacunas</span>
+                </TabsTrigger>
+                <TabsTrigger
+                  value="examenes"
+                  className="flex items-center space-x-2"
+                >
+                  <Activity className="w-4 h-4" />
+                  <span>Exámenes</span>
+                </TabsTrigger>
+              </TabsList>
 
-            {/* Consultas Tab */}
-            <TabsContent value="consultas" className="space-y-4">
-              {historialMascota.consultas.length === 0 ? (
-                <Card>
-                  <CardContent className="p-12 text-center">
-                    <Stethoscope className="w-16 h-16 text-vet-gray-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-vet-gray-900 mb-2">
-                      Sin consultas registradas
-                    </h3>
-                    <p className="text-vet-gray-600">
-                      {selectedMascota} no tiene consultas en su historial
-                    </p>
-                  </CardContent>
-                </Card>
-              ) : (
-                historialMascota.consultas.map((consulta) => (
-                  <Card key={consulta.id}>
-                    <CardHeader>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <CardTitle className="flex items-center space-x-2">
-                            <Calendar className="w-5 h-5 text-vet-primary" />
-                            <span>{consulta.motivo}</span>
-                          </CardTitle>
-                          <CardDescription>
-                            {consulta.fecha.toLocaleDateString("es-ES", {
-                              weekday: "long",
-                              year: "numeric",
-                              month: "long",
-                              day: "numeric",
-                            })}{" "}
-                            • {consulta.veterinario}
-                          </CardDescription>
-                        </div>
-                        <Badge className="bg-vet-primary/10 text-vet-primary">
-                          Completada
-                        </Badge>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                          <h4 className="font-semibold text-vet-gray-900 mb-2">
-                            Diagnóstico
-                          </h4>
-                          <p className="text-vet-gray-700 mb-4">
-                            {consulta.diagnostico}
-                          </p>
-
-                          <h4 className="font-semibold text-vet-gray-900 mb-2">
-                            Tratamiento
-                          </h4>
-                          <p className="text-vet-gray-700">
-                            {consulta.tratamiento}
-                          </p>
-                        </div>
-
-                        <div>
-                          {consulta.medicamentos.length > 0 && (
-                            <div className="mb-4">
-                              <h4 className="font-semibold text-vet-gray-900 mb-2">
-                                Medicamentos
-                              </h4>
-                              <div className="space-y-2">
-                                {consulta.medicamentos.map((med, index) => (
-                                  <div
-                                    key={index}
-                                    className="bg-vet-gray-50 rounded-lg p-3"
-                                  >
-                                    <div className="flex items-center space-x-2 mb-1">
-                                      <Pill className="w-4 h-4 text-vet-primary" />
-                                      <span className="font-medium">
-                                        {med.nombre}
-                                      </span>
-                                    </div>
-                                    <p className="text-sm text-vet-gray-600">
-                                      {med.dosis} • {med.duracion}
-                                    </p>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-
-                          {consulta.proxima_cita && (
-                            <div className="mb-4">
-                              <h4 className="font-semibold text-vet-gray-900 mb-2">
-                                Próximo control
-                              </h4>
-                              <p className="text-vet-gray-700">
-                                {consulta.proxima_cita.toLocaleDateString(
-                                  "es-ES",
-                                )}
-                              </p>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-
-                      {consulta.notas && (
-                        <div className="mt-4 p-4 bg-vet-primary/5 rounded-lg border border-vet-primary/20">
-                          <h4 className="font-semibold text-vet-primary mb-2">
-                            Notas del veterinario
-                          </h4>
-                          <p className="text-vet-gray-700">{consulta.notas}</p>
-                        </div>
-                      )}
+              {/* Consultas Tab */}
+              <TabsContent value="consultas" className="space-y-4">
+                {historialMascota.consultas.length === 0 ? (
+                  <Card>
+                    <CardContent className="p-12 text-center">
+                      <Stethoscope className="w-16 h-16 text-vet-gray-400 mx-auto mb-4" />
+                      <h3 className="text-lg font-semibold text-vet-gray-900 mb-2">
+                        Sin consultas registradas
+                      </h3>
+                      <p className="text-vet-gray-600 mb-6">
+                        {selectedMascota} no tiene consultas completadas en su
+                        historial. Las consultas aparecerán aquí después de que
+                        un veterinario las atienda y registre la información
+                        médica.
+                      </p>
+                      <Button
+                        onClick={() => (window.location.href = "/mis-citas")}
+                        className="bg-vet-primary hover:bg-vet-primary-dark"
+                      >
+                        <Calendar className="w-4 h-4 mr-2" />
+                        Agendar Cita Médica
+                      </Button>
                     </CardContent>
                   </Card>
-                ))
-              )}
-            </TabsContent>
-
-            {/* Vacunas Tab */}
-            <TabsContent value="vacunas" className="space-y-4">
-              {historialMascota.vacunas.length === 0 ? (
-                <Card>
-                  <CardContent className="p-12 text-center">
-                    <Syringe className="w-16 h-16 text-vet-gray-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-vet-gray-900 mb-2">
-                      Sin vacunas registradas
-                    </h3>
-                    <p className="text-vet-gray-600">
-                      {selectedMascota} no tiene vacunas en su historial
-                    </p>
-                  </CardContent>
-                </Card>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {historialMascota.vacunas.map((vacuna) => (
-                    <Card key={vacuna.id}>
-                      <CardContent className="p-6">
-                        <div className="flex items-center space-x-3 mb-4">
-                          <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                            <Syringe className="w-5 h-5 text-green-600" />
-                          </div>
+                ) : (
+                  historialMascota.consultas.map((consulta) => (
+                    <Card key={consulta.id}>
+                      <CardHeader>
+                        <div className="flex items-center justify-between">
                           <div>
-                            <h3 className="font-semibold text-vet-gray-900">
-                              {vacuna.nombre}
-                            </h3>
-                            <p className="text-sm text-vet-gray-600">
-                              Lote: {vacuna.lote}
+                            <CardTitle className="flex items-center space-x-2">
+                              <Calendar className="w-5 h-5 text-vet-primary" />
+                              <span>{consulta.motivo}</span>
+                            </CardTitle>
+                            <CardDescription>
+                              {consulta.fecha.toLocaleDateString("es-ES", {
+                                weekday: "long",
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                              })}{" "}
+                              • {consulta.veterinario}
+                            </CardDescription>
+                          </div>
+                          <Badge className="bg-vet-primary/10 text-vet-primary">
+                            Completada
+                          </Badge>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div>
+                            <h4 className="font-semibold text-vet-gray-900 mb-2">
+                              Diagnóstico
+                            </h4>
+                            <p className="text-vet-gray-700 mb-4">
+                              {consulta.diagnostico}
+                            </p>
+
+                            <h4 className="font-semibold text-vet-gray-900 mb-2">
+                              Tratamiento
+                            </h4>
+                            <p className="text-vet-gray-700">
+                              {consulta.tratamiento}
                             </p>
                           </div>
+
+                          <div>
+                            {consulta.medicamentos.length > 0 && (
+                              <div className="mb-4">
+                                <h4 className="font-semibold text-vet-gray-900 mb-2">
+                                  Medicamentos
+                                </h4>
+                                <div className="space-y-2">
+                                  {consulta.medicamentos.map((med, index) => (
+                                    <div
+                                      key={index}
+                                      className="bg-vet-gray-50 rounded-lg p-3"
+                                    >
+                                      <div className="flex items-center space-x-2 mb-1">
+                                        <Pill className="w-4 h-4 text-vet-primary" />
+                                        <span className="font-medium">
+                                          {med.nombre}
+                                        </span>
+                                      </div>
+                                      <p className="text-sm text-vet-gray-600">
+                                        {med.dosis} • {med.duracion}
+                                      </p>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {consulta.proxima_cita && (
+                              <div className="mb-4">
+                                <h4 className="font-semibold text-vet-gray-900 mb-2">
+                                  Próximo control
+                                </h4>
+                                <p className="text-vet-gray-700">
+                                  {consulta.proxima_cita.toLocaleDateString(
+                                    "es-ES",
+                                  )}
+                                </p>
+                              </div>
+                            )}
+                          </div>
                         </div>
 
-                        <div className="space-y-2">
-                          <div className="flex justify-between">
-                            <span className="text-vet-gray-600">
-                              Fecha aplicación:
-                            </span>
-                            <span className="font-medium">
-                              {vacuna.fecha.toLocaleDateString("es-ES")}
-                            </span>
+                        {consulta.notas && (
+                          <div className="mt-4 p-4 bg-vet-primary/5 rounded-lg border border-vet-primary/20">
+                            <h4 className="font-semibold text-vet-primary mb-2">
+                              Notas del veterinario
+                            </h4>
+                            <p className="text-vet-gray-700">
+                              {consulta.notas}
+                            </p>
                           </div>
-                          <div className="flex justify-between">
-                            <span className="text-vet-gray-600">
-                              Veterinario:
-                            </span>
-                            <span className="font-medium">
-                              {vacuna.veterinario}
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-vet-gray-600">
-                              Próxima dosis:
-                            </span>
-                            <span className="font-medium text-vet-primary">
-                              {vacuna.proxima.toLocaleDateString("es-ES")}
-                            </span>
-                          </div>
-                        </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  ))
+                )}
+              </TabsContent>
 
-                        <div className="mt-4">
-                          <Badge
-                            className={
-                              vacuna.proxima > new Date()
-                                ? "bg-green-100 text-green-800"
-                                : "bg-yellow-100 text-yellow-800"
-                            }
-                          >
-                            {vacuna.proxima > new Date()
-                              ? "Al día"
-                              : "Requiere refuerzo"}
-                          </Badge>
+              {/* Vacunas Tab */}
+              <TabsContent value="vacunas" className="space-y-4">
+                {historialMascota.vacunas.length === 0 ? (
+                  <Card>
+                    <CardContent className="p-12 text-center">
+                      <Syringe className="w-16 h-16 text-vet-gray-400 mx-auto mb-4" />
+                      <h3 className="text-lg font-semibold text-vet-gray-900 mb-2">
+                        Sin vacunas registradas
+                      </h3>
+                      <p className="text-vet-gray-600 mb-6">
+                        {selectedMascota} no tiene vacunas registradas en su
+                        historial. Las vacunas se registrarán durante las
+                        consultas veterinarias.
+                      </p>
+                      <Button
+                        onClick={() => (window.location.href = "/mis-citas")}
+                        className="bg-vet-primary hover:bg-vet-primary-dark"
+                      >
+                        <Calendar className="w-4 h-4 mr-2" />
+                        Agendar Consulta
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {historialMascota.vacunas.map((vacuna) => (
+                      <Card key={vacuna.id}>
+                        <CardContent className="p-6">
+                          <div className="flex items-center space-x-3 mb-4">
+                            <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                              <Syringe className="w-5 h-5 text-green-600" />
+                            </div>
+                            <div>
+                              <h3 className="font-semibold text-vet-gray-900">
+                                {vacuna.nombre}
+                              </h3>
+                              <p className="text-sm text-vet-gray-600">
+                                Lote: {vacuna.lote}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="space-y-2">
+                            <div className="flex justify-between">
+                              <span className="text-vet-gray-600">
+                                Fecha aplicación:
+                              </span>
+                              <span className="font-medium">
+                                {vacuna.fecha.toLocaleDateString("es-ES")}
+                              </span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-vet-gray-600">
+                                Veterinario:
+                              </span>
+                              <span className="font-medium">
+                                {vacuna.veterinario}
+                              </span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-vet-gray-600">
+                                Próxima dosis:
+                              </span>
+                              <span className="font-medium text-vet-primary">
+                                {vacuna.proxima.toLocaleDateString("es-ES")}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="mt-4">
+                            <Badge
+                              className={
+                                vacuna.proxima > new Date()
+                                  ? "bg-green-100 text-green-800"
+                                  : "bg-yellow-100 text-yellow-800"
+                              }
+                            >
+                              {vacuna.proxima > new Date()
+                                ? "Al día"
+                                : "Requiere refuerzo"}
+                            </Badge>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                )}
+              </TabsContent>
+
+              {/* Exámenes Tab */}
+              <TabsContent value="examenes" className="space-y-4">
+                {historialMascota.examenes.length === 0 ? (
+                  <Card>
+                    <CardContent className="p-12 text-center">
+                      <Activity className="w-16 h-16 text-vet-gray-400 mx-auto mb-4" />
+                      <h3 className="text-lg font-semibold text-vet-gray-900 mb-2">
+                        Sin exámenes registrados
+                      </h3>
+                      <p className="text-vet-gray-600 mb-6">
+                        {selectedMascota} no tiene exámenes médicos registrados
+                        en su historial. Los exámenes se agregarán cuando sean
+                        solicitados y realizados durante las consultas.
+                      </p>
+                      <Button
+                        onClick={() => (window.location.href = "/mis-citas")}
+                        className="bg-vet-primary hover:bg-vet-primary-dark"
+                      >
+                        <Calendar className="w-4 h-4 mr-2" />
+                        Agendar Consulta
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  historialMascota.examenes.map((examen) => (
+                    <Card key={examen.id}>
+                      <CardContent className="p-6">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-4">
+                            <div className="w-12 h-12 bg-vet-secondary/10 rounded-full flex items-center justify-center">
+                              <Activity className="w-6 h-6 text-vet-secondary" />
+                            </div>
+                            <div>
+                              <h3 className="font-semibold text-vet-gray-900">
+                                {examen.tipo}
+                              </h3>
+                              <p className="text-vet-gray-600">
+                                {examen.fecha.toLocaleDateString("es-ES")}
+                              </p>
+                              <p className="text-sm text-vet-gray-600 mt-1">
+                                Resultado: {examen.resultados}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="flex space-x-2">
+                            <Button variant="outline" size="sm">
+                              <Eye className="w-4 h-4 mr-2" />
+                              Ver
+                            </Button>
+                            <Button variant="outline" size="sm">
+                              <Download className="w-4 h-4 mr-2" />
+                              Descargar
+                            </Button>
+                          </div>
                         </div>
                       </CardContent>
                     </Card>
-                  ))}
-                </div>
-              )}
-            </TabsContent>
-
-            {/* Exámenes Tab */}
-            <TabsContent value="examenes" className="space-y-4">
-              {historialMascota.examenes.length === 0 ? (
-                <Card>
-                  <CardContent className="p-12 text-center">
-                    <Activity className="w-16 h-16 text-vet-gray-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-vet-gray-900 mb-2">
-                      Sin exámenes registrados
-                    </h3>
-                    <p className="text-vet-gray-600">
-                      {selectedMascota} no tiene exámenes en su historial
-                    </p>
-                  </CardContent>
-                </Card>
-              ) : (
-                historialMascota.examenes.map((examen) => (
-                  <Card key={examen.id}>
-                    <CardContent className="p-6">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-4">
-                          <div className="w-12 h-12 bg-vet-secondary/10 rounded-full flex items-center justify-center">
-                            <Activity className="w-6 h-6 text-vet-secondary" />
-                          </div>
-                          <div>
-                            <h3 className="font-semibold text-vet-gray-900">
-                              {examen.tipo}
-                            </h3>
-                            <p className="text-vet-gray-600">
-                              {examen.fecha.toLocaleDateString("es-ES")}
-                            </p>
-                            <p className="text-sm text-vet-gray-600 mt-1">
-                              Resultado: {examen.resultados}
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="flex space-x-2">
-                          <Button variant="outline" size="sm">
-                            <Eye className="w-4 h-4 mr-2" />
-                            Ver
-                          </Button>
-                          <Button variant="outline" size="sm">
-                            <Download className="w-4 h-4 mr-2" />
-                            Descargar
-                          </Button>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))
-              )}
-            </TabsContent>
-          </Tabs>
+                  ))
+                )}
+              </TabsContent>
+            </Tabs>
+          )}
         </div>
       </div>
     </Layout>

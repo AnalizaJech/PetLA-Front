@@ -34,6 +34,7 @@ import {
   ArrowRight,
   TrendingUp,
   FileText,
+  ChevronDown,
 } from "lucide-react";
 import { PreCitaFormData } from "@/lib/types";
 
@@ -564,51 +565,69 @@ export default function Index() {
                 </div>
                 <div>
                   <Label htmlFor="fechaPreferida">Fecha preferida *</Label>
-                  <Input
-                    id="fechaPreferida"
-                    name="fechaPreferida"
-                    type="date"
-                    value={formData.fechaPreferida}
-                    onChange={handleInputChange}
-                    required
-                    className="mt-1"
-                    min={new Date().toISOString().split("T")[0]}
-                  />
+                  <div className="relative mt-1">
+                    <Input
+                      id="fechaPreferida"
+                      name="fechaPreferida"
+                      type="date"
+                      value={formData.fechaPreferida}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full pl-10 pr-4 py-2 border border-vet-gray-300 rounded-lg focus:ring-2 focus:ring-vet-primary focus:border-vet-primary transition-all duration-200"
+                      min={new Date().toISOString().split("T")[0]}
+                    />
+                    <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-vet-gray-400 pointer-events-none" />
+                  </div>
+                  <p className="text-xs text-vet-gray-500 mt-1">
+                    Selecciona tu fecha preferida para la consulta
+                  </p>
                 </div>
                 <div>
                   <Label htmlFor="horaPreferida">Hora preferida *</Label>
-                  <select
-                    id="horaPreferida"
-                    name="horaPreferida"
-                    value={formData.horaPreferida}
-                    onChange={handleInputChange}
-                    required
-                    className="mt-1 w-full px-3 py-2 border border-vet-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-vet-primary focus:border-transparent"
-                  >
-                    <option value="">Selecciona una hora</option>
-                    <option value="09:00">9:00 AM</option>
-                    <option value="10:00">10:00 AM</option>
-                    <option value="11:00">11:00 AM</option>
-                    <option value="12:00">12:00 PM</option>
-                    <option value="14:00">2:00 PM</option>
-                    <option value="15:00">3:00 PM</option>
-                    <option value="16:00">4:00 PM</option>
-                    <option value="17:00">5:00 PM</option>
-                  </select>
+                  <div className="relative mt-1">
+                    <select
+                      id="horaPreferida"
+                      name="horaPreferida"
+                      value={formData.horaPreferida}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full pl-10 pr-8 py-2 border border-vet-gray-300 rounded-lg focus:ring-2 focus:ring-vet-primary focus:border-vet-primary transition-all duration-200 appearance-none bg-white"
+                    >
+                      <option value="">Selecciona una hora</option>
+                      <option value="09:00">🌅 9:00 AM - Temprano</option>
+                      <option value="10:00">☀️ 10:00 AM - Mañana</option>
+                      <option value="11:00">☀️ 11:00 AM - Media Mañana</option>
+                      <option value="12:00">🌞 12:00 PM - Mediodía</option>
+                      <option value="14:00">🌞 2:00 PM - Tarde</option>
+                      <option value="15:00">🌤️ 3:00 PM - Media Tarde</option>
+                      <option value="16:00">🌤️ 4:00 PM - Tarde</option>
+                      <option value="17:00">🌆 5:00 PM - Final del Día</option>
+                    </select>
+                    <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-vet-gray-400 pointer-events-none" />
+                    <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-vet-gray-400 pointer-events-none" />
+                  </div>
+                  <p className="text-xs text-vet-gray-500 mt-1">
+                    Elige el horario que mejor se adapte a ti
+                  </p>
                 </div>
               </div>
 
               <div>
                 <Label htmlFor="motivoConsulta">Motivo de la consulta</Label>
-                <Textarea
-                  id="motivoConsulta"
-                  name="motivoConsulta"
-                  value={formData.motivoConsulta}
-                  onChange={handleInputChange}
-                  placeholder="Describe brevemente el motivo de la consulta veterinaria..."
-                  rows={4}
-                  className="mt-1"
-                />
+                <div className="mt-1">
+                  <Textarea
+                    id="motivoConsulta"
+                    name="motivoConsulta"
+                    value={formData.motivoConsulta}
+                    onChange={handleInputChange}
+                    placeholder="Describe brevemente el motivo de la consulta veterinaria..."
+                    className="w-full min-h-[100px] max-h-[100px] resize-none overflow-y-auto px-3 py-2 border border-vet-gray-300 rounded-lg focus:ring-2 focus:ring-vet-primary focus:border-vet-primary transition-all duration-200"
+                  />
+                  <p className="text-xs text-vet-gray-500 mt-1">
+                    Máximo 500 caracteres. Describe síntomas, comportamientos o
+                    motivos de la consulta.
+                  </p>
+                </div>
               </div>
 
               <div className="bg-vet-primary/5 border border-vet-primary/20 rounded-lg p-4">

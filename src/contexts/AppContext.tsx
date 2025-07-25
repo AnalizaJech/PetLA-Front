@@ -76,7 +76,7 @@ interface HistorialClinico {
     | "consulta_general"
     | "vacunacion"
     | "emergencia"
-    | "control"
+    | "grooming"
     | "cirugia"
     | "diagnostico";
   motivo: string;
@@ -446,21 +446,77 @@ export function AppProvider({ children }: { children: ReactNode }) {
     },
   );
 
+  // Función para verificar y optimizar localStorage
+  const optimizeLocalStorage = () => {
+    try {
+      // Calcular uso actual de localStorage
+      let total = 0;
+      for (const key in localStorage) {
+        if (localStorage.hasOwnProperty(key)) {
+          total += localStorage[key].length;
+        }
+      }
+
+      // Si está cerca del límite (>80% de ~5MB), limpiar datos innecesarios
+      const maxSize = 5 * 1024 * 1024; // 5MB aproximado
+      if (total > maxSize * 0.8) {
+        console.warn("localStorage cerca del límite, optimizando...");
+
+        // Limpiar datos temporales o innecesarios
+        const keysToCheck = ["fictional_data_cleared", "temp_data"];
+        keysToCheck.forEach((key) => {
+          if (localStorage.getItem(key)) {
+            localStorage.removeItem(key);
+          }
+        });
+      }
+    } catch (error) {
+      console.error("Error optimizando localStorage:", error);
+    }
+  };
+
   // Persist to localStorage whenever state changes
   useEffect(() => {
     if (user) {
-      localStorage.setItem("user", JSON.stringify(user));
+      try {
+        optimizeLocalStorage();
+        localStorage.setItem("user", JSON.stringify(user));
+      } catch (error) {
+        console.error("Error guardando usuario:", error);
+      }
     } else {
       localStorage.removeItem("user");
     }
   }, [user]);
 
   useEffect(() => {
-    localStorage.setItem("usuarios", JSON.stringify(usuarios));
+    try {
+      localStorage.setItem("usuarios", JSON.stringify(usuarios));
+    } catch (error) {
+      console.error("Error guardando usuarios:", error);
+    }
   }, [usuarios]);
 
   useEffect(() => {
-    localStorage.setItem("mascotas", JSON.stringify(mascotas));
+    try {
+      optimizeLocalStorage();
+      localStorage.setItem("mascotas", JSON.stringify(mascotas));
+    } catch (error) {
+      console.error("Error guardando mascotas:", error);
+      // En caso de error, intentar guardar sin las fotos para preservar datos básicos
+      try {
+        const mascotasSinFotos = mascotas.map((mascota) => ({
+          ...mascota,
+          foto: null,
+        }));
+        localStorage.setItem("mascotas", JSON.stringify(mascotasSinFotos));
+        console.warn(
+          "Mascotas guardadas sin fotos para preservar datos básicos",
+        );
+      } catch (fallbackError) {
+        console.error("Error crítico guardando mascotas:", fallbackError);
+      }
+    }
   }, [mascotas]);
 
   useEffect(() => {

@@ -58,10 +58,10 @@ import {
   AlertCircle,
   CheckCircle,
   UserCheck,
+  Heart,
   MapPin,
   Weight,
   Thermometer,
-  Heart,
   Plus,
   ChevronRight,
   Info,
@@ -198,7 +198,7 @@ export default function HistorialClinicoVeterinario() {
           records = records.filter(
             (r) =>
               r.tipoConsulta === "consulta_general" ||
-              r.tipoConsulta === "control" ||
+              r.tipoConsulta === "grooming" ||
               r.tipoConsulta === "emergencia",
           );
           break;
@@ -229,7 +229,7 @@ export default function HistorialClinicoVeterinario() {
       consultas: historialMascota.filter(
         (r) =>
           r.tipoConsulta === "consulta_general" ||
-          r.tipoConsulta === "control" ||
+          r.tipoConsulta === "grooming" ||
           r.tipoConsulta === "emergencia",
       ).length,
       vacunas: historialMascota.filter((r) => r.tipoConsulta === "vacunacion")
@@ -274,6 +274,8 @@ export default function HistorialClinicoVeterinario() {
         return <AlertCircle className="w-4 h-4" />;
       case "cirugia":
         return <Activity className="w-4 h-4" />;
+      case "grooming":
+        return <Heart className="w-4 h-4" />;
       default:
         return <Stethoscope className="w-4 h-4" />;
     }
@@ -288,6 +290,8 @@ export default function HistorialClinicoVeterinario() {
         return "bg-red-100 text-red-800";
       case "cirugia":
         return "bg-purple-100 text-purple-800";
+      case "grooming":
+        return "bg-pink-100 text-pink-800";
       default:
         return "bg-blue-100 text-blue-800";
     }

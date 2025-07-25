@@ -34,6 +34,10 @@ import {
   Stethoscope,
   MapPin,
   CreditCard,
+  Syringe,
+  Heart,
+  Activity,
+  Search,
 } from "lucide-react";
 
 interface NuevaCitaData {
@@ -48,12 +52,48 @@ interface NuevaCitaData {
 }
 
 const tiposConsulta = [
-  { id: "consulta_general", nombre: "Consulta General", precio: 350 },
-  { id: "vacunacion", nombre: "Vacunación", precio: 280 },
-  { id: "emergencia", nombre: "Emergencia", precio: 600 },
-  { id: "control", nombre: "Control", precio: 300 },
-  { id: "cirugia", nombre: "Cirugía", precio: 800 },
-  { id: "diagnostico", nombre: "Diagnóstico", precio: 450 },
+  {
+    id: "consulta_general",
+    nombre: "Consulta General",
+    precio: 80,
+    icono: "Stethoscope",
+    descripcion: "Examen médico rutinario y evaluación de salud general",
+  },
+  {
+    id: "vacunacion",
+    nombre: "Vacunación",
+    precio: 65,
+    icono: "Syringe",
+    descripcion: "Aplicación de vacunas preventivas y refuerzos",
+  },
+  {
+    id: "emergencia",
+    nombre: "Emergencia",
+    precio: 150,
+    icono: "AlertCircle",
+    descripcion: "Atención médica urgente las 24 horas",
+  },
+  {
+    id: "grooming",
+    nombre: "Grooming",
+    precio: 45,
+    icono: "Heart",
+    descripcion: "Baño, corte de pelo, limpieza de oídos y uñas",
+  },
+  {
+    id: "cirugia",
+    nombre: "Cirugía",
+    precio: 250,
+    icono: "Activity",
+    descripcion: "Procedimientos quirúrgicos especializados",
+  },
+  {
+    id: "diagnostico",
+    nombre: "Diagnóstico",
+    precio: 120,
+    icono: "Search",
+    descripcion: "Exámenes y análisis para determinar diagnósticos",
+  },
 ];
 
 const ubicaciones = [
@@ -84,6 +124,27 @@ const horasDisponibles = [
   "17:30",
   "18:00",
 ];
+
+// Función para obtener el icono del servicio
+const getServiceIcon = (iconName) => {
+  const iconProps = { className: "w-6 h-6" };
+  switch (iconName) {
+    case "Stethoscope":
+      return <Stethoscope {...iconProps} />;
+    case "Syringe":
+      return <Syringe {...iconProps} />;
+    case "AlertCircle":
+      return <AlertCircle {...iconProps} />;
+    case "Heart":
+      return <Heart {...iconProps} />;
+    case "Activity":
+      return <Activity {...iconProps} />;
+    case "Search":
+      return <Search {...iconProps} />;
+    default:
+      return <Stethoscope {...iconProps} />;
+  }
+};
 
 export default function NuevaCita() {
   const navigate = useNavigate();
@@ -457,10 +518,11 @@ export default function NuevaCita() {
                 <div className="space-y-6">
                   <div>
                     <h2 className="text-2xl font-bold text-vet-gray-900 mb-2">
-                      Tipo de consulta
+                      Servicios Veterinarios
                     </h2>
                     <p className="text-vet-gray-600">
-                      Selecciona el tipo de atención que necesita tu mascota
+                      Elige el servicio que mejor se adapte a las necesidades de
+                      tu mascota
                     </p>
                   </div>
 
@@ -477,18 +539,32 @@ export default function NuevaCita() {
                           setCitaData({ ...citaData, tipoConsulta: tipo.id })
                         }
                       >
-                        <CardContent className="p-6">
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <h4 className="font-semibold text-vet-gray-900 mb-2">
-                                {tipo.nombre}
-                              </h4>
-                              <Badge className="bg-vet-primary/10 text-vet-primary">
-                                S/. {tipo.precio.toLocaleString()}
-                              </Badge>
+                        <CardContent className="p-4">
+                          <div className="flex items-start justify-between">
+                            <div className="flex items-start space-x-3">
+                              <div
+                                className={`p-2 rounded-lg ${
+                                  citaData.tipoConsulta === tipo.id
+                                    ? "bg-vet-primary text-white"
+                                    : "bg-vet-primary/10 text-vet-primary"
+                                }`}
+                              >
+                                {getServiceIcon(tipo.icono)}
+                              </div>
+                              <div className="flex-1">
+                                <h4 className="font-semibold text-vet-gray-900 mb-1">
+                                  {tipo.nombre}
+                                </h4>
+                                <p className="text-sm text-vet-gray-600 mb-2 leading-tight">
+                                  {tipo.descripcion}
+                                </p>
+                                <Badge className="bg-vet-primary/10 text-vet-primary font-semibold">
+                                  S/. {tipo.precio.toLocaleString()}
+                                </Badge>
+                              </div>
                             </div>
                             {citaData.tipoConsulta === tipo.id && (
-                              <CheckCircle className="w-6 h-6 text-vet-primary" />
+                              <CheckCircle className="w-5 h-5 text-vet-primary flex-shrink-0 mt-1" />
                             )}
                           </div>
                         </CardContent>
@@ -499,16 +575,21 @@ export default function NuevaCita() {
                   <div className="space-y-4">
                     <div>
                       <Label htmlFor="motivo">Motivo de la consulta *</Label>
-                      <Textarea
-                        id="motivo"
-                        value={citaData.motivo}
-                        onChange={(e) =>
-                          setCitaData({ ...citaData, motivo: e.target.value })
-                        }
-                        placeholder="Describe los síntomas o el motivo de la consulta..."
-                        className="mt-2"
-                        rows={4}
-                      />
+                      <div className="mt-2">
+                        <Textarea
+                          id="motivo"
+                          value={citaData.motivo}
+                          onChange={(e) =>
+                            setCitaData({ ...citaData, motivo: e.target.value })
+                          }
+                          placeholder="Describe los síntomas o el motivo de la consulta..."
+                          className="w-full min-h-[120px] max-h-[120px] resize-none overflow-y-auto px-3 py-2 border border-vet-gray-300 rounded-lg focus:ring-2 focus:ring-vet-primary focus:border-vet-primary transition-all duration-200"
+                        />
+                        <p className="text-xs text-vet-gray-500 mt-1">
+                          💬 Describe síntomas, comportamientos o motivos
+                          específicos para una mejor atención
+                        </p>
+                      </div>
                     </div>
 
                     <div>
@@ -550,19 +631,22 @@ export default function NuevaCita() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <Label htmlFor="fecha">Fecha preferida *</Label>
-                      <Input
-                        id="fecha"
-                        type="date"
-                        value={citaData.fecha}
-                        onChange={(e) =>
-                          setCitaData({ ...citaData, fecha: e.target.value })
-                        }
-                        min={getMinDate()}
-                        max={getMaxDate()}
-                        className="mt-2"
-                      />
+                      <div className="relative mt-2">
+                        <Input
+                          id="fecha"
+                          type="date"
+                          value={citaData.fecha}
+                          onChange={(e) =>
+                            setCitaData({ ...citaData, fecha: e.target.value })
+                          }
+                          min={getMinDate()}
+                          max={getMaxDate()}
+                          className="w-full pl-10 pr-4 py-2 border border-vet-gray-300 rounded-lg focus:ring-2 focus:ring-vet-primary focus:border-vet-primary transition-all duration-200"
+                        />
+                        <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-vet-gray-400 pointer-events-none" />
+                      </div>
                       <p className="text-xs text-vet-gray-500 mt-1">
-                        Puedes agendar hasta 3 meses por adelantado
+                        📅 Puedes agendar hasta 3 meses por adelantado
                       </p>
                     </div>
 
