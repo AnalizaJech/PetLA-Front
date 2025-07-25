@@ -566,12 +566,12 @@ export default function Index() {
                       <SelectValue placeholder="Selecciona tipo de mascota" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="perro">🐕 Perro</SelectItem>
-                      <SelectItem value="gato">🐱 Gato</SelectItem>
-                      <SelectItem value="ave">🐦 Ave</SelectItem>
-                      <SelectItem value="roedor">🐹 Roedor</SelectItem>
-                      <SelectItem value="reptil">🦎 Reptil</SelectItem>
-                      <SelectItem value="otro">🐾 Otro</SelectItem>
+                      <SelectItem value="perro">Perro</SelectItem>
+                      <SelectItem value="gato">Gato</SelectItem>
+                      <SelectItem value="ave">Ave</SelectItem>
+                      <SelectItem value="roedor">Roedor</SelectItem>
+                      <SelectItem value="reptil">Reptil</SelectItem>
+                      <SelectItem value="otro">Otro</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -609,26 +609,23 @@ export default function Index() {
                       <SelectValue placeholder="Selecciona una hora" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="09:00">
-                        🌅 9:00 AM
-                      </SelectItem>
-                      <SelectItem value="10:00">
-                        ☀️ 10:00 AM
-                      </SelectItem>
-                      <SelectItem value="11:00">
-                        ☀️ 11:00 AM
-                      </SelectItem>
-                      <SelectItem value="12:00">
-                        🌞 12:00 PM
-                      </SelectItem>
-                      <SelectItem value="14:00">🌞 2:00 PM</SelectItem>
-                      <SelectItem value="15:00">
-                        🌤️ 3:00 PM
-                      </SelectItem>
-                      <SelectItem value="16:00">🌤️ 4:00 PM</SelectItem>
-                      <SelectItem value="17:00">
-                        🌆 5:00 PM
-                      </SelectItem>
+                      <SelectItem value="09:00">09:00</SelectItem>
+                      <SelectItem value="09:30">09:30</SelectItem>
+                      <SelectItem value="10:00">10:00</SelectItem>
+                      <SelectItem value="10:30">10:30</SelectItem>
+                      <SelectItem value="11:00">11:00</SelectItem>
+                      <SelectItem value="11:30">11:30</SelectItem>
+                      <SelectItem value="12:00">12:00</SelectItem>
+                      <SelectItem value="12:30">12:30</SelectItem>
+                      <SelectItem value="14:00">14:00</SelectItem>
+                      <SelectItem value="14:30">14:30</SelectItem>
+                      <SelectItem value="15:00">15:00</SelectItem>
+                      <SelectItem value="15:30">15:30</SelectItem>
+                      <SelectItem value="16:00">16:00</SelectItem>
+                      <SelectItem value="16:30">16:30</SelectItem>
+                      <SelectItem value="17:00">17:00</SelectItem>
+                      <SelectItem value="17:30">17:30</SelectItem>
+                      <SelectItem value="18:00">18:00</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
