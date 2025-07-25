@@ -521,6 +521,70 @@ function AdminDashboard() {
 }
 
 function ClientDashboard({ stats }: { stats: any }) {
+  const { user, mascotas, citas } = useAppContext();
+
+  // Calcular estadísticas reales de salud
+  const calculateHealthStats = () => {
+    const userMascotas = mascotas.filter(m => m.clienteId === user?.id);
+    const userCitas = citas.filter(c =>
+      userMascotas.some(m => m.nombre === c.mascota)
+    );
+
+    if (userMascotas.length === 0) {
+      return {
+        vacunacionPorcentaje: 0,
+        revisionesPendientes: 0,
+        proximaCita: null,
+        estadoGeneral: "Sin datos"
+      };
+    }
+
+    // Calcular porcentaje de vacunación (mascotas con citas de vacunación recientes)
+    const mascotasConVacunas = userMascotas.filter(mascota => {
+      const citasVacunacion = userCitas.filter(c =>
+        c.mascota === mascota.nombre &&
+        c.tipoConsulta === "vacunacion" &&
+        c.estado === "Completada"
+      );
+
+      if (citasVacunacion.length === 0) return false;
+
+      // Considerar vacunación al día si la última fue hace menos de 1 año
+      const ultimaVacunacion = citasVacunacion
+        .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())[0];
+      const mesesDesdeUltimaVacuna = (new Date().getTime() - new Date(ultimaVacunacion.fecha).getTime())
+        / (1000 * 60 * 60 * 24 * 30);
+
+      return mesesDesdeUltimaVacuna < 12;
+    });
+
+    const vacunacionPorcentaje = userMascotas.length > 0
+      ? Math.round((mascotasConVacunas.length / userMascotas.length) * 100)
+      : 0;
+
+    // Calcular revisiones pendientes
+    const revisionesPendientes = userCitas.filter(c =>
+      c.estado === "pendiente_pago" || c.estado === "en_validacion" || c.estado === "aceptada"
+    ).length;
+
+    // Encontrar próxima cita
+    const citasFuturas = userCitas
+      .filter(c => new Date(c.fecha) > new Date() && c.estado === "aceptada")
+      .sort((a, b) => new Date(a.fecha).getTime() - new Date(b.fecha).getTime());
+
+    const proximaCita = citasFuturas.length > 0 ? citasFuturas[0] : null;
+
+    return {
+      vacunacionPorcentaje,
+      revisionesPendientes,
+      proximaCita,
+      estadoGeneral: vacunacionPorcentaje >= 80 ? "Excelente" :
+                    vacunacionPorcentaje >= 60 ? "Bueno" :
+                    vacunacionPorcentaje >= 40 ? "Regular" : "Necesita atención"
+    };
+  };
+
+  const healthStats = calculateHealthStats();
   return (
     <div className="space-y-8">
       {/* Client Stats */}
