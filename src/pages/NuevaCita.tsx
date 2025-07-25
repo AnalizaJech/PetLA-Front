@@ -493,10 +493,10 @@ export default function NuevaCita() {
                 <div className="space-y-6">
                   <div>
                     <h2 className="text-2xl font-bold text-vet-gray-900 mb-2">
-                      Tipo de consulta
+                      Servicios Veterinarios
                     </h2>
                     <p className="text-vet-gray-600">
-                      Selecciona el tipo de atención que necesita tu mascota
+                      Elige el servicio que mejor se adapte a las necesidades de tu mascota
                     </p>
                   </div>
 
