@@ -293,10 +293,7 @@ export function DatePicker({
           background: hsl(var(--primary));
         }
 
-        .react-datepicker__today-button:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 8px 15px hsl(var(--primary)/0.4);
-        }
+
       `}</style>
 
       <ReactDatePicker
