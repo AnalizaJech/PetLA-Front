@@ -538,10 +538,10 @@ export default function NuevaCita() {
                           setCitaData({ ...citaData, tipoConsulta: tipo.id })
                         }
                       >
-                        <CardContent className="p-6">
-                          <div className="flex items-start justify-between mb-4">
-                            <div className="flex items-start space-x-4">
-                              <div className={`p-3 rounded-xl ${
+                        <CardContent className="p-4">
+                          <div className="flex items-start justify-between">
+                            <div className="flex items-start space-x-3">
+                              <div className={`p-2 rounded-lg ${
                                 citaData.tipoConsulta === tipo.id
                                   ? "bg-vet-primary text-white"
                                   : "bg-vet-primary/10 text-vet-primary"
@@ -549,10 +549,10 @@ export default function NuevaCita() {
                                 {getServiceIcon(tipo.icono)}
                               </div>
                               <div className="flex-1">
-                                <h4 className="font-semibold text-vet-gray-900 mb-2">
+                                <h4 className="font-semibold text-vet-gray-900 mb-1">
                                   {tipo.nombre}
                                 </h4>
-                                <p className="text-sm text-vet-gray-600 mb-3 leading-relaxed">
+                                <p className="text-sm text-vet-gray-600 mb-2 leading-tight">
                                   {tipo.descripcion}
                                 </p>
                                 <Badge className="bg-vet-primary/10 text-vet-primary font-semibold">
@@ -561,7 +561,7 @@ export default function NuevaCita() {
                               </div>
                             </div>
                             {citaData.tipoConsulta === tipo.id && (
-                              <CheckCircle className="w-6 h-6 text-vet-primary flex-shrink-0" />
+                              <CheckCircle className="w-5 h-5 text-vet-primary flex-shrink-0 mt-1" />
                             )}
                           </div>
                         </CardContent>
