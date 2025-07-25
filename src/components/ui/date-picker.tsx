@@ -30,6 +30,8 @@ export function DatePicker({
   className,
   fromYear = 1990,
   toYear = new Date().getFullYear(),
+  minDate,
+  maxDate,
 }: DatePickerProps) {
   const CustomInput = React.forwardRef<
     HTMLButtonElement,
