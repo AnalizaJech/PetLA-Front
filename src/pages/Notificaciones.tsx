@@ -25,7 +25,15 @@ import {
 } from "lucide-react";
 
 export default function Notificaciones() {
-  const { user, citas, preCitas, mascotas } = useAppContext();
+  const {
+    user,
+    citas,
+    preCitas,
+    mascotas,
+    getNotificacionesByUser,
+    markNotificacionAsRead,
+    markAllNotificacionesAsRead
+  } = useAppContext();
   const [selectedFilter, setSelectedFilter] = useState("todas");
   const [notifications, setNotifications] = useState([]);
 
