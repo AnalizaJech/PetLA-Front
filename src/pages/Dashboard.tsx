@@ -592,9 +592,7 @@ function ClientDashboard({ stats }: { stats: any }) {
           ? "Excelente"
           : vacunacionPorcentaje >= 60
             ? "Bueno"
-            : vacunacionPorcentaje >= 40
-              ? "Regular"
-              : "Necesita atención",
+            : "Regular",
     };
   };
 
