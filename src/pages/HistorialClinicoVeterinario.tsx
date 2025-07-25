@@ -229,7 +229,7 @@ export default function HistorialClinicoVeterinario() {
       consultas: historialMascota.filter(
         (r) =>
           r.tipoConsulta === "consulta_general" ||
-          r.tipoConsulta === "control" ||
+          r.tipoConsulta === "grooming" ||
           r.tipoConsulta === "emergencia",
       ).length,
       vacunas: historialMascota.filter((r) => r.tipoConsulta === "vacunacion")
