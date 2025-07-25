@@ -907,6 +907,24 @@ export function AppProvider({ children }: { children: ReactNode }) {
       }),
     };
     setHistorialClinico((prev) => [...prev, newEntry]);
+
+    // Generar notificación para el cliente cuando se registra una consulta
+    const mascotaInfo = mascotas.find((m) => m.id === entryData.mascotaId);
+    if (mascotaInfo) {
+      addNotificacion({
+        usuarioId: mascotaInfo.clienteId,
+        tipo: "consulta_registrada",
+        titulo: "Consulta médica registrada",
+        mensaje: `Se ha registrado la consulta médica de ${entryData.mascotaNombre}. Los detalles están disponibles en el historial clínico.`,
+        leida: false,
+        datos: {
+          mascotaNombre: entryData.mascotaNombre,
+          veterinario: entryData.veterinario,
+          fechaCita: new Date(entryData.fecha),
+          motivo: entryData.motivo,
+        },
+      });
+    }
   };
 
   const updateHistorialEntry = (
