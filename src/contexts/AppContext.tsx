@@ -407,12 +407,29 @@ export function AppProvider({ children }: { children: ReactNode }) {
       const citasStr = localStorage.getItem("citas");
       if (citasStr) {
         const parsedCitas = JSON.parse(citasStr);
-        // Convert date strings back to Date objects
-        return parsedCitas.map((cita: any) => ({
-          ...cita,
-          fecha: new Date(cita.fecha),
-          tipoConsulta: cita.tipoConsulta || "Consulta General", // Default for existing appointments
-        }));
+        // Convert date strings back to Date objects and load receipt data
+        return parsedCitas.map((cita: any) => {
+          const citaWithDate = {
+            ...cita,
+            fecha: new Date(cita.fecha),
+            tipoConsulta: cita.tipoConsulta || "Consulta General",
+          };
+
+          // If cita has comprobantePago but no comprobanteData, try to load it
+          if (cita.comprobantePago && !cita.comprobanteData) {
+            try {
+              const storageKey = `comprobante_${cita.id}`;
+              const stored = localStorage.getItem(storageKey);
+              if (stored) {
+                citaWithDate.comprobanteData = JSON.parse(stored);
+              }
+            } catch (error) {
+              console.warn(`No se pudo cargar comprobante para cita ${cita.id}:`, error);
+            }
+          }
+
+          return citaWithDate;
+        });
       }
       return [];
     } catch {
