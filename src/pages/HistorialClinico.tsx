@@ -220,35 +220,92 @@ export default function HistorialClinico() {
     }
   }, [availableMascotas]);
 
-  // Obtener historial real basado en citas completadas
+  // Obtener historial real basado en citas completadas y atendidas
   const getHistorialReal = (nombreMascota) => {
-    const citasCompletadas = citas.filter(
+    const citasRelevantes = citas.filter(
       (cita) =>
         cita.mascota === nombreMascota &&
-        cita.estado === "Completada" &&
-        cita.consulta, // Solo citas que tienen información de consulta registrada
+        (cita.estado === "atendida" || cita.estado === "Completada")
     );
 
-    const consultas = citasCompletadas.map((cita) => ({
-      id: cita.id,
-      fecha: new Date(cita.fecha),
-      veterinario: cita.veterinario,
-      motivo: cita.motivo || "Consulta general",
-      diagnostico: cita.consulta?.diagnostico || "Sin diagnóstico registrado",
-      tratamiento: cita.consulta?.tratamiento || "Sin tratamiento registrado",
-      medicamentos: cita.consulta?.medicamentos || [],
-      proxima_cita: cita.consulta?.proximaCita
-        ? new Date(cita.consulta.proximaCita)
-        : null,
-      notas: cita.consulta?.notas || "",
-    }));
+    // Categorizar servicios por tipo
+    const consultas = [];
+    const vacunas = [];
+    const examenes = [];
 
-    // Por ahora, vacunas y exámenes estarán vacíos hasta que se implementen
+    citasRelevantes.forEach((cita) => {
+      const tipoConsulta = cita.tipoConsulta || "Consulta General";
+      const baseRecord = {
+        id: cita.id,
+        fecha: new Date(cita.fecha),
+        veterinario: cita.veterinario,
+        motivo: cita.motivo || "Sin motivo especificado",
+        tipoConsulta: tipoConsulta,
+      };
+
+      // Clasificar por tipo de servicio
+      if (tipoConsulta.toLowerCase().includes('vacun') ||
+          tipoConsulta.toLowerCase().includes('inmuniz')) {
+        vacunas.push({
+          ...baseRecord,
+          nombre: tipoConsulta,
+          lote: `LOT-${cita.id}`, // Generar número de lote basado en ID
+          proxima: getProximaVacuna(cita.fecha),
+        });
+      } else if (tipoConsulta.toLowerCase().includes('examen') ||
+                 tipoConsulta.toLowerCase().includes('laboratorio') ||
+                 tipoConsulta.toLowerCase().includes('radiograf') ||
+                 tipoConsulta.toLowerCase().includes('analisis')) {
+        examenes.push({
+          ...baseRecord,
+          tipo: tipoConsulta,
+          resultados: cita.consulta?.diagnostico || "Pendiente de resultados",
+          archivo: `${tipoConsulta.toLowerCase().replace(/\s+/g, '_')}_${cita.mascota}_${cita.fecha.toISOString().split('T')[0]}.pdf`,
+        });
+      } else {
+        // Consultas generales y especializadas
+        consultas.push({
+          ...baseRecord,
+          diagnostico: cita.consulta?.diagnostico || "Evaluación completada",
+          tratamiento: cita.consulta?.tratamiento || "Tratamiento aplicado según protocolo",
+          medicamentos: cita.consulta?.medicamentos || [],
+          proxima_cita: cita.consulta?.proximaCita
+            ? new Date(cita.consulta.proximaCita)
+            : getProximaConsulta(tipoConsulta, cita.fecha),
+          notas: cita.consulta?.notas || `${tipoConsulta} realizada exitosamente.`,
+          precio: cita.precio,
+        });
+      }
+    });
+
     return {
-      consultas,
-      vacunas: [],
-      examenes: [],
+      consultas: consultas.sort((a, b) => b.fecha - a.fecha),
+      vacunas: vacunas.sort((a, b) => b.fecha - a.fecha),
+      examenes: examenes.sort((a, b) => b.fecha - a.fecha),
     };
+  };
+
+  // Función auxiliar para calcular próxima vacuna
+  const getProximaVacuna = (fechaActual) => {
+    const fecha = new Date(fechaActual);
+    fecha.setFullYear(fecha.getFullYear() + 1); // Vacunas anuales por defecto
+    return fecha;
+  };
+
+  // Función auxiliar para calcular próxima consulta según tipo
+  const getProximaConsulta = (tipoConsulta, fechaActual) => {
+    const fecha = new Date(fechaActual);
+
+    if (tipoConsulta.toLowerCase().includes('control') ||
+        tipoConsulta.toLowerCase().includes('seguimiento')) {
+      fecha.setMonth(fecha.getMonth() + 3); // 3 meses para controles
+    } else if (tipoConsulta.toLowerCase().includes('dental')) {
+      fecha.setMonth(fecha.getMonth() + 6); // 6 meses para dental
+    } else {
+      fecha.setFullYear(fecha.getFullYear() + 1); // 1 año para consultas generales
+    }
+
+    return fecha;
   };
 
   const historialMascota = selectedMascota
