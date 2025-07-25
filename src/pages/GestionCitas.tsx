@@ -609,6 +609,9 @@ export default function GestionCitas() {
                                         e.stopPropagation();
                                         setSelectedCita(cita);
                                         setVoucherModalMode("view");
+                                        // Cargar datos del comprobante
+                                        const receiptData = getComprobante(cita.id);
+                                        setCurrentReceiptData(receiptData);
                                         setShowVoucherModal(true);
                                       }}
                                       className="flex items-center cursor-pointer hover:bg-vet-gray-50"
