@@ -198,7 +198,7 @@ export default function NewsletterSection() {
             <div className="space-y-4 mb-8">
               <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 bg-vet-primary/10 rounded-full flex items-center justify-center">
-                  <CheckCircle className="w-4 h-4 text-vet-primary" />
+                  <Heart className="w-4 h-4 text-vet-primary" />
                 </div>
                 <span className="text-vet-gray-700">
                   Consejos veterinarios semanales
@@ -206,7 +206,7 @@ export default function NewsletterSection() {
               </div>
               <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 bg-vet-secondary/10 rounded-full flex items-center justify-center">
-                  <CheckCircle className="w-4 h-4 text-vet-secondary" />
+                  <Syringe className="w-4 h-4 text-vet-secondary" />
                 </div>
                 <span className="text-vet-gray-700">
                   Recordatorios de vacunas automáticos
@@ -214,7 +214,7 @@ export default function NewsletterSection() {
               </div>
               <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                  <CheckCircle className="w-4 h-4 text-green-600" />
+                  <Gift className="w-4 h-4 text-green-600" />
                 </div>
                 <span className="text-vet-gray-700">
                   Descuentos exclusivos para suscriptores
