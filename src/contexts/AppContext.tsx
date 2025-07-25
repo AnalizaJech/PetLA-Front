@@ -140,6 +140,23 @@ interface NewsletterEmail {
   archivos?: ArchivoGuardado[];
 }
 
+interface Notificacion {
+  id: string;
+  usuarioId: string;
+  tipo: "cita_aceptada" | "bienvenida_cliente" | "consulta_registrada" | "sistema";
+  titulo: string;
+  mensaje: string;
+  fechaCreacion: Date;
+  leida: boolean;
+  datos?: {
+    citaId?: string;
+    mascotaNombre?: string;
+    veterinario?: string;
+    fechaCita?: Date;
+    motivo?: string;
+  };
+}
+
 interface AppContextType {
   // User state
   user: Usuario | null;
