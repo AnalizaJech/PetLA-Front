@@ -564,16 +564,22 @@ export default function Index() {
                 </div>
                 <div>
                   <Label htmlFor="fechaPreferida">Fecha preferida *</Label>
-                  <Input
-                    id="fechaPreferida"
-                    name="fechaPreferida"
-                    type="date"
-                    value={formData.fechaPreferida}
-                    onChange={handleInputChange}
-                    required
-                    className="mt-1"
-                    min={new Date().toISOString().split("T")[0]}
-                  />
+                  <div className="relative mt-1">
+                    <Input
+                      id="fechaPreferida"
+                      name="fechaPreferida"
+                      type="date"
+                      value={formData.fechaPreferida}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full pl-10 pr-4 py-2 border border-vet-gray-300 rounded-lg focus:ring-2 focus:ring-vet-primary focus:border-vet-primary transition-all duration-200"
+                      min={new Date().toISOString().split("T")[0]}
+                    />
+                    <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-vet-gray-400 pointer-events-none" />
+                  </div>
+                  <p className="text-xs text-vet-gray-500 mt-1">
+                    Selecciona tu fecha preferida para la consulta
+                  </p>
                 </div>
                 <div>
                   <Label htmlFor="horaPreferida">Hora preferida *</Label>
