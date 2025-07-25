@@ -187,7 +187,7 @@ export default function FeaturesCarousel() {
         {/* Header */}
         <div className="text-center mb-16">
           <div className="inline-flex items-center px-4 py-2 bg-vet-primary/10 rounded-full mb-6">
-            <Heart className="w-4 h-4 text-vet-primary mr-2" />
+            <Stethoscope className="w-4 h-4 text-vet-primary mr-2" />
             <span className="text-vet-primary font-semibold text-sm">
               CARACTERÍSTICAS ÚNICAS
             </span>
