@@ -201,14 +201,26 @@ export default function Notificaciones() {
   const unreadCount = notifications.filter((n) => !n.read).length;
 
   const markAsRead = (id) => {
-    setNotifications((prev) =>
-      prev.map((notification) =>
-        notification.id === id ? { ...notification, read: true } : notification,
-      ),
-    );
+    const notification = notifications.find((n) => n.id === id);
+    if (notification?.contextNotification) {
+      // Es una notificación del contexto, usar la función del contexto
+      markNotificacionAsRead(id);
+    } else {
+      // Es una notificación dinámica, actualizar localmente
+      setNotifications((prev) =>
+        prev.map((notification) =>
+          notification.id === id ? { ...notification, read: true } : notification,
+        ),
+      );
+    }
   };
 
   const markAllAsRead = () => {
+    if (user) {
+      // Marcar todas las notificaciones del contexto como leídas
+      markAllNotificacionesAsRead(user.id);
+    }
+    // Marcar todas las notificaciones dinámicas como leídas
     setNotifications((prev) =>
       prev.map((notification) => ({ ...notification, read: true })),
     );
