@@ -127,7 +127,7 @@ const horasDisponibles = [
 
 // Función para obtener el icono del servicio
 const getServiceIcon = (iconName) => {
-  const iconProps = { className: "w-8 h-8" };
+  const iconProps = { className: "w-6 h-6" };
   switch (iconName) {
     case "Stethoscope":
       return <Stethoscope {...iconProps} />;
