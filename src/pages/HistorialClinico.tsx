@@ -282,12 +282,12 @@ export default function HistorialClinico() {
                  serviceName.toLowerCase().includes('diagnostico')) {
         examenes.push({
           ...baseRecord,
-          tipo: tipoConsulta,
-          resultados: cita.consulta?.diagnostico || "Pendiente de resultados",
-          archivo: `${tipoConsulta.toLowerCase().replace(/\s+/g, '_')}_${cita.mascota}_${cita.fecha.toISOString().split('T')[0]}.pdf`,
+          tipo: serviceName,
+          resultados: cita.consulta?.diagnostico || "Examen completado - Resultados disponibles",
+          archivo: `diagnostico_${cita.mascota.toLowerCase()}_${cita.fecha.toISOString().split('T')[0]}.pdf`,
         });
       } else {
-        // Consultas generales y especializadas
+        // 3. CONSULTA GENERAL, 4. EMERGENCIA, 5. CIRUGÍA, 6. GROOMING
         const diagnosticoDefault = getDiagnosticoDefecto(tipoConsulta, cita.estado);
         const tratamientoDefault = getTratamientoDefecto(tipoConsulta, cita.estado);
 
