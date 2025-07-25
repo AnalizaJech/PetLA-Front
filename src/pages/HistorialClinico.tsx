@@ -143,7 +143,7 @@ const mockHistorial = {
     vacunas: [
       {
         id: "3",
-        nombre: "Antirrábica",
+        nombre: "Antirr��bica",
         fecha: new Date("2023-09-10"),
         lote: "RAB-2023-123",
         veterinario: "Dra. Ana López",
@@ -287,15 +287,18 @@ export default function HistorialClinico() {
         });
       } else {
         // Consultas generales y especializadas
+        const diagnosticoDefault = getDiagnosticoDefecto(tipoConsulta, cita.estado);
+        const tratamientoDefault = getTratamientoDefecto(tipoConsulta, cita.estado);
+
         consultas.push({
           ...baseRecord,
-          diagnostico: cita.consulta?.diagnostico || "Evaluación completada",
-          tratamiento: cita.consulta?.tratamiento || "Tratamiento aplicado según protocolo",
+          diagnostico: cita.consulta?.diagnostico || diagnosticoDefault,
+          tratamiento: cita.consulta?.tratamiento || tratamientoDefault,
           medicamentos: cita.consulta?.medicamentos || [],
           proxima_cita: cita.consulta?.proximaCita
             ? new Date(cita.consulta.proximaCita)
             : getProximaConsulta(tipoConsulta, cita.fecha),
-          notas: cita.consulta?.notas || `${tipoConsulta} realizada exitosamente.`,
+          notas: cita.consulta?.notas || getNotasDefecto(tipoConsulta, cita.estado),
           precio: cita.precio,
         });
       }
