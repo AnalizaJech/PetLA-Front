@@ -322,6 +322,7 @@ export default function NuevaCita() {
         estado: "pendiente_pago" as const,
         veterinario: assignedVeterinario || "Veterinario no disponible",
         motivo: citaData.motivo,
+        tipoConsulta: selectedTipoConsulta.nombre,
         ubicacion: citaData.ubicacion,
         precio: selectedTipoConsulta.precio,
         notas: citaData.notas,
