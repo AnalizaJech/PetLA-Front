@@ -32,7 +32,7 @@ export default function Notificaciones() {
     mascotas,
     getNotificacionesByUser,
     markNotificacionAsRead,
-    markAllNotificacionesAsRead
+    markAllNotificacionesAsRead,
   } = useAppContext();
   const [selectedFilter, setSelectedFilter] = useState("todas");
   const [notifications, setNotifications] = useState([]);
@@ -88,11 +88,12 @@ export default function Notificaciones() {
         type: type,
         title: notif.titulo,
         message: notif.mensaje,
-        time: hoursAgo === 0
-          ? "Hace menos de 1 hora"
-          : hoursAgo < 24
-            ? `Hace ${hoursAgo} hora${hoursAgo > 1 ? "s" : ""}`
-            : `Hace ${Math.floor(hoursAgo / 24)} día${Math.floor(hoursAgo / 24) > 1 ? "s" : ""}`,
+        time:
+          hoursAgo === 0
+            ? "Hace menos de 1 hora"
+            : hoursAgo < 24
+              ? `Hace ${hoursAgo} hora${hoursAgo > 1 ? "s" : ""}`
+              : `Hace ${Math.floor(hoursAgo / 24)} día${Math.floor(hoursAgo / 24) > 1 ? "s" : ""}`,
         read: notif.leida,
         priority: priority,
         icon: icon,
@@ -209,7 +210,9 @@ export default function Notificaciones() {
       // Es una notificación dinámica, actualizar localmente
       setNotifications((prev) =>
         prev.map((notification) =>
-          notification.id === id ? { ...notification, read: true } : notification,
+          notification.id === id
+            ? { ...notification, read: true }
+            : notification,
         ),
       );
     }

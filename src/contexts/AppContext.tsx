@@ -150,7 +150,11 @@ interface NewsletterEmail {
 interface Notificacion {
   id: string;
   usuarioId: string;
-  tipo: "cita_aceptada" | "bienvenida_cliente" | "consulta_registrada" | "sistema";
+  tipo:
+    | "cita_aceptada"
+    | "bienvenida_cliente"
+    | "consulta_registrada"
+    | "sistema";
   titulo: string;
   mensaje: string;
   fechaCreacion: Date;
@@ -232,7 +236,9 @@ interface AppContextType {
 
   // Notificaciones state
   notificaciones: Notificacion[];
-  addNotificacion: (notificacion: Omit<Notificacion, "id" | "fechaCreacion">) => void;
+  addNotificacion: (
+    notificacion: Omit<Notificacion, "id" | "fechaCreacion">,
+  ) => void;
   markNotificacionAsRead: (id: string) => void;
   markAllNotificacionesAsRead: (usuarioId: string) => void;
   getNotificacionesByUser: (usuarioId: string) => Notificacion[];
@@ -814,10 +820,18 @@ export function AppProvider({ children }: { children: ReactNode }) {
     );
 
     // Generar notificación cuando se acepta una cita
-    if (citaAnterior && updates.estado === "aceptada" && citaAnterior.estado !== "aceptada") {
-      const mascotaInfo = mascotas.find((m) => m.nombre === citaAnterior.mascota);
+    if (
+      citaAnterior &&
+      updates.estado === "aceptada" &&
+      citaAnterior.estado !== "aceptada"
+    ) {
+      const mascotaInfo = mascotas.find(
+        (m) => m.nombre === citaAnterior.mascota,
+      );
       if (mascotaInfo) {
-        const fechaCita = updates.fecha ? new Date(updates.fecha) : new Date(citaAnterior.fecha);
+        const fechaCita = updates.fecha
+          ? new Date(updates.fecha)
+          : new Date(citaAnterior.fecha);
         addNotificacion({
           usuarioId: mascotaInfo.clienteId,
           tipo: "cita_aceptada",
@@ -1048,7 +1062,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
   };
 
   // Funciones de notificaciones
-  const addNotificacion = (notificacionData: Omit<Notificacion, "id" | "fechaCreacion">) => {
+  const addNotificacion = (
+    notificacionData: Omit<Notificacion, "id" | "fechaCreacion">,
+  ) => {
     const newNotificacion: Notificacion = {
       ...notificacionData,
       id: Date.now().toString(),
@@ -1077,7 +1093,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
     return notificaciones
       .filter((notif) => notif.usuarioId === usuarioId)
       .sort(
-        (a, b) => new Date(b.fechaCreacion).getTime() - new Date(a.fechaCreacion).getTime(),
+        (a, b) =>
+          new Date(b.fechaCreacion).getTime() -
+          new Date(a.fechaCreacion).getTime(),
       );
   };
 

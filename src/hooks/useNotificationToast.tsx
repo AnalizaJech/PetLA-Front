@@ -11,10 +11,11 @@ export function useNotificationToast() {
     if (!user) return;
 
     const notificaciones = getNotificacionesByUser(user.id);
-    
+
     // Mostrar toast para notificaciones nuevas (creadas en los últimos 5 segundos)
     const recentNotifications = notificaciones.filter((notif) => {
-      const timeDiff = new Date().getTime() - new Date(notif.fechaCreacion).getTime();
+      const timeDiff =
+        new Date().getTime() - new Date(notif.fechaCreacion).getTime();
       return timeDiff < 5000 && !notif.leida; // 5 segundos
     });
 

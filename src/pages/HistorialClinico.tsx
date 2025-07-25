@@ -381,8 +381,12 @@ export default function HistorialClinico() {
     addText(`Nombre: ${mascotaInfo.nombre}`);
     addText(`Especie: ${mascotaInfo.especie}`);
     addText(`Raza: ${mascotaInfo.raza}`);
-    addText(`Fecha de Nacimiento: ${mascotaInfo.fechaNacimiento.toLocaleDateString("es-ES")}`);
-    addText(`Peso: ${mascotaInfo.peso ? `${mascotaInfo.peso} kg` : "No registrado"}`);
+    addText(
+      `Fecha de Nacimiento: ${mascotaInfo.fechaNacimiento.toLocaleDateString("es-ES")}`,
+    );
+    addText(
+      `Peso: ${mascotaInfo.peso ? `${mascotaInfo.peso} kg` : "No registrado"}`,
+    );
     addText(`Sexo: ${mascotaInfo.sexo || "No registrado"}`);
     addText(`Microchip: ${mascotaInfo.microchip || "No registrado"}`);
     yPosition += 5;
@@ -409,7 +413,9 @@ export default function HistorialClinico() {
         }
 
         if (consulta.proxima_cita) {
-          addText(`Próxima cita: ${consulta.proxima_cita.toLocaleDateString("es-ES")}`);
+          addText(
+            `Próxima cita: ${consulta.proxima_cita.toLocaleDateString("es-ES")}`,
+          );
         }
 
         if (consulta.notas) {
@@ -425,12 +431,16 @@ export default function HistorialClinico() {
     checkNewPage(20);
     yPosition += 10;
     addText("DOCUMENTO GENERADO", 12, "bold");
-    addText(`Fecha: ${new Date().toLocaleDateString("es-ES")} ${new Date().toLocaleTimeString("es-ES")}`);
+    addText(
+      `Fecha: ${new Date().toLocaleDateString("es-ES")} ${new Date().toLocaleTimeString("es-ES")}`,
+    );
     addText(`Generado por: ${user?.nombre || "Usuario"}`);
     addText("Sistema: Clínica Veterinaria Digital");
 
     // Descargar PDF
-    pdf.save(`historial_clinico_${selectedMascota.replace(/\s+/g, "_")}_${new Date().toISOString().split("T")[0]}.pdf`);
+    pdf.save(
+      `historial_clinico_${selectedMascota.replace(/\s+/g, "_")}_${new Date().toISOString().split("T")[0]}.pdf`,
+    );
   };
 
   // Función para descargar el historial clínico en formato Excel
@@ -452,7 +462,10 @@ export default function HistorialClinico() {
       ["Nombre", mascotaInfo.nombre],
       ["Especie", mascotaInfo.especie],
       ["Raza", mascotaInfo.raza],
-      ["Fecha de Nacimiento", mascotaInfo.fechaNacimiento.toLocaleDateString("es-ES")],
+      [
+        "Fecha de Nacimiento",
+        mascotaInfo.fechaNacimiento.toLocaleDateString("es-ES"),
+      ],
       ["Peso", mascotaInfo.peso ? `${mascotaInfo.peso} kg` : "No registrado"],
       ["Sexo", mascotaInfo.sexo || "No registrado"],
       ["Microchip", mascotaInfo.microchip || "No registrado"],
@@ -466,13 +479,22 @@ export default function HistorialClinico() {
       const consultasData = [
         ["CONSULTAS MÉDICAS"],
         [""],
-        ["Fecha", "Veterinario", "Motivo", "Diagnóstico", "Tratamiento", "Medicamentos", "Próxima Cita", "Notas"]
+        [
+          "Fecha",
+          "Veterinario",
+          "Motivo",
+          "Diagnóstico",
+          "Tratamiento",
+          "Medicamentos",
+          "Próxima Cita",
+          "Notas",
+        ],
       ];
 
       historialMascota.consultas.forEach((consulta) => {
-        const medicamentos = consulta.medicamentos.map(med =>
-          `${med.nombre}: ${med.dosis} (${med.duracion})`
-        ).join("; ");
+        const medicamentos = consulta.medicamentos
+          .map((med) => `${med.nombre}: ${med.dosis} (${med.duracion})`)
+          .join("; ");
 
         consultasData.push([
           consulta.fecha.toLocaleDateString("es-ES"),
@@ -481,8 +503,10 @@ export default function HistorialClinico() {
           consulta.diagnostico,
           consulta.tratamiento,
           medicamentos || "Ninguno",
-          consulta.proxima_cita ? consulta.proxima_cita.toLocaleDateString("es-ES") : "No programada",
-          consulta.notas || "Sin notas"
+          consulta.proxima_cita
+            ? consulta.proxima_cita.toLocaleDateString("es-ES")
+            : "No programada",
+          consulta.notas || "Sin notas",
         ]);
       });
 
@@ -495,19 +519,26 @@ export default function HistorialClinico() {
       ["RESUMEN DEL HISTORIAL"],
       [""],
       ["Total de consultas", historialMascota.consultas.length.toString()],
-      ["Última consulta", historialMascota.consultas.length > 0 ?
-        historialMascota.consultas[0].fecha.toLocaleDateString("es-ES") : "No hay consultas"],
+      [
+        "Última consulta",
+        historialMascota.consultas.length > 0
+          ? historialMascota.consultas[0].fecha.toLocaleDateString("es-ES")
+          : "No hay consultas",
+      ],
       [""],
       ["Documento generado el", new Date().toLocaleDateString("es-ES")],
       ["Generado por", user?.nombre || "Usuario"],
-      ["Sistema", "Clínica Veterinaria Digital"]
+      ["Sistema", "Clínica Veterinaria Digital"],
     ];
 
     const wsResumen = XLSX.utils.aoa_to_sheet(resumenData);
     XLSX.utils.book_append_sheet(wb, wsResumen, "Resumen");
 
     // Descargar Excel
-    XLSX.writeFile(wb, `historial_clinico_${selectedMascota.replace(/\s+/g, "_")}_${new Date().toISOString().split("T")[0]}.xlsx`);
+    XLSX.writeFile(
+      wb,
+      `historial_clinico_${selectedMascota.replace(/\s+/g, "_")}_${new Date().toISOString().split("T")[0]}.xlsx`,
+    );
   };
 
   if (!user) {
@@ -741,47 +772,50 @@ export default function HistorialClinico() {
                               {consulta.tratamiento}
                             </p>
 
-                            {consulta.servicios && consulta.servicios.length > 0 && (
-                              <div>
-                                <h4 className="font-semibold text-vet-gray-900 mb-2">
-                                  Servicios Realizados
-                                </h4>
-                                <div className="space-y-2">
-                                  {consulta.servicios.map((servicio, index) => (
-                                    <div
-                                      key={index}
-                                      className="bg-vet-gray-50 rounded-lg p-3"
-                                    >
-                                      <div className="flex items-center justify-between mb-1">
-                                        <span className="font-medium text-vet-gray-900">
-                                          {servicio.nombre}
-                                        </span>
-                                        {servicio.precio && (
-                                          <span className="text-sm font-medium text-vet-primary">
-                                            ${servicio.precio}
-                                          </span>
-                                        )}
-                                      </div>
-                                      {servicio.descripcion && (
-                                        <p className="text-sm text-vet-gray-600 mb-1">
-                                          {servicio.descripcion}
-                                        </p>
-                                      )}
-                                      {servicio.duracion && (
-                                        <p className="text-xs text-vet-gray-500">
-                                          Duración: {servicio.duracion}
-                                        </p>
-                                      )}
-                                      {servicio.notas && (
-                                        <p className="text-xs text-vet-gray-500 mt-1">
-                                          Notas: {servicio.notas}
-                                        </p>
-                                      )}
-                                    </div>
-                                  ))}
+                            {consulta.servicios &&
+                              consulta.servicios.length > 0 && (
+                                <div>
+                                  <h4 className="font-semibold text-vet-gray-900 mb-2">
+                                    Servicios Realizados
+                                  </h4>
+                                  <div className="space-y-2">
+                                    {consulta.servicios.map(
+                                      (servicio, index) => (
+                                        <div
+                                          key={index}
+                                          className="bg-vet-gray-50 rounded-lg p-3"
+                                        >
+                                          <div className="flex items-center justify-between mb-1">
+                                            <span className="font-medium text-vet-gray-900">
+                                              {servicio.nombre}
+                                            </span>
+                                            {servicio.precio && (
+                                              <span className="text-sm font-medium text-vet-primary">
+                                                ${servicio.precio}
+                                              </span>
+                                            )}
+                                          </div>
+                                          {servicio.descripcion && (
+                                            <p className="text-sm text-vet-gray-600 mb-1">
+                                              {servicio.descripcion}
+                                            </p>
+                                          )}
+                                          {servicio.duracion && (
+                                            <p className="text-xs text-vet-gray-500">
+                                              Duración: {servicio.duracion}
+                                            </p>
+                                          )}
+                                          {servicio.notas && (
+                                            <p className="text-xs text-vet-gray-500 mt-1">
+                                              Notas: {servicio.notas}
+                                            </p>
+                                          )}
+                                        </div>
+                                      ),
+                                    )}
+                                  </div>
                                 </div>
-                              </div>
-                            )}
+                              )}
                           </div>
 
                           <div>

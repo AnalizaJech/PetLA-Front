@@ -146,7 +146,7 @@ export default function Layout({
     user: contextUser,
     logout,
     isAuthenticated,
-    getNotificacionesByUser
+    getNotificacionesByUser,
   } = useAppContext();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
@@ -159,7 +159,7 @@ export default function Layout({
 
   // Calcular notificaciones no leídas
   const unreadNotificationsCount = user
-    ? getNotificacionesByUser(user.id).filter(notif => !notif.leida).length
+    ? getNotificacionesByUser(user.id).filter((notif) => !notif.leida).length
     : 0;
 
   // Explicitly check authentication state
@@ -488,41 +488,56 @@ export default function Layout({
                           </h3>
                           {unreadNotificationsCount > 0 && (
                             <span className="text-xs text-vet-primary font-medium">
-                              {unreadNotificationsCount} nueva{unreadNotificationsCount > 1 ? 's' : ''}
+                              {unreadNotificationsCount} nueva
+                              {unreadNotificationsCount > 1 ? "s" : ""}
                             </span>
                           )}
                         </div>
                         <div className="space-y-2 sm:space-y-3 max-h-80 overflow-y-auto">
-                          {user && getNotificacionesByUser(user.id).slice(0, 3).length > 0 ? (
-                            getNotificacionesByUser(user.id).slice(0, 3).map((notif) => (
-                              <div
-                                key={notif.id}
-                                className={`p-3 rounded-lg border transition-colors ${
-                                  notif.leida
-                                    ? 'bg-gray-50 border-gray-200'
-                                    : 'bg-vet-primary/5 border-vet-primary/20'
-                                }`}
-                              >
-                                <div className="flex items-start space-x-3">
-                                  <div className={`w-2 h-2 rounded-full mt-2 ${
-                                    notif.leida ? 'bg-gray-300' : 'bg-vet-primary'
-                                  }`} />
-                                  <div className="flex-1 min-w-0">
-                                    <p className={`text-sm font-medium ${
-                                      notif.leida ? 'text-gray-700' : 'text-vet-gray-900'
-                                    }`}>
-                                      {notif.titulo}
-                                    </p>
-                                    <p className="text-xs text-vet-gray-600 mt-1 line-clamp-2">
-                                      {notif.mensaje}
-                                    </p>
-                                    <p className="text-xs text-vet-gray-500 mt-1">
-                                      {new Date(notif.fechaCreacion).toLocaleDateString('es-ES')}
-                                    </p>
+                          {user &&
+                          getNotificacionesByUser(user.id).slice(0, 3).length >
+                            0 ? (
+                            getNotificacionesByUser(user.id)
+                              .slice(0, 3)
+                              .map((notif) => (
+                                <div
+                                  key={notif.id}
+                                  className={`p-3 rounded-lg border transition-colors ${
+                                    notif.leida
+                                      ? "bg-gray-50 border-gray-200"
+                                      : "bg-vet-primary/5 border-vet-primary/20"
+                                  }`}
+                                >
+                                  <div className="flex items-start space-x-3">
+                                    <div
+                                      className={`w-2 h-2 rounded-full mt-2 ${
+                                        notif.leida
+                                          ? "bg-gray-300"
+                                          : "bg-vet-primary"
+                                      }`}
+                                    />
+                                    <div className="flex-1 min-w-0">
+                                      <p
+                                        className={`text-sm font-medium ${
+                                          notif.leida
+                                            ? "text-gray-700"
+                                            : "text-vet-gray-900"
+                                        }`}
+                                      >
+                                        {notif.titulo}
+                                      </p>
+                                      <p className="text-xs text-vet-gray-600 mt-1 line-clamp-2">
+                                        {notif.mensaje}
+                                      </p>
+                                      <p className="text-xs text-vet-gray-500 mt-1">
+                                        {new Date(
+                                          notif.fechaCreacion,
+                                        ).toLocaleDateString("es-ES")}
+                                      </p>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                            ))
+                              ))
                           ) : (
                             <div className="text-center py-8">
                               <Bell className="w-12 h-12 text-vet-gray-300 mx-auto mb-3" />

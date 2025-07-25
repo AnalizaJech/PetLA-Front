@@ -40,7 +40,7 @@ export function DatePicker({
         "w-full justify-start text-left font-normal h-10 px-3 py-2 text-sm border-input bg-transparent hover:bg-accent hover:text-accent-foreground focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-colors",
         !value && "text-muted-foreground",
         disabled && "cursor-not-allowed opacity-50",
-        className
+        className,
       )}
       onClick={onClick}
       disabled={disabled}
