@@ -136,40 +136,14 @@ export function DatePicker({
         }
 
         .react-datepicker__day--selected {
-          background: linear-gradient(135deg,
-            hsl(var(--primary)) 0%,
-            hsl(var(--primary)/0.8) 100%) !important;
+          background: hsl(var(--primary)) !important;
           color: hsl(var(--primary-foreground)) !important;
-          border-color: hsl(var(--primary)) !important;
-          font-weight: 700 !important;
-          transform: scale(1.15) translateY(-3px) !important;
-          box-shadow:
-            0 15px 25px hsl(var(--primary)/0.4),
-            0 5px 10px hsl(var(--primary)/0.3),
-            0 0 0 2px hsl(var(--primary)/0.2) !important;
-          z-index: 10 !important;
-        }
-
-        .react-datepicker__day--selected::after {
-          content: '✓';
-          position: absolute;
-          top: -8px;
-          right: -8px;
-          width: 1rem;
-          height: 1rem;
-          background: hsl(var(--background));
-          color: hsl(var(--primary));
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 0.625rem;
-          font-weight: 800;
-          box-shadow: 0 2px 4px rgb(0 0 0 / 0.2);
+          font-weight: 600 !important;
         }
 
         .react-datepicker__day--selected:hover {
-          transform: scale(1.15) translateY(-3px) !important;
+          background: hsl(var(--primary)) !important;
+          color: hsl(var(--primary-foreground)) !important;
         }
 
         .react-datepicker__day--keyboard-selected {
