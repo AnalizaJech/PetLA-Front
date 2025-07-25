@@ -645,7 +645,22 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, [mascotas]);
 
   useEffect(() => {
-    localStorage.setItem("citas", JSON.stringify(citas));
+    try {
+      localStorage.setItem("citas", JSON.stringify(citas));
+      // También asegurar que los comprobantes se persistan por separado
+      citas.forEach(cita => {
+        if (cita.comprobanteData) {
+          const storageKey = `comprobante_${cita.id}`;
+          try {
+            localStorage.setItem(storageKey, JSON.stringify(cita.comprobanteData));
+          } catch (error) {
+            console.warn(`No se pudo persistir comprobante para cita ${cita.id}:`, error);
+          }
+        }
+      });
+    } catch (error) {
+      console.error("Error guardando citas:", error);
+    }
   }, [citas]);
 
   useEffect(() => {
