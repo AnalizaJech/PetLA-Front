@@ -468,7 +468,7 @@ export default function HistorialClinico() {
                       Las consultas aparecerán aquí después de que un veterinario las atienda y registre la información médica.
                     </p>
                     <Button
-                      onClick={() => window.location.href = "/agendar-cita"}
+                      onClick={() => window.location.href = "/mis-citas"}
                       className="bg-vet-primary hover:bg-vet-primary-dark"
                     >
                       <Calendar className="w-4 h-4 mr-2" />
