@@ -840,19 +840,15 @@ function ClientDashboard({ stats }: { stats: any }) {
                     ? "bg-green-50 border-green-200"
                     : healthStats.estadoGeneral === "Bueno"
                       ? "bg-blue-50 border-blue-200"
-                      : healthStats.estadoGeneral === "Regular"
-                        ? "bg-yellow-50 border-yellow-200"
-                        : "bg-red-50 border-red-200"
+                      : "bg-yellow-50 border-yellow-200"
                 }`}
               >
                 {healthStats.estadoGeneral === "Excelente" ? (
                   <CheckCircle className="w-5 h-5 text-green-600" />
                 ) : healthStats.estadoGeneral === "Bueno" ? (
                   <Heart className="w-5 h-5 text-blue-600" />
-                ) : healthStats.estadoGeneral === "Regular" ? (
-                  <AlertCircle className="w-5 h-5 text-yellow-600" />
                 ) : (
-                  <AlertCircle className="w-5 h-5 text-red-600" />
+                  <AlertCircle className="w-5 h-5 text-yellow-600" />
                 )}
                 <div>
                   <p
@@ -861,18 +857,14 @@ function ClientDashboard({ stats }: { stats: any }) {
                         ? "text-green-800"
                         : healthStats.estadoGeneral === "Bueno"
                           ? "text-blue-800"
-                          : healthStats.estadoGeneral === "Regular"
-                            ? "text-yellow-800"
-                            : "text-red-800"
+                          : "text-yellow-800"
                     }`}
                   >
                     {healthStats.estadoGeneral === "Excelente"
                       ? "¡Buen trabajo!"
                       : healthStats.estadoGeneral === "Bueno"
                         ? "¡Muy bien!"
-                        : healthStats.estadoGeneral === "Regular"
-                          ? "Mejorable"
-                          : "Necesita atención"}
+                        : "Mejorable"}
                   </p>
                   <p
                     className={`text-xs ${
@@ -880,18 +872,14 @@ function ClientDashboard({ stats }: { stats: any }) {
                         ? "text-green-600"
                         : healthStats.estadoGeneral === "Bueno"
                           ? "text-blue-600"
-                          : healthStats.estadoGeneral === "Regular"
-                            ? "text-yellow-600"
-                            : "text-red-600"
+                          : "text-yellow-600"
                     }`}
                   >
                     {healthStats.estadoGeneral === "Excelente"
                       ? "Tus mascotas están muy bien cuidadas"
                       : healthStats.estadoGeneral === "Bueno"
                         ? "Tus mascotas están bien cuidadas"
-                        : healthStats.estadoGeneral === "Regular"
-                          ? "Algunas mascotas necesitan atención"
-                          : "Programa citas médicas urgentemente"}
+                        : "Considera programar revisiones preventivas"}
                   </p>
                 </div>
               </div>
