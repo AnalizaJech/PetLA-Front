@@ -245,17 +245,28 @@ export default function HistorialClinico() {
 
     citasRelevantes.forEach((cita) => {
       const tipoConsulta = cita.tipoConsulta || "Consulta General";
+      console.log(`🔍 Procesando cita:`, {
+        id: cita.id,
+        tipoConsulta,
+        motivo: cita.motivo,
+        estado: cita.estado
+      });
+
       const baseRecord = {
         id: cita.id,
         fecha: new Date(cita.fecha),
         veterinario: cita.veterinario,
         motivo: cita.motivo || "Sin motivo especificado",
         tipoConsulta: tipoConsulta,
+        estado: cita.estado,
       };
 
-      // Clasificar por tipo de servicio
-      if (tipoConsulta.toLowerCase().includes('vacun') ||
-          tipoConsulta.toLowerCase().includes('inmuniz')) {
+      // Clasificar por tipo de servicio basado en tipoConsulta O motivo
+      const textoAnalisis = `${tipoConsulta} ${cita.motivo || ''}`.toLowerCase();
+
+      if (textoAnalisis.includes('vacun') ||
+          textoAnalisis.includes('inmuniz') ||
+          textoAnalisis.includes('vacuna')) {
         vacunas.push({
           ...baseRecord,
           nombre: tipoConsulta,
