@@ -5,6 +5,8 @@ import React, {
   useEffect,
   ReactNode,
 } from "react";
+import { compressImage, optimizeStorageSpace } from "@/lib/imageUtils";
+import type { CompressedImage } from "@/lib/imageUtils";
 
 // Types
 interface Mascota {
