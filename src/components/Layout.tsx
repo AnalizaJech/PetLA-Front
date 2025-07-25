@@ -154,13 +154,13 @@ export default function Layout({
   // Hook para mostrar notificaciones toast automáticamente
   useNotificationToast();
 
+  // Use prop user if provided, otherwise use context user
+  const user = userProp || contextUser;
+
   // Calcular notificaciones no leídas
   const unreadNotificationsCount = user
     ? getNotificacionesByUser(user.id).filter(notif => !notif.leida).length
     : 0;
-
-  // Use prop user if provided, otherwise use context user
-  const user = userProp || contextUser;
 
   // Explicitly check authentication state
   const isUserAuthenticated = isAuthenticated && !!user;
