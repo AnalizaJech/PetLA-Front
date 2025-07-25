@@ -785,11 +785,36 @@ export function AppProvider({ children }: { children: ReactNode }) {
       ...updates,
       ...(updates.fecha && { fecha: new Date(updates.fecha) }),
     };
+
+    const citaAnterior = citas.find((c) => c.id === id);
+
     setCitas((prev) =>
       prev.map((cita) =>
         cita.id === id ? { ...cita, ...processedUpdates } : cita,
       ),
     );
+
+    // Generar notificación cuando se acepta una cita
+    if (citaAnterior && updates.estado === "aceptada" && citaAnterior.estado !== "aceptada") {
+      const mascotaInfo = mascotas.find((m) => m.nombre === citaAnterior.mascota);
+      if (mascotaInfo) {
+        const fechaCita = updates.fecha ? new Date(updates.fecha) : new Date(citaAnterior.fecha);
+        addNotificacion({
+          usuarioId: mascotaInfo.clienteId,
+          tipo: "cita_aceptada",
+          titulo: "¡Cita confirmada!",
+          mensaje: `Tu cita para ${citaAnterior.mascota} ha sido aceptada y confirmada.`,
+          leida: false,
+          datos: {
+            citaId: id,
+            mascotaNombre: citaAnterior.mascota,
+            veterinario: citaAnterior.veterinario,
+            fechaCita: fechaCita,
+            motivo: citaAnterior.motivo,
+          },
+        });
+      }
+    }
   };
 
   const deleteCita = (id: string) => {
