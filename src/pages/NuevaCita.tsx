@@ -40,6 +40,7 @@ import {
   Search,
 } from "lucide-react";
 import { DatePicker } from "@/components/ui/date-picker";
+import { useToast } from "@/hooks/use-toast";
 
 interface NuevaCitaData {
   mascotaId: string;
