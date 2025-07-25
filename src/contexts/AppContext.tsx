@@ -471,6 +471,28 @@ export function AppProvider({ children }: { children: ReactNode }) {
     },
   );
 
+  const [notificaciones, setNotificaciones] = useState<Notificacion[]>(() => {
+    try {
+      const notificacionesStr = localStorage.getItem("notificaciones");
+      if (notificacionesStr) {
+        const parsedNotificaciones = JSON.parse(notificacionesStr);
+        return parsedNotificaciones.map((notif: any) => ({
+          ...notif,
+          fechaCreacion: new Date(notif.fechaCreacion),
+          ...(notif.datos?.fechaCita && {
+            datos: {
+              ...notif.datos,
+              fechaCita: new Date(notif.datos.fechaCita),
+            },
+          }),
+        }));
+      }
+      return [];
+    } catch {
+      return [];
+    }
+  });
+
   // Función para verificar y optimizar localStorage
   const optimizeLocalStorage = () => {
     try {
