@@ -60,43 +60,21 @@ export function DatePicker({
       <style>{`
         .react-datepicker {
           font-family: inherit;
-          border: none;
-          border-radius: 1rem;
+          border: 1px solid hsl(var(--border));
+          border-radius: 0.75rem;
           background: hsl(var(--background));
           color: hsl(var(--foreground));
-          box-shadow:
-            0 25px 50px -12px rgb(0 0 0 / 0.25),
-            0 0 0 1px hsl(var(--border)),
-            0 0 0 1px rgb(255 255 255 / 0.05) inset;
+          box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05);
           overflow: hidden;
-          min-width: 320px;
-          backdrop-filter: blur(8px);
+          min-width: 280px;
         }
 
         .react-datepicker__header {
-          background: linear-gradient(135deg,
-            hsl(var(--primary)) 0%,
-            hsl(var(--primary)) 50%,
-            hsl(var(--primary)/0.9) 100%);
-          border-bottom: none;
+          background: hsl(var(--muted));
+          border-bottom: 1px solid hsl(var(--border));
           border-radius: 0;
-          padding: 1.5rem 1rem 1rem;
+          padding: 1rem;
           position: relative;
-          box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-        }
-
-        .react-datepicker__header::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: linear-gradient(45deg,
-            transparent 30%,
-            rgb(255 255 255 / 0.1) 50%,
-            transparent 70%);
-          pointer-events: none;
         }
 
         .react-datepicker__current-month {
