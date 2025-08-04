@@ -865,7 +865,7 @@ export default function PreCitas() {
                           processAction === "rechazar"
                             ? "bg-red-600 hover:bg-red-700"
                             : processAction === "cambiar_fecha"
-                              ? "bg-blue-600 hover:bg-blue-700"
+                              ? "bg-vet-primary hover:bg-vet-primary-dark"
                               : "bg-vet-primary hover:bg-vet-primary-dark"
                         }`}
                       >
