@@ -139,7 +139,10 @@ export default function Dashboard() {
       localStorage.setItem("veterinary_services", JSON.stringify(services));
 
       setSavedMessage("Configuración de servicios actualizada correctamente");
-      setTimeout(() => setSavedMessage(""), 3000);
+      setTimeout(() => {
+        setSavedMessage("");
+        setShowServicesModal(false);
+      }, 2000);
     } catch (error) {
       console.error("Error al actualizar los servicios:", error);
     } finally {
