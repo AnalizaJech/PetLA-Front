@@ -412,10 +412,19 @@ function AdminDashboard() {
                 variant="outline"
                 className="w-full h-20 flex flex-col items-center justify-center space-y-2"
               >
-                <Stethoscope className="w-6 h-6 text-vet-primary" />
+                <User className="w-6 h-6 text-vet-primary" />
                 <span className="text-sm">Veterinarios</span>
               </Button>
             </Link>
+
+            <Button
+              variant="outline"
+              className="w-full h-20 flex flex-col items-center justify-center space-y-2"
+              onClick={() => setShowServicesModal(true)}
+            >
+              <Stethoscope className="w-6 h-6 text-vet-primary" />
+              <span className="text-sm">Servicios</span>
+            </Button>
           </CardContent>
         </Card>
 
