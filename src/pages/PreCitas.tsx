@@ -643,7 +643,7 @@ export default function PreCitas() {
                           <span className="text-xs font-medium text-vet-gray-500 uppercase tracking-wide">
                             Notas Previas
                           </span>
-                          <p className="mt-1 text-blue-700 bg-blue-50 p-3 rounded border border-blue-200">
+                          <p className="mt-1 text-vet-gray-700 bg-vet-gray-50 p-3 rounded border border-vet-gray-200">
                             {selectedPreCita.notasAdmin}
                           </p>
                         </div>
