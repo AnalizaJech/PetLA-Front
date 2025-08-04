@@ -176,7 +176,7 @@ export default function Dashboard() {
           </div>
 
           {/* Admin Dashboard */}
-          {user?.rol === "admin" && <AdminDashboard />}
+          {user?.rol === "admin" && <AdminDashboard setShowServicesModal={setShowServicesModal} />}
 
           {/* Client Dashboard */}
           {user?.rol === "cliente" && (
@@ -191,7 +191,7 @@ export default function Dashboard() {
   );
 }
 
-function AdminDashboard() {
+function AdminDashboard({ setShowServicesModal }: { setShowServicesModal: (show: boolean) => void }) {
   const { usuarios, citas, preCitas, suscriptoresNewsletter } = useAppContext();
 
   const adminStats = {
