@@ -594,6 +594,7 @@ export default function Index() {
                     placeholder="Selecciona fecha"
                     fromYear={new Date().getFullYear()}
                     toYear={new Date().getFullYear() + 1}
+                    minDate={new Date()}
                   />
                 </div>
                 <div className="space-y-2">
