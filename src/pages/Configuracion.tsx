@@ -379,12 +379,16 @@ export default function Configuracion() {
   }, [themeSettings]);
 
   // Handle service updates
-  const handleServiceUpdate = (serviceId: string, field: string, value: any) => {
-    setServices(prev => prev.map(service =>
-      service.id === serviceId
-        ? { ...service, [field]: value }
-        : service
-    ));
+  const handleServiceUpdate = (
+    serviceId: string,
+    field: string,
+    value: any,
+  ) => {
+    setServices((prev) =>
+      prev.map((service) =>
+        service.id === serviceId ? { ...service, [field]: value } : service,
+      ),
+    );
   };
 
   const handleSaveServices = async () => {
@@ -478,7 +482,6 @@ export default function Configuracion() {
                 <span className="hidden sm:inline">Apariencia</span>
                 <span className="sm:hidden">Tema</span>
               </TabsTrigger>
-
             </TabsList>
 
             {/* Profile Tab */}
@@ -1243,8 +1246,6 @@ export default function Configuracion() {
                 </CardContent>
               </Card>
             </TabsContent>
-
-
           </Tabs>
         </div>
       </div>

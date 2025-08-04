@@ -120,12 +120,16 @@ export default function Dashboard() {
   const stats = getStats();
 
   // Handle service updates
-  const handleServiceUpdate = (serviceId: string, field: string, value: any) => {
-    setServices(prev => prev.map(service =>
-      service.id === serviceId
-        ? { ...service, [field]: value }
-        : service
-    ));
+  const handleServiceUpdate = (
+    serviceId: string,
+    field: string,
+    value: any,
+  ) => {
+    setServices((prev) =>
+      prev.map((service) =>
+        service.id === serviceId ? { ...service, [field]: value } : service,
+      ),
+    );
   };
 
   const handleSaveServices = async () => {
@@ -139,7 +143,9 @@ export default function Dashboard() {
       localStorage.setItem("veterinary_services", JSON.stringify(services));
 
       // Dispatch custom event to notify other components
-      window.dispatchEvent(new CustomEvent('servicesUpdated', { detail: services }));
+      window.dispatchEvent(
+        new CustomEvent("servicesUpdated", { detail: services }),
+      );
 
       setSavedMessage("Configuración de servicios actualizada correctamente");
       setTimeout(() => {
@@ -182,7 +188,9 @@ export default function Dashboard() {
           </div>
 
           {/* Admin Dashboard */}
-          {user?.rol === "admin" && <AdminDashboard setShowServicesModal={setShowServicesModal} />}
+          {user?.rol === "admin" && (
+            <AdminDashboard setShowServicesModal={setShowServicesModal} />
+          )}
 
           {/* Client Dashboard */}
           {user?.rol === "cliente" && (
@@ -203,7 +211,8 @@ export default function Dashboard() {
               <span>Configuración de Servicios Veterinarios</span>
             </DialogTitle>
             <DialogDescription>
-              Gestiona los 6 servicios veterinarios principales: precios, descripciones y disponibilidad
+              Gestiona los 6 servicios veterinarios principales: precios,
+              descripciones y disponibilidad
             </DialogDescription>
           </DialogHeader>
 
@@ -219,7 +228,10 @@ export default function Dashboard() {
           <div className="space-y-6">
             <div className="grid gap-6">
               {services.map((service) => (
-                <Card key={service.id} className="border-l-4 border-l-vet-primary">
+                <Card
+                  key={service.id}
+                  className="border-l-4 border-l-vet-primary"
+                >
                   <CardContent className="p-6">
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
@@ -228,8 +240,12 @@ export default function Dashboard() {
                             <Stethoscope className="w-5 h-5 text-vet-primary" />
                           </div>
                           <div>
-                            <h3 className="font-semibold text-vet-gray-900">{service.nombre}</h3>
-                            <p className="text-sm text-vet-gray-600">{service.id}</p>
+                            <h3 className="font-semibold text-vet-gray-900">
+                              {service.nombre}
+                            </h3>
+                            <p className="text-sm text-vet-gray-600">
+                              {service.id}
+                            </p>
                           </div>
                         </div>
                         <Switch
@@ -242,7 +258,9 @@ export default function Dashboard() {
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
-                          <Label htmlFor={`precio-${service.id}`}>Precio (S/)</Label>
+                          <Label htmlFor={`precio-${service.id}`}>
+                            Precio (S/)
+                          </Label>
                           <div className="relative">
                             <DollarSign className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
                             <Input
@@ -253,7 +271,11 @@ export default function Dashboard() {
                               className="pl-10"
                               value={service.precio}
                               onChange={(e) =>
-                                handleServiceUpdate(service.id, "precio", parseFloat(e.target.value) || 0)
+                                handleServiceUpdate(
+                                  service.id,
+                                  "precio",
+                                  parseFloat(e.target.value) || 0,
+                                )
                               }
                               placeholder="0.00"
                             />
@@ -261,12 +283,18 @@ export default function Dashboard() {
                         </div>
 
                         <div className="space-y-2">
-                          <Label htmlFor={`nombre-${service.id}`}>Nombre del servicio</Label>
+                          <Label htmlFor={`nombre-${service.id}`}>
+                            Nombre del servicio
+                          </Label>
                           <Input
                             id={`nombre-${service.id}`}
                             value={service.nombre}
                             onChange={(e) =>
-                              handleServiceUpdate(service.id, "nombre", e.target.value)
+                              handleServiceUpdate(
+                                service.id,
+                                "nombre",
+                                e.target.value,
+                              )
                             }
                             placeholder="Nombre del servicio"
                           />
@@ -274,12 +302,18 @@ export default function Dashboard() {
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor={`descripcion-${service.id}`}>Descripción</Label>
+                        <Label htmlFor={`descripcion-${service.id}`}>
+                          Descripción
+                        </Label>
                         <Textarea
                           id={`descripcion-${service.id}`}
                           value={service.descripcion}
                           onChange={(e) =>
-                            handleServiceUpdate(service.id, "descripcion", e.target.value)
+                            handleServiceUpdate(
+                              service.id,
+                              "descripcion",
+                              e.target.value,
+                            )
                           }
                           placeholder="Descripción del servicio..."
                           rows={2}
@@ -290,7 +324,8 @@ export default function Dashboard() {
                         <Alert className="border-orange-200 bg-orange-50">
                           <AlertTriangle className="w-4 h-4 text-orange-600" />
                           <AlertDescription className="text-orange-800">
-                            Este servicio está desactivado y no aparecerá en las opciones de citas
+                            Este servicio está desactivado y no aparecerá en las
+                            opciones de citas
                           </AlertDescription>
                         </Alert>
                       )}
@@ -303,7 +338,10 @@ export default function Dashboard() {
             <div className="pt-4 border-t border-vet-gray-200">
               <div className="flex justify-between items-center">
                 <div className="text-sm text-vet-gray-600">
-                  <p>Los cambios se aplicarán inmediatamente en toda la plataforma</p>
+                  <p>
+                    Los cambios se aplicarán inmediatamente en toda la
+                    plataforma
+                  </p>
                 </div>
                 <Button
                   onClick={handleSaveServices}
@@ -331,7 +369,11 @@ export default function Dashboard() {
   );
 }
 
-function AdminDashboard({ setShowServicesModal }: { setShowServicesModal: (show: boolean) => void }) {
+function AdminDashboard({
+  setShowServicesModal,
+}: {
+  setShowServicesModal: (show: boolean) => void;
+}) {
   const { usuarios, citas, preCitas, suscriptoresNewsletter } = useAppContext();
 
   const adminStats = {
