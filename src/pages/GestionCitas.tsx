@@ -892,8 +892,8 @@ export default function GestionCitas() {
                           </h4>
                         </div>
 
-                        <Alert className="border-blue-200 bg-blue-50">
-                          <AlertCircle className="w-4 h-4 text-blue-600" />
+                        <Alert className="border-vet-gray-200 bg-vet-gray-50">
+                          <AlertCircle className="w-4 h-4 text-vet-gray-600" />
                           <AlertDescription className="text-blue-800">
                             El cliente ha subido su comprobante de pago. Revisa
                             la información y decide si aprobar o rechazar la
