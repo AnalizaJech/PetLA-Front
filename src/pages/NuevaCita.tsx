@@ -666,10 +666,17 @@ export default function NuevaCita() {
                           citaData.fecha ? new Date(citaData.fecha) : undefined
                         }
                         onDateChange={(date) => {
-                          setCitaData({
-                            ...citaData,
-                            fecha: date ? date.toISOString().split("T")[0] : "",
-                          });
+                          if (date && date >= new Date()) {
+                            setCitaData({
+                              ...citaData,
+                              fecha: date.toISOString().split("T")[0],
+                            });
+                          } else if (!date) {
+                            setCitaData({
+                              ...citaData,
+                              fecha: "",
+                            });
+                          }
                         }}
                         placeholder="Selecciona fecha"
                         fromYear={new Date().getFullYear()}
