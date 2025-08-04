@@ -365,7 +365,7 @@ export default function Configuracion() {
           </div>
 
           <Tabs defaultValue="profile" className="space-y-4 sm:space-y-6">
-            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 h-auto">
+            <TabsList className={`grid w-full h-auto ${user?.rol === "admin" ? "grid-cols-2 md:grid-cols-5" : "grid-cols-2 md:grid-cols-4"}`}>
               <TabsTrigger
                 value="profile"
                 className="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm p-2 sm:p-3"
