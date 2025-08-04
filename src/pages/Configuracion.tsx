@@ -398,6 +398,16 @@ export default function Configuracion() {
                 <span className="hidden sm:inline">Apariencia</span>
                 <span className="sm:hidden">Tema</span>
               </TabsTrigger>
+              {user?.rol === "admin" && (
+                <TabsTrigger
+                  value="services"
+                  className="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm p-2 sm:p-3"
+                >
+                  <Stethoscope className="w-3 h-3 sm:w-4 sm:h-4" />
+                  <span className="hidden sm:inline">Servicios</span>
+                  <span className="sm:hidden">Serv.</span>
+                </TabsTrigger>
+              )}
             </TabsList>
 
             {/* Profile Tab */}
