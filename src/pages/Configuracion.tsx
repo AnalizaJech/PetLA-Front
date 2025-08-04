@@ -378,6 +378,34 @@ export default function Configuracion() {
     return () => clearTimeout(timer);
   }, [themeSettings]);
 
+  // Handle service updates
+  const handleServiceUpdate = (serviceId: string, field: string, value: any) => {
+    setServices(prev => prev.map(service =>
+      service.id === serviceId
+        ? { ...service, [field]: value }
+        : service
+    ));
+  };
+
+  const handleSaveServices = async () => {
+    setIsLoading(true);
+    setSavedMessage("");
+    setErrorMessage("");
+
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Save to localStorage
+      saveSettings("veterinary_services", services);
+
+      setSavedMessage("Configuración de servicios actualizada correctamente");
+    } catch (error) {
+      setErrorMessage("Error al actualizar los servicios");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <Layout>
       <div className="min-h-screen bg-vet-gray-50 py-8">
