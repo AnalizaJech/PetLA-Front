@@ -770,13 +770,14 @@ export default function PreCitas() {
                               toYear={new Date().getFullYear() + 1}
                             />
                           </div>
-                          <div>
+                          <div className="space-y-2">
                             <Label htmlFor="nueva-hora">Nueva hora *</Label>
                             <Input
                               id="nueva-hora"
                               type="time"
                               value={newTime}
                               onChange={(e) => setNewTime(e.target.value)}
+                              className="h-10"
                             />
                           </div>
                         </div>
