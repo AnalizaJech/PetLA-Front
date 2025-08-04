@@ -1157,14 +1157,14 @@ export default function GestionCitas() {
                 {selectedCita?.comprobantePago ? (
                   <div className="space-y-4">
                     {/* File Info */}
-                    <div className="bg-blue-50 p-4">
+                    <div className="bg-green-50 p-4">
                       <div className="flex items-center space-x-3">
-                        <FileText className="w-8 h-8 text-blue-600" />
+                        <FileText className="w-8 h-8 text-green-600" />
                         <div>
-                          <h4 className="font-medium text-blue-900">
+                          <h4 className="font-medium text-green-900">
                             Comprobante de Pago
                           </h4>
-                          <p className="text-sm text-blue-700">
+                          <p className="text-sm text-green-700">
                             Archivo subido por el cliente
                           </p>
                         </div>
