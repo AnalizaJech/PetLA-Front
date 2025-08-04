@@ -751,8 +751,8 @@ export default function PreCitas() {
 
                     {/* New Date Selection - only show if changing date */}
                     {processAction === "cambiar_fecha" && (
-                      <div className="space-y-3 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                        <h4 className="font-medium text-blue-900">
+                      <div className="space-y-3 p-4 bg-vet-gray-50 border border-vet-gray-200 rounded-lg">
+                        <h4 className="font-medium text-vet-gray-900">
                           Nueva fecha y hora
                         </h4>
                         <div className="grid grid-cols-2 gap-3">
