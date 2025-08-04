@@ -894,7 +894,7 @@ export default function GestionCitas() {
 
                         <Alert className="border-vet-gray-200 bg-vet-gray-50">
                           <AlertCircle className="w-4 h-4 text-vet-gray-600" />
-                          <AlertDescription className="text-blue-800">
+                          <AlertDescription className="text-vet-gray-800">
                             El cliente ha subido su comprobante de pago. Revisa
                             la información y decide si aprobar o rechazar la
                             cita.
@@ -1108,8 +1108,8 @@ export default function GestionCitas() {
           <div className="max-h-[calc(90vh-8rem)] overflow-y-auto scrollbar-hide">
             <DialogHeader className="pb-4 border-b border-vet-gray-200">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <FileText className="w-5 h-5 text-blue-600" />
+                <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                  <FileText className="w-5 h-5 text-green-600" />
                 </div>
                 <div>
                   <DialogTitle className="text-xl font-semibold text-vet-gray-900">
