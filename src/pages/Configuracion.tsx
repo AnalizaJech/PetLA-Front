@@ -445,7 +445,7 @@ export default function Configuracion() {
           </div>
 
           <Tabs defaultValue="profile" className="space-y-4 sm:space-y-6">
-            <TabsList className={`grid w-full h-auto ${user?.rol === "admin" ? "grid-cols-2 md:grid-cols-5" : "grid-cols-2 md:grid-cols-4"}`}>
+            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 h-auto">
               <TabsTrigger
                 value="profile"
                 className="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm p-2 sm:p-3"
@@ -478,16 +478,7 @@ export default function Configuracion() {
                 <span className="hidden sm:inline">Apariencia</span>
                 <span className="sm:hidden">Tema</span>
               </TabsTrigger>
-              {user?.rol === "admin" && (
-                <TabsTrigger
-                  value="services"
-                  className="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm p-2 sm:p-3"
-                >
-                  <Stethoscope className="w-3 h-3 sm:w-4 sm:h-4" />
-                  <span className="hidden sm:inline">Servicios</span>
-                  <span className="sm:hidden">Serv.</span>
-                </TabsTrigger>
-              )}
+
             </TabsList>
 
             {/* Profile Tab */}
@@ -1049,7 +1040,7 @@ export default function Configuracion() {
                           </p>
                           <ul className="mt-1 space-y-1 text-xs">
                             <li>
-                              • Usa una contraseña fuerte con al menos 8
+                              • Usa una contrase��a fuerte con al menos 8
                               caracteres
                             </li>
                             <li>• Habilita la autenticación de dos factores</li>
