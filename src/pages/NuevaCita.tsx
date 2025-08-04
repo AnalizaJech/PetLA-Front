@@ -202,6 +202,23 @@ export default function NuevaCita() {
     console.log("User changed:", user);
   }, [mascotas, user]);
 
+  // Reload services when component mounts or when localStorage changes
+  useEffect(() => {
+    const updateServices = () => {
+      setTiposConsulta(getTiposConsulta());
+    };
+
+    // Update services on mount
+    updateServices();
+
+    // Listen for storage changes (when admin updates services)
+    window.addEventListener('storage', updateServices);
+
+    return () => {
+      window.removeEventListener('storage', updateServices);
+    };
+  }, []);
+
   if (!user || user.rol !== "cliente") {
     return (
       <Layout>
