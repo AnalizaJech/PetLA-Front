@@ -37,6 +37,8 @@ import {
   EyeOff,
   AlertTriangle,
   Info,
+  Stethoscope,
+  DollarSign,
 } from "lucide-react";
 
 export default function Configuracion() {
