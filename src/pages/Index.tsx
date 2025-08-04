@@ -577,20 +577,29 @@ export default function Index() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="fechaPreferida">Fecha preferida *</Label>
-                  <Input
-                    id="fechaPreferida"
-                    name="fechaPreferida"
-                    type="date"
-                    value={formData.fechaPreferida}
-                    onChange={(e) => {
-                      setFormData({
-                        ...formData,
-                        fechaPreferida: e.target.value,
-                      });
+                  <DatePicker
+                    date={
+                      formData.fechaPreferida
+                        ? new Date(formData.fechaPreferida)
+                        : undefined
+                    }
+                    onDateChange={(date) => {
+                      if (date && date >= new Date()) {
+                        setFormData({
+                          ...formData,
+                          fechaPreferida: date.toISOString().split("T")[0],
+                        });
+                      } else if (!date) {
+                        setFormData({
+                          ...formData,
+                          fechaPreferida: "",
+                        });
+                      }
                     }}
-                    min={new Date().toISOString().split("T")[0]}
-                    required
-                    className="h-10"
+                    placeholder="Selecciona fecha"
+                    fromYear={new Date().getFullYear()}
+                    toYear={new Date().getFullYear() + 1}
+                    minDate={new Date()}
                   />
                 </div>
                 <div className="space-y-2">
