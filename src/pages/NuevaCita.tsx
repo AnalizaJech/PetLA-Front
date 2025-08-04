@@ -213,9 +213,12 @@ export default function NuevaCita() {
 
     // Listen for storage changes (when admin updates services)
     window.addEventListener('storage', updateServices);
+    // Listen for custom event when services are updated
+    window.addEventListener('servicesUpdated', updateServices);
 
     return () => {
       window.removeEventListener('storage', updateServices);
+      window.removeEventListener('servicesUpdated', updateServices);
     };
   }, []);
 

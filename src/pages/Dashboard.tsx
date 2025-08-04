@@ -138,6 +138,9 @@ export default function Dashboard() {
       // Save to localStorage
       localStorage.setItem("veterinary_services", JSON.stringify(services));
 
+      // Dispatch custom event to notify other components
+      window.dispatchEvent(new CustomEvent('servicesUpdated', { detail: services }));
+
       setSavedMessage("Configuración de servicios actualizada correctamente");
       setTimeout(() => {
         setSavedMessage("");
