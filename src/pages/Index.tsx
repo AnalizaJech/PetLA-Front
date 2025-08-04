@@ -584,12 +584,17 @@ export default function Index() {
                         : undefined
                     }
                     onDateChange={(date) => {
-                      setFormData({
-                        ...formData,
-                        fechaPreferida: date
-                          ? date.toISOString().split("T")[0]
-                          : "",
-                      });
+                      if (date && date >= new Date()) {
+                        setFormData({
+                          ...formData,
+                          fechaPreferida: date.toISOString().split("T")[0],
+                        });
+                      } else if (!date) {
+                        setFormData({
+                          ...formData,
+                          fechaPreferida: "",
+                        });
+                      }
                     }}
                     placeholder="Selecciona fecha"
                     fromYear={new Date().getFullYear()}
