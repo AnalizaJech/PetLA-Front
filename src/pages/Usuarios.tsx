@@ -811,7 +811,7 @@ export default function Usuarios() {
                                     e.stopPropagation();
                                     handlePasswordReset_Open(cliente.id);
                                   }}
-                                  className="flex items-center cursor-pointer hover:bg-blue-50"
+                                  className="flex items-center cursor-pointer hover:bg-gray-50"
                                 >
                                   <Key className="w-4 h-4 mr-2 text-blue-600" />
                                   Resetear contraseña
