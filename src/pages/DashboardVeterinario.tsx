@@ -328,7 +328,7 @@ export default function DashboardVeterinario() {
                     <Calendar className="w-5 h-5 text-vet-primary" />
                     <span>Citas de Hoy</span>
                     {stats.citasHoy > 0 && (
-                      <Badge className="bg-blue-100 text-blue-800">
+                      <Badge className="bg-gray-100 text-gray-800">
                         {stats.citasHoy}
                       </Badge>
                     )}

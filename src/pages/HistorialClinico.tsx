@@ -1533,7 +1533,7 @@ export default function HistorialClinico() {
                               {servicio.veterinario}
                             </CardDescription>
                           </div>
-                          <Badge className="bg-blue-100 text-blue-800">
+                          <Badge className="bg-gray-100 text-gray-800">
                             ${servicio.precio}
                           </Badge>
                         </div>
