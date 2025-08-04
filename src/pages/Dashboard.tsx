@@ -119,6 +119,34 @@ export default function Dashboard() {
 
   const stats = getStats();
 
+  // Handle service updates
+  const handleServiceUpdate = (serviceId: string, field: string, value: any) => {
+    setServices(prev => prev.map(service =>
+      service.id === serviceId
+        ? { ...service, [field]: value }
+        : service
+    ));
+  };
+
+  const handleSaveServices = async () => {
+    setIsLoading(true);
+    setSavedMessage("");
+
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Save to localStorage
+      localStorage.setItem("veterinary_services", JSON.stringify(services));
+
+      setSavedMessage("Configuración de servicios actualizada correctamente");
+      setTimeout(() => setSavedMessage(""), 3000);
+    } catch (error) {
+      console.error("Error al actualizar los servicios:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <Layout>
       <div className="min-h-screen bg-vet-gray-50 py-8">
