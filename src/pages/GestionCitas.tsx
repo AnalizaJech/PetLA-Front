@@ -604,7 +604,7 @@ export default function GestionCitas() {
                                 }}
                                 className="flex items-center cursor-pointer hover:bg-vet-gray-50"
                               >
-                                <Eye className="w-4 h-4 mr-2 text-blue-600" />
+                                <Eye className="w-4 h-4 mr-2 text-vet-gray-600" />
                                 Ver detalles
                               </DropdownMenuItem>
 
@@ -872,9 +872,9 @@ export default function GestionCitas() {
                           <span className="text-xs font-medium text-vet-gray-500 uppercase tracking-wide">
                             Comprobante de Pago
                           </span>
-                          <div className="mt-2 flex items-center space-x-2 p-3 bg-blue-50 border border-blue-200 rounded">
-                            <FileText className="w-5 h-5 text-blue-600" />
-                            <span className="text-sm font-medium text-blue-900">
+                          <div className="mt-2 flex items-center space-x-2 p-3 bg-green-50 border border-green-200 rounded">
+                            <FileText className="w-5 h-5 text-green-600" />
+                            <span className="text-sm font-medium text-green-900">
                               Comprobante subido por el cliente
                             </span>
                           </div>
