@@ -666,12 +666,24 @@ export default function MisPacientes() {
                 </Alert>
               )}
 
+              {stats.citasIncompletas > 0 && (
+                <Alert className="border-purple-200 bg-purple-50">
+                  <Info className="w-4 h-4 text-purple-600" />
+                  <AlertDescription className="text-purple-800">
+                    <strong>{stats.citasIncompletas} citas</strong> tienen información de relación incompleta.
+                  </AlertDescription>
+                </Alert>
+              )}
+
               {stats.problemasData > 0 && (
                 <Alert className="border-blue-200 bg-blue-50">
                   <Info className="w-4 h-4 text-blue-600" />
                   <AlertDescription className="text-blue-800">
                     Resumen: <strong>{stats.propietariosUnicos} propietarios únicos</strong>,
                     <strong> {stats.mascotasUnicas} mascotas únicas</strong> en {stats.total} citas.
+                    {stats.problemasData > 0 && (
+                      <><br />Total de problemas detectados: <strong>{stats.problemasData}</strong></>
+                    )}
                   </AlertDescription>
                 </Alert>
               )}
