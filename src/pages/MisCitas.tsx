@@ -357,11 +357,11 @@ export default function MisCitas() {
             onValueChange={setSelectedTab}
             className="space-y-6"
           >
-            <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="todas">Todas</TabsTrigger>
-              <TabsTrigger value="pendientes">Pendientes</TabsTrigger>
-              <TabsTrigger value="proximas">Próximas</TabsTrigger>
-              <TabsTrigger value="completadas">Completadas</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 gap-1">
+              <TabsTrigger value="todas" className="text-xs sm:text-sm">Todas</TabsTrigger>
+              <TabsTrigger value="pendientes" className="text-xs sm:text-sm">Pendientes</TabsTrigger>
+              <TabsTrigger value="proximas" className="text-xs sm:text-sm">Próximas</TabsTrigger>
+              <TabsTrigger value="completadas" className="text-xs sm:text-sm">Completadas</TabsTrigger>
             </TabsList>
 
             <TabsContent value={selectedTab} className="space-y-4">
@@ -486,31 +486,34 @@ export default function MisCitas() {
                           <div className="text-lg font-bold text-vet-gray-900 mb-2">
                             S/. {cita.precio.toLocaleString()}
                           </div>
-                          <div className="flex flex-col space-y-2">
+                          <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:justify-end">
                             {user?.rol === "veterinario" ? (
                               <>
                                 {cita.estado === "aceptada" && (
                                   <Button
                                     size="sm"
-                                    className="bg-vet-primary hover:bg-vet-primary-dark"
+                                    className="bg-vet-primary hover:bg-vet-primary-dark min-w-0 flex-shrink-0"
                                     onClick={() => {
                                       // Marcar como atendida y navegar al historial
                                       // Esta lógica se implementaría con el contexto
                                     }}
                                   >
-                                    <CheckCircle className="w-4 h-4 mr-2" />
-                                    Registrar Consulta
+                                    <CheckCircle className="w-4 h-4 mr-1 sm:mr-2" />
+                                    <span className="hidden sm:inline">Registrar Consulta</span>
+                                    <span className="sm:hidden">Registrar</span>
                                   </Button>
                                 )}
                                 {cita.estado === "atendida" && (
-                                  <Button variant="outline" size="sm">
-                                    <FileText className="w-4 h-4 mr-2" />
-                                    Ver Historial
+                                  <Button variant="outline" size="sm" className="min-w-0 flex-shrink-0">
+                                    <FileText className="w-4 h-4 mr-1 sm:mr-2" />
+                                    <span className="hidden sm:inline">Ver Historial</span>
+                                    <span className="sm:hidden">Historial</span>
                                   </Button>
                                 )}
-                                <Button variant="outline" size="sm">
-                                  <User className="w-4 h-4 mr-2" />
-                                  Info Paciente
+                                <Button variant="outline" size="sm" className="min-w-0 flex-shrink-0">
+                                  <User className="w-4 h-4 mr-1 sm:mr-2" />
+                                  <span className="hidden sm:inline">Info Paciente</span>
+                                  <span className="sm:hidden">Info</span>
                                 </Button>
                               </>
                             ) : (
@@ -520,12 +523,17 @@ export default function MisCitas() {
                                     size="sm"
                                     onClick={() => handleUploadProof(cita.id)}
                                     disabled={uploadingCitaId === cita.id}
-                                    className="bg-vet-primary hover:bg-vet-primary-dark"
+                                    className="bg-vet-primary hover:bg-vet-primary-dark min-w-0 flex-shrink-0"
                                   >
-                                    <Upload className="w-4 h-4 mr-2" />
-                                    {uploadingCitaId === cita.id
-                                      ? "Subiendo..."
-                                      : "Subir Comprobante"}
+                                    <Upload className="w-4 h-4 mr-1 sm:mr-2" />
+                                    <span className="hidden sm:inline">
+                                      {uploadingCitaId === cita.id
+                                        ? "Subiendo..."
+                                        : "Subir Comprobante"}
+                                    </span>
+                                    <span className="sm:hidden">
+                                      {uploadingCitaId === cita.id ? "..." : "Subir"}
+                                    </span>
                                   </Button>
                                 )}
                                 {(cita.estado === "en_validacion" ||
@@ -535,10 +543,11 @@ export default function MisCitas() {
                                       size="sm"
                                       variant="outline"
                                       onClick={() => handleViewReceipt(cita.id)}
-                                      className="border-vet-primary text-vet-primary hover:bg-vet-primary/10"
+                                      className="border-vet-primary text-vet-primary hover:bg-vet-primary/10 min-w-0 flex-shrink-0"
                                     >
-                                      <Eye className="w-4 h-4 mr-2" />
-                                      Ver Comprobante
+                                      <Eye className="w-4 h-4 mr-1 sm:mr-2" />
+                                      <span className="hidden sm:inline">Ver Comprobante</span>
+                                      <span className="sm:hidden">Ver</span>
                                     </Button>
                                   )}
                                 {cita.estado === "rechazada" && (
@@ -546,22 +555,25 @@ export default function MisCitas() {
                                     size="sm"
                                     onClick={() => handleDeleteCita(cita.id)}
                                     variant="outline"
-                                    className="border-red-300 text-red-700 hover:bg-red-50"
+                                    className="border-red-300 text-red-700 hover:bg-red-50 min-w-0 flex-shrink-0"
                                   >
-                                    <Trash2 className="w-4 h-4 mr-2" />
-                                    Eliminar Cita
+                                    <Trash2 className="w-4 h-4 mr-1 sm:mr-2" />
+                                    <span className="hidden sm:inline">Eliminar Cita</span>
+                                    <span className="sm:hidden">Eliminar</span>
                                   </Button>
                                 )}
                                 {cita.estado === "atendida" && (
-                                  <Button variant="outline" size="sm">
-                                    <FileText className="w-4 h-4 mr-2" />
-                                    Ver Reporte
+                                  <Button variant="outline" size="sm" className="min-w-0 flex-shrink-0">
+                                    <FileText className="w-4 h-4 mr-1 sm:mr-2" />
+                                    <span className="hidden sm:inline">Ver Reporte</span>
+                                    <span className="sm:hidden">Reporte</span>
                                   </Button>
                                 )}
                                 {cita.estado === "aceptada" && (
-                                  <Button variant="outline" size="sm">
-                                    <Phone className="w-4 h-4 mr-2" />
-                                    Contactar
+                                  <Button variant="outline" size="sm" className="min-w-0 flex-shrink-0">
+                                    <Phone className="w-4 h-4 mr-1 sm:mr-2" />
+                                    <span className="hidden sm:inline">Contactar</span>
+                                    <span className="sm:hidden">Llamar</span>
                                   </Button>
                                 )}
                               </>
@@ -657,7 +669,7 @@ export default function MisCitas() {
                     Información importante
                   </h4>
                   <ul className="text-sm text-blue-700 space-y-1">
-                    <li>• Asegúrate de que el comprobante sea legible</li>
+                    <li>�� Asegúrate de que el comprobante sea legible</li>
                     <li>
                       • Verifica que contenga la información completa del pago
                     </li>
