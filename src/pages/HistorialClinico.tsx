@@ -454,7 +454,7 @@ export default function HistorialClinico() {
     if (estado === "aceptada") return "Servicio confirmado y programado";
 
     const tipo = tipoConsulta.toLowerCase();
-    // Notas espec��ficas por servicio
+    // Notas específicas por servicio
     if (tipo.includes("consulta general"))
       return "Consulta general completada. Mascota en buen estado de salud. Continuar con cuidados preventivos.";
     if (tipo.includes("vacunación") || tipo.includes("vacunacion"))
@@ -548,11 +548,11 @@ export default function HistorialClinico() {
       contenido += `No hay consultas registradas.\n\n`;
     }
 
-    // VACUNAS
-    if (historialMascota.vacunas.length > 0) {
+    // VACUNAS (incluidas en las consultas médicas)
+    if (historialMascota.vacunacion.length > 0) {
       contenido += `VACUNAS\n`;
       contenido += `-`.repeat(30) + `\n`;
-      historialMascota.vacunas.forEach((vacuna, index) => {
+      historialMascota.vacunacion.forEach((vacuna, index) => {
         contenido += `\nVacuna #${index + 1}\n`;
         contenido += `Fecha: ${vacuna.fecha.toLocaleDateString("es-ES")}\n`;
         contenido += `Veterinario: ${vacuna.veterinario}\n`;
@@ -1179,7 +1179,7 @@ export default function HistorialClinico() {
                         Sin servicios de vacunación registrados
                       </h3>
                       <p className="text-vet-gray-600 mb-6">
-                        {selectedMascota} no tiene servicios de vacunación en su
+                        {selectedMascota} no tiene servicios de vacunaci��n en su
                         historial.
                       </p>
                       <Button
