@@ -416,45 +416,47 @@ export default function MisCitas() {
                             );
                           })()}
                           <div>
-                            <div className="flex items-center space-x-2 mb-1">
-                              <h4 className="font-semibold text-vet-gray-900">
+                            <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2 mb-2">
+                              <h4 className="font-semibold text-base sm:text-lg text-vet-gray-900">
                                 {cita.mascota}
                               </h4>
-                              <Badge className="text-xs">{cita.especie}</Badge>
-                              <Badge className={estadoColors[cita.estado]}>
-                                {estadoLabels[cita.estado]}
-                              </Badge>
+                              <div className="flex space-x-2">
+                                <Badge className="text-xs sm:text-sm">{cita.especie}</Badge>
+                                <Badge className={estadoColors[cita.estado]}>
+                                  {estadoLabels[cita.estado]}
+                                </Badge>
+                              </div>
                             </div>
-                            <p className="text-sm text-vet-gray-600 mb-1">
+                            <p className="text-sm sm:text-base text-vet-gray-600 mb-3">
                               <span className="font-medium text-vet-primary">
                                 {cita.tipoConsulta}
-                              </span>{" "}
-                              • {cita.motivo} • {cita.veterinario}
+                              </span>
+                              <span className="block sm:inline"> • {cita.motivo}</span>
+                              <span className="block sm:inline"> • {cita.veterinario}</span>
                             </p>
-                            <div className="flex items-center space-x-4 text-sm text-vet-gray-500">
-                              <div className="flex items-center space-x-1">
-                                <Calendar className="w-4 h-4" />
-                                <span>
+                            <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-6 text-sm sm:text-base text-vet-gray-500">
+                              <div className="flex items-center space-x-2">
+                                <Calendar className="w-5 h-5 sm:w-4 sm:h-4 text-vet-primary" />
+                                <span className="font-medium">
                                   {cita.fecha.toLocaleDateString("es-ES", {
-                                    weekday: "long",
-                                    year: "numeric",
-                                    month: "long",
+                                    weekday: "short",
+                                    month: "short",
                                     day: "numeric",
                                   })}
                                 </span>
                               </div>
-                              <div className="flex items-center space-x-1">
-                                <Clock className="w-4 h-4" />
-                                <span>
+                              <div className="flex items-center space-x-2">
+                                <Clock className="w-5 h-5 sm:w-4 sm:h-4 text-vet-primary" />
+                                <span className="font-medium">
                                   {cita.fecha.toLocaleTimeString("es-ES", {
                                     hour: "2-digit",
                                     minute: "2-digit",
                                   })}
                                 </span>
                               </div>
-                              <div className="flex items-center space-x-1">
-                                <MapPin className="w-4 h-4" />
-                                <span>{cita.ubicacion}</span>
+                              <div className="flex items-center space-x-2">
+                                <MapPin className="w-5 h-5 sm:w-4 sm:h-4 text-vet-primary" />
+                                <span className="font-medium">{cita.ubicacion}</span>
                               </div>
                             </div>
                             {cita.notas && (
