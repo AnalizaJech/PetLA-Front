@@ -49,6 +49,7 @@ import {
   Plus,
   Filter,
   UserCheck,
+  Download,
 } from "lucide-react";
 
 export default function DashboardVeterinario() {
