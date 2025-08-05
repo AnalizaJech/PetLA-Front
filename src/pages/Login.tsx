@@ -144,9 +144,19 @@ export default function Login() {
           }
         }}
       >
-        <TabsList className="grid w-full grid-cols-2 h-12 mb-8">
-          <TabsTrigger value="login">Iniciar Sesión</TabsTrigger>
-          <TabsTrigger value="register">Registrarse</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-2 h-12 mb-8 bg-vet-gray-100 rounded-xl p-1 border-0">
+          <TabsTrigger
+            value="login"
+            className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-vet-primary data-[state=active]:shadow-sm font-medium transition-all duration-200 text-vet-gray-600 hover:text-vet-gray-900"
+          >
+            Iniciar Sesión
+          </TabsTrigger>
+          <TabsTrigger
+            value="register"
+            className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-vet-primary data-[state=active]:shadow-sm font-medium transition-all duration-200 text-vet-gray-600 hover:text-vet-gray-900"
+          >
+            Registrarse
+          </TabsTrigger>
         </TabsList>
 
         {/* Login Tab */}
@@ -516,7 +526,7 @@ export default function Login() {
                   <input
                     type="checkbox"
                     id="terms"
-                    className="mt-1.5 w-4 h-4 rounded border-vet-gray-300 text-vet-primary focus:ring-vet-primary/20 focus:ring-2"
+                    className="mt-1 w-4 h-4 rounded border-vet-gray-300 text-vet-primary focus:ring-vet-primary/20 focus:ring-2 shrink-0"
                     required
                   />
                   <Label htmlFor="terms" className="text-sm text-vet-gray-600">
