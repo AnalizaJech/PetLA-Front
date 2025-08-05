@@ -235,25 +235,40 @@ export function enhanceCita(
   usuarios: Usuario[],
   historialClinico: HistorialClinico[] = [],
 ): CitaRelationData {
-  // Buscar mascota
-  const mascota = findMascotaByName(cita.mascota, mascotas);
+  // Buscar mascota - primero por ID si está disponible, luego por nombre
+  let mascota: Mascota | null = null;
 
-  // Buscar propietario con lógica mejorada
-  const propietario = findPropietarioForMascota(mascota, usuarios);
+  if (cita.mascotaId) {
+    mascota = mascotas.find(m => m.id === cita.mascotaId) || null;
+  }
 
-  // Si no encontramos propietario, intentar búsqueda alternativa
-  let propietarioFinal = propietario;
-  if (!propietarioFinal && mascota) {
-    // Buscar cualquier cliente que tenga mascotas (fallback)
+  if (!mascota) {
+    mascota = findMascotaByName(cita.mascota, mascotas);
+  }
+
+  // Buscar propietario - primero usando clienteId de la cita, luego de la mascota
+  let propietario: Usuario | null = null;
+
+  if (cita.clienteId) {
+    propietario = usuarios.find(u => u.id === cita.clienteId && u.rol === 'cliente') || null;
+  }
+
+  if (!propietario && mascota) {
+    propietario = findPropietarioForMascota(mascota, usuarios);
+  }
+
+  // Si aún no encontramos propietario, intentar búsqueda alternativa
+  if (!propietario && mascota) {
+    // Buscar cualquier cliente que tenga mascotas de la misma especie (fallback)
     const clientesConMascotas = usuarios.filter(u =>
       u.rol === 'cliente' &&
-      mascotas.some(m => m.clienteId === u.id && m.especie === mascota.especie)
+      mascotas.some(m => m.clienteId === u.id && m.especie === mascota!.especie)
     );
 
     if (clientesConMascotas.length > 0) {
       // Tomar el primer cliente encontrado como fallback temporal
-      propietarioFinal = clientesConMascotas[0];
-      console.warn(`Asignando propietario temporal a mascota ${mascota.nombre}: ${propietarioFinal.nombre}`);
+      propietario = clientesConMascotas[0];
+      console.warn(`Asignando propietario temporal a mascota ${mascota.nombre}: ${propietario.nombre}`);
     }
   }
 
@@ -275,7 +290,7 @@ export function enhanceCita(
   return {
     cita,
     mascota,
-    propietario: propietarioFinal,
+    propietario,
     urgencyLevel,
     hasHistorial,
     ultimaConsulta,
