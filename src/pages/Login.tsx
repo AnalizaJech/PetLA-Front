@@ -254,7 +254,7 @@ export default function Login() {
 
         {/* Register Tab */}
         <TabsContent value="register">
-          <Card>
+          <Card className="border-0 shadow-2xl bg-white/95 backdrop-blur-sm">
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <Dog className="w-5 h-5 text-vet-primary" />
