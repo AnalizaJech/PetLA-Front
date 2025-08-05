@@ -958,50 +958,58 @@ export default function HistorialClinico() {
               onValueChange={setSelectedTab}
               className="space-y-6"
             >
-              <TabsList className="grid w-full grid-cols-6 text-xs">
-                <TabsTrigger
-                  value="consulta_general"
-                  className="flex items-center space-x-1"
-                >
-                  <Stethoscope className="w-3 h-3" />
-                  <span>General</span>
-                </TabsTrigger>
-                <TabsTrigger
-                  value="vacunacion"
-                  className="flex items-center space-x-1"
-                >
-                  <Syringe className="w-3 h-3" />
-                  <span>Vacunas</span>
-                </TabsTrigger>
-                <TabsTrigger
-                  value="emergencia"
-                  className="flex items-center space-x-1"
-                >
-                  <Activity className="w-3 h-3" />
-                  <span>Emergencia</span>
-                </TabsTrigger>
-                <TabsTrigger
-                  value="grooming"
-                  className="flex items-center space-x-1"
-                >
-                  <PawPrint className="w-3 h-3" />
-                  <span>Grooming</span>
-                </TabsTrigger>
-                <TabsTrigger
-                  value="cirugia"
-                  className="flex items-center space-x-1"
-                >
-                  <Pill className="w-3 h-3" />
-                  <span>Cirugía</span>
-                </TabsTrigger>
-                <TabsTrigger
-                  value="diagnostico"
-                  className="flex items-center space-x-1"
-                >
-                  <FileText className="w-3 h-3" />
-                  <span>Diagnóstico</span>
-                </TabsTrigger>
-              </TabsList>
+              <div className="w-full overflow-x-auto">
+                <TabsList className="grid w-full grid-cols-3 sm:grid-cols-6 text-xs gap-1 min-w-max">
+                  <TabsTrigger
+                    value="consulta_general"
+                    className="flex items-center justify-center space-x-1 min-w-0 px-2 sm:px-3"
+                  >
+                    <Stethoscope className="w-3 h-3 flex-shrink-0" />
+                    <span className="hidden sm:inline">General</span>
+                    <span className="sm:hidden">Gen</span>
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="vacunacion"
+                    className="flex items-center justify-center space-x-1 min-w-0 px-2 sm:px-3"
+                  >
+                    <Syringe className="w-3 h-3 flex-shrink-0" />
+                    <span className="hidden sm:inline">Vacunas</span>
+                    <span className="sm:hidden">Vac</span>
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="emergencia"
+                    className="flex items-center justify-center space-x-1 min-w-0 px-2 sm:px-3"
+                  >
+                    <Activity className="w-3 h-3 flex-shrink-0" />
+                    <span className="hidden sm:inline">Emergencia</span>
+                    <span className="sm:hidden">Emer</span>
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="grooming"
+                    className="flex items-center justify-center space-x-1 min-w-0 px-2 sm:px-3"
+                  >
+                    <PawPrint className="w-3 h-3 flex-shrink-0" />
+                    <span className="hidden sm:inline">Grooming</span>
+                    <span className="sm:hidden">Grm</span>
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="cirugia"
+                    className="flex items-center justify-center space-x-1 min-w-0 px-2 sm:px-3"
+                  >
+                    <Pill className="w-3 h-3 flex-shrink-0" />
+                    <span className="hidden sm:inline">Cirugía</span>
+                    <span className="sm:hidden">Cir</span>
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="diagnostico"
+                    className="flex items-center justify-center space-x-1 min-w-0 px-2 sm:px-3"
+                  >
+                    <FileText className="w-3 h-3 flex-shrink-0" />
+                    <span className="hidden sm:inline">Diagnóstico</span>
+                    <span className="sm:hidden">Diag</span>
+                  </TabsTrigger>
+                </TabsList>
+              </div>
 
               {/* Consulta General Tab */}
               <TabsContent value="consulta_general" className="space-y-4">
