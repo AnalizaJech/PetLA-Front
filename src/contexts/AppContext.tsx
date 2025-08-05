@@ -713,6 +713,54 @@ export function AppProvider({ children }: { children: ReactNode }) {
     localStorage.setItem("notificaciones", JSON.stringify(notificaciones));
   }, [notificaciones]);
 
+  // Auto-repair appointments without client information (one-time fix)
+  useEffect(() => {
+    const hasRunAutoRepair = localStorage.getItem('auto_repair_appointments_v1');
+
+    if (!hasRunAutoRepair && citas.length > 0 && mascotas.length > 0 && usuarios.length > 0) {
+      console.log('🔧 Ejecutando reparación automática de citas sin información de cliente...');
+
+      let repaired = 0;
+      const repairedCitas = citas.map(cita => {
+        if (!cita.clienteId && !cita.clienteNombre) {
+          // Try to find the pet and its owner
+          const mascotaEncontrada = mascotas.find(m =>
+            m.nombre.toLowerCase() === cita.mascota.toLowerCase() ||
+            m.id === cita.mascotaId
+          );
+
+          if (mascotaEncontrada) {
+            const propietario = usuarios.find(u =>
+              u.id === mascotaEncontrada.clienteId && u.rol === 'cliente'
+            );
+
+            if (propietario) {
+              repaired++;
+              console.log(`✅ Auto-reparada cita de "${cita.mascota}" vinculada con propietario ${propietario.nombre}`);
+
+              return {
+                ...cita,
+                mascotaId: mascotaEncontrada.id,
+                clienteId: propietario.id,
+                clienteNombre: propietario.nombre,
+              };
+            }
+          }
+        }
+
+        return cita;
+      });
+
+      if (repaired > 0) {
+        setCitas(repairedCitas);
+        console.log(`🎉 Auto-reparación completada: ${repaired} citas reparadas`);
+      }
+
+      // Mark as completed to avoid running again
+      localStorage.setItem('auto_repair_appointments_v1', 'completed');
+    }
+  }, [citas, mascotas, usuarios]);
+
   // Receipt/Voucher management functions
   const saveComprobante = async (
     citaId: string,
