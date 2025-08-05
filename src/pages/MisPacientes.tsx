@@ -135,11 +135,10 @@ export default function MisPacientes() {
   });
 
   // Estados para filtros y búsqueda
-  const [selectedTab, setSelectedTab] = useState("proximas");
   const [searchTerm, setSearchTerm] = useState("");
   const [filterOwner, setFilterOwner] = useState("todos");
   const [filterEspecie, setFilterEspecie] = useState("todos");
-  const [filterUrgencia, setFilterUrgencia] = useState("todos");
+  const [filterEstado, setFilterEstado] = useState("todos");
   const [sortBy, setSortBy] = useState<SortBy>("fecha_desc");
   const [showDataIssues, setShowDataIssues] = useState(false);
   const [showAutoFix, setShowAutoFix] = useState(false);
