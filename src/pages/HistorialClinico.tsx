@@ -1179,8 +1179,8 @@ export default function HistorialClinico() {
                         Sin servicios de vacunación registrados
                       </h3>
                       <p className="text-vet-gray-600 mb-6">
-                        {selectedMascota} no tiene servicios de vacunaci��n en su
-                        historial.
+                        {selectedMascota} no tiene servicios de vacunaci��n en
+                        su historial.
                       </p>
                       <Button
                         onClick={() => (window.location.href = "/mis-citas")}

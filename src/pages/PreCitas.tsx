@@ -89,8 +89,12 @@ export default function PreCitas() {
   const filteredPreCitas = preCitas
     .filter((preCita) => {
       const matchesSearch =
-        preCita.nombreCliente.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        preCita.nombreMascota.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        preCita.nombreCliente
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        preCita.nombreMascota
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
         preCita.email.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesStatus =
         selectedStatus === "todos" || preCita.estado === selectedStatus;

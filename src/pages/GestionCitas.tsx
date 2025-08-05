@@ -125,7 +125,8 @@ export default function GestionCitas() {
         selectedStatus === "todos" || cita.estado === selectedStatus;
 
       const matchesDate =
-        !selectedDate || cita.fecha.toISOString().split("T")[0] === selectedDate;
+        !selectedDate ||
+        cita.fecha.toISOString().split("T")[0] === selectedDate;
 
       return matchesSearch && matchesStatus && matchesDate;
     })

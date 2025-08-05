@@ -119,7 +119,9 @@ export default function Index() {
         tipoMascota: formData.tipoMascota,
         motivoConsulta: formData.motivoConsulta,
         fechaPreferida: (() => {
-          const [year, month, day] = formData.fechaPreferida.split('-').map(Number);
+          const [year, month, day] = formData.fechaPreferida
+            .split("-")
+            .map(Number);
           return new Date(year, month - 1, day);
         })(),
         horaPreferida: formData.horaPreferida,
@@ -605,7 +607,9 @@ export default function Index() {
                     date={
                       formData.fechaPreferida
                         ? (() => {
-                            const [year, month, day] = formData.fechaPreferida.split('-').map(Number);
+                            const [year, month, day] = formData.fechaPreferida
+                              .split("-")
+                              .map(Number);
                             return new Date(year, month - 1, day);
                           })()
                         : undefined
@@ -624,7 +628,10 @@ export default function Index() {
                         if (selectedDate >= today) {
                           // Formatear fecha directamente sin ajustes de zona horaria
                           const year = date.getFullYear();
-                          const month = String(date.getMonth() + 1).padStart(2, "0");
+                          const month = String(date.getMonth() + 1).padStart(
+                            2,
+                            "0",
+                          );
                           const day = String(date.getDate()).padStart(2, "0");
                           const formattedDate = `${year}-${month}-${day}`;
 

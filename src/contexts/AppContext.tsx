@@ -1065,8 +1065,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
   // Helper function to create dates safely
   const createSafeDate = (dateInput: string | Date): Date => {
     if (dateInput instanceof Date) return dateInput;
-    if (typeof dateInput === 'string' && dateInput.includes('-')) {
-      const [year, month, day] = dateInput.split('-').map(Number);
+    if (typeof dateInput === "string" && dateInput.includes("-")) {
+      const [year, month, day] = dateInput.split("-").map(Number);
       return new Date(year, month - 1, day);
     }
     return new Date(dateInput);
