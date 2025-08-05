@@ -37,7 +37,10 @@ interface ComprobanteData {
 interface Cita {
   id: string;
   mascota: string;
+  mascotaId?: string; // ID de la mascota
   especie: string;
+  clienteId?: string; // ID del cliente propietario
+  clienteNombre?: string; // Nombre del cliente para referencia rápida
   fecha: Date;
   estado: string;
   veterinario: string;
