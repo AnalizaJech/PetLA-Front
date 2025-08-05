@@ -669,7 +669,7 @@ export default function MisCitas() {
                     Información importante
                   </h4>
                   <ul className="text-sm text-blue-700 space-y-1">
-                    <li>�� Asegúrate de que el comprobante sea legible</li>
+                    <li>• Asegúrate de que el comprobante sea legible</li>
                     <li>
                       • Verifica que contenga la información completa del pago
                     </li>
