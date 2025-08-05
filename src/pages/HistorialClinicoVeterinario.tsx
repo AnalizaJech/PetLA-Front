@@ -584,9 +584,10 @@ export default function HistorialClinicoVeterinario() {
                               sistema:
                             </p>
                             {mascotasFantasma.map((fantasma, index) => (
-                              <div
+                              <button
                                 key={index}
-                                className="text-xs text-orange-700 mb-1"
+                                onClick={() => setSelectedPetByName(fantasma.nombre)}
+                                className="w-full text-left text-xs text-orange-700 mb-1 p-2 rounded hover:bg-orange-200 transition-colors"
                               >
                                 • <strong>{fantasma.nombre}</strong> (
                                 {fantasma.especie})
@@ -607,7 +608,11 @@ export default function HistorialClinicoVeterinario() {
                                     ).toLocaleDateString("es-ES")}
                                   </span>
                                 )}
-                              </div>
+                                <br />
+                                <span className="text-orange-600 text-xs">
+                                  👆 Click para ver historial
+                                </span>
+                              </button>
                             ))}
                           </div>
                         )}
