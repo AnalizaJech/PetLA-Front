@@ -229,10 +229,10 @@ export default function Layout({
                   <Link
                     to="/dashboard"
                     className={cn(
-                      "flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                      "flex items-center space-x-2 px-3 py-2 text-sm font-medium transition-colors relative",
                       location.pathname === "/dashboard"
-                        ? "bg-vet-primary text-white"
-                        : "text-vet-gray-600 hover:text-vet-primary hover:bg-vet-gray-100",
+                        ? "text-vet-primary border-b-2 border-vet-primary"
+                        : "text-vet-gray-600 hover:text-vet-primary",
                     )}
                   >
                     <Home className="w-4 h-4" />
@@ -247,10 +247,10 @@ export default function Layout({
                       <Link
                         to="/pre-citas"
                         className={cn(
-                          "flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                          "flex items-center space-x-2 px-3 py-2 text-sm font-medium transition-colors relative",
                           location.pathname === "/pre-citas"
-                            ? "bg-vet-primary text-white"
-                            : "text-vet-gray-600 hover:text-vet-primary hover:bg-vet-gray-100",
+                            ? "text-vet-primary border-b-2 border-vet-primary"
+                            : "text-vet-gray-600 hover:text-vet-primary",
                         )}
                       >
                         <Clock className="w-4 h-4" />
@@ -259,10 +259,10 @@ export default function Layout({
                       <Link
                         to="/gestion-citas"
                         className={cn(
-                          "flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                          "flex items-center space-x-2 px-3 py-2 text-sm font-medium transition-colors relative",
                           location.pathname === "/gestion-citas"
-                            ? "bg-vet-primary text-white"
-                            : "text-vet-gray-600 hover:text-vet-primary hover:bg-vet-gray-100",
+                            ? "text-vet-primary border-b-2 border-vet-primary"
+                            : "text-vet-gray-600 hover:text-vet-primary",
                         )}
                       >
                         <Calendar className="w-4 h-4" />
@@ -271,10 +271,10 @@ export default function Layout({
                       <Link
                         to="/usuarios"
                         className={cn(
-                          "flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                          "flex items-center space-x-2 px-3 py-2 text-sm font-medium transition-colors relative",
                           location.pathname === "/usuarios"
-                            ? "bg-vet-primary text-white"
-                            : "text-vet-gray-600 hover:text-vet-primary hover:bg-vet-gray-100",
+                            ? "text-vet-primary border-b-2 border-vet-primary"
+                            : "text-vet-gray-600 hover:text-vet-primary",
                         )}
                       >
                         <Users className="w-4 h-4" />
@@ -283,10 +283,10 @@ export default function Layout({
                       <Link
                         to="/veterinarios"
                         className={cn(
-                          "flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                          "flex items-center space-x-2 px-3 py-2 text-sm font-medium transition-colors relative",
                           location.pathname === "/veterinarios"
-                            ? "bg-vet-primary text-white"
-                            : "text-vet-gray-600 hover:text-vet-primary hover:bg-vet-gray-100",
+                            ? "text-vet-primary border-b-2 border-vet-primary"
+                            : "text-vet-gray-600 hover:text-vet-primary",
                         )}
                       >
                         <Stethoscope className="w-4 h-4" />
@@ -299,10 +299,10 @@ export default function Layout({
                       <Link
                         to="/mis-pacientes"
                         className={cn(
-                          "flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                          "flex items-center space-x-2 px-3 py-2 text-sm font-medium transition-colors relative",
                           location.pathname === "/mis-pacientes"
-                            ? "bg-vet-primary text-white"
-                            : "text-vet-gray-600 hover:text-vet-primary hover:bg-vet-gray-100",
+                            ? "text-vet-primary border-b-2 border-vet-primary"
+                            : "text-vet-gray-600 hover:text-vet-primary",
                         )}
                       >
                         <Stethoscope className="w-4 h-4" />
@@ -311,10 +311,10 @@ export default function Layout({
                       <Link
                         to="/calendario"
                         className={cn(
-                          "flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                          "flex items-center space-x-2 px-3 py-2 text-sm font-medium transition-colors relative",
                           location.pathname === "/calendario"
-                            ? "bg-vet-primary text-white"
-                            : "text-vet-gray-600 hover:text-vet-primary hover:bg-vet-gray-100",
+                            ? "text-vet-primary border-b-2 border-vet-primary"
+                            : "text-vet-gray-600 hover:text-vet-primary",
                         )}
                       >
                         <Calendar className="w-4 h-4" />
@@ -323,10 +323,10 @@ export default function Layout({
                       <Link
                         to="/historial-clinico-veterinario"
                         className={cn(
-                          "flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                          "flex items-center space-x-2 px-3 py-2 text-sm font-medium transition-colors relative",
                           location.pathname === "/historial-clinico-veterinario"
-                            ? "bg-vet-primary text-white"
-                            : "text-vet-gray-600 hover:text-vet-primary hover:bg-vet-gray-100",
+                            ? "text-vet-primary border-b-2 border-vet-primary"
+                            : "text-vet-gray-600 hover:text-vet-primary",
                         )}
                       >
                         <FileText className="w-4 h-4" />
@@ -339,10 +339,10 @@ export default function Layout({
                       <Link
                         to="/mascotas"
                         className={cn(
-                          "flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                          "flex items-center space-x-2 px-3 py-2 text-sm font-medium transition-colors relative",
                           location.pathname === "/mascotas"
-                            ? "bg-vet-primary text-white"
-                            : "text-vet-gray-600 hover:text-vet-primary hover:bg-vet-gray-100",
+                            ? "text-vet-primary border-b-2 border-vet-primary"
+                            : "text-vet-gray-600 hover:text-vet-primary",
                         )}
                       >
                         <PawPrint className="w-4 h-4" />
@@ -351,10 +351,10 @@ export default function Layout({
                       <Link
                         to="/mis-citas"
                         className={cn(
-                          "flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                          "flex items-center space-x-2 px-3 py-2 text-sm font-medium transition-colors relative",
                           location.pathname === "/mis-citas"
-                            ? "bg-vet-primary text-white"
-                            : "text-vet-gray-600 hover:text-vet-primary hover:bg-vet-gray-100",
+                            ? "text-vet-primary border-b-2 border-vet-primary"
+                            : "text-vet-gray-600 hover:text-vet-primary",
                         )}
                       >
                         <Clock className="w-4 h-4" />
@@ -363,10 +363,10 @@ export default function Layout({
                       <Link
                         to="/historial"
                         className={cn(
-                          "flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                          "flex items-center space-x-2 px-3 py-2 text-sm font-medium transition-colors relative",
                           location.pathname === "/historial"
-                            ? "bg-vet-primary text-white"
-                            : "text-vet-gray-600 hover:text-vet-primary hover:bg-vet-gray-100",
+                            ? "text-vet-primary border-b-2 border-vet-primary"
+                            : "text-vet-gray-600 hover:text-vet-primary",
                         )}
                       >
                         <FileText className="w-4 h-4" />
