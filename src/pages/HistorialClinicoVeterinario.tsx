@@ -644,8 +644,39 @@ export default function HistorialClinicoVeterinario() {
                               </h4>
                               <div className="space-y-1 text-sm text-vet-gray-600">
                                 <p><strong>Especie:</strong> {pet.especie}</p>
-                                <p><strong>Raza:</strong> {pet.raza || "No especificada"}</p>
-                                {pet.sexo && <p><strong>Sexo:</strong> {pet.sexo}</p>}
+                                <p>
+                                  <strong>Raza:</strong> {pet.raza || "No especificada"}
+                                  {!pet.raza && (
+                                    <span className="ml-2 text-xs text-yellow-600 bg-yellow-100 px-1 py-0.5 rounded">
+                                      Sin registrar
+                                    </span>
+                                  )}
+                                </p>
+                                <p>
+                                  <strong>Sexo:</strong> {pet.sexo || "No especificado"}
+                                  {!pet.sexo && (
+                                    <span className="ml-2 text-xs text-yellow-600 bg-yellow-100 px-1 py-0.5 rounded">
+                                      Sin registrar
+                                    </span>
+                                  )}
+                                </p>
+                                {pet.fechaNacimiento && (
+                                  <p><strong>Edad:</strong> {(() => {
+                                    const birthDate = new Date(pet.fechaNacimiento);
+                                    const today = new Date();
+                                    const ageInYears = Math.floor((today.getTime() - birthDate.getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+                                    const ageInMonths = Math.floor((today.getTime() - birthDate.getTime()) / (30.44 * 24 * 60 * 60 * 1000));
+
+                                    if (ageInYears >= 2) {
+                                      return `${ageInYears} años`;
+                                    } else if (ageInYears === 1) {
+                                      const extraMonths = ageInMonths - 12;
+                                      return extraMonths > 0 ? `1 año ${extraMonths} mes${extraMonths > 1 ? 'es' : ''}` : '1 año';
+                                    } else {
+                                      return `${ageInMonths} mes${ageInMonths > 1 ? 'es' : ''}`;
+                                    }
+                                  })()}</p>
+                                )}
                                 {pet.peso && <p><strong>Peso:</strong> {pet.peso} kg</p>}
                               </div>
                               <div className="flex items-center space-x-4 mt-3">
