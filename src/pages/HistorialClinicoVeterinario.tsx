@@ -705,9 +705,28 @@ export default function HistorialClinicoVeterinario() {
                       </h3>
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2 text-sm text-vet-gray-600">
                         <div><strong>Especie:</strong> {selectedPet.especie}</div>
-                        <div><strong>Raza:</strong> {selectedPet.raza || "No especificada"}</div>
-                        {selectedPet.sexo && <div><strong>Sexo:</strong> {selectedPet.sexo}</div>}
+                        <div>
+                          <strong>Raza:</strong> {selectedPet.raza || "No especificada"}
+                          {!selectedPet.raza && (
+                            <span className="ml-2 text-xs text-yellow-600 bg-yellow-100 px-2 py-1 rounded">
+                              Sin registrar
+                            </span>
+                          )}
+                        </div>
+                        <div>
+                          <strong>Sexo:</strong> {selectedPet.sexo || "No especificado"}
+                          {!selectedPet.sexo && (
+                            <span className="ml-2 text-xs text-yellow-600 bg-yellow-100 px-2 py-1 rounded">
+                              Sin registrar
+                            </span>
+                          )}
+                        </div>
                         {selectedPet.peso && <div><strong>Peso:</strong> {selectedPet.peso} kg</div>}
+                        {selectedPet.fechaNacimiento && (
+                          <div>
+                            <strong>Edad:</strong> {Math.floor((Date.now() - new Date(selectedPet.fechaNacimiento).getTime()) / (365.25 * 24 * 60 * 60 * 1000))} años
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
