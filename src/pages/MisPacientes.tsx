@@ -689,60 +689,101 @@ export default function MisPacientes() {
           )}
 
           {/* Filtros mejorados */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
-            <div className="relative lg:col-span-2">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
-              <Input
-                placeholder="Buscar por mascota, dueño, motivo..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
-            </div>
+          <Card className="mb-6">
+            <CardContent className="p-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
+                <div className="relative lg:col-span-2">
+                  <Search className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
+                  <Input
+                    placeholder="Buscar por mascota, dueño, motivo..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
 
-            <Select value={filterOwner} onValueChange={setFilterOwner}>
-              <SelectTrigger>
-                <User className="w-4 h-4 mr-2" />
-                <SelectValue placeholder="Propietario" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="todos">Todos los propietarios</SelectItem>
-                {misClientes.map((cliente) => (
-                  <SelectItem key={cliente.id} value={cliente.id}>
-                    {cliente.nombre}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+                <Select value={filterOwner} onValueChange={setFilterOwner}>
+                  <SelectTrigger>
+                    <User className="w-4 h-4 mr-2" />
+                    <SelectValue placeholder="Propietario" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="todos">Todos</SelectItem>
+                    {misClientes.map((cliente) => (
+                      <SelectItem key={cliente.id} value={cliente.id}>
+                        {cliente.nombre}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
 
-            <Select value={filterEspecie} onValueChange={setFilterEspecie}>
-              <SelectTrigger>
-                <PawPrint className="w-4 h-4 mr-2" />
-                <SelectValue placeholder="Especie" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="todos">Todas las especies</SelectItem>
-                {especiesUnicas.map((especie) => (
-                  <SelectItem key={especie} value={especie}>
-                    {especie}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+                <Select value={filterEspecie} onValueChange={setFilterEspecie}>
+                  <SelectTrigger>
+                    <PawPrint className="w-4 h-4 mr-2" />
+                    <SelectValue placeholder="Especie" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="todos">Todas</SelectItem>
+                    {especiesUnicas.map((especie) => (
+                      <SelectItem key={especie} value={especie}>
+                        {especie}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
 
-            <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger>
-                <Filter className="w-4 h-4 mr-2" />
-                <SelectValue placeholder="Ordenar" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="fecha_desc">Fecha (más reciente)</SelectItem>
-                <SelectItem value="fecha_asc">Fecha (más antigua)</SelectItem>
-                <SelectItem value="urgencia">Por urgencia</SelectItem>
-                <SelectItem value="mascota">Por mascota (A-Z)</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+                <Select value={filterEstado} onValueChange={setFilterEstado}>
+                  <SelectTrigger>
+                    <CheckCircle className="w-4 h-4 mr-2" />
+                    <SelectValue placeholder="Estado" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="todos">Todos</SelectItem>
+                    <SelectItem value="aceptada">Confirmadas</SelectItem>
+                    <SelectItem value="atendida">Completadas</SelectItem>
+                    <SelectItem value="en_validacion">En validación</SelectItem>
+                    <SelectItem value="pendiente_pago">Pendiente pago</SelectItem>
+                    <SelectItem value="cancelada">Canceladas</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger>
+                    <Filter className="w-4 h-4 mr-2" />
+                    <SelectValue placeholder="Ordenar" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="fecha_desc">Fecha ↓</SelectItem>
+                    <SelectItem value="fecha_asc">Fecha ↑</SelectItem>
+                    <SelectItem value="urgencia">Urgencia</SelectItem>
+                    <SelectItem value="mascota">Mascota A-Z</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {(filterOwner !== "todos" || filterEspecie !== "todos" || filterEstado !== "todos" || searchTerm) && (
+                <div className="flex items-center justify-between mt-4 pt-4 border-t border-vet-gray-200">
+                  <div className="flex items-center space-x-2 text-sm text-vet-gray-600">
+                    <Filter className="w-4 h-4" />
+                    <span>Filtros activos: {filteredCitas.length} resultado{filteredCitas.length !== 1 ? 's' : ''}</span>
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setFilterOwner("todos");
+                      setFilterEspecie("todos");
+                      setFilterEstado("todos");
+                      setSearchTerm("");
+                    }}
+                  >
+                    <X className="w-4 h-4 mr-2" />
+                    Limpiar filtros
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
 
           <Tabs
             value={selectedTab}
