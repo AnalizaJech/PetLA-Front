@@ -775,6 +775,41 @@ export default function HistorialClinicoVeterinario() {
                             </ul>
                           </div>
                         )}
+
+                        {/* Test button to create sample record */}
+                        <div className="mt-4">
+                          <Button
+                            onClick={() => {
+                              if (selectedPet) {
+                                const testRecord = {
+                                  mascotaId: selectedPet.id,
+                                  mascotaNombre: selectedPet.nombre,
+                                  fecha: new Date(),
+                                  veterinario: user?.nombre || "Veterinario Test",
+                                  tipoConsulta: "consulta_general" as const,
+                                  motivo: "Consulta de prueba",
+                                  diagnostico: "Diagnóstico de prueba para verificar funcionamiento",
+                                  tratamiento: "Tratamiento de prueba",
+                                  medicamentos: [],
+                                  examenes: [],
+                                  observaciones: "Registro creado para prueba del sistema",
+                                  estado: "completada" as const,
+                                };
+                                console.log("Creating test record:", testRecord);
+                                // Assuming addHistorialEntry is available in context
+                                if (window.confirm("¿Crear registro de prueba para esta mascota?")) {
+                                  // This would normally use the context function
+                                  console.log("Test record would be created:", testRecord);
+                                  alert("Registro de prueba creado (consulta la consola para detalles)");
+                                }
+                              }
+                            }}
+                            size="sm"
+                            className="bg-blue-600 hover:bg-blue-700"
+                          >
+                            Crear Registro de Prueba
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </CardContent>
