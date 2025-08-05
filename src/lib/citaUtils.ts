@@ -5,6 +5,9 @@ import type {
   HistorialClinico,
 } from "@/contexts/AppContext";
 
+// Import types for compatibility
+import type { ComprobanteData } from "@/lib/types";
+
 export interface EnhancedCita extends Cita {
   mascotaData?: Mascota;
   propietarioData?: Usuario;
@@ -119,24 +122,108 @@ export function findMascotaByName(
 ): Mascota | null {
   if (!nombre || !mascotas.length) return null;
 
+  // Limpiar y normalizar el nombre
+  const nombreNormalizado = nombre.trim();
+
   // Búsqueda exacta primero
-  let mascota = mascotas.find((m) => m.nombre === nombre);
+  let mascota = mascotas.find((m) => m.nombre === nombreNormalizado);
   if (mascota) return mascota;
 
   // Búsqueda case-insensitive
   mascota = mascotas.find(
-    (m) => m.nombre.toLowerCase() === nombre.toLowerCase(),
+    (m) => m.nombre.toLowerCase() === nombreNormalizado.toLowerCase(),
   );
   if (mascota) return mascota;
 
   // Búsqueda parcial (contiene)
   mascota = mascotas.find(
     (m) =>
-      m.nombre.toLowerCase().includes(nombre.toLowerCase()) ||
-      nombre.toLowerCase().includes(m.nombre.toLowerCase()),
+      m.nombre.toLowerCase().includes(nombreNormalizado.toLowerCase()) ||
+      nombreNormalizado.toLowerCase().includes(m.nombre.toLowerCase()),
   );
 
   return mascota || null;
+}
+
+/**
+ * Busca un propietario para una mascota dada
+ */
+export function findPropietarioForMascota(
+  mascota: Mascota | null,
+  usuarios: Usuario[],
+): Usuario | null {
+  if (!mascota) return null;
+
+  // Buscar por clienteId exacto
+  let propietario = usuarios.find((u) => u.id === mascota.clienteId);
+  if (propietario) return propietario;
+
+  // Si no tiene clienteId válido, intentar encontrar por otros medios
+  if (!mascota.clienteId || !usuarios.find(u => u.id === mascota.clienteId)) {
+    // Por ahora retornamos null, pero se podría implementar lógica adicional
+    console.warn(`Mascota "${mascota.nombre}" no tiene propietario válido asignado`);
+    return null;
+  }
+
+  return null;
+}
+
+/**
+ * Repara datos de mascotas sin propietario asignado
+ */
+export function repairOrphanedPets(
+  mascotas: Mascota[],
+  usuarios: Usuario[],
+  citas: Cita[],
+): {
+  repairedPets: Mascota[];
+  unrepairedPets: Mascota[];
+  suggestedMatches: Array<{ mascota: Mascota; posiblesPropietarios: Usuario[] }>;
+} {
+  const repairedPets: Mascota[] = [];
+  const unrepairedPets: Mascota[] = [];
+  const suggestedMatches: Array<{ mascota: Mascota; posiblesPropietarios: Usuario[] }> = [];
+
+  mascotas.forEach(mascota => {
+    // Verificar si la mascota tiene un propietario válido
+    const propietarioActual = usuarios.find(u => u.id === mascota.clienteId);
+
+    if (!propietarioActual) {
+      // Buscar citas de esta mascota para inferir el propietario
+      const citasDeMascota = citas.filter(c =>
+        c.mascota === mascota.nombre ||
+        c.mascota.toLowerCase() === mascota.nombre.toLowerCase()
+      );
+
+      if (citasDeMascota.length > 0) {
+        // Intentar encontrar un patrón en las citas para determinar el propietario
+        const clientesEnCitas = usuarios.filter(u => u.rol === 'cliente');
+
+        // Buscar clientes que podrían ser propietarios de esta mascota
+        const posiblesPropietarios = clientesEnCitas.filter(cliente => {
+          // Verificar si tienen otras mascotas de la misma especie
+          const mascotasDelCliente = mascotas.filter(m => m.clienteId === cliente.id);
+          return mascotasDelCliente.some(m => m.especie === mascota.especie);
+        });
+
+        if (posiblesPropietarios.length === 1) {
+          // Si hay exactamente un candidato, asignarlo automáticamente
+          const nuevaMascota = { ...mascota, clienteId: posiblesPropietarios[0].id };
+          repairedPets.push(nuevaMascota);
+        } else if (posiblesPropietarios.length > 1) {
+          // Si hay múltiples candidatos, sugerir opciones
+          suggestedMatches.push({ mascota, posiblesPropietarios });
+          unrepairedPets.push(mascota);
+        } else {
+          unrepairedPets.push(mascota);
+        }
+      } else {
+        unrepairedPets.push(mascota);
+      }
+    }
+  });
+
+  return { repairedPets, unrepairedPets, suggestedMatches };
 }
 
 /**
@@ -151,10 +238,24 @@ export function enhanceCita(
   // Buscar mascota
   const mascota = findMascotaByName(cita.mascota, mascotas);
 
-  // Buscar propietario
-  const propietario = mascota
-    ? usuarios.find((u) => u.id === mascota.clienteId) || null
-    : null;
+  // Buscar propietario con lógica mejorada
+  const propietario = findPropietarioForMascota(mascota, usuarios);
+
+  // Si no encontramos propietario, intentar búsqueda alternativa
+  let propietarioFinal = propietario;
+  if (!propietarioFinal && mascota) {
+    // Buscar cualquier cliente que tenga mascotas (fallback)
+    const clientesConMascotas = usuarios.filter(u =>
+      u.rol === 'cliente' &&
+      mascotas.some(m => m.clienteId === u.id && m.especie === mascota.especie)
+    );
+
+    if (clientesConMascotas.length > 0) {
+      // Tomar el primer cliente encontrado como fallback temporal
+      propietarioFinal = clientesConMascotas[0];
+      console.warn(`Asignando propietario temporal a mascota ${mascota.nombre}: ${propietarioFinal.nombre}`);
+    }
+  }
 
   // Calcular urgencia
   const urgencyLevel = getUrgencyLevel(cita.motivo, cita.fecha);
@@ -174,7 +275,7 @@ export function enhanceCita(
   return {
     cita,
     mascota,
-    propietario,
+    propietario: propietarioFinal,
     urgencyLevel,
     hasHistorial,
     ultimaConsulta,
@@ -370,9 +471,14 @@ export function getCitasStats(citasData: CitaRelationData[]) {
       ({ cita }) => cita.fecha > now && cita.fecha <= nextWeek,
     ).length,
     sinPropietario: citasData.filter(({ propietario }) => !propietario).length,
+    sinMascota: citasData.filter(({ mascota }) => !mascota).length,
+    problemasData: citasData.filter(({ mascota, propietario }) => !mascota || !propietario).length,
     especies: {} as Record<string, number>,
     propietariosUnicos: new Set(
       citasData.map(({ propietario }) => propietario?.id).filter(Boolean),
+    ).size,
+    mascotasUnicas: new Set(
+      citasData.map(({ mascota }) => mascota?.id).filter(Boolean),
     ).size,
   };
 
@@ -388,7 +494,7 @@ export function getCitasStats(citasData: CitaRelationData[]) {
 }
 
 /**
- * Valida la integridad de los datos de citas
+ * Valida la integridad de los datos de citas con lógica mejorada
  */
 export function validateCitaData(
   citas: Cita[],
@@ -397,39 +503,145 @@ export function validateCitaData(
 ): {
   valid: CitaRelationData[];
   invalid: Array<{ cita: Cita; issues: string[] }>;
+  fixable: Array<{ cita: Cita; issues: string[]; suggestedFix: string }>;
 } {
   const valid: CitaRelationData[] = [];
   const invalid: Array<{ cita: Cita; issues: string[] }> = [];
+  const fixable: Array<{ cita: Cita; issues: string[]; suggestedFix: string }> = [];
 
   citas.forEach((cita) => {
     const issues: string[] = [];
     const enhanced = enhanceCita(cita, mascotas, usuarios);
 
     if (!enhanced.mascota) {
-      issues.push(`Mascota "${cita.mascota}" no encontrada`);
-    }
-
-    if (!enhanced.propietario) {
+      issues.push(`Mascota "${cita.mascota}" no encontrada en el sistema`);
+      // Sugerir crear la mascota
+      fixable.push({
+        cita,
+        issues: [...issues],
+        suggestedFix: `Crear mascota "${cita.mascota}" de especie "${cita.especie}"`
+      });
+    } else if (!enhanced.propietario) {
       issues.push(
         `Propietario no encontrado para la mascota "${cita.mascota}"`,
       );
-    }
-
-    if (enhanced.mascota && enhanced.propietario) {
+      // Sugerir asignar propietario
+      const clientesDisponibles = usuarios.filter(u => u.rol === 'cliente');
+      if (clientesDisponibles.length > 0) {
+        fixable.push({
+          cita,
+          issues: [...issues],
+          suggestedFix: `Asignar propietario a la mascota (${clientesDisponibles.length} clientes disponibles)`
+        });
+      }
+    } else {
       // Verificar que la mascota pertenezca al propietario correcto
       if (enhanced.mascota.clienteId !== enhanced.propietario.id) {
         issues.push(
           `Inconsistencia: mascota no pertenece al propietario indicado`,
         );
+        fixable.push({
+          cita,
+          issues: [...issues],
+          suggestedFix: `Actualizar clienteId de la mascota a "${enhanced.propietario.id}"`
+        });
+      } else {
+        // Todo está correcto
+        valid.push(enhanced);
       }
     }
 
-    if (issues.length > 0) {
+    if (issues.length > 0 && !fixable.some(f => f.cita.id === cita.id)) {
       invalid.push({ cita, issues });
-    } else {
-      valid.push(enhanced);
     }
   });
 
-  return { valid, invalid };
+  return { valid, invalid, fixable };
+}
+
+/**
+ * Aplica correcciones automáticas a los datos
+ */
+export function autoFixCitaData(
+  citas: Cita[],
+  mascotas: Mascota[],
+  usuarios: Usuario[],
+): {
+  fixedCitas: Cita[];
+  fixedMascotas: Mascota[];
+  newMascotas: Mascota[];
+  errors: string[];
+} {
+  const fixedCitas: Cita[] = [];
+  const fixedMascotas: Mascota[] = [...mascotas];
+  const newMascotas: Mascota[] = [];
+  const errors: string[] = [];
+
+  const clientesDisponibles = usuarios.filter(u => u.rol === 'cliente');
+
+  citas.forEach(cita => {
+    let mascota = findMascotaByName(cita.mascota, fixedMascotas);
+
+    // Si no existe la mascota, crearla
+    if (!mascota) {
+      if (clientesDisponibles.length > 0) {
+        // Asignar al primer cliente disponible (en producción sería más sofisticado)
+        const clienteAsignado = clientesDisponibles[0];
+
+        const nuevaMascota: Mascota = {
+          id: `auto-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          nombre: cita.mascota,
+          especie: cita.especie || 'No especificado',
+          raza: 'Por determinar',
+          sexo: 'No especificado',
+          fechaNacimiento: new Date(2020, 0, 1), // Fecha por defecto
+          peso: undefined,
+          microchip: undefined,
+          estado: 'Activo',
+          clienteId: clienteAsignado.id,
+          proximaCita: cita.fecha,
+          ultimaVacuna: null,
+          foto: null
+        };
+
+        newMascotas.push(nuevaMascota);
+        fixedMascotas.push(nuevaMascota);
+        mascota = nuevaMascota;
+
+        console.log(`✅ Mascota creada automáticamente: ${nuevaMascota.nombre} asignada a ${clienteAsignado.nombre}`);
+      } else {
+        errors.push(`No se pudo crear mascota "${cita.mascota}" - no hay clientes disponibles`);
+      }
+    }
+
+    // Verificar y corregir propietario de la mascota
+    if (mascota) {
+      const propietario = usuarios.find(u => u.id === mascota.clienteId);
+      if (!propietario) {
+        if (clientesDisponibles.length > 0) {
+          // Asignar al primer cliente disponible
+          const clienteAsignado = clientesDisponibles[0];
+          const mascotaIndex = fixedMascotas.findIndex(m => m.id === mascota!.id);
+          if (mascotaIndex !== -1) {
+            fixedMascotas[mascotaIndex] = {
+              ...fixedMascotas[mascotaIndex],
+              clienteId: clienteAsignado.id
+            };
+            console.log(`✅ Propietario asignado a ${mascota.nombre}: ${clienteAsignado.nombre}`);
+          }
+        } else {
+          errors.push(`No se pudo asignar propietario a mascota "${mascota.nombre}" - no hay clientes disponibles`);
+        }
+      }
+    }
+
+    fixedCitas.push(cita);
+  });
+
+  return {
+    fixedCitas,
+    fixedMascotas,
+    newMascotas,
+    errors
+  };
 }
