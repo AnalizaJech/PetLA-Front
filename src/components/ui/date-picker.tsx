@@ -75,8 +75,8 @@ export function DatePicker({
         placeholderText={placeholder}
         disabled={disabled}
         className="w-full"
-        calendarClassName="!z-[1000]"
-        popperClassName="!z-[1000]"
+        calendarClassName="!z-50"
+        popperClassName="!z-50"
         popperPlacement="bottom-start"
         showPopperArrow={false}
         fixedHeight
