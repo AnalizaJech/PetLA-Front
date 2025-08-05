@@ -162,12 +162,12 @@ export default function Login() {
         {/* Login Tab */}
         <TabsContent value="login">
           <Card className="border-0 shadow-2xl bg-white/95 backdrop-blur-sm">
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
+            <CardHeader className="text-center pb-6">
+              <CardTitle className="flex items-center justify-center space-x-2 text-xl">
                 <User className="w-5 h-5 text-vet-primary" />
-                <span>Iniciar Sesión</span>
+                <span className="text-vet-gray-900">Iniciar Sesión</span>
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-vet-gray-600 mt-2">
                 Ingresa tus credenciales para acceder a tu cuenta
               </CardDescription>
             </CardHeader>
@@ -272,12 +272,12 @@ export default function Login() {
         {/* Register Tab */}
         <TabsContent value="register">
           <Card className="border-0 shadow-2xl bg-white/95 backdrop-blur-sm">
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
+            <CardHeader className="text-center pb-6">
+              <CardTitle className="flex items-center justify-center space-x-2 text-xl">
                 <Dog className="w-5 h-5 text-vet-primary" />
-                <span>Crear Cuenta</span>
+                <span className="text-vet-gray-900">Crear Cuenta</span>
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-vet-gray-600 mt-2">
                 Regístrate para acceder a todos nuestros servicios
               </CardDescription>
             </CardHeader>
