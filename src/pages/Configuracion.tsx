@@ -55,6 +55,40 @@ import {
   Calendar,
 } from "lucide-react";
 
+// Helper function to safely convert date to string format
+const formatDateForInput = (date: any): string => {
+  if (!date) return "";
+
+  // If it's already a string in the correct format, return it
+  if (typeof date === "string") {
+    // Check if it's already in YYYY-MM-DD format
+    if (/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+      return date;
+    }
+    // Try to parse it as a date
+    const parsedDate = new Date(date);
+    if (!isNaN(parsedDate.getTime())) {
+      return parsedDate.toISOString().split("T")[0];
+    }
+    return "";
+  }
+
+  // If it's a Date object
+  if (date instanceof Date && !isNaN(date.getTime())) {
+    return date.toISOString().split("T")[0];
+  }
+
+  // If it's a timestamp
+  if (typeof date === "number") {
+    const dateObj = new Date(date);
+    if (!isNaN(dateObj.getTime())) {
+      return dateObj.toISOString().split("T")[0];
+    }
+  }
+
+  return "";
+};
+
 export default function Configuracion() {
   const { user, setUser, updateUsuario } = useAppContext();
   const [isLoading, setIsLoading] = useState(false);
@@ -142,9 +176,7 @@ export default function Configuracion() {
     email: user?.email || "",
     telefono: user?.telefono || "",
     direccion: user?.direccion || "",
-    fechaNacimiento: user?.fechaNacimiento
-      ? user.fechaNacimiento.toISOString().split("T")[0]
-      : "",
+    fechaNacimiento: formatDateForInput(user?.fechaNacimiento),
     genero: user?.genero || "",
     bio: loadSettings("user_bio", ""),
     foto: user?.foto || null,
@@ -212,9 +244,7 @@ export default function Configuracion() {
         email: user.email || "",
         telefono: user.telefono || "",
         direccion: user.direccion || "",
-        fechaNacimiento: user.fechaNacimiento
-          ? user.fechaNacimiento.toISOString().split("T")[0]
-          : "",
+        fechaNacimiento: formatDateForInput(user.fechaNacimiento),
         genero: user.genero || "",
         foto: user.foto || null,
         documento: user.documento || "",
