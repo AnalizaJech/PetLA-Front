@@ -265,18 +265,56 @@ export default function HistorialClinicoVeterinario() {
     if (!selectedPet || !historialMascota.length) return;
 
     const doc = new jsPDF();
-    
+
     // Header
     doc.setFontSize(20);
-    doc.text("Historial Clínico", 20, 20);
-    
+    doc.text("Historial Clínico Veterinario", 20, 20);
+
+    doc.setFontSize(12);
+    doc.text(`Generado: ${new Date().toLocaleDateString("es-ES")}`, 20, 30);
+
+    // Pet information
     doc.setFontSize(14);
-    doc.text(`Mascota: ${selectedPet.nombre}`, 20, 35);
-    doc.text(`Especie: ${selectedPet.especie}`, 20, 45);
-    doc.text(`Raza: ${selectedPet.raza}`, 20, 55);
-    doc.text(`Propietario: ${selectedOwner.nombre}`, 20, 65);
-    
-    let y = 85;
+    doc.text("INFORMACIÓN DE LA MASCOTA", 20, 45);
+    doc.setFontSize(11);
+    doc.text(`Nombre: ${selectedPet.nombre}`, 20, 55);
+    doc.text(`Especie: ${selectedPet.especie}`, 20, 62);
+    doc.text(`Raza: ${selectedPet.raza || "No especificada"}`, 20, 69);
+    doc.text(`Sexo: ${selectedPet.sexo || "No especificado"}`, 20, 76);
+
+    // Calculate and show age
+    if (selectedPet.fechaNacimiento) {
+      const birthDate = new Date(selectedPet.fechaNacimiento);
+      const today = new Date();
+      const ageInYears = Math.floor((today.getTime() - birthDate.getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+      const ageInMonths = Math.floor((today.getTime() - birthDate.getTime()) / (30.44 * 24 * 60 * 60 * 1000));
+
+      let ageText;
+      if (ageInYears >= 2) {
+        ageText = `${ageInYears} años`;
+      } else if (ageInYears === 1) {
+        const extraMonths = ageInMonths - 12;
+        ageText = extraMonths > 0 ? `1 año ${extraMonths} mes${extraMonths > 1 ? 'es' : ''}` : '1 año';
+      } else {
+        ageText = `${ageInMonths} mes${ageInMonths > 1 ? 'es' : ''}`;
+      }
+
+      doc.text(`Edad: ${ageText}`, 20, 83);
+      doc.text(`Fecha de nacimiento: ${birthDate.toLocaleDateString("es-ES")}`, 20, 90);
+    }
+
+    if (selectedPet.peso) {
+      doc.text(`Peso actual: ${selectedPet.peso} kg`, 20, 97);
+    }
+
+    if (selectedOwner) {
+      doc.text(`Propietario: ${selectedOwner.nombre}`, 20, 104);
+      if (selectedOwner.telefono) {
+        doc.text(`Teléfono: ${selectedOwner.telefono}`, 20, 111);
+      }
+    }
+
+    let y = 125;
     
     filteredHistory.forEach((record, index) => {
       if (y > 270) {
