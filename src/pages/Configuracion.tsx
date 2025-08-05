@@ -422,6 +422,97 @@ export default function Configuracion() {
     }
   };
 
+  // Photo management functions
+  const handlePhotoUpload = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        setPhotoFile(file);
+        // Convert to Base64 for preview and storage
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const base64String = event.target?.result as string;
+          setPhotoPreviewURL(base64String);
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+    input.click();
+  };
+
+  const handleConfirmPhoto = () => {
+    if (photoFile && photoPreviewURL) {
+      try {
+        // Compress image before saving to optimize localStorage
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        const img = new Image();
+
+        img.onload = () => {
+          // Resize to a maximum size of 400x400 for optimized storage
+          const maxSize = 400;
+          let { width, height } = img;
+
+          if (width > height) {
+            if (width > maxSize) {
+              height = (height * maxSize) / width;
+              width = maxSize;
+            }
+          } else {
+            if (height > maxSize) {
+              width = (width * maxSize) / height;
+              height = maxSize;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+
+          // Draw resized image
+          ctx?.drawImage(img, 0, 0, width, height);
+
+          // Convert to base64 with optimized quality (0.7 = 70% quality)
+          const compressedBase64 = canvas.toDataURL("image/jpeg", 0.7);
+
+          // Update profile data with optimized image
+          setProfileData(prev => ({
+            ...prev,
+            foto: compressedBase64
+          }));
+
+          handleClosePhotoModal();
+        };
+
+        img.src = photoPreviewURL;
+      } catch (error) {
+        console.error("Error processing image:", error);
+        // Fallback: save original image if there's an error
+        setProfileData(prev => ({
+          ...prev,
+          foto: photoPreviewURL
+        }));
+        handleClosePhotoModal();
+      }
+    }
+  };
+
+  const handleRemovePhoto = () => {
+    setProfileData(prev => ({
+      ...prev,
+      foto: null
+    }));
+    handleClosePhotoModal();
+  };
+
+  const handleClosePhotoModal = () => {
+    setShowPhotoModal(false);
+    setPhotoFile(null);
+    setPhotoPreviewURL(null);
+  };
+
   return (
     <Layout>
       <div className="min-h-screen bg-vet-gray-50 py-8">
@@ -1253,6 +1344,128 @@ export default function Configuracion() {
               </Card>
             </TabsContent>
           </Tabs>
+
+          {/* Photo Management Modal */}
+          <Dialog open={showPhotoModal} onOpenChange={setShowPhotoModal}>
+            <DialogContent className="max-w-sm w-full mx-4 max-h-[85vh] overflow-hidden flex flex-col">
+              <DialogHeader className="flex-shrink-0">
+                <DialogTitle className="flex items-center space-x-2 text-base">
+                  <Camera className="w-4 h-4 text-vet-primary flex-shrink-0" />
+                  <span className="truncate">
+                    {profileData.foto ? "Cambiar" : "Agregar"} Foto de Perfil
+                  </span>
+                </DialogTitle>
+                <DialogDescription className="text-sm">
+                  {profileData.foto
+                    ? "Cambia tu foto de perfil o elimínala"
+                    : "Agrega una foto para personalizar tu perfil"}
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="flex-1 overflow-y-auto">
+                <div className="space-y-3 py-2">
+                  {/* Current or preview photo */}
+                  <div className="flex justify-center">
+                    <div className="w-24 h-24 rounded-full overflow-hidden bg-vet-gray-100 flex items-center justify-center flex-shrink-0">
+                      {photoPreviewURL ? (
+                        <img
+                          src={photoPreviewURL}
+                          alt="Vista previa"
+                          className="w-full h-full object-cover"
+                        />
+                      ) : profileData.foto ? (
+                        <img
+                          src={profileData.foto}
+                          alt={`Foto actual de ${profileData.nombre}`}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <User className="w-12 h-12 text-vet-gray-400" />
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Photo info */}
+                  {photoFile && (
+                    <div className="bg-vet-gray-50 rounded-lg p-2">
+                      <div className="flex items-center space-x-2">
+                        <ImageIcon className="w-4 h-4 text-vet-primary flex-shrink-0" />
+                        <div className="min-w-0">
+                          <p className="text-sm font-medium text-vet-gray-900 truncate">
+                            {photoFile.name}
+                          </p>
+                          <p className="text-xs text-vet-gray-500">
+                            {(photoFile.size / 1024 / 1024).toFixed(2)} MB
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Instructions */}
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-2">
+                    <div className="flex items-start space-x-2">
+                      <Camera className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                      <div className="min-w-0">
+                        <p className="text-sm text-blue-700 font-medium">
+                          Consejos para una buena foto:
+                        </p>
+                        <ul className="text-xs text-blue-600 mt-1 space-y-0.5">
+                          <li>• Buena iluminación natural</li>
+                          <li>• Enfoque del rostro</li>
+                          <li>• Fondo simple</li>
+                          <li>• Máximo 5MB</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <DialogFooter className="flex-shrink-0 pt-4">
+                <div className="flex flex-col w-full gap-2">
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      onClick={handleClosePhotoModal}
+                      className="flex-1 text-sm h-9"
+                    >
+                      <X className="w-4 h-4 mr-1" />
+                      Cancelar
+                    </Button>
+
+                    {profileData.foto && !photoFile && (
+                      <Button
+                        variant="outline"
+                        onClick={handleRemovePhoto}
+                        className="flex-1 text-red-600 hover:text-red-700 text-sm h-9"
+                      >
+                        <X className="w-4 h-4 mr-1" />
+                        Eliminar
+                      </Button>
+                    )}
+                  </div>
+
+                  <Button
+                    onClick={photoFile ? handleConfirmPhoto : handlePhotoUpload}
+                    className="w-full bg-vet-primary hover:bg-vet-primary-dark text-sm h-9"
+                  >
+                    {photoFile ? (
+                      <>
+                        <Upload className="w-4 h-4 mr-1" />
+                        Confirmar
+                      </>
+                    ) : (
+                      <>
+                        <Camera className="w-4 h-4 mr-1" />
+                        {profileData.foto ? "Cambiar" : "Seleccionar"}
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
     </Layout>
