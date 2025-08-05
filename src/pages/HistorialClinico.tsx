@@ -505,10 +505,20 @@ export default function HistorialClinico() {
     contenido += `Sexo: ${mascotaInfo.sexo || "No registrado"}\n`;
     contenido += `Microchip: ${mascotaInfo.microchip || "No registrado"}\n\n`;
 
-    if (historialMascota.consultas.length > 0) {
+    // Obtener todas las consultas de todos los tipos
+    const todasLasConsultas = [
+      ...historialMascota.consulta_general,
+      ...historialMascota.vacunacion,
+      ...historialMascota.emergencia,
+      ...historialMascota.grooming,
+      ...historialMascota.cirugia,
+      ...historialMascota.diagnostico,
+    ];
+
+    if (todasLasConsultas.length > 0) {
       contenido += `CONSULTAS MÉDICAS\n`;
       contenido += `-`.repeat(30) + `\n`;
-      historialMascota.consultas.forEach((consulta, index) => {
+      todasLasConsultas.forEach((consulta, index) => {
         contenido += `\nConsulta #${index + 1}\n`;
         contenido += `Fecha: ${consulta.fecha.toLocaleDateString("es-ES")}\n`;
         contenido += `Veterinario: ${consulta.veterinario}\n`;
@@ -516,7 +526,7 @@ export default function HistorialClinico() {
         contenido += `Diagnóstico: ${consulta.diagnostico}\n`;
         contenido += `Tratamiento: ${consulta.tratamiento}\n`;
 
-        if (consulta.medicamentos.length > 0) {
+        if (consulta.medicamentos && consulta.medicamentos.length > 0) {
           contenido += `Medicamentos:\n`;
           consulta.medicamentos.forEach((med) => {
             contenido += `  - ${med.nombre}: ${med.dosis} (${med.duracion})\n`;
