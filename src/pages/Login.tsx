@@ -154,7 +154,7 @@ export default function Login() {
         {/* Login Tab */}
         <TabsContent value="login">
           <Card className="border-0 shadow-2xl bg-white/95 backdrop-blur-sm">
-            <CardHeader className="text-center pb-6">
+            <CardHeader className="text-center pb-3">
               <CardTitle className="flex items-center justify-center space-x-2 text-xl">
                 <User className="w-5 h-5 text-vet-primary" />
                 <span className="text-vet-gray-900">Iniciar Sesión</span>
@@ -264,7 +264,7 @@ export default function Login() {
         {/* Register Tab */}
         <TabsContent value="register">
           <Card className="border-0 shadow-2xl bg-white/95 backdrop-blur-sm">
-            <CardHeader className="text-center pb-6">
+            <CardHeader className="text-center pb-3">
               <CardTitle className="flex items-center justify-center space-x-2 text-xl">
                 <Dog className="w-5 h-5 text-vet-primary" />
                 <span className="text-vet-gray-900">Crear Cuenta</span>
