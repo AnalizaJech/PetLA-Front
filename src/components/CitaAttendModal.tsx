@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useAppContext } from "@/contexts/AppContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,20 +12,28 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
+  Stethoscope,
   Activity,
-  Save,
-  FileText,
   Heart,
   Thermometer,
   Weight,
-  CalendarPlus,
   Pill,
-  ClipboardList,
-  Edit3,
+  Plus,
+  Trash2,
+  CheckCircle,
+  AlertCircle,
+  X,
+  Save,
 } from "lucide-react";
 import type { CitaRelationData } from "@/lib/citaUtils";
-import { findMascotaByName } from "@/lib/citaUtils";
-import { useToast } from "@/hooks/use-toast";
 
 interface CitaAttendModalProps {
   isOpen: boolean;
@@ -34,417 +42,502 @@ interface CitaAttendModalProps {
   onSave?: () => void;
 }
 
+interface Medicamento {
+  nombre: string;
+  dosis: string;
+  frecuencia: string;
+  duracion: string;
+  indicaciones?: string;
+}
+
+interface Examen {
+  tipo: string;
+  resultado: string;
+}
+
 export default function CitaAttendModal({
   isOpen,
   onClose,
   selectedCita,
   onSave,
 }: CitaAttendModalProps) {
-  const { updateCita, user, addHistorialEntry, mascotas } = useAppContext();
-  const { toast } = useToast();
-
-  // Debug: verificar datos del contexto
-  console.log("CitaAttendModal - Datos del contexto:", {
-    mascotasCount: mascotas?.length || 0,
-    user: user?.nombre,
-    selectedCita: selectedCita?.cita?.mascota,
-  });
-
-  const [newConsulta, setNewConsulta] = useState({
-    motivo: "",
-    diagnostico: "",
-    tratamiento: "",
-    medicamentos: "",
-    notas: "",
+  const { user, updateCita, addHistorialEntry } = useAppContext();
+  
+  // Form state
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+  
+  // Medical consultation form data
+  const [formData, setFormData] = useState({
     peso: "",
     temperatura: "",
-    proximaCita: "",
+    presionArterial: "",
+    frecuenciaCardiaca: "",
+    diagnostico: "",
+    tratamiento: "",
+    observaciones: "",
+    proximaVisita: "",
   });
+  
+  const [medicamentos, setMedicamentos] = useState<Medicamento[]>([]);
+  const [examenes, setExamenes] = useState<Examen[]>([]);
+  const [attended, setAttended] = useState<boolean | null>(null);
 
-  // Reset form when modal opens with new cita
-  useEffect(() => {
-    if (selectedCita && isOpen) {
-      setNewConsulta((prev) => ({
-        ...prev,
-        motivo: selectedCita.cita.motivo,
-      }));
-    }
-  }, [selectedCita, isOpen]);
-
-  const handleSaveConsulta = () => {
-    console.log("Intentando guardar consulta...", {
-      selectedCita,
-      user,
-      newConsulta,
-    });
-
-    if (!selectedCita || !user) {
-      console.error("Faltan datos requeridos:", { selectedCita, user });
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Faltan datos requeridos para guardar la consulta",
-      });
-      return;
-    }
-
-    console.log("=== INICIO BÚSQUEDA DE MASCOTA ===");
-    console.log("mascotas.length:", mascotas.length);
-    console.log("selectedCita.mascota:", selectedCita.mascota);
-    console.log("selectedCita.cita.mascota:", selectedCita.cita.mascota);
-
-    // Encontrar la mascota asociada a la cita - usar utilidad robusta
-    let mascota = selectedCita.mascota;
-
-    // Si no hay mascota directa, usar la función de búsqueda robusta
-    if (!mascota) {
-      mascota = findMascotaByName(selectedCita.cita.mascota, mascotas);
-    }
-
-    // Como último recurso, buscar por ID si selectedCita.cita.mascota es un ID
-    if (!mascota) {
-      mascota = mascotas.find((m) => m.id === selectedCita.cita.mascota);
-    }
-
-    if (!mascota) {
-      console.error("No se pudo encontrar la mascota para la cita:");
-      console.error(
-        "Datos completos de selectedCita:",
-        JSON.stringify(selectedCita, null, 2),
-      );
-      console.error("Lista de mascotas:", JSON.stringify(mascotas, null, 2));
-
-      // Si no hay mascotas cargadas, crear una mascota temporal basada en los datos de la cita
-      console.log("=== VERIFICANDO SI CREAR MASCOTA TEMPORAL ===");
-      console.log("mascotas.length === 0:", mascotas.length === 0);
-      if (mascotas.length === 0) {
-        console.log("✅ CREANDO MASCOTA TEMPORAL...");
-        mascota = {
-          id: `temp_${selectedCita.cita.id}`,
-          nombre: selectedCita.cita.mascota,
-          especie: selectedCita.cita.especie,
-          raza: "No especificado",
-          sexo: "No especificado",
-          fechaNacimiento: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000), // 1 año atrás por defecto
-          estado: "activo",
-          clienteId: "temp_cliente",
-        };
-        console.log("Mascota temporal creada:", mascota);
-      } else {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "No se pudo encontrar la información de la mascota",
-        });
-        return;
-      }
-    }
-
-    console.log("Datos de búsqueda de mascota:");
-    console.log("- selectedCita.mascota:", selectedCita.mascota);
-    console.log("- selectedCita.cita.mascota:", selectedCita.cita.mascota);
-    console.log("- mascotas disponibles:", mascotas);
-    console.log("- mascota encontrada:", mascota);
-
-    // Validación básica
-    if (!newConsulta.motivo && !selectedCita.cita.motivo) {
-      toast({
-        variant: "destructive",
-        title: "Validación",
-        description: "Por favor completa el motivo de la consulta",
-      });
-      return;
-    }
-
-    // Crear entrada en el historial clínico
-    const historialEntry = {
-      mascotaId: mascota.id,
-      mascotaNombre: mascota.nombre,
-      fecha: new Date(),
-      veterinario: user.nombre,
-      tipoConsulta: "consulta_general" as const,
-      motivo: newConsulta.motivo || selectedCita.cita.motivo,
-      diagnostico: newConsulta.diagnostico,
-      tratamiento: newConsulta.tratamiento,
-      medicamentos: newConsulta.medicamentos
-        ? [
-            {
-              nombre: newConsulta.medicamentos,
-              dosis: "",
-              frecuencia: "",
-              duracion: "",
-            },
-          ]
-        : [],
-      peso: newConsulta.peso,
-      temperatura: newConsulta.temperatura,
-      observaciones: newConsulta.notas,
-      estado: "completada" as const,
-      proximaVisita: newConsulta.proximaCita
-        ? new Date(newConsulta.proximaCita)
-        : undefined,
-    };
-
-    console.log("Guardando entrada en historial:", historialEntry);
-
-    try {
-      // Guardar en el historial clínico
-      addHistorialEntry(historialEntry);
-      console.log("Historial guardado exitosamente");
-
-      // Marcar cita como atendida
-      updateCita(selectedCita.cita.id, {
-        estado: "atendida",
-        notas: `Consulta registrada: ${newConsulta.diagnostico || "Sin diagnóstico específico"}`,
-      });
-      console.log("Cita actualizada exitosamente");
-
-      // Toast de éxito con animación
-      toast({
-        title: "✅ ¡Consulta guardada!",
-        description: `La consulta de ${mascota.nombre} se registró exitosamente`,
-        className: "bg-green-50 border-green-200 text-green-800",
-      });
-
-      // Limpiar estado
-      onClose();
-    } catch (error) {
-      console.error("Error al guardar la consulta:", error);
-      toast({
-        variant: "destructive",
-        title: "Error al guardar",
-        description:
-          "No se pudo guardar la consulta. Por favor intenta nuevamente.",
-      });
-    }
-    setNewConsulta({
-      motivo: "",
-      diagnostico: "",
-      tratamiento: "",
-      medicamentos: "",
-      notas: "",
+  const resetForm = () => {
+    setFormData({
       peso: "",
       temperatura: "",
-      proximaCita: "",
+      presionArterial: "",
+      frecuenciaCardiaca: "",
+      diagnostico: "",
+      tratamiento: "",
+      observaciones: "",
+      proximaVisita: "",
     });
-
-    // Callback para actualizar la vista padre
-    if (onSave) {
-      onSave();
-    }
+    setMedicamentos([]);
+    setExamenes([]);
+    setAttended(null);
+    setMessage("");
+    setError("");
   };
 
   const handleClose = () => {
+    resetForm();
     onClose();
-    // Reset form
-    setNewConsulta({
-      motivo: "",
-      diagnostico: "",
-      tratamiento: "",
-      medicamentos: "",
-      notas: "",
-      peso: "",
-      temperatura: "",
-      proximaCita: "",
-    });
+  };
+
+  const addMedicamento = () => {
+    setMedicamentos([
+      ...medicamentos,
+      { nombre: "", dosis: "", frecuencia: "", duracion: "", indicaciones: "" },
+    ]);
+  };
+
+  const removeMedicamento = (index: number) => {
+    setMedicamentos(medicamentos.filter((_, i) => i !== index));
+  };
+
+  const updateMedicamento = (index: number, field: keyof Medicamento, value: string) => {
+    const updated = [...medicamentos];
+    updated[index] = { ...updated[index], [field]: value };
+    setMedicamentos(updated);
+  };
+
+  const addExamen = () => {
+    setExamenes([...examenes, { tipo: "", resultado: "" }]);
+  };
+
+  const removeExamen = (index: number) => {
+    setExamenes(examenes.filter((_, i) => i !== index));
+  };
+
+  const updateExamen = (index: number, field: keyof Examen, value: string) => {
+    const updated = [...examenes];
+    updated[index] = { ...updated[index], [field]: value };
+    setExamenes(updated);
+  };
+
+  const handleSaveConsultation = async () => {
+    if (!selectedCita || !user || attended === null) {
+      setError("Información incompleta para registrar la consulta");
+      return;
+    }
+
+    if (attended && !formData.diagnostico.trim()) {
+      setError("El diagnóstico es requerido para consultas atendidas");
+      return;
+    }
+
+    setIsProcessing(true);
+    setError("");
+
+    try {
+      // Update appointment status
+      await updateCita(selectedCita.cita.id, {
+        estado: attended ? "atendida" : "no_asistio",
+        notas: attended ? formData.observaciones : "El paciente no asistió a la cita",
+      });
+
+      // If attended, create medical history entry
+      if (attended && selectedCita.mascota) {
+        const historialEntry = {
+          mascotaId: selectedCita.mascota.id,
+          mascotaNombre: selectedCita.mascota.nombre,
+          fecha: new Date(),
+          veterinario: user.nombre,
+          tipoConsulta: selectedCita.cita.tipoConsulta as any,
+          motivo: selectedCita.cita.motivo,
+          diagnostico: formData.diagnostico,
+          tratamiento: formData.tratamiento,
+          medicamentos: medicamentos.filter(m => m.nombre.trim()),
+          examenes: examenes.filter(e => e.tipo.trim()),
+          peso: formData.peso || undefined,
+          temperatura: formData.temperatura || undefined,
+          presionArterial: formData.presionArterial || undefined,
+          frecuenciaCardiaca: formData.frecuenciaCardiaca || undefined,
+          observaciones: formData.observaciones,
+          proximaVisita: formData.proximaVisita ? new Date(formData.proximaVisita) : undefined,
+          estado: "completada" as const,
+        };
+
+        await addHistorialEntry(historialEntry);
+      }
+
+      setMessage(
+        attended 
+          ? "Consulta registrada exitosamente"
+          : "Marcado como no asistió"
+      );
+
+      setTimeout(() => {
+        handleClose();
+        onSave?.();
+      }, 1500);
+
+    } catch (error) {
+      console.error("Error saving consultation:", error);
+      setError("Error al guardar la consulta");
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   if (!selectedCita) return null;
 
+  const { cita, mascota, propietario } = selectedCita;
+
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="flex items-center space-x-2">
-            <Activity className="w-5 h-5 text-vet-primary" />
-            <span>Registrar Consulta</span>
-          </DialogTitle>
-          <DialogDescription>
-            Completa la información de la consulta médica para{" "}
-            {selectedCita.cita.mascota}
-          </DialogDescription>
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-vet-primary/10 rounded-lg flex items-center justify-center">
+              <Activity className="w-5 h-5 text-vet-primary" />
+            </div>
+            <div>
+              <DialogTitle className="text-xl font-semibold text-vet-gray-900">
+                Registrar Atención Médica
+              </DialogTitle>
+              <DialogDescription className="text-vet-gray-600">
+                Registra la consulta médica para {cita.mascota}
+              </DialogDescription>
+            </div>
+          </div>
         </DialogHeader>
 
-        <div className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="motivo" className="flex items-center space-x-2">
-                <FileText className="w-4 h-4" />
-                <span>Motivo de consulta</span>
-              </Label>
-              <Input
-                id="motivo"
-                value={newConsulta.motivo}
-                onChange={(e) =>
-                  setNewConsulta({
-                    ...newConsulta,
-                    motivo: e.target.value,
-                  })
-                }
-                placeholder="Ej: Revisión general"
-              />
+        <div className="space-y-6 pt-4">
+          {/* Patient Information */}
+          <div className="bg-vet-gray-50 rounded-lg p-4">
+            <h4 className="font-semibold text-vet-gray-900 mb-3 flex items-center">
+              <Stethoscope className="w-4 h-4 mr-2 text-vet-primary" />
+              Información del Paciente
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+              <div>
+                <span className="font-medium text-vet-gray-700">Mascota:</span> {cita.mascota}
+              </div>
+              <div>
+                <span className="font-medium text-vet-gray-700">Especie:</span> {mascota?.especie || cita.especie}
+              </div>
+              <div>
+                <span className="font-medium text-vet-gray-700">Propietario:</span> {propietario?.nombre || "Sin asignar"}
+              </div>
+              <div>
+                <span className="font-medium text-vet-gray-700">Motivo:</span> {cita.motivo}
+              </div>
             </div>
+          </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="peso" className="flex items-center space-x-2">
-                <Weight className="w-4 h-4" />
-                <span>Peso (kg)</span>
-              </Label>
-              <Input
-                id="peso"
-                value={newConsulta.peso}
-                onChange={(e) =>
-                  setNewConsulta({
-                    ...newConsulta,
-                    peso: e.target.value,
-                  })
-                }
-                placeholder="Ej: 25.5"
-                type="number"
-                step="0.1"
-              />
-            </div>
+          {/* Messages */}
+          {message && (
+            <Alert className="border-green-200 bg-green-50">
+              <CheckCircle className="w-4 h-4 text-green-600" />
+              <AlertDescription className="text-green-800">{message}</AlertDescription>
+            </Alert>
+          )}
 
-            <div className="space-y-2">
-              <Label
-                htmlFor="temperatura"
-                className="flex items-center space-x-2"
+          {error && (
+            <Alert className="border-red-200 bg-red-50">
+              <AlertCircle className="w-4 h-4 text-red-600" />
+              <AlertDescription className="text-red-800">{error}</AlertDescription>
+            </Alert>
+          )}
+
+          {/* Attendance Selection */}
+          <div className="space-y-4">
+            <Label className="text-base font-medium text-vet-gray-900">
+              ¿El paciente asistió a la consulta?
+            </Label>
+            <div className="flex space-x-4">
+              <Button
+                type="button"
+                variant={attended === true ? "default" : "outline"}
+                onClick={() => setAttended(true)}
+                className={attended === true ? "bg-green-600 hover:bg-green-700" : ""}
               >
-                <Thermometer className="w-4 h-4" />
-                <span>Temperatura (°C)</span>
-              </Label>
-              <Input
-                id="temperatura"
-                value={newConsulta.temperatura}
-                onChange={(e) =>
-                  setNewConsulta({
-                    ...newConsulta,
-                    temperatura: e.target.value,
-                  })
-                }
-                placeholder="Ej: 38.2"
-                type="number"
-                step="0.1"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label
-                htmlFor="proxima-cita"
-                className="flex items-center space-x-2"
+                <CheckCircle className="w-4 h-4 mr-2" />
+                Sí, fue atendido
+              </Button>
+              <Button
+                type="button"
+                variant={attended === false ? "default" : "outline"}
+                onClick={() => setAttended(false)}
+                className={attended === false ? "bg-orange-600 hover:bg-orange-700" : ""}
               >
-                <CalendarPlus className="w-4 h-4" />
-                <span>Próxima cita (opcional)</span>
-              </Label>
-              <Input
-                id="proxima-cita"
-                type="date"
-                value={newConsulta.proximaCita}
-                onChange={(e) =>
-                  setNewConsulta({
-                    ...newConsulta,
-                    proximaCita: e.target.value,
-                  })
-                }
-              />
+                <X className="w-4 h-4 mr-2" />
+                No asistió
+              </Button>
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label
-              htmlFor="diagnostico"
-              className="flex items-center space-x-2"
+          {/* Medical Form - Only show if attended */}
+          {attended === true && (
+            <div className="space-y-6">
+              {/* Vital Signs */}
+              <div className="bg-blue-50 rounded-lg p-4">
+                <h4 className="font-semibold text-vet-gray-900 mb-3 flex items-center">
+                  <Heart className="w-4 h-4 mr-2 text-blue-600" />
+                  Signos Vitales
+                </h4>
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <div>
+                    <Label htmlFor="peso" className="flex items-center">
+                      <Weight className="w-3 h-3 mr-1" />
+                      Peso (kg)
+                    </Label>
+                    <Input
+                      id="peso"
+                      value={formData.peso}
+                      onChange={(e) => setFormData({ ...formData, peso: e.target.value })}
+                      placeholder="Ej: 5.2"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="temperatura" className="flex items-center">
+                      <Thermometer className="w-3 h-3 mr-1" />
+                      Temperatura (°C)
+                    </Label>
+                    <Input
+                      id="temperatura"
+                      value={formData.temperatura}
+                      onChange={(e) => setFormData({ ...formData, temperatura: e.target.value })}
+                      placeholder="Ej: 38.5"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="presionArterial">Presión Arterial</Label>
+                    <Input
+                      id="presionArterial"
+                      value={formData.presionArterial}
+                      onChange={(e) => setFormData({ ...formData, presionArterial: e.target.value })}
+                      placeholder="Ej: 120/80"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="frecuenciaCardiaca">Frecuencia Cardíaca (bpm)</Label>
+                    <Input
+                      id="frecuenciaCardiaca"
+                      value={formData.frecuenciaCardiaca}
+                      onChange={(e) => setFormData({ ...formData, frecuenciaCardiaca: e.target.value })}
+                      placeholder="Ej: 80"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Diagnosis and Treatment */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <Label htmlFor="diagnostico">Diagnóstico *</Label>
+                  <Textarea
+                    id="diagnostico"
+                    value={formData.diagnostico}
+                    onChange={(e) => setFormData({ ...formData, diagnostico: e.target.value })}
+                    placeholder="Describe el diagnóstico médico..."
+                    rows={4}
+                    required
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="tratamiento">Tratamiento</Label>
+                  <Textarea
+                    id="tratamiento"
+                    value={formData.tratamiento}
+                    onChange={(e) => setFormData({ ...formData, tratamiento: e.target.value })}
+                    placeholder="Describe el plan de tratamiento..."
+                    rows={4}
+                  />
+                </div>
+              </div>
+
+              {/* Medications */}
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <Label className="text-base font-medium flex items-center">
+                    <Pill className="w-4 h-4 mr-2 text-vet-primary" />
+                    Medicamentos Recetados
+                  </Label>
+                  <Button type="button" onClick={addMedicamento} size="sm" variant="outline">
+                    <Plus className="w-4 h-4 mr-1" />
+                    Agregar
+                  </Button>
+                </div>
+                {medicamentos.map((med, index) => (
+                  <div key={index} className="border border-vet-gray-200 rounded-lg p-4 mb-3">
+                    <div className="flex justify-between items-start mb-3">
+                      <h5 className="font-medium text-vet-gray-900">Medicamento {index + 1}</h5>
+                      <Button
+                        type="button"
+                        onClick={() => removeMedicamento(index)}
+                        size="sm"
+                        variant="ghost"
+                      >
+                        <Trash2 className="w-4 h-4 text-red-500" />
+                      </Button>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <Label>Nombre del medicamento</Label>
+                        <Input
+                          value={med.nombre}
+                          onChange={(e) => updateMedicamento(index, "nombre", e.target.value)}
+                          placeholder="Ej: Amoxicilina"
+                        />
+                      </div>
+                      <div>
+                        <Label>Dosis</Label>
+                        <Input
+                          value={med.dosis}
+                          onChange={(e) => updateMedicamento(index, "dosis", e.target.value)}
+                          placeholder="Ej: 250mg"
+                        />
+                      </div>
+                      <div>
+                        <Label>Frecuencia</Label>
+                        <Input
+                          value={med.frecuencia}
+                          onChange={(e) => updateMedicamento(index, "frecuencia", e.target.value)}
+                          placeholder="Ej: Cada 8 horas"
+                        />
+                      </div>
+                      <div>
+                        <Label>Duración</Label>
+                        <Input
+                          value={med.duracion}
+                          onChange={(e) => updateMedicamento(index, "duracion", e.target.value)}
+                          placeholder="Ej: 7 días"
+                        />
+                      </div>
+                      <div className="md:col-span-2">
+                        <Label>Indicaciones especiales</Label>
+                        <Input
+                          value={med.indicaciones}
+                          onChange={(e) => updateMedicamento(index, "indicaciones", e.target.value)}
+                          placeholder="Instrucciones adicionales..."
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Exams */}
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <Label className="text-base font-medium">Exámenes Realizados</Label>
+                  <Button type="button" onClick={addExamen} size="sm" variant="outline">
+                    <Plus className="w-4 h-4 mr-1" />
+                    Agregar
+                  </Button>
+                </div>
+                {examenes.map((exam, index) => (
+                  <div key={index} className="border border-vet-gray-200 rounded-lg p-4 mb-3">
+                    <div className="flex justify-between items-start mb-3">
+                      <h5 className="font-medium text-vet-gray-900">Examen {index + 1}</h5>
+                      <Button
+                        type="button"
+                        onClick={() => removeExamen(index)}
+                        size="sm"
+                        variant="ghost"
+                      >
+                        <Trash2 className="w-4 h-4 text-red-500" />
+                      </Button>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <Label>Tipo de examen</Label>
+                        <Input
+                          value={exam.tipo}
+                          onChange={(e) => updateExamen(index, "tipo", e.target.value)}
+                          placeholder="Ej: Radiografía, Análisis de sangre"
+                        />
+                      </div>
+                      <div>
+                        <Label>Resultado</Label>
+                        <Input
+                          value={exam.resultado}
+                          onChange={(e) => updateExamen(index, "resultado", e.target.value)}
+                          placeholder="Resultado del examen..."
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Observations and Follow-up */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <Label htmlFor="observaciones">Observaciones Generales</Label>
+                  <Textarea
+                    id="observaciones"
+                    value={formData.observaciones}
+                    onChange={(e) => setFormData({ ...formData, observaciones: e.target.value })}
+                    placeholder="Observaciones adicionales sobre la consulta..."
+                    rows={4}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="proximaVisita">Próxima Visita (opcional)</Label>
+                  <Input
+                    id="proximaVisita"
+                    type="date"
+                    value={formData.proximaVisita}
+                    onChange={(e) => setFormData({ ...formData, proximaVisita: e.target.value })}
+                    min={new Date().toISOString().split('T')[0]}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Action Buttons */}
+          <div className="flex justify-end space-x-3 pt-6 border-t border-vet-gray-200">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleClose}
+              disabled={isProcessing}
             >
-              <ClipboardList className="w-4 h-4" />
-              <span>Diagnóstico</span>
-            </Label>
-            <Textarea
-              id="diagnostico"
-              value={newConsulta.diagnostico}
-              onChange={(e) =>
-                setNewConsulta({
-                  ...newConsulta,
-                  diagnostico: e.target.value,
-                })
-              }
-              placeholder="Describe el diagnóstico encontrado..."
-              rows={3}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label
-              htmlFor="tratamiento"
-              className="flex items-center space-x-2"
-            >
-              <Heart className="w-4 h-4" />
-              <span>Tratamiento</span>
-            </Label>
-            <Textarea
-              id="tratamiento"
-              value={newConsulta.tratamiento}
-              onChange={(e) =>
-                setNewConsulta({
-                  ...newConsulta,
-                  tratamiento: e.target.value,
-                })
-              }
-              placeholder="Describe el tratamiento aplicado o recomendado..."
-              rows={3}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label
-              htmlFor="medicamentos"
-              className="flex items-center space-x-2"
-            >
-              <Pill className="w-4 h-4" />
-              <span>Medicamentos recetados</span>
-            </Label>
-            <Textarea
-              id="medicamentos"
-              value={newConsulta.medicamentos}
-              onChange={(e) =>
-                setNewConsulta({
-                  ...newConsulta,
-                  medicamentos: e.target.value,
-                })
-              }
-              placeholder="Medicamento, dosis, frecuencia y duración del tratamiento..."
-              rows={2}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="notas" className="flex items-center space-x-2">
-              <Edit3 className="w-4 h-4" />
-              <span>Notas adicionales</span>
-            </Label>
-            <Textarea
-              id="notas"
-              value={newConsulta.notas}
-              onChange={(e) =>
-                setNewConsulta({
-                  ...newConsulta,
-                  notas: e.target.value,
-                })
-              }
-              placeholder="Observaciones, recomendaciones para el propietario..."
-              rows={3}
-            />
-          </div>
-
-          <div className="flex justify-end space-x-2 pt-4 border-t">
-            <Button variant="outline" onClick={handleClose}>
               Cancelar
             </Button>
             <Button
-              onClick={handleSaveConsulta}
+              onClick={handleSaveConsultation}
+              disabled={isProcessing || attended === null}
               className="bg-vet-primary hover:bg-vet-primary-dark"
             >
-              <Save className="w-4 h-4 mr-2" />
-              Guardar Consulta
+              {isProcessing ? (
+                <div className="flex items-center">
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                  Guardando...
+                </div>
+              ) : (
+                <>
+                  <Save className="w-4 h-4 mr-2" />
+                  Guardar Consulta
+                </>
+              )}
             </Button>
           </div>
         </div>
