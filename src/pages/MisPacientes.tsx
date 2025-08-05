@@ -403,13 +403,6 @@ export default function MisPacientes() {
                 </div>
               </div>
 
-              <Button
-                onClick={() => navigate("/historial-clinico-veterinario")}
-                className="w-full sm:w-auto bg-vet-primary hover:bg-vet-primary-dark"
-              >
-                <FileText className="w-4 h-4 mr-2" />
-                Historial Clínico
-              </Button>
             </div>
           </div>
 
