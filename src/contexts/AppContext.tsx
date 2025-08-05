@@ -427,6 +427,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
             ...cita,
             fecha: new Date(cita.fecha),
             tipoConsulta: cita.tipoConsulta || "Consulta General",
+            // Ensure new fields are present for backward compatibility
+            mascotaId: cita.mascotaId || undefined,
+            clienteId: cita.clienteId || undefined,
+            clienteNombre: cita.clienteNombre || undefined,
           };
 
           // If cita has comprobantePago but no comprobanteData, try to load it
@@ -935,6 +939,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const repairDataIntegrity = () => {
     let repairedPets = 0;
     let createdPets = 0;
+    let repairedCitas = 0;
     const errors: string[] = [];
 
     try {
@@ -974,7 +979,37 @@ export function AppProvider({ children }: { children: ReactNode }) {
         });
       });
 
-      // Step 2: Create missing pets for existing appointments
+      // Step 2: Repair appointments without client information
+      setCitas((prevCitas) => {
+        return prevCitas.map((cita) => {
+          if (!cita.clienteId || !cita.clienteNombre) {
+            // Try to find the pet and its owner
+            const mascotaEncontrada = mascotas.find(m =>
+              m.nombre === cita.mascota || m.id === cita.mascotaId
+            );
+
+            if (mascotaEncontrada) {
+              const propietario = usuarios.find(u => u.id === mascotaEncontrada.clienteId && u.rol === 'cliente');
+
+              if (propietario) {
+                repairedCitas++;
+                console.log(`✅ Cita de "${cita.mascota}" vinculada con propietario ${propietario.nombre}`);
+
+                return {
+                  ...cita,
+                  mascotaId: mascotaEncontrada.id,
+                  clienteId: propietario.id,
+                  clienteNombre: propietario.nombre,
+                };
+              }
+            }
+          }
+
+          return cita;
+        });
+      });
+
+      // Step 3: Create missing pets for existing appointments
       const mascotasEnCitas = new Set(citas.map(c => c.mascota));
       const mascotasRegistradas = new Set(mascotas.map(m => m.nombre));
 
@@ -986,6 +1021,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
             .sort((a, b) => b.fecha.getTime() - a.fecha.getTime())[0];
 
           if (citaReciente && clientesDisponibles.length > 0) {
+            // Use the client from the appointment if available, otherwise first available
+            let clienteAsignado = clientesDisponibles[0];
+            if (citaReciente.clienteId) {
+              const clienteDeCita = clientesDisponibles.find(c => c.id === citaReciente.clienteId);
+              if (clienteDeCita) {
+                clienteAsignado = clienteDeCita;
+              }
+            }
+
             // Create the missing pet
             const nuevaMascota: Mascota = {
               id: `repair-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -997,7 +1041,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
               peso: undefined,
               microchip: undefined,
               estado: 'Activo',
-              clienteId: clientesDisponibles[0].id, // Assign to first available client
+              clienteId: clienteAsignado.id,
               proximaCita: citaReciente.fecha > new Date() ? citaReciente.fecha : null,
               ultimaVacuna: null,
               foto: null
@@ -1005,17 +1049,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
             setMascotas(prev => [...prev, nuevaMascota]);
             createdPets++;
-            console.log(`➕ Mascota creada: "${nombreMascota}" asignada a ${clientesDisponibles[0].nombre}`);
+            console.log(`➕ Mascota creada: "${nombreMascota}" asignada a ${clienteAsignado.nombre}`);
           } else {
             errors.push(`No se pudo crear mascota "${nombreMascota}" - no hay clientes disponibles`);
           }
         }
       });
 
-      // Step 3: Update appointment references if needed
-      // This would involve checking if pet names in appointments match registered pets
-
-      console.log(`🔧 Reparación completada: ${repairedPets} mascotas reparadas, ${createdPets} mascotas creadas`);
+      console.log(`🔧 Reparación completada: ${repairedPets} mascotas reparadas, ${createdPets} mascotas creadas, ${repairedCitas} citas reparadas`);
 
       if (errors.length > 0) {
         console.warn('⚠️ Errores durante la reparación:', errors);
