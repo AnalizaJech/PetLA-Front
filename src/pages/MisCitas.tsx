@@ -396,8 +396,8 @@ export default function MisCitas() {
                     key={cita.id}
                     className="hover:shadow-md transition-shadow"
                   >
-                    <CardContent className="p-6">
-                      <div className="flex items-center justify-between">
+                    <CardContent className="p-4 sm:p-6">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
                         <div className="flex items-center space-x-4">
                           {(() => {
                             const mascota = mascotas.find(
@@ -482,11 +482,11 @@ export default function MisCitas() {
                           </div>
                         </div>
 
-                        <div className="text-right">
-                          <div className="text-xl sm:text-2xl font-bold text-vet-gray-900 mb-3">
+                        <div className="text-left sm:text-right">
+                          <div className="text-lg sm:text-xl lg:text-2xl font-bold text-vet-gray-900 mb-2 sm:mb-3">
                             S/. {cita.precio.toLocaleString()}
                           </div>
-                          <div className="flex flex-col gap-2">
+                          <div className="flex flex-col sm:flex-col gap-2">
                             {user?.rol === "veterinario" ? (
                               <>
                                 {cita.estado === "aceptada" && (

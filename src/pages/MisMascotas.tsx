@@ -177,7 +177,7 @@ export default function MisMascotas() {
         const img = new Image();
 
         img.onload = () => {
-          // Redimensionar a un tamaño máximo de 400x400 para optimizar almacenamiento
+          // Redimensionar a un tamaño m��ximo de 400x400 para optimizar almacenamiento
           const maxSize = 400;
           let { width, height } = img;
 
@@ -313,7 +313,7 @@ export default function MisMascotas() {
                   </Button>
                 </DialogTrigger>
 
-                <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                <DialogContent className="max-w-2xl max-h-[95vh] overflow-y-auto">
                   <DialogHeader>
                     <DialogTitle className="text-lg sm:text-xl">
                       {editingMascota ? "Editar Mascota" : "Nueva Mascota"}
