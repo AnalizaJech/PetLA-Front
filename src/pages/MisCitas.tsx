@@ -355,9 +355,9 @@ export default function MisCitas() {
           <Tabs
             value={selectedTab}
             onValueChange={setSelectedTab}
-            className="space-y-6"
+            className="space-y-8"
           >
-            <TabsList className="grid w-full grid-cols-4">
+            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 mb-6">
               <TabsTrigger value="todas">Todas</TabsTrigger>
               <TabsTrigger value="pendientes">Pendientes</TabsTrigger>
               <TabsTrigger value="proximas">Próximas</TabsTrigger>
@@ -483,16 +483,15 @@ export default function MisCitas() {
                         </div>
 
                         <div className="text-right">
-                          <div className="text-lg font-bold text-vet-gray-900 mb-2">
+                          <div className="text-xl sm:text-2xl font-bold text-vet-gray-900 mb-3">
                             S/. {cita.precio.toLocaleString()}
                           </div>
-                          <div className="flex flex-col space-y-2">
+                          <div className="flex flex-col gap-2">
                             {user?.rol === "veterinario" ? (
                               <>
                                 {cita.estado === "aceptada" && (
                                   <Button
-                                    size="sm"
-                                    className="bg-vet-primary hover:bg-vet-primary-dark"
+                                    className="bg-vet-primary hover:bg-vet-primary-dark w-full sm:w-auto"
                                     onClick={() => {
                                       // Marcar como atendida y navegar al historial
                                       // Esta lógica se implementaría con el contexto
@@ -503,12 +502,18 @@ export default function MisCitas() {
                                   </Button>
                                 )}
                                 {cita.estado === "atendida" && (
-                                  <Button variant="outline" size="sm">
+                                  <Button
+                                    variant="outline"
+                                    className="w-full sm:w-auto"
+                                  >
                                     <FileText className="w-4 h-4 mr-2" />
                                     Ver Historial
                                   </Button>
                                 )}
-                                <Button variant="outline" size="sm">
+                                <Button
+                                  variant="outline"
+                                  className="w-full sm:w-auto"
+                                >
                                   <User className="w-4 h-4 mr-2" />
                                   Info Paciente
                                 </Button>
@@ -517,10 +522,9 @@ export default function MisCitas() {
                               <>
                                 {cita.estado === "pendiente_pago" && (
                                   <Button
-                                    size="sm"
                                     onClick={() => handleUploadProof(cita.id)}
                                     disabled={uploadingCitaId === cita.id}
-                                    className="bg-vet-primary hover:bg-vet-primary-dark"
+                                    className="bg-vet-primary hover:bg-vet-primary-dark w-full sm:w-auto"
                                   >
                                     <Upload className="w-4 h-4 mr-2" />
                                     {uploadingCitaId === cita.id
@@ -532,10 +536,9 @@ export default function MisCitas() {
                                   cita.estado === "aceptada") &&
                                   cita.comprobantePago && (
                                     <Button
-                                      size="sm"
                                       variant="outline"
                                       onClick={() => handleViewReceipt(cita.id)}
-                                      className="border-vet-primary text-vet-primary hover:bg-vet-primary/10"
+                                      className="border-vet-primary text-vet-primary hover:bg-vet-primary/10 w-full sm:w-auto"
                                     >
                                       <Eye className="w-4 h-4 mr-2" />
                                       Ver Comprobante
@@ -543,23 +546,28 @@ export default function MisCitas() {
                                   )}
                                 {cita.estado === "rechazada" && (
                                   <Button
-                                    size="sm"
                                     onClick={() => handleDeleteCita(cita.id)}
                                     variant="outline"
-                                    className="border-red-300 text-red-700 hover:bg-red-50"
+                                    className="border-red-300 text-red-700 hover:bg-red-50 w-full sm:w-auto"
                                   >
                                     <Trash2 className="w-4 h-4 mr-2" />
                                     Eliminar Cita
                                   </Button>
                                 )}
                                 {cita.estado === "atendida" && (
-                                  <Button variant="outline" size="sm">
+                                  <Button
+                                    variant="outline"
+                                    className="w-full sm:w-auto"
+                                  >
                                     <FileText className="w-4 h-4 mr-2" />
                                     Ver Reporte
                                   </Button>
                                 )}
                                 {cita.estado === "aceptada" && (
-                                  <Button variant="outline" size="sm">
+                                  <Button
+                                    variant="outline"
+                                    className="w-full sm:w-auto"
+                                  >
                                     <Phone className="w-4 h-4 mr-2" />
                                     Contactar
                                   </Button>

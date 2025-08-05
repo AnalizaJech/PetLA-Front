@@ -166,30 +166,45 @@ export default function CitaAttendModal({
       });
 
       // If attended, create medical history entry
-      if (attended && selectedCita.mascota) {
+      if (attended) {
+        // Ensure we have minimum required data for clinical history
+        const mascotaData = selectedCita.mascota;
+        const mascotaId =
+          mascotaData?.id || `temp_${selectedCita.cita.id}_${Date.now()}`;
+        const mascotaNombre = mascotaData?.nombre || selectedCita.cita.mascota;
+
         const historialEntry = {
-          mascotaId: selectedCita.mascota.id,
-          mascotaNombre: selectedCita.mascota.nombre,
+          mascotaId: mascotaId,
+          mascotaNombre: mascotaNombre,
           fecha: new Date(),
           veterinario: user.nombre,
           tipoConsulta: selectedCita.cita.tipoConsulta as any,
-          motivo: selectedCita.cita.motivo,
+          motivo: selectedCita.cita.motivo || "Consulta médica",
           diagnostico: formData.diagnostico,
-          tratamiento: formData.tratamiento,
+          tratamiento: formData.tratamiento || "",
           medicamentos: medicamentos.filter((m) => m.nombre.trim()),
           examenes: examenes.filter((e) => e.tipo.trim()),
           peso: formData.peso || undefined,
           temperatura: formData.temperatura || undefined,
           presionArterial: formData.presionArterial || undefined,
           frecuenciaCardiaca: formData.frecuenciaCardiaca || undefined,
-          observaciones: formData.observaciones,
+          observaciones: formData.observaciones || "",
           proximaVisita: formData.proximaVisita
             ? new Date(formData.proximaVisita)
             : undefined,
           estado: "completada" as const,
         };
 
+        console.log("Creating clinical history entry:", historialEntry);
         await addHistorialEntry(historialEntry);
+
+        // Log success for debugging
+        console.log("Clinical history entry created successfully for:", {
+          mascotaId,
+          mascotaNombre,
+          citaId: selectedCita.cita.id,
+          veterinario: user.nombre,
+        });
       }
 
       setMessage(
@@ -244,18 +259,37 @@ export default function CitaAttendModal({
               <div>
                 <span className="font-medium text-vet-gray-700">Mascota:</span>{" "}
                 {cita.mascota}
+                {!mascota && (
+                  <span className="ml-2 text-xs text-orange-600 bg-orange-100 px-2 py-1 rounded">
+                    No registrada
+                  </span>
+                )}
               </div>
               <div>
                 <span className="font-medium text-vet-gray-700">Especie:</span>{" "}
                 {mascota?.especie || cita.especie}
               </div>
               <div>
+                <span className="font-medium text-vet-gray-700">Raza:</span>{" "}
+                {mascota?.raza || "No especificada"}
+                {mascota && !mascota.raza && (
+                  <span className="ml-2 text-xs text-yellow-600 bg-yellow-100 px-2 py-1 rounded">
+                    Sin registrar
+                  </span>
+                )}
+              </div>
+              <div>
                 <span className="font-medium text-vet-gray-700">
                   Propietario:
                 </span>{" "}
                 {propietario?.nombre || "Sin asignar"}
+                {!propietario && (
+                  <span className="ml-2 text-xs text-red-600 bg-red-100 px-2 py-1 rounded">
+                    Requerido
+                  </span>
+                )}
               </div>
-              <div>
+              <div className="md:col-span-2">
                 <span className="font-medium text-vet-gray-700">Motivo:</span>{" "}
                 {cita.motivo}
               </div>

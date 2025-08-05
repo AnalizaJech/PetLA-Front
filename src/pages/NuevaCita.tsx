@@ -426,23 +426,13 @@ export default function NuevaCita() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="mb-8">
-            <div className="flex items-center space-x-4 mb-6">
-              <Button
-                variant="outline"
-                onClick={() => navigate("/mis-citas")}
-                className="flex items-center"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Volver
-              </Button>
-              <div>
-                <h1 className="text-3xl font-bold text-vet-gray-900">
-                  Agendar Nueva Cita
-                </h1>
-                <p className="text-vet-gray-600">
-                  Programa una cita médica para tu mascota
-                </p>
-              </div>
+            <div className="mb-6">
+              <h1 className="text-3xl font-bold text-vet-gray-900">
+                Agendar Nueva Cita
+              </h1>
+              <p className="text-vet-gray-600">
+                Programa una cita médica para tu mascota
+              </p>
             </div>
 
             {/* Progress Indicator */}
@@ -940,12 +930,13 @@ export default function NuevaCita() {
               <div className="flex justify-between pt-8 border-t">
                 <Button
                   variant="outline"
-                  onClick={prevStep}
-                  disabled={currentStep === 1}
+                  onClick={
+                    currentStep === 1 ? () => navigate("/mis-citas") : prevStep
+                  }
                   className="flex items-center"
                 >
                   <ArrowLeft className="w-4 h-4 mr-2" />
-                  Anterior
+                  {currentStep === 1 ? "Volver" : "Anterior"}
                 </Button>
 
                 {currentStep < 4 ? (

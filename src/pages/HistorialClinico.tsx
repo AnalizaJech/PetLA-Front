@@ -958,49 +958,13 @@ export default function HistorialClinico() {
               onValueChange={setSelectedTab}
               className="space-y-6"
             >
-              <TabsList className="grid w-full grid-cols-6 text-xs">
-                <TabsTrigger
-                  value="consulta_general"
-                  className="flex items-center space-x-1"
-                >
-                  <Stethoscope className="w-3 h-3" />
-                  <span>General</span>
-                </TabsTrigger>
-                <TabsTrigger
-                  value="vacunacion"
-                  className="flex items-center space-x-1"
-                >
-                  <Syringe className="w-3 h-3" />
-                  <span>Vacunas</span>
-                </TabsTrigger>
-                <TabsTrigger
-                  value="emergencia"
-                  className="flex items-center space-x-1"
-                >
-                  <Activity className="w-3 h-3" />
-                  <span>Emergencia</span>
-                </TabsTrigger>
-                <TabsTrigger
-                  value="grooming"
-                  className="flex items-center space-x-1"
-                >
-                  <PawPrint className="w-3 h-3" />
-                  <span>Grooming</span>
-                </TabsTrigger>
-                <TabsTrigger
-                  value="cirugia"
-                  className="flex items-center space-x-1"
-                >
-                  <Pill className="w-3 h-3" />
-                  <span>Cirugía</span>
-                </TabsTrigger>
-                <TabsTrigger
-                  value="diagnostico"
-                  className="flex items-center space-x-1"
-                >
-                  <FileText className="w-3 h-3" />
-                  <span>Diagnóstico</span>
-                </TabsTrigger>
+              <TabsList className="grid w-full grid-cols-3 sm:grid-cols-6 mb-8">
+                <TabsTrigger value="consulta_general">General</TabsTrigger>
+                <TabsTrigger value="vacunacion">Vacunas</TabsTrigger>
+                <TabsTrigger value="emergencia">Emergencia</TabsTrigger>
+                <TabsTrigger value="grooming">Grooming</TabsTrigger>
+                <TabsTrigger value="cirugia">Cirugía</TabsTrigger>
+                <TabsTrigger value="diagnostico">Diagnóstico</TabsTrigger>
               </TabsList>
 
               {/* Consulta General Tab */}
@@ -1179,8 +1143,8 @@ export default function HistorialClinico() {
                         Sin servicios de vacunación registrados
                       </h3>
                       <p className="text-vet-gray-600 mb-6">
-                        {selectedMascota} no tiene servicios de vacunaci��n en
-                        su historial.
+                        {selectedMascota} no tiene servicios de vacunación en su
+                        historial.
                       </p>
                       <Button
                         onClick={() => (window.location.href = "/mis-citas")}

@@ -154,7 +154,7 @@ export const optimizeStorageSpace = (): void => {
     const usagePercent = (totalSize / maxSize) * 100;
 
     console.log(
-      `�� LocalStorage: ${usagePercent.toFixed(1)}% usado (${(totalSize / 1024).toFixed(1)}KB)`,
+      `📊 LocalStorage: ${usagePercent.toFixed(1)}% usado (${(totalSize / 1024).toFixed(1)}KB)`,
     );
 
     // Si supera el 80%, limpiar comprobantes antiguos

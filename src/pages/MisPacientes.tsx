@@ -34,7 +34,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import {
   Select,
@@ -135,11 +134,10 @@ export default function MisPacientes() {
   });
 
   // Estados para filtros y búsqueda
-  const [selectedTab, setSelectedTab] = useState("proximas");
   const [searchTerm, setSearchTerm] = useState("");
   const [filterOwner, setFilterOwner] = useState("todos");
   const [filterEspecie, setFilterEspecie] = useState("todos");
-  const [filterUrgencia, setFilterUrgencia] = useState("todos");
+  const [filterEstado, setFilterEstado] = useState("todos");
   const [sortBy, setSortBy] = useState<SortBy>("fecha_desc");
   const [showDataIssues, setShowDataIssues] = useState(false);
   const [showAutoFix, setShowAutoFix] = useState(false);
@@ -214,45 +212,13 @@ export default function MisPacientes() {
 
   // Aplicar filtros usando utilidades mejoradas
   const filteredCitas = useMemo(() => {
-    const now = new Date();
     let filtered = enhancedCitas;
 
-    // Filtrar por pestaña/estado
-    switch (selectedTab) {
-      case "proximas":
-        filtered = filtered.filter(
-          ({ cita }) =>
-            cita.fecha > now &&
-            (cita.estado === "aceptada" || cita.estado === "en_validacion"),
-        );
-        break;
-      case "hoy":
-        const today = now.toDateString();
-        filtered = filtered.filter(
-          ({ cita }) => cita.fecha.toDateString() === today,
-        );
-        break;
-      case "pendientes":
-        filtered = filtered.filter(
-          ({ cita }) =>
-            cita.estado === "en_validacion" || cita.estado === "pendiente_pago",
-        );
-        break;
-      case "completadas":
-        filtered = filtered.filter(({ cita }) => cita.estado === "atendida");
-        break;
-      case "urgentes":
-        filtered = filtered.filter(
-          ({ urgencyLevel }) => urgencyLevel === "alta",
-        );
-        break;
-    }
-
-    // Aplicar filtros adicionales
+    // Aplicar filtros
     const filter: CitaFilter = {
       ...(filterOwner !== "todos" && { propietarioId: filterOwner }),
       ...(filterEspecie !== "todos" && { especie: filterEspecie }),
-      ...(filterUrgencia !== "todos" && { urgencia: filterUrgencia as any }),
+      ...(filterEstado !== "todos" && { estado: filterEstado as any }),
       ...(searchTerm.trim() && { searchTerm }),
     };
 
@@ -262,10 +228,9 @@ export default function MisPacientes() {
     return sortCitas(filtered, sortBy);
   }, [
     enhancedCitas,
-    selectedTab,
     filterOwner,
     filterEspecie,
-    filterUrgencia,
+    filterEstado,
     searchTerm,
     sortBy,
   ]);
@@ -437,14 +402,6 @@ export default function MisPacientes() {
                   </p>
                 </div>
               </div>
-
-              <Button
-                onClick={() => navigate("/calendario")}
-                className="w-full sm:w-auto bg-vet-primary hover:bg-vet-primary-dark"
-              >
-                <Calendar className="w-4 h-4 mr-2" />
-                Ver Agenda
-              </Button>
             </div>
           </div>
 
@@ -723,327 +680,352 @@ export default function MisPacientes() {
           )}
 
           {/* Filtros mejorados */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
-            <div className="relative lg:col-span-2">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
-              <Input
-                placeholder="Buscar por mascota, dueño, motivo..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
-            </div>
+          <Card className="mb-6">
+            <CardContent className="p-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
+                <div className="relative lg:col-span-2">
+                  <Search className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
+                  <Input
+                    placeholder="Buscar por mascota, dueño, motivo..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
 
-            <Select value={filterOwner} onValueChange={setFilterOwner}>
-              <SelectTrigger>
-                <User className="w-4 h-4 mr-2" />
-                <SelectValue placeholder="Propietario" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="todos">Todos los propietarios</SelectItem>
-                {misClientes.map((cliente) => (
-                  <SelectItem key={cliente.id} value={cliente.id}>
-                    {cliente.nombre}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+                <Select value={filterOwner} onValueChange={setFilterOwner}>
+                  <SelectTrigger>
+                    <User className="w-4 h-4 mr-2" />
+                    <SelectValue placeholder="Propietario" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="todos">Todos</SelectItem>
+                    {misClientes.map((cliente) => (
+                      <SelectItem key={cliente.id} value={cliente.id}>
+                        {cliente.nombre}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
 
-            <Select value={filterEspecie} onValueChange={setFilterEspecie}>
-              <SelectTrigger>
-                <PawPrint className="w-4 h-4 mr-2" />
-                <SelectValue placeholder="Especie" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="todos">Todas las especies</SelectItem>
-                {especiesUnicas.map((especie) => (
-                  <SelectItem key={especie} value={especie}>
-                    {especie}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+                <Select value={filterEspecie} onValueChange={setFilterEspecie}>
+                  <SelectTrigger>
+                    <PawPrint className="w-4 h-4 mr-2" />
+                    <SelectValue placeholder="Especie" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="todos">Todas</SelectItem>
+                    {especiesUnicas.map((especie) => (
+                      <SelectItem key={especie} value={especie}>
+                        {especie}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
 
-            <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger>
-                <Filter className="w-4 h-4 mr-2" />
-                <SelectValue placeholder="Ordenar" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="fecha_desc">Fecha (más reciente)</SelectItem>
-                <SelectItem value="fecha_asc">Fecha (más antigua)</SelectItem>
-                <SelectItem value="urgencia">Por urgencia</SelectItem>
-                <SelectItem value="mascota">Por mascota (A-Z)</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+                <Select value={filterEstado} onValueChange={setFilterEstado}>
+                  <SelectTrigger>
+                    <CheckCircle className="w-4 h-4 mr-2" />
+                    <SelectValue placeholder="Estado" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="todos">Todos</SelectItem>
+                    <SelectItem value="aceptada">Confirmadas</SelectItem>
+                    <SelectItem value="atendida">Completadas</SelectItem>
+                    <SelectItem value="en_validacion">En validación</SelectItem>
+                    <SelectItem value="pendiente_pago">
+                      Pendiente pago
+                    </SelectItem>
+                    <SelectItem value="cancelada">Canceladas</SelectItem>
+                  </SelectContent>
+                </Select>
 
-          <Tabs
-            value={selectedTab}
-            onValueChange={setSelectedTab}
-            className="space-y-4 sm:space-y-6"
-          >
-            <TabsList className="grid w-full grid-cols-3 md:grid-cols-6 h-auto">
-              <TabsTrigger
-                value="proximas"
-                className="text-xs sm:text-sm p-2 sm:p-3"
-              >
-                Próximas
-              </TabsTrigger>
-              <TabsTrigger
-                value="hoy"
-                className="text-xs sm:text-sm p-2 sm:p-3"
-              >
-                Hoy
-              </TabsTrigger>
-              <TabsTrigger
-                value="pendientes"
-                className="text-xs sm:text-sm p-2 sm:p-3"
-              >
-                Pendientes
-              </TabsTrigger>
-              <TabsTrigger
-                value="urgentes"
-                className="text-xs sm:text-sm p-2 sm:p-3"
-              >
-                Urgentes
-              </TabsTrigger>
-              <TabsTrigger
-                value="completadas"
-                className="text-xs sm:text-sm p-2 sm:p-3"
-              >
-                Completadas
-              </TabsTrigger>
-              <TabsTrigger
-                value="todas"
-                className="text-xs sm:text-sm p-2 sm:p-3"
-              >
-                Todas
-              </TabsTrigger>
-            </TabsList>
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger>
+                    <Filter className="w-4 h-4 mr-2" />
+                    <SelectValue placeholder="Ordenar" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="fecha_desc">Fecha ↓</SelectItem>
+                    <SelectItem value="fecha_asc">Fecha ↑</SelectItem>
+                    <SelectItem value="urgencia">Urgencia</SelectItem>
+                    <SelectItem value="mascota">Mascota A-Z</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
-            <TabsContent value={selectedTab} className="space-y-4">
-              {filteredCitas.length === 0 ? (
-                <Card>
-                  <CardContent className="p-12 text-center">
-                    <Stethoscope className="w-16 h-16 text-vet-gray-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-vet-gray-900 mb-2">
-                      No hay pacientes
-                    </h3>
-                    <p className="text-vet-gray-600">
-                      No se encontraron citas que coincidan con los filtros
-                      seleccionados
-                    </p>
-                  </CardContent>
-                </Card>
-              ) : (
-                filteredCitas.map((citaData) => {
-                  const { cita, mascota, propietario, urgencyLevel } = citaData;
-                  const StatusIcon = estadoIcons[cita.estado];
+              {(filterOwner !== "todos" ||
+                filterEspecie !== "todos" ||
+                filterEstado !== "todos" ||
+                searchTerm) && (
+                <div className="flex items-center justify-between mt-4 pt-4 border-t border-vet-gray-200">
+                  <div className="flex items-center space-x-2 text-sm text-vet-gray-600">
+                    <Filter className="w-4 h-4" />
+                    <span>
+                      Filtros activos: {filteredCitas.length} resultado
+                      {filteredCitas.length !== 1 ? "s" : ""}
+                    </span>
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setFilterOwner("todos");
+                      setFilterEspecie("todos");
+                      setFilterEstado("todos");
+                      setSearchTerm("");
+                    }}
+                  >
+                    <X className="w-4 h-4 mr-2" />
+                    Limpiar filtros
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
 
-                  return (
-                    <Card
-                      key={cita.id}
-                      className="hover:shadow-lg transition-all duration-200 border-l-4 border-l-vet-primary"
-                    >
-                      <CardContent className="p-4 sm:p-6">
-                        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between space-y-4 sm:space-y-0">
-                          <div className="flex items-start space-x-4 flex-1">
-                            <div className="w-12 h-12 bg-vet-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                              <PawPrint className="w-6 h-6 text-vet-primary" />
+          {/* Lista de citas */}
+          <div className="space-y-4">
+            {filteredCitas.length === 0 ? (
+              <Card>
+                <CardContent className="p-12 text-center">
+                  <Stethoscope className="w-16 h-16 text-vet-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold text-vet-gray-900 mb-2">
+                    No hay pacientes
+                  </h3>
+                  <p className="text-vet-gray-600">
+                    No se encontraron citas que coincidan con los filtros
+                    seleccionados
+                  </p>
+                </CardContent>
+              </Card>
+            ) : (
+              filteredCitas.map((citaData) => {
+                const { cita, mascota, propietario, urgencyLevel } = citaData;
+                const StatusIcon = estadoIcons[cita.estado];
+
+                return (
+                  <Card
+                    key={cita.id}
+                    className="hover:shadow-lg transition-all duration-200 border-l-4 border-l-vet-primary"
+                  >
+                    <CardContent className="p-4 sm:p-6">
+                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between space-y-4 sm:space-y-0">
+                        <div className="flex items-start space-x-4 flex-1">
+                          <div className="w-12 h-12 bg-vet-primary/10 rounded-full flex items-center justify-center flex-shrink-0 relative">
+                            {mascota?.foto ? (
+                              <img
+                                src={mascota.foto}
+                                alt={`${cita.mascota}`}
+                                className="w-full h-full rounded-full object-cover"
+                                onError={(e) => {
+                                  e.currentTarget.style.display = "none";
+                                  e.currentTarget.nextElementSibling?.classList.remove(
+                                    "hidden",
+                                  );
+                                }}
+                              />
+                            ) : null}
+                            <PawPrint
+                              className={`w-6 h-6 text-vet-primary ${mascota?.foto ? "hidden" : ""}`}
+                            />
+                          </div>
+
+                          <div className="flex-1 min-w-0">
+                            <div className="flex flex-wrap items-center gap-2 mb-3">
+                              <h4 className="font-bold text-lg text-vet-gray-900">
+                                {cita.mascota}
+                              </h4>
+                              <Badge
+                                variant="secondary"
+                                className={estadoColors[cita.estado]}
+                              >
+                                <StatusIcon className="w-3 h-3 mr-1" />
+                                {estadoLabels[cita.estado]}
+                              </Badge>
+                              {getUrgencyBadge(urgencyLevel)}
                             </div>
 
-                            <div className="flex-1 min-w-0">
-                              <div className="flex flex-wrap items-center gap-2 mb-3">
-                                <h4 className="font-bold text-lg text-vet-gray-900">
-                                  {cita.mascota}
-                                </h4>
-                                <Badge
-                                  variant="secondary"
-                                  className={estadoColors[cita.estado]}
+                            {/* Información del propietario - Mejorada */}
+                            <div
+                              className={`p-3 rounded-lg mb-3 ${
+                                propietario
+                                  ? "bg-vet-gray-50 border border-vet-gray-200"
+                                  : "bg-red-50 border border-red-200"
+                              }`}
+                            >
+                              <div className="flex items-center space-x-2 mb-2">
+                                {propietario ? (
+                                  <UserCheck className="w-4 h-4 text-vet-primary" />
+                                ) : (
+                                  <UserX className="w-4 h-4 text-red-600" />
+                                )}
+                                <span
+                                  className={`font-medium ${
+                                    propietario
+                                      ? "text-vet-gray-900"
+                                      : "text-red-900"
+                                  }`}
                                 >
-                                  <StatusIcon className="w-3 h-3 mr-1" />
-                                  {estadoLabels[cita.estado]}
-                                </Badge>
-                                {getUrgencyBadge(urgencyLevel)}
+                                  Propietario:{" "}
+                                  {propietario?.nombre || "⚠️ Sin asignar"}
+                                </span>
+                                {!propietario && (
+                                  <Badge className="bg-red-100 text-red-800 border-red-200">
+                                    Requiere atención
+                                  </Badge>
+                                )}
                               </div>
-
-                              {/* Información del propietario - Mejorada */}
-                              <div
-                                className={`p-3 rounded-lg mb-3 ${
-                                  propietario
-                                    ? "bg-vet-gray-50 border border-vet-gray-200"
-                                    : "bg-red-50 border border-red-200"
-                                }`}
-                              >
-                                <div className="flex items-center space-x-2 mb-2">
-                                  {propietario ? (
-                                    <UserCheck className="w-4 h-4 text-vet-primary" />
-                                  ) : (
-                                    <UserX className="w-4 h-4 text-red-600" />
+                              {propietario ? (
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-vet-gray-600">
+                                  {propietario.telefono && (
+                                    <div className="flex items-center space-x-2">
+                                      <Phone className="w-3 h-3" />
+                                      <span>{propietario.telefono}</span>
+                                    </div>
                                   )}
-                                  <span
-                                    className={`font-medium ${
-                                      propietario
-                                        ? "text-vet-gray-900"
-                                        : "text-red-900"
-                                    }`}
-                                  >
-                                    Propietario:{" "}
-                                    {propietario?.nombre || "⚠️ Sin asignar"}
+                                  {propietario.email && (
+                                    <div className="flex items-center space-x-2">
+                                      <Mail className="w-3 h-3" />
+                                      <span>{propietario.email}</span>
+                                    </div>
+                                  )}
+                                  <div className="flex items-center space-x-2 text-xs text-vet-gray-500">
+                                    <Info className="w-3 h-3" />
+                                    <span>ID: {propietario.id}</span>
+                                  </div>
+                                </div>
+                              ) : (
+                                <div className="text-sm text-red-600">
+                                  Esta mascota necesita ser asignada a un
+                                  propietario
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Información de la mascota */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                              <div className="space-y-2">
+                                <div className="flex items-center space-x-2">
+                                  <PawPrint className="w-4 h-4 text-vet-gray-600" />
+                                  <span>
+                                    <strong>Especie:</strong>{" "}
+                                    {mascota?.especie ||
+                                      cita.especie ||
+                                      "No especificado"}
                                   </span>
-                                  {!propietario && (
-                                    <Badge className="bg-red-100 text-red-800 border-red-200">
-                                      Requiere atención
+                                  {!mascota && (
+                                    <Badge className="bg-orange-100 text-orange-800 border-orange-200 text-xs">
+                                      No registrada
                                     </Badge>
                                   )}
                                 </div>
-                                {propietario ? (
-                                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-vet-gray-600">
-                                    {propietario.telefono && (
-                                      <div className="flex items-center space-x-2">
-                                        <Phone className="w-3 h-3" />
-                                        <span>{propietario.telefono}</span>
-                                      </div>
-                                    )}
-                                    {propietario.email && (
-                                      <div className="flex items-center space-x-2">
-                                        <Mail className="w-3 h-3" />
-                                        <span>{propietario.email}</span>
-                                      </div>
-                                    )}
-                                    <div className="flex items-center space-x-2 text-xs text-vet-gray-500">
-                                      <Info className="w-3 h-3" />
-                                      <span>ID: {propietario.id}</span>
-                                    </div>
-                                  </div>
-                                ) : (
-                                  <div className="text-sm text-red-600">
-                                    Esta mascota necesita ser asignada a un
-                                    propietario
-                                  </div>
-                                )}
-                              </div>
-
-                              {/* Información de la mascota */}
-                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-                                <div className="space-y-2">
-                                  <div className="flex items-center space-x-2">
-                                    <PawPrint className="w-4 h-4 text-vet-gray-600" />
-                                    <span>
-                                      <strong>Especie:</strong>{" "}
-                                      {mascota?.especie ||
-                                        cita.especie ||
-                                        "No especificado"}
-                                    </span>
-                                    {!mascota && (
-                                      <Badge className="bg-orange-100 text-orange-800 border-orange-200 text-xs">
-                                        No registrada
+                                {/* Always show breed information if available, even for unregistered pets */}
+                                <div className="flex items-center space-x-2">
+                                  <Info className="w-4 h-4 text-vet-gray-600" />
+                                  <span>
+                                    <strong>Raza:</strong>{" "}
+                                    {mascota?.raza || "No especificada"}
+                                    {!mascota?.raza && (
+                                      <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200 text-xs ml-2">
+                                        Sin registrar
                                       </Badge>
                                     )}
-                                  </div>
-                                  {mascota?.raza && (
-                                    <div className="flex items-center space-x-2">
-                                      <Info className="w-4 h-4 text-vet-gray-600" />
-                                      <span>
-                                        <strong>Raza:</strong> {mascota.raza}
-                                      </span>
-                                    </div>
-                                  )}
-                                  <div className="flex items-center space-x-2">
-                                    <Calendar className="w-4 h-4 text-vet-gray-600" />
-                                    <span>
-                                      <strong>Fecha:</strong>{" "}
-                                      {new Date(cita.fecha).toLocaleDateString(
-                                        "es-ES",
-                                        {
-                                          weekday: "long",
-                                          year: "numeric",
-                                          month: "long",
-                                          day: "numeric",
-                                        },
-                                      )}
-                                    </span>
-                                  </div>
+                                  </span>
                                 </div>
+                                <div className="flex items-center space-x-2">
+                                  <Calendar className="w-4 h-4 text-vet-gray-600" />
+                                  <span>
+                                    <strong>Fecha:</strong>{" "}
+                                    {new Date(cita.fecha).toLocaleDateString(
+                                      "es-ES",
+                                      {
+                                        weekday: "long",
+                                        year: "numeric",
+                                        month: "long",
+                                        day: "numeric",
+                                      },
+                                    )}
+                                  </span>
+                                </div>
+                              </div>
 
-                                <div className="space-y-2">
-                                  <div className="flex items-center space-x-2">
-                                    <Clock className="w-4 h-4 text-vet-gray-600" />
-                                    <span>
-                                      <strong>Hora:</strong>{" "}
-                                      {new Date(cita.fecha).toLocaleTimeString(
-                                        "es-ES",
-                                        {
-                                          hour: "2-digit",
-                                          minute: "2-digit",
-                                        },
-                                      )}
-                                    </span>
-                                  </div>
-                                  <div className="flex items-start space-x-2">
-                                    <FileText className="w-4 h-4 text-vet-gray-600 mt-0.5" />
-                                    <span>
-                                      <strong>Motivo:</strong> {cita.motivo}
-                                    </span>
-                                  </div>
+                              <div className="space-y-2">
+                                <div className="flex items-center space-x-2">
+                                  <Clock className="w-4 h-4 text-vet-gray-600" />
+                                  <span>
+                                    <strong>Hora:</strong>{" "}
+                                    {new Date(cita.fecha).toLocaleTimeString(
+                                      "es-ES",
+                                      {
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                      },
+                                    )}
+                                  </span>
+                                </div>
+                                <div className="flex items-start space-x-2">
+                                  <FileText className="w-4 h-4 text-vet-gray-600 mt-0.5" />
+                                  <span>
+                                    <strong>Motivo:</strong> {cita.motivo}
+                                  </span>
                                 </div>
                               </div>
                             </div>
                           </div>
-
-                          {/* Botones de acción */}
-                          <div className="flex flex-col space-y-2 sm:ml-4 sm:flex-shrink-0">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handleViewDetail(citaData)}
-                              className="h-9"
-                            >
-                              <Eye className="w-4 h-4 mr-2" />
-                              Ver Detalle
-                            </Button>
-
-                            {cita.estado === "aceptada" && (
-                              <Button
-                                size="sm"
-                                onClick={() => handleAttendCita(citaData)}
-                                className="bg-vet-primary hover:bg-vet-primary-dark h-9"
-                              >
-                                <Activity className="w-4 h-4 mr-2" />
-                                Atender
-                              </Button>
-                            )}
-
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => {
-                                if (mascota) {
-                                  navigate(
-                                    `/historial-clinico-veterinario?mascota=${mascota.id}&nombre=${encodeURIComponent(mascota.nombre)}`,
-                                  );
-                                } else {
-                                  // Fallback para cuando no hay mascota, usar datos de la cita
-                                  navigate(
-                                    `/historial-clinico-veterinario?nombre=${encodeURIComponent(cita.mascota)}&especie=${encodeURIComponent(cita.especie)}`,
-                                  );
-                                }
-                              }}
-                              className="h-9"
-                            >
-                              <FileText className="w-4 h-4 mr-2" />
-                              Historial
-                            </Button>
-                          </div>
                         </div>
-                      </CardContent>
-                    </Card>
-                  );
-                })
-              )}
-            </TabsContent>
-          </Tabs>
+
+                        {/* Botones de acción */}
+                        <div className="flex flex-col space-y-2 sm:ml-4 sm:flex-shrink-0">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleViewDetail(citaData)}
+                            className="h-9"
+                          >
+                            <Eye className="w-4 h-4 mr-2" />
+                            Ver Detalle
+                          </Button>
+
+                          {cita.estado === "aceptada" && (
+                            <Button
+                              size="sm"
+                              onClick={() => handleAttendCita(citaData)}
+                              className="bg-vet-primary hover:bg-vet-primary-dark h-9"
+                            >
+                              <Activity className="w-4 h-4 mr-2" />
+                              Atender
+                            </Button>
+                          )}
+
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                              if (mascota) {
+                                navigate(
+                                  `/historial-clinico-veterinario?view=history&ownerId=${propietario?.id || "unknown"}&petId=${mascota.id}`,
+                                );
+                              } else {
+                                // Fallback para cuando no hay mascota, usar datos de la cita
+                                navigate(
+                                  `/historial-clinico-veterinario?view=history&petName=${encodeURIComponent(cita.mascota)}&especie=${encodeURIComponent(cita.especie)}`,
+                                );
+                              }
+                            }}
+                            className="h-9"
+                          >
+                            <FileText className="w-4 h-4 mr-2" />
+                            Historial
+                          </Button>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })
+            )}
+          </div>
 
           {/* Modales reutilizables */}
           <CitaDetailModal
