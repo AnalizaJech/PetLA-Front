@@ -396,8 +396,8 @@ export default function MisCitas() {
                     key={cita.id}
                     className="hover:shadow-md transition-shadow"
                   >
-                    <CardContent className="p-6">
-                      <div className="flex items-center justify-between">
+                    <CardContent className="p-4 sm:p-6">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
                         <div className="flex items-center space-x-4">
                           {(() => {
                             const mascota = mascotas.find(
@@ -407,54 +407,66 @@ export default function MisCitas() {
                               <img
                                 src={mascota.foto}
                                 alt={cita.mascota}
-                                className="w-12 h-12 rounded-full object-cover border-2 border-vet-primary/20"
+                                className="w-16 h-16 rounded-full object-cover border-2 border-vet-primary/20"
                               />
                             ) : (
-                              <div className="w-12 h-12 bg-vet-primary/10 rounded-full flex items-center justify-center">
-                                <PawPrint className="w-6 h-6 text-vet-primary" />
+                              <div className="w-16 h-16 bg-vet-primary/10 rounded-full flex items-center justify-center">
+                                <PawPrint className="w-8 h-8 text-vet-primary" />
                               </div>
                             );
                           })()}
                           <div>
-                            <div className="flex items-center space-x-2 mb-1">
-                              <h4 className="font-semibold text-vet-gray-900">
+                            <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2 mb-2">
+                              <h4 className="font-semibold text-base sm:text-lg text-vet-gray-900">
                                 {cita.mascota}
                               </h4>
-                              <Badge className="text-xs">{cita.especie}</Badge>
-                              <Badge className={estadoColors[cita.estado]}>
-                                {estadoLabels[cita.estado]}
-                              </Badge>
+                              <div className="flex space-x-2">
+                                <Badge className="text-xs sm:text-sm">
+                                  {cita.especie}
+                                </Badge>
+                                <Badge className={estadoColors[cita.estado]}>
+                                  {estadoLabels[cita.estado]}
+                                </Badge>
+                              </div>
                             </div>
-                            <p className="text-sm text-vet-gray-600 mb-1">
+                            <p className="text-sm sm:text-base text-vet-gray-600 mb-3">
                               <span className="font-medium text-vet-primary">
                                 {cita.tipoConsulta}
-                              </span>{" "}
-                              • {cita.motivo} • {cita.veterinario}
+                              </span>
+                              <span className="block sm:inline">
+                                {" "}
+                                • {cita.motivo}
+                              </span>
+                              <span className="block sm:inline">
+                                {" "}
+                                • {cita.veterinario}
+                              </span>
                             </p>
-                            <div className="flex items-center space-x-4 text-sm text-vet-gray-500">
-                              <div className="flex items-center space-x-1">
-                                <Calendar className="w-4 h-4" />
-                                <span>
+                            <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-6 text-sm sm:text-base text-vet-gray-500">
+                              <div className="flex items-center space-x-2">
+                                <Calendar className="w-5 h-5 sm:w-4 sm:h-4 text-vet-primary" />
+                                <span className="font-medium">
                                   {cita.fecha.toLocaleDateString("es-ES", {
-                                    weekday: "long",
-                                    year: "numeric",
-                                    month: "long",
+                                    weekday: "short",
+                                    month: "short",
                                     day: "numeric",
                                   })}
                                 </span>
                               </div>
-                              <div className="flex items-center space-x-1">
-                                <Clock className="w-4 h-4" />
-                                <span>
+                              <div className="flex items-center space-x-2">
+                                <Clock className="w-5 h-5 sm:w-4 sm:h-4 text-vet-primary" />
+                                <span className="font-medium">
                                   {cita.fecha.toLocaleTimeString("es-ES", {
                                     hour: "2-digit",
                                     minute: "2-digit",
                                   })}
                                 </span>
                               </div>
-                              <div className="flex items-center space-x-1">
-                                <MapPin className="w-4 h-4" />
-                                <span>{cita.ubicacion}</span>
+                              <div className="flex items-center space-x-2">
+                                <MapPin className="w-5 h-5 sm:w-4 sm:h-4 text-vet-primary" />
+                                <span className="font-medium">
+                                  {cita.ubicacion}
+                                </span>
                               </div>
                             </div>
                             {cita.notas && (
@@ -482,11 +494,11 @@ export default function MisCitas() {
                           </div>
                         </div>
 
-                        <div className="text-right">
-                          <div className="text-xl sm:text-2xl font-bold text-vet-gray-900 mb-3">
+                        <div className="text-left sm:text-right">
+                          <div className="text-lg sm:text-xl lg:text-2xl font-bold text-vet-gray-900 mb-2 sm:mb-3">
                             S/. {cita.precio.toLocaleString()}
                           </div>
-                          <div className="flex flex-col gap-2">
+                          <div className="flex flex-col sm:flex-col gap-2">
                             {user?.rol === "veterinario" ? (
                               <>
                                 {cita.estado === "aceptada" && (

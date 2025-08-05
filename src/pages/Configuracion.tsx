@@ -55,6 +55,40 @@ import {
   Calendar,
 } from "lucide-react";
 
+// Helper function to safely convert date to string format
+const formatDateForInput = (date: any): string => {
+  if (!date) return "";
+
+  // If it's already a string in the correct format, return it
+  if (typeof date === "string") {
+    // Check if it's already in YYYY-MM-DD format
+    if (/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+      return date;
+    }
+    // Try to parse it as a date
+    const parsedDate = new Date(date);
+    if (!isNaN(parsedDate.getTime())) {
+      return parsedDate.toISOString().split("T")[0];
+    }
+    return "";
+  }
+
+  // If it's a Date object
+  if (date instanceof Date && !isNaN(date.getTime())) {
+    return date.toISOString().split("T")[0];
+  }
+
+  // If it's a timestamp
+  if (typeof date === "number") {
+    const dateObj = new Date(date);
+    if (!isNaN(dateObj.getTime())) {
+      return dateObj.toISOString().split("T")[0];
+    }
+  }
+
+  return "";
+};
+
 export default function Configuracion() {
   const { user, setUser, updateUsuario } = useAppContext();
   const [isLoading, setIsLoading] = useState(false);
@@ -134,7 +168,7 @@ export default function Configuracion() {
     }
   };
 
-  // Profile form state
+  // Profile form state - including ALL registration fields
   const [profileData, setProfileData] = useState({
     nombre: user?.nombre || "",
     apellidos: user?.apellidos || "",
@@ -142,12 +176,16 @@ export default function Configuracion() {
     email: user?.email || "",
     telefono: user?.telefono || "",
     direccion: user?.direccion || "",
-    fechaNacimiento: user?.fechaNacimiento
-      ? user.fechaNacimiento.toISOString().split("T")[0]
-      : "",
+    fechaNacimiento: formatDateForInput(user?.fechaNacimiento),
     genero: user?.genero || "",
     bio: loadSettings("user_bio", ""),
     foto: user?.foto || null,
+    // Additional fields from registration
+    documento: user?.documento || "",
+    tipoDocumento: user?.tipoDocumento || "dni",
+    especialidad: user?.especialidad || "", // For veterinarians
+    experiencia: user?.experiencia || "", // For veterinarians
+    colegiatura: user?.colegiatura || "", // For veterinarians
   });
 
   // Photo management state
@@ -206,11 +244,14 @@ export default function Configuracion() {
         email: user.email || "",
         telefono: user.telefono || "",
         direccion: user.direccion || "",
-        fechaNacimiento: user.fechaNacimiento
-          ? user.fechaNacimiento.toISOString().split("T")[0]
-          : "",
+        fechaNacimiento: formatDateForInput(user.fechaNacimiento),
         genero: user.genero || "",
         foto: user.foto || null,
+        documento: user.documento || "",
+        tipoDocumento: user.tipoDocumento || "dni",
+        especialidad: user.especialidad || "",
+        experiencia: user.experiencia || "",
+        colegiatura: user.colegiatura || "",
       }));
     }
   }, [user]);
@@ -231,9 +272,21 @@ export default function Configuracion() {
     setSavedMessage("");
     setErrorMessage("");
 
-    // Validation
+    // Enhanced validation for all required fields
     if (!profileData.nombre.trim()) {
       setErrorMessage("El nombre es obligatorio");
+      setIsLoading(false);
+      return;
+    }
+
+    if (!profileData.apellidos.trim()) {
+      setErrorMessage("Los apellidos son obligatorios");
+      setIsLoading(false);
+      return;
+    }
+
+    if (!profileData.username.trim()) {
+      setErrorMessage("El nombre de usuario es obligatorio");
       setIsLoading(false);
       return;
     }
@@ -244,12 +297,34 @@ export default function Configuracion() {
       return;
     }
 
+    if (!profileData.telefono.trim()) {
+      setErrorMessage("El teléfono es obligatorio");
+      setIsLoading(false);
+      return;
+    }
+
+    // Additional validation for veterinarians
+    if (user?.rol === "veterinario") {
+      if (!profileData.especialidad.trim()) {
+        setErrorMessage("La especialidad es obligatoria para veterinarios");
+        setIsLoading(false);
+        return;
+      }
+      if (!profileData.colegiatura.trim()) {
+        setErrorMessage(
+          "El número de colegiatura es obligatorio para veterinarios",
+        );
+        setIsLoading(false);
+        return;
+      }
+    }
+
     try {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       if (user) {
-        // Update user in both contexts (usuarios array and current user)
+        // Update user in both contexts (usuarios array and current user) - ALL FIELDS
         const updatedUserData = {
           nombre: profileData.nombre.trim(),
           apellidos: profileData.apellidos.trim(),
@@ -262,6 +337,12 @@ export default function Configuracion() {
             : undefined,
           genero: profileData.genero,
           foto: profileData.foto,
+          documento: profileData.documento.trim(),
+          tipoDocumento: profileData.tipoDocumento,
+          // Veterinarian specific fields
+          especialidad: profileData.especialidad.trim(),
+          experiencia: profileData.experiencia.trim(),
+          colegiatura: profileData.colegiatura.trim(),
         };
 
         // Update in usuarios array
@@ -274,12 +355,27 @@ export default function Configuracion() {
         };
         setUser(updatedUser);
 
-        // Save additional data to localStorage
+        // Save additional data to localStorage - ALL IMPORTANT DATA
         saveSettings("user_direccion", profileData.direccion);
         saveSettings("user_bio", profileData.bio);
+        saveSettings("user_documento", profileData.documento);
+        saveSettings("user_tipo_documento", profileData.tipoDocumento);
+        if (user?.rol === "veterinario") {
+          saveSettings("user_especialidad", profileData.especialidad);
+          saveSettings("user_experiencia", profileData.experiencia);
+          saveSettings("user_colegiatura", profileData.colegiatura);
+        }
       }
 
-      setSavedMessage("Perfil actualizado correctamente");
+      setSavedMessage(
+        "Perfil actualizado correctamente. Todos los datos han sido guardados en el sistema.",
+      );
+
+      // Scroll to top to show success message
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
     } catch (error) {
       setErrorMessage("Error al actualizar el perfil. Inténtalo de nuevo.");
     } finally {
@@ -299,6 +395,12 @@ export default function Configuracion() {
       saveSettings("notifications", notificationSettings);
 
       setSavedMessage("Configuración de notificaciones guardada correctamente");
+
+      // Scroll to top to show success message
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
     } catch (error) {
       setErrorMessage("Error al guardar las notificaciones");
     } finally {
@@ -350,6 +452,12 @@ export default function Configuracion() {
       }
 
       setSavedMessage("Configuración de seguridad actualizada correctamente");
+
+      // Scroll to top to show success message
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
 
       // Clear password fields
       setSecurityData((prev) => ({
@@ -563,18 +671,18 @@ export default function Configuracion() {
             </div>
 
             {savedMessage && (
-              <Alert className="bg-green-50 border-green-200 mb-4">
-                <CheckCircle className="w-4 h-4 text-green-600" />
-                <AlertDescription className="text-green-800">
+              <Alert className="bg-green-50 border-green-200 mb-6 shadow-md">
+                <CheckCircle className="w-5 h-5 text-green-600" />
+                <AlertDescription className="text-green-800 font-medium">
                   {savedMessage}
                 </AlertDescription>
               </Alert>
             )}
 
             {errorMessage && (
-              <Alert className="bg-red-50 border-red-200 mb-4">
-                <AlertTriangle className="w-4 h-4 text-red-600" />
-                <AlertDescription className="text-red-800">
+              <Alert className="bg-red-50 border-red-200 mb-6 shadow-md">
+                <AlertTriangle className="w-5 h-5 text-red-600" />
+                <AlertDescription className="text-red-800 font-medium">
                   {errorMessage}
                 </AlertDescription>
               </Alert>
@@ -582,7 +690,7 @@ export default function Configuracion() {
           </div>
 
           <Tabs defaultValue="profile" className="space-y-4 sm:space-y-6">
-            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 h-auto">
+            <TabsList className="grid w-full grid-cols-3 h-auto">
               <TabsTrigger
                 value="profile"
                 className="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm p-2 sm:p-3"
@@ -606,14 +714,6 @@ export default function Configuracion() {
                 <Shield className="w-3 h-3 sm:w-4 sm:h-4" />
                 <span className="hidden sm:inline">Seguridad</span>
                 <span className="sm:hidden">Segur.</span>
-              </TabsTrigger>
-              <TabsTrigger
-                value="appearance"
-                className="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm p-2 sm:p-3"
-              >
-                <Palette className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span className="hidden sm:inline">Apariencia</span>
-                <span className="sm:hidden">Tema</span>
               </TabsTrigger>
             </TabsList>
 
@@ -675,7 +775,7 @@ export default function Configuracion() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                     <div className="space-y-2">
-                      <Label htmlFor="nombre">Nombres</Label>
+                      <Label htmlFor="nombre">Nombres *</Label>
                       <Input
                         id="nombre"
                         value={profileData.nombre}
@@ -687,11 +787,12 @@ export default function Configuracion() {
                         }
                         placeholder="Tus nombres"
                         required
+                        className="border-vet-gray-300 focus:border-vet-primary focus:ring-vet-primary"
                       />
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="apellidos">Apellidos</Label>
+                      <Label htmlFor="apellidos">Apellidos *</Label>
                       <Input
                         id="apellidos"
                         value={profileData.apellidos}
@@ -703,16 +804,17 @@ export default function Configuracion() {
                         }
                         placeholder="Tus apellidos"
                         required
+                        className="border-vet-gray-300 focus:border-vet-primary focus:ring-vet-primary"
                       />
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="username">Nombre de usuario</Label>
+                      <Label htmlFor="username">Nombre de usuario *</Label>
                       <div className="relative">
                         <User className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
                         <Input
                           id="username"
-                          className="pl-10"
+                          className="pl-10 border-vet-gray-300 focus:border-vet-primary focus:ring-vet-primary"
                           value={profileData.username}
                           onChange={(e) =>
                             setProfileData({
@@ -721,18 +823,19 @@ export default function Configuracion() {
                             })
                           }
                           placeholder="usuario123"
+                          required
                         />
                       </div>
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
+                      <Label htmlFor="email">Email *</Label>
                       <div className="relative">
                         <Mail className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
                         <Input
                           id="email"
                           type="email"
-                          className="pl-10"
+                          className="pl-10 border-vet-gray-300 focus:border-vet-primary focus:ring-vet-primary"
                           value={profileData.email}
                           onChange={(e) =>
                             setProfileData({
@@ -741,18 +844,19 @@ export default function Configuracion() {
                             })
                           }
                           placeholder="tu@email.com"
+                          required
                         />
                       </div>
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="telefono">Teléfono</Label>
+                      <Label htmlFor="telefono">Teléfono *</Label>
                       <div className="relative">
                         <Phone className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
                         <Input
                           id="telefono"
                           type="tel"
-                          className="pl-10"
+                          className="pl-10 border-vet-gray-300 focus:border-vet-primary focus:ring-vet-primary"
                           value={profileData.telefono}
                           onChange={(e) =>
                             setProfileData({
@@ -760,18 +864,19 @@ export default function Configuracion() {
                               telefono: e.target.value,
                             })
                           }
-                          placeholder="+52 55 1234 5678"
+                          placeholder="+51 999 123 456"
+                          required
                         />
                       </div>
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="direccion">Dirección (opcional)</Label>
+                      <Label htmlFor="direccion">Dirección</Label>
                       <div className="relative">
                         <MapPin className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
                         <Input
                           id="direccion"
-                          className="pl-10"
+                          className="pl-10 border-vet-gray-300 focus:border-vet-primary focus:ring-vet-primary"
                           value={profileData.direccion}
                           onChange={(e) =>
                             setProfileData({
@@ -785,15 +890,56 @@ export default function Configuracion() {
                     </div>
 
                     <div className="space-y-2">
+                      <Label htmlFor="tipoDocumento">Tipo de documento</Label>
+                      <Select
+                        value={profileData.tipoDocumento}
+                        onValueChange={(value) =>
+                          setProfileData({
+                            ...profileData,
+                            tipoDocumento: value,
+                          })
+                        }
+                      >
+                        <SelectTrigger className="border-vet-gray-300 focus:border-vet-primary focus:ring-vet-primary">
+                          <SelectValue placeholder="Seleccionar tipo" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="dni">DNI</SelectItem>
+                          <SelectItem value="pasaporte">Pasaporte</SelectItem>
+                          <SelectItem value="carnet_extranjeria">
+                            Carnet de Extranjería
+                          </SelectItem>
+                          <SelectItem value="cedula">Cédula</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="documento">Número de documento</Label>
+                      <Input
+                        id="documento"
+                        value={profileData.documento}
+                        onChange={(e) =>
+                          setProfileData({
+                            ...profileData,
+                            documento: e.target.value,
+                          })
+                        }
+                        placeholder="Número de documento"
+                        className="border-vet-gray-300 focus:border-vet-primary focus:ring-vet-primary"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
                       <Label htmlFor="fechaNacimiento">
-                        Fecha de nacimiento (opcional)
+                        Fecha de nacimiento
                       </Label>
                       <div className="relative">
                         <Calendar className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
                         <Input
                           id="fechaNacimiento"
                           type="date"
-                          className="pl-10"
+                          className="pl-10 border-vet-gray-300 focus:border-vet-primary focus:ring-vet-primary"
                           value={profileData.fechaNacimiento}
                           onChange={(e) =>
                             setProfileData({
@@ -806,7 +952,7 @@ export default function Configuracion() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="genero">Género (opcional)</Label>
+                      <Label htmlFor="genero">Género</Label>
                       <Select
                         value={profileData.genero}
                         onValueChange={(value) =>
@@ -816,7 +962,7 @@ export default function Configuracion() {
                           })
                         }
                       >
-                        <SelectTrigger>
+                        <SelectTrigger className="border-vet-gray-300 focus:border-vet-primary focus:ring-vet-primary">
                           <SelectValue placeholder="Seleccionar género" />
                         </SelectTrigger>
                         <SelectContent>
@@ -831,12 +977,80 @@ export default function Configuracion() {
                     </div>
                   </div>
 
+                  {/* Veterinarian-specific fields */}
+                  {user?.rol === "veterinario" && (
+                    <div className="space-y-4">
+                      <div className="border-t border-vet-gray-200 pt-6">
+                        <h3 className="text-lg font-semibold text-vet-gray-900 mb-4 flex items-center space-x-2">
+                          <Stethoscope className="w-5 h-5 text-vet-primary" />
+                          <span>Información Profesional</span>
+                        </h3>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                          <div className="space-y-2">
+                            <Label htmlFor="especialidad">Especialidad *</Label>
+                            <Input
+                              id="especialidad"
+                              value={profileData.especialidad}
+                              onChange={(e) =>
+                                setProfileData({
+                                  ...profileData,
+                                  especialidad: e.target.value,
+                                })
+                              }
+                              placeholder="Ej: Medicina Interna, Cirugía, etc."
+                              required
+                              className="border-vet-gray-300 focus:border-vet-primary focus:ring-vet-primary"
+                            />
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label htmlFor="colegiatura">
+                              Número de Colegiatura *
+                            </Label>
+                            <Input
+                              id="colegiatura"
+                              value={profileData.colegiatura}
+                              onChange={(e) =>
+                                setProfileData({
+                                  ...profileData,
+                                  colegiatura: e.target.value,
+                                })
+                              }
+                              placeholder="Número de colegiatura"
+                              required
+                              className="border-vet-gray-300 focus:border-vet-primary focus:ring-vet-primary"
+                            />
+                          </div>
+
+                          <div className="space-y-2 md:col-span-2">
+                            <Label htmlFor="experiencia">
+                              Años de Experiencia
+                            </Label>
+                            <Input
+                              id="experiencia"
+                              value={profileData.experiencia}
+                              onChange={(e) =>
+                                setProfileData({
+                                  ...profileData,
+                                  experiencia: e.target.value,
+                                })
+                              }
+                              placeholder="Años de experiencia profesional"
+                              className="border-vet-gray-300 focus:border-vet-primary focus:ring-vet-primary"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   <div className="space-y-2">
                     <Label htmlFor="bio">
                       {user?.rol === "cliente"
                         ? "Información sobre tus mascotas"
                         : user?.rol === "veterinario"
-                          ? "Especialidades y experiencia"
+                          ? "Descripción profesional"
                           : user?.rol === "admin"
                             ? "Información administrativa"
                             : "Información adicional"}
@@ -854,13 +1068,32 @@ export default function Configuracion() {
                         user?.rol === "cliente"
                           ? "Cuéntanos sobre tus mascotas, sus necesidades especiales, etc..."
                           : user?.rol === "veterinario"
-                            ? "Describe tus especialidades, años de experiencia, certificaciones..."
+                            ? "Describe tu experiencia, certificaciones, filosofía de trabajo..."
                             : user?.rol === "admin"
                               ? "Información sobre tu rol administrativo..."
                               : "Información adicional..."
                       }
                       rows={4}
+                      className="border-vet-gray-300 focus:border-vet-primary focus:ring-vet-primary"
                     />
+                  </div>
+
+                  {/* Important note about data */}
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <div className="flex items-start space-x-2">
+                      <Info className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                      <div>
+                        <h4 className="font-medium text-blue-900 mb-1">
+                          Importante
+                        </h4>
+                        <p className="text-sm text-blue-700">
+                          Todos los datos de tu perfil son importantes para el
+                          funcionamiento del sistema. Los campos marcados con *
+                          son obligatorios. Asegúrate de mantener tu información
+                          actualizada.
+                        </p>
+                      </div>
+                    </div>
                   </div>
 
                   {/* Role-specific information */}
@@ -1286,175 +1519,6 @@ export default function Configuracion() {
                         <>
                           <Save className="mr-2 w-4 h-4" />
                           Actualizar seguridad
-                        </>
-                      )}
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            {/* Appearance Tab */}
-            <TabsContent value="appearance" className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <Palette className="w-5 h-5 text-vet-primary" />
-                    <span>Preferencias de Apariencia</span>
-                  </CardTitle>
-                  <CardDescription>
-                    Personaliza la apariencia y el idioma de la aplicación
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <Label htmlFor="theme">Tema de la aplicación</Label>
-                      <Select
-                        value={themeSettings.theme}
-                        onValueChange={(value) =>
-                          setThemeSettings({
-                            ...themeSettings,
-                            theme: value,
-                          })
-                        }
-                      >
-                        <SelectTrigger className="border-vet-gray-300 focus:border-vet-primary focus:ring-vet-primary">
-                          <SelectValue placeholder="Seleccionar tema" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="light">🌞 Claro</SelectItem>
-                          <SelectItem value="dark">🌙 Oscuro</SelectItem>
-                          <SelectItem value="system">⚙️ Sistema</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="language">Idioma de la interfaz</Label>
-                      <Select
-                        value={themeSettings.language}
-                        onValueChange={(value) =>
-                          setThemeSettings({
-                            ...themeSettings,
-                            language: value,
-                          })
-                        }
-                      >
-                        <SelectTrigger className="border-vet-gray-300 focus:border-vet-primary focus:ring-vet-primary">
-                          <SelectValue placeholder="Seleccionar idioma" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="es">🇪🇸 Español</SelectItem>
-                          <SelectItem value="en">🇺🇸 English</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="timezone">Zona horaria</Label>
-                      <Select
-                        value={themeSettings.timezone}
-                        onValueChange={(value) =>
-                          setThemeSettings({
-                            ...themeSettings,
-                            timezone: value,
-                          })
-                        }
-                      >
-                        <SelectTrigger className="border-vet-gray-300 focus:border-vet-primary focus:ring-vet-primary">
-                          <SelectValue placeholder="Seleccionar zona horaria" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="America/Lima">
-                            🇵🇪 Lima (GMT-5)
-                          </SelectItem>
-                          <SelectItem value="America/Mexico_City">
-                            🇲🇽 Ciudad de México (GMT-6)
-                          </SelectItem>
-                          <SelectItem value="America/Bogota">
-                            🇨🇴 Bogotá (GMT-5)
-                          </SelectItem>
-                          <SelectItem value="America/Buenos_Aires">
-                            🇦🇷 Buenos Aires (GMT-3)
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="dateFormat">Formato de fecha</Label>
-                      <Select
-                        value={themeSettings.dateFormat}
-                        onValueChange={(value) =>
-                          setThemeSettings({
-                            ...themeSettings,
-                            dateFormat: value,
-                          })
-                        }
-                      >
-                        <SelectTrigger className="border-vet-gray-300 focus:border-vet-primary focus:ring-vet-primary">
-                          <SelectValue placeholder="Seleccionar formato" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="DD/MM/YYYY">
-                            DD/MM/YYYY (31/12/2024)
-                          </SelectItem>
-                          <SelectItem value="MM/DD/YYYY">
-                            MM/DD/YYYY (12/31/2024)
-                          </SelectItem>
-                          <SelectItem value="YYYY-MM-DD">
-                            YYYY-MM-DD (2024-12-31)
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="currency">Moneda</Label>
-                      <Select
-                        value={themeSettings.currency}
-                        onValueChange={(value) =>
-                          setThemeSettings({
-                            ...themeSettings,
-                            currency: value,
-                          })
-                        }
-                      >
-                        <SelectTrigger className="border-vet-gray-300 focus:border-vet-primary focus:ring-vet-primary">
-                          <SelectValue placeholder="Seleccionar moneda" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="PEN">
-                            🇵🇪 Soles Peruanos (S/.)
-                          </SelectItem>
-                          <SelectItem value="USD">🇺🇸 Dólares (USD)</SelectItem>
-                          <SelectItem value="MXN">
-                            🇲🇽 Pesos Mexicanos (MXN)
-                          </SelectItem>
-                          <SelectItem value="COP">
-                            🇨🇴 Pesos Colombianos (COP)
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-
-                  <div className="flex justify-end">
-                    <Button
-                      onClick={handleSaveTheme}
-                      disabled={isLoading}
-                      className="bg-vet-primary hover:bg-vet-primary-dark"
-                    >
-                      {isLoading ? (
-                        <>
-                          <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2" />
-                          Guardando...
-                        </>
-                      ) : (
-                        <>
-                          <Save className="mr-2 w-4 h-4" />
-                          Guardar preferencias
                         </>
                       )}
                     </Button>
