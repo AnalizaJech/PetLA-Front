@@ -88,6 +88,25 @@ export default function Index() {
     e.preventDefault();
     setIsLoading(true);
 
+    // Validar campos obligatorios
+    if (!formData.fechaPreferida) {
+      alert("Por favor selecciona una fecha preferida");
+      setIsLoading(false);
+      return;
+    }
+
+    if (!formData.horaPreferida) {
+      alert("Por favor selecciona una hora preferida");
+      setIsLoading(false);
+      return;
+    }
+
+    if (!formData.motivoConsulta.trim()) {
+      alert("Por favor describe el motivo de la consulta");
+      setIsLoading(false);
+      return;
+    }
+
     try {
       // Create pre-cita using context
       addPreCita({
@@ -596,10 +615,11 @@ export default function Index() {
                         });
                       }
                     }}
-                    placeholder="Selecciona fecha"
+                    placeholder="Selecciona fecha *"
                     fromYear={new Date().getFullYear()}
                     toYear={new Date().getFullYear() + 1}
                     minDate={new Date()}
+                    className={!formData.fechaPreferida ? "border-red-300" : ""}
                   />
                 </div>
                 <div className="space-y-2">
@@ -611,8 +631,8 @@ export default function Index() {
                     }
                     required
                   >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecciona una hora" />
+                    <SelectTrigger className={!formData.horaPreferida ? "border-red-300" : ""}>
+                      <SelectValue placeholder="Selecciona una hora *" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="09:00">09:00</SelectItem>
@@ -638,18 +658,21 @@ export default function Index() {
               </div>
 
               <div>
-                <Label htmlFor="motivoConsulta">Motivo de la consulta</Label>
+                <Label htmlFor="motivoConsulta">Motivo de la consulta *</Label>
                 <div className="mt-1">
                   <Textarea
                     id="motivoConsulta"
                     name="motivoConsulta"
                     value={formData.motivoConsulta}
                     onChange={handleInputChange}
-                    placeholder="Describe brevemente el motivo de la consulta veterinaria..."
-                    className="w-full min-h-[100px] max-h-[100px] resize-none overflow-y-auto px-3 py-2 border border-vet-gray-300 rounded-lg focus:ring-2 focus:ring-vet-primary focus:border-vet-primary transition-all duration-200"
+                    placeholder="Describe brevemente el motivo de la consulta veterinaria... *"
+                    required
+                    className={`w-full min-h-[100px] max-h-[100px] resize-none overflow-y-auto px-3 py-2 border rounded-lg focus:ring-2 focus:ring-vet-primary focus:border-vet-primary transition-all duration-200 ${
+                      !formData.motivoConsulta.trim() ? "border-red-300" : "border-vet-gray-300"
+                    }`}
                   />
                   <p className="text-xs text-vet-gray-500 mt-1">
-                    Máximo 500 caracteres. Describe síntomas, comportamientos o
+                    <span className="text-red-500">*Obligatorio</span> - Máximo 500 caracteres. Describe síntomas, comportamientos o
                     motivos de la consulta.
                   </p>
                 </div>
