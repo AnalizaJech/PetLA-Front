@@ -950,8 +950,14 @@ export default function Calendario() {
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       if (mascota) {
+                                        const propietario = usuarios.find(u => u.id === mascota.clienteId);
                                         navigate(
-                                          `/historial-clinico-veterinario?mascota=${mascota.id}`,
+                                          `/historial-clinico-veterinario?view=history&ownerId=${propietario?.id || 'unknown'}&petId=${mascota.id}`,
+                                        );
+                                      } else {
+                                        // Fallback para mascotas no registradas
+                                        navigate(
+                                          `/historial-clinico-veterinario?view=history&petName=${encodeURIComponent(cita.mascota)}&especie=${encodeURIComponent(cita.especie)}`,
                                         );
                                       }
                                     }}
