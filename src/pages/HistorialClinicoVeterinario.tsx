@@ -66,6 +66,7 @@ export default function HistorialClinicoVeterinario() {
     mascotas,
     historialClinico,
     getHistorialByMascota,
+    addHistorialEntry,
   } = useAppContext();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
