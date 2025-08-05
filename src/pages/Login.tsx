@@ -116,12 +116,12 @@ export default function Login() {
   };
 
   return (
-    <div className="w-full space-y-6">
+    <div className="w-full space-y-8">
       <div className="text-center">
-        <h2 className="text-3xl font-bold text-vet-gray-900">
+        <h2 className="text-4xl font-bold text-vet-gray-900 mb-4">
           Bienvenido a PetLA
         </h2>
-        <p className="mt-2 text-vet-gray-600">
+        <p className="text-lg text-vet-gray-600">
           Accede a tu cuenta o crea una nueva
         </p>
       </div>
