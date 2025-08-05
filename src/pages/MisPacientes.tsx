@@ -213,45 +213,13 @@ export default function MisPacientes() {
 
   // Aplicar filtros usando utilidades mejoradas
   const filteredCitas = useMemo(() => {
-    const now = new Date();
     let filtered = enhancedCitas;
 
-    // Filtrar por pestaña/estado
-    switch (selectedTab) {
-      case "proximas":
-        filtered = filtered.filter(
-          ({ cita }) =>
-            cita.fecha > now &&
-            (cita.estado === "aceptada" || cita.estado === "en_validacion"),
-        );
-        break;
-      case "hoy":
-        const today = now.toDateString();
-        filtered = filtered.filter(
-          ({ cita }) => cita.fecha.toDateString() === today,
-        );
-        break;
-      case "pendientes":
-        filtered = filtered.filter(
-          ({ cita }) =>
-            cita.estado === "en_validacion" || cita.estado === "pendiente_pago",
-        );
-        break;
-      case "completadas":
-        filtered = filtered.filter(({ cita }) => cita.estado === "atendida");
-        break;
-      case "urgentes":
-        filtered = filtered.filter(
-          ({ urgencyLevel }) => urgencyLevel === "alta",
-        );
-        break;
-    }
-
-    // Aplicar filtros adicionales
+    // Aplicar filtros
     const filter: CitaFilter = {
       ...(filterOwner !== "todos" && { propietarioId: filterOwner }),
       ...(filterEspecie !== "todos" && { especie: filterEspecie }),
-      ...(filterUrgencia !== "todos" && { urgencia: filterUrgencia as any }),
+      ...(filterEstado !== "todos" && { estado: filterEstado as any }),
       ...(searchTerm.trim() && { searchTerm }),
     };
 
@@ -261,10 +229,9 @@ export default function MisPacientes() {
     return sortCitas(filtered, sortBy);
   }, [
     enhancedCitas,
-    selectedTab,
     filterOwner,
     filterEspecie,
-    filterUrgencia,
+    filterEstado,
     searchTerm,
     sortBy,
   ]);
