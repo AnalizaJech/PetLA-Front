@@ -181,7 +181,11 @@ export default function MisPacientes() {
   );
 
   // Validar integridad de datos con mejoras
-  const { valid: validCitas, invalid: invalidCitas, fixable: fixableCitas } = useMemo(
+  const {
+    valid: validCitas,
+    invalid: invalidCitas,
+    fixable: fixableCitas,
+  } = useMemo(
     () => validateCitaData(misCitas, mascotas, usuarios),
     [misCitas, mascotas, usuarios],
   );
@@ -273,17 +277,18 @@ export default function MisPacientes() {
 
     // Filter validation results to only include this veterinarian's patients
     const myDataIssues = {
-      orphanedPets: dataValidation.orphanedPets.filter(pet =>
-        misCitas.some(cita =>
-          cita.mascota.toLowerCase() === pet.nombre.toLowerCase() ||
-          cita.mascotaId === pet.id
-        )
+      orphanedPets: dataValidation.orphanedPets.filter((pet) =>
+        misCitas.some(
+          (cita) =>
+            cita.mascota.toLowerCase() === pet.nombre.toLowerCase() ||
+            cita.mascotaId === pet.id,
+        ),
       ).length,
-      incompleteCitas: dataValidation.incompleteCitas.filter(cita =>
-        cita.veterinario === user?.nombre
+      incompleteCitas: dataValidation.incompleteCitas.filter(
+        (cita) => cita.veterinario === user?.nombre,
       ).length,
-      ghostPets: dataValidation.ghostPets.filter(nombre =>
-        misCitas.some(cita => cita.mascota === nombre)
+      ghostPets: dataValidation.ghostPets.filter((nombre) =>
+        misCitas.some((cita) => cita.mascota === nombre),
       ).length,
     };
 
@@ -296,7 +301,10 @@ export default function MisPacientes() {
       urgentes: citasStats.urgentes,
       sinPropietario: myDataIssues.orphanedPets,
       sinMascota: myDataIssues.ghostPets,
-      problemasData: myDataIssues.orphanedPets + myDataIssues.incompleteCitas + myDataIssues.ghostPets,
+      problemasData:
+        myDataIssues.orphanedPets +
+        myDataIssues.incompleteCitas +
+        myDataIssues.ghostPets,
       propietariosUnicos: citasStats.propietariosUnicos,
       mascotasUnicas: citasStats.mascotasUnicas,
       citasIncompletas: myDataIssues.incompleteCitas,
@@ -306,20 +314,20 @@ export default function MisPacientes() {
   // Enhanced auto-fix handler using context repair functionality
   const handleAutoFix = () => {
     try {
-      console.log('🔧 Iniciando reparación automática de datos...');
+      console.log("🔧 Iniciando reparación automática de datos...");
       const results = repairDataIntegrity();
 
       // Create a compatible results object for UI display
       const compatibleResults = {
         newMascotas: Array.from({ length: results.createdPets }, (_, i) => ({
-          nombre: `Mascota ${i + 1}`
+          nombre: `Mascota ${i + 1}`,
         })),
-        errors: results.errors
+        errors: results.errors,
       };
 
       setAutoFixResults(compatibleResults);
 
-      console.log('🔧 Resultados de reparación automática:', results);
+      console.log("🔧 Resultados de reparación automática:", results);
 
       if (results.createdPets > 0) {
         console.log(`➕ ${results.createdPets} mascotas creadas`);
@@ -330,7 +338,7 @@ export default function MisPacientes() {
       }
 
       if (results.errors.length > 0) {
-        console.warn('⚠️ Errores durante la reparación:', results.errors);
+        console.warn("⚠️ Errores durante la reparación:", results.errors);
       }
 
       setShowAutoFix(true);
@@ -340,7 +348,7 @@ export default function MisPacientes() {
         window.location.reload();
       }, 3000);
     } catch (error) {
-      console.error('Error aplicando correcciones automáticas:', error);
+      console.error("Error aplicando correcciones automáticas:", error);
     }
   };
 
@@ -553,7 +561,8 @@ export default function MisPacientes() {
                   <AlertCircle className="w-4 h-4 text-red-600" />
                   <AlertDescription className="text-red-800">
                     <strong>
-                      Se detectaron {invalidCitas.length} citas con problemas críticos.
+                      Se detectaron {invalidCitas.length} citas con problemas
+                      críticos.
                     </strong>
                     <Button
                       variant="link"
@@ -567,7 +576,8 @@ export default function MisPacientes() {
                       <div className="mt-2 space-y-1">
                         {invalidCitas.slice(0, 3).map(({ cita, issues }) => (
                           <div key={cita.id} className="text-sm">
-                            • <strong>{cita.mascota}</strong>: {issues.join(", ")}
+                            • <strong>{cita.mascota}</strong>:{" "}
+                            {issues.join(", ")}
                           </div>
                         ))}
                         {invalidCitas.length > 3 && (
@@ -589,14 +599,18 @@ export default function MisPacientes() {
                     <div className="flex items-center justify-between">
                       <div>
                         <strong>
-                          {fixableCitas.length} problemas pueden repararse automáticamente.
+                          {fixableCitas.length} problemas pueden repararse
+                          automáticamente.
                         </strong>
                         <div className="mt-2 text-sm">
-                          {fixableCitas.slice(0, 2).map(({ cita, suggestedFix }) => (
-                            <div key={cita.id}>
-                              • <strong>{cita.mascota}</strong>: {suggestedFix}
-                            </div>
-                          ))}
+                          {fixableCitas
+                            .slice(0, 2)
+                            .map(({ cita, suggestedFix }) => (
+                              <div key={cita.id}>
+                                • <strong>{cita.mascota}</strong>:{" "}
+                                {suggestedFix}
+                              </div>
+                            ))}
                           {fixableCitas.length > 2 && (
                             <div>... y {fixableCitas.length - 2} más</div>
                           )}
@@ -623,10 +637,16 @@ export default function MisPacientes() {
                       <strong>Reparación completada:</strong>
                       <div className="mt-2 text-sm space-y-1">
                         {autoFixResults.newMascotas.length > 0 && (
-                          <div>✅ {autoFixResults.newMascotas.length} mascotas creadas</div>
+                          <div>
+                            ✅ {autoFixResults.newMascotas.length} mascotas
+                            creadas
+                          </div>
                         )}
                         {autoFixResults.errors.length > 0 && (
-                          <div>⚠️ {autoFixResults.errors.length} errores encontrados</div>
+                          <div>
+                            ⚠️ {autoFixResults.errors.length} errores
+                            encontrados
+                          </div>
                         )}
                       </div>
                       <Button
@@ -645,7 +665,9 @@ export default function MisPacientes() {
           )}
 
           {/* Stats adicionales con más detalles */}
-          {(stats.sinPropietario > 0 || stats.sinMascota > 0 || stats.problemasData > 0) && (
+          {(stats.sinPropietario > 0 ||
+            stats.sinMascota > 0 ||
+            stats.problemasData > 0) && (
             <div className="space-y-3 mb-6">
               {stats.sinPropietario > 0 && (
                 <Alert className="border-yellow-200 bg-yellow-50">
@@ -661,7 +683,8 @@ export default function MisPacientes() {
                 <Alert className="border-orange-200 bg-orange-50">
                   <PawPrint className="w-4 h-4 text-orange-600" />
                   <AlertDescription className="text-orange-800">
-                    <strong>{stats.sinMascota} citas</strong> tienen mascotas no registradas en el sistema.
+                    <strong>{stats.sinMascota} citas</strong> tienen mascotas no
+                    registradas en el sistema.
                   </AlertDescription>
                 </Alert>
               )}
@@ -670,7 +693,8 @@ export default function MisPacientes() {
                 <Alert className="border-purple-200 bg-purple-50">
                   <Info className="w-4 h-4 text-purple-600" />
                   <AlertDescription className="text-purple-800">
-                    <strong>{stats.citasIncompletas} citas</strong> tienen información de relación incompleta.
+                    <strong>{stats.citasIncompletas} citas</strong> tienen
+                    información de relación incompleta.
                   </AlertDescription>
                 </Alert>
               )}
@@ -679,10 +703,18 @@ export default function MisPacientes() {
                 <Alert className="border-blue-200 bg-blue-50">
                   <Info className="w-4 h-4 text-blue-600" />
                   <AlertDescription className="text-blue-800">
-                    Resumen: <strong>{stats.propietariosUnicos} propietarios únicos</strong>,
-                    <strong> {stats.mascotasUnicas} mascotas únicas</strong> en {stats.total} citas.
+                    Resumen:{" "}
+                    <strong>
+                      {stats.propietariosUnicos} propietarios únicos
+                    </strong>
+                    ,<strong> {stats.mascotasUnicas} mascotas únicas</strong> en{" "}
+                    {stats.total} citas.
                     {stats.problemasData > 0 && (
-                      <><br />Total de problemas detectados: <strong>{stats.problemasData}</strong></>
+                      <>
+                        <br />
+                        Total de problemas detectados:{" "}
+                        <strong>{stats.problemasData}</strong>
+                      </>
                     )}
                   </AlertDescription>
                 </Alert>
@@ -837,20 +869,26 @@ export default function MisPacientes() {
                               </div>
 
                               {/* Información del propietario - Mejorada */}
-                              <div className={`p-3 rounded-lg mb-3 ${
-                                propietario
-                                  ? "bg-vet-gray-50 border border-vet-gray-200"
-                                  : "bg-red-50 border border-red-200"
-                              }`}>
+                              <div
+                                className={`p-3 rounded-lg mb-3 ${
+                                  propietario
+                                    ? "bg-vet-gray-50 border border-vet-gray-200"
+                                    : "bg-red-50 border border-red-200"
+                                }`}
+                              >
                                 <div className="flex items-center space-x-2 mb-2">
                                   {propietario ? (
                                     <UserCheck className="w-4 h-4 text-vet-primary" />
                                   ) : (
                                     <UserX className="w-4 h-4 text-red-600" />
                                   )}
-                                  <span className={`font-medium ${
-                                    propietario ? "text-vet-gray-900" : "text-red-900"
-                                  }`}>
+                                  <span
+                                    className={`font-medium ${
+                                      propietario
+                                        ? "text-vet-gray-900"
+                                        : "text-red-900"
+                                    }`}
+                                  >
                                     Propietario:{" "}
                                     {propietario?.nombre || "⚠️ Sin asignar"}
                                   </span>
@@ -881,7 +919,8 @@ export default function MisPacientes() {
                                   </div>
                                 ) : (
                                   <div className="text-sm text-red-600">
-                                    Esta mascota necesita ser asignada a un propietario
+                                    Esta mascota necesita ser asignada a un
+                                    propietario
                                   </div>
                                 )}
                               </div>
@@ -893,7 +932,9 @@ export default function MisPacientes() {
                                     <PawPrint className="w-4 h-4 text-vet-gray-600" />
                                     <span>
                                       <strong>Especie:</strong>{" "}
-                                      {mascota?.especie || cita.especie || "No especificado"}
+                                      {mascota?.especie ||
+                                        cita.especie ||
+                                        "No especificado"}
                                     </span>
                                     {!mascota && (
                                       <Badge className="bg-orange-100 text-orange-800 border-orange-200 text-xs">

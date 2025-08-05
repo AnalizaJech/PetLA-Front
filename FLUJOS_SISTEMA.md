@@ -11,6 +11,7 @@ PetLA es un sistema de gestión veterinaria que digitaliza y optimiza todos los 
 ### 🚀 Propósito Principal
 
 Transformar la experiencia veterinaria tradicional en un proceso digital fluido que:
+
 - **Simplifica** el agendamiento de citas para los dueños de mascotas
 - **Optimiza** la gestión de pacientes para los veterinarios
 - **Automatiza** los procesos administrativos para el personal
@@ -19,6 +20,7 @@ Transformar la experiencia veterinaria tradicional en un proceso digital fluido 
 ### 👥 Usuarios del Sistema
 
 **🟦 Clientes (Propietarios de Mascotas)**
+
 - Registran y gestionan la información de sus mascotas
 - Agendan citas médicas de forma autónoma
 - Suben comprobantes de pago digital
@@ -26,6 +28,7 @@ Transformar la experiencia veterinaria tradicional en un proceso digital fluido 
 - Reciben notificaciones sobre el estado de sus citas
 
 **🟩 Veterinarios**
+
 - Acceden a su agenda médica personalizada
 - Gestionan información completa de pacientes y propietarios
 - Registran consultas y actualizan historiales clínicos
@@ -33,6 +36,7 @@ Transformar la experiencia veterinaria tradicional en un proceso digital fluido 
 - Monitorean estadísticas de su práctica profesional
 
 **🟥 Administradores**
+
 - Supervisan todas las operaciones de la clínica
 - Validan comprobantes de pago y gestionan facturación
 - Administran usuarios y asignan veterinarios
@@ -42,30 +46,35 @@ Transformar la experiencia veterinaria tradicional en un proceso digital fluido 
 ### 🔧 Características Principales
 
 **📅 Gestión Inteligente de Citas**
+
 - Sistema de estados automatizado (pendiente → validación → confirmada → atendida)
 - Asignación automática de veterinarios
 - Validación digital de comprobantes de pago
 - Notificaciones en tiempo real
 
 **🏥 Historial Clínico Digital**
+
 - Registro completo de consultas médicas
 - Seguimiento de tratamientos y medicamentos
 - Análisis de tendencias de salud
 - Acceso controlado por roles
 
 **💳 Sistema de Pagos Integrado**
+
 - Múltiples métodos de pago (YAPE, PLIN, bancos)
 - Validación automática de comprobantes
 - Gestión de facturación
 - Seguimiento de pagos pendientes
 
 **🔍 Búsqueda y Filtrado Avanzado**
+
 - Búsqueda inteligente de pacientes
 - Filtros por múltiples criterios
 - Resultados en tiempo real
 - Información contextual enriquecida
 
 **📊 Dashboard y Estadísticas**
+
 - Métricas en tiempo real por rol
 - Indicadores de rendimiento
 - Análisis de tendencias
@@ -74,12 +83,14 @@ Transformar la experiencia veterinaria tradicional en un proceso digital fluido 
 ### 🏗️ Arquitectura Técnica
 
 **Frontend**
+
 - React 18 con TypeScript para máxima confiabilidad
 - TailwindCSS + Radix UI para interfaz moderna y accesible
 - React Router 6 para navegación fluida (SPA)
 - Context API + localStorage para gestión de estado
 
 **Características Técnicas**
+
 - Diseño responsive (desktop, tablet, móvil)
 - Compresión automática de imágenes
 - Sistema de notificaciones inteligentes
@@ -133,16 +144,19 @@ graph TD
 #### **🌟 Diferenciadores Competitivos**
 
 **Enfoque 360° en la Experiencia Veterinaria**
+
 - Primera plataforma que integra completamente clientes, veterinarios y administradores
 - Workflow automatizado desde agendamiento hasta seguimiento post-consulta
 - Historial clínico digital completo con análisis de tendencias
 
 **Tecnología de Vanguardia**
+
 - Interfaz moderna y responsive construida con React 18 + TypeScript
 - Sistema de notificaciones en tiempo real
 - Auto-reparación de datos para máxima confiabilidad
 
 **Facilidad de Adopción**
+
 - Implementación inmediata sin instalaciones complejas
 - Interfaz intuitiva que reduce tiempo de capacitación
 - Compatibilidad total con dispositivos móviles
@@ -150,16 +164,19 @@ graph TD
 #### **🎯 Segmentos de Mercado Objetivo**
 
 **Clínicas Veterinarias Medianas (5-15 veterinarios)**
+
 - Necesidad de digitalización pero sin recursos para desarrollos custom
 - Buscan mejorar eficiencia operativa y experiencia del cliente
 - Requieren sistema confiable con soporte técnico
 
 **Veterinarios Independientes**
+
 - Profesionales que buscan modernizar su práctica
 - Necesitan herramientas para competir con clínicas grandes
 - Valoran la simplicidad y el costo-beneficio
 
 **Cadenas de Clínicas Veterinarias**
+
 - Necesitan uniformidad en procesos entre sucursales
 - Requieren reportes centralizados y métricas de performance
 - Buscan escalabilidad y integración con otros sistemas
@@ -167,11 +184,13 @@ graph TD
 #### **💰 Modelo de Negocio**
 
 **SaaS (Software as a Service)**
+
 - Suscripción mensual por veterinario activo
 - Planes escalonados según características y volumen
 - Sin costos de implementación o hardware
 
 **Estructura de Precios Competitiva**
+
 - Plan Básico: Funcionalidades core para veterinarios independientes
 - Plan Profesional: Características avanzadas + reportes + soporte prioritario
 - Plan Enterprise: Customizaciones + API + integración con terceros
@@ -181,21 +200,23 @@ graph TD
 #### **Frontend de Alto Rendimiento**
 
 **React 18 Ecosystem**
+
 ```typescript
 // Stack tecnológico principal
 const techStack = {
-  framework: 'React 18.2+ con TypeScript',
-  buildTool: 'Vite para desarrollo rápido',
-  routing: 'React Router 6 (SPA)',
-  stateManagement: 'Context API + localStorage',
-  styling: 'TailwindCSS 3.4+ utility-first',
-  components: 'Radix UI primitivos accesibles',
-  icons: 'Lucide React',
-  development: 'TypeScript 5.0+ + ESLint + Prettier'
+  framework: "React 18.2+ con TypeScript",
+  buildTool: "Vite para desarrollo rápido",
+  routing: "React Router 6 (SPA)",
+  stateManagement: "Context API + localStorage",
+  styling: "TailwindCSS 3.4+ utility-first",
+  components: "Radix UI primitivos accesibles",
+  icons: "Lucide React",
+  development: "TypeScript 5.0+ + ESLint + Prettier",
 };
 ```
 
 **Arquitectura de Componentes Moderna**
+
 ```
 src/
 ├── components/              # Arquitectura atómica
@@ -232,6 +253,7 @@ src/
 #### **Sistema de Gestión de Estado Avanzado**
 
 **Context API + TypeScript**
+
 ```typescript
 interface AppContextType {
   // Autenticación y usuarios
@@ -249,7 +271,7 @@ interface AppContextType {
   // Operaciones CRUD
   updateCita: (id: string, updates: Partial<Cita>) => void;
   deleteCita: (id: string) => void;
-  addMascota: (mascota: Omit<Mascota, 'id'>) => void;
+  addMascota: (mascota: Omit<Mascota, "id">) => void;
 
   // Sistema de notificaciones
   notificaciones: Notificacion[];
@@ -263,6 +285,7 @@ interface AppContextType {
 ```
 
 **Persistencia Inteligente con localStorage**
+
 - Serialización automática de objetos complejos
 - Sincronización bidireccional context ↔ localStorage
 - Compresión de imágenes antes del almacenamiento
@@ -271,29 +294,31 @@ interface AppContextType {
 #### **Sistema de Diseño Profesional**
 
 **Design System Personalizado**
+
 ```css
 /* Variables CSS personalizadas */
 :root {
   /* Paleta principal */
-  --vet-primary: #2B7F75;          /* Verde veterinario */
-  --vet-primary-dark: #1E5A52;     /* Verde oscuro */
-  --vet-secondary: #F97316;        /* Naranja energético */
+  --vet-primary: #2b7f75; /* Verde veterinario */
+  --vet-primary-dark: #1e5a52; /* Verde oscuro */
+  --vet-secondary: #f97316; /* Naranja energético */
 
   /* Escala de grises */
-  --vet-gray-50: #F9FAFB;          /* Backgrounds claros */
-  --vet-gray-100: #F3F4F6;         /* Borders suaves */
-  --vet-gray-600: #4B5563;         /* Texto secundario */
-  --vet-gray-900: #111827;         /* Texto principal */
+  --vet-gray-50: #f9fafb; /* Backgrounds claros */
+  --vet-gray-100: #f3f4f6; /* Borders suaves */
+  --vet-gray-600: #4b5563; /* Texto secundario */
+  --vet-gray-900: #111827; /* Texto principal */
 
   /* Colores semánticos */
-  --success: #10B981;              /* Verde éxito */
-  --warning: #F59E0B;              /* Amarillo advertencia */
-  --error: #EF4444;                /* Rojo error */
-  --info: #3B82F6;                 /* Azul información */
+  --success: #10b981; /* Verde éxito */
+  --warning: #f59e0b; /* Amarillo advertencia */
+  --error: #ef4444; /* Rojo error */
+  --info: #3b82f6; /* Azul información */
 }
 ```
 
 **Componentes UI con Variantes**
+
 - **Buttons**: 8 variantes (default, primary, outline, ghost, destructive)
 - **Cards**: Containers con shadows consistentes y hover effects
 - **Modals**: Sistema de overlays accesible con Radix UI
@@ -305,11 +330,12 @@ interface AppContextType {
 #### **Funcionalidades Avanzadas Implementadas**
 
 **🔍 Sistema de Búsqueda Inteligente**
+
 ```typescript
 // Búsqueda fuzzy con múltiples criterios
 const searchPatients = (term: string, criteria: SearchCriteria) => {
-  return mascotas.filter(mascota => {
-    const propietario = usuarios.find(u => u.id === mascota.clienteId);
+  return mascotas.filter((mascota) => {
+    const propietario = usuarios.find((u) => u.id === mascota.clienteId);
     return (
       mascota.nombre?.toLowerCase().includes(term.toLowerCase()) ||
       mascota.especie?.toLowerCase().includes(term.toLowerCase()) ||
@@ -322,6 +348,7 @@ const searchPatients = (term: string, criteria: SearchCriteria) => {
 ```
 
 **📸 Gestión Avanzada de Archivos**
+
 - Compresión automática de imágenes con canvas API
 - Soporte para múltiples formatos (JPEG, PNG, PDF)
 - Previsualización en tiempo real
@@ -329,17 +356,19 @@ const searchPatients = (term: string, criteria: SearchCriteria) => {
 - Encoding Base64 optimizado para localStorage
 
 **🔧 Sistema de Auto-Reparación**
+
 ```typescript
 // Auto-detección y reparación de relaciones rotas
 const autoRepairData = () => {
-  citas.forEach(cita => {
+  citas.forEach((cita) => {
     // Reparar relación mascota-propietario
     if (!cita.clienteId) {
-      const mascota = mascotas.find(m => m.nombre === cita.mascota);
+      const mascota = mascotas.find((m) => m.nombre === cita.mascota);
       if (mascota?.clienteId) {
         updateCita(cita.id, {
           clienteId: mascota.clienteId,
-          clienteNombre: usuarios.find(u => u.id === mascota.clienteId)?.nombre
+          clienteNombre: usuarios.find((u) => u.id === mascota.clienteId)
+            ?.nombre,
         });
       }
     }
@@ -350,6 +379,7 @@ const autoRepairData = () => {
 #### **Optimizaciones de Performance**
 
 **Code Splitting y Lazy Loading**
+
 ```typescript
 // Carga perezosa de rutas
 const Dashboard = lazy(() => import('@/pages/Dashboard'));
@@ -363,6 +393,7 @@ const ExpensiveComponent = React.memo(({ data }) => {
 ```
 
 **Técnicas de Optimización UI**
+
 - Debouncing en búsquedas (300ms delay)
 - Virtualización para listas largas (>100 items)
 - Memoización con useMemo y useCallback
@@ -371,6 +402,7 @@ const ExpensiveComponent = React.memo(({ data }) => {
 #### **Seguridad y Validación**
 
 **Validación Multinivel**
+
 ```typescript
 // Validación de tipos en tiempo de compilación
 interface CitaFormData {
@@ -378,22 +410,24 @@ interface CitaFormData {
   veterinarioId: string;
   fecha: Date;
   motivo: string;
-  tipoConsulta: 'consulta' | 'vacunacion' | 'emergencia' | 'cirugia';
+  tipoConsulta: "consulta" | "vacunacion" | "emergencia" | "cirugia";
 }
 
 // Validación en runtime
 const validateCitaData = (data: CitaFormData): ValidationResult => {
   const errors: string[] = [];
 
-  if (!data.mascotaId) errors.push('Debe seleccionar una mascota');
-  if (!data.motivo.trim()) errors.push('El motivo es requerido');
-  if (data.fecha < new Date()) errors.push('La fecha no puede ser anterior a hoy');
+  if (!data.mascotaId) errors.push("Debe seleccionar una mascota");
+  if (!data.motivo.trim()) errors.push("El motivo es requerido");
+  if (data.fecha < new Date())
+    errors.push("La fecha no puede ser anterior a hoy");
 
   return { isValid: errors.length === 0, errors };
 };
 ```
 
 **Control de Acceso Basado en Roles**
+
 - Rutas protegidas con ProtectedRoute component
 - Validación de permisos a nivel de componente
 - Navegación dinámica según rol de usuario
@@ -402,23 +436,27 @@ const validateCitaData = (data: CitaFormData): ValidationResult => {
 ### 🚀 **Funcionalidades Distintivas**
 
 #### **Dashboard Inteligente por Rol**
+
 - **Clientes**: Gestión de mascotas, agendamiento, historial
 - **Veterinarios**: Agenda médica, pacientes, consultas
 - **Admins**: Validación de pagos, gestión de usuarios, configuración
 
 #### **Sistema de Notificaciones en Tiempo Real**
+
 - Toast notifications no intrusivas
 - Centro de notificaciones persistente
 - Notificaciones push para eventos importantes
 - Sistema de prioridades (info, warning, error, success)
 
 #### **Gestión de Citas Avanzada**
+
 - Estados automatizados (pendiente → validación → confirmada → atendida)
 - Asignación inteligente de veterinarios
 - Validación digital de comprobantes de pago
 - Recordatorios automáticos
 
 #### **Historial Clínico Digital Completo**
+
 - Registro detallado de consultas médicas
 - Seguimiento de tratamientos y medicamentos
 - Análisis de tendencias de salud
@@ -427,12 +465,14 @@ const validateCitaData = (data: CitaFormData): ValidationResult => {
 ### 📊 **Métricas y KPIs del Sistema**
 
 **Performance Técnico**
+
 - Tiempo de carga inicial: <2 segundos
 - Time to Interactive: <3 segundos
 - Lighthouse Score: 95+ en todas las categorías
 - Compatibilidad: 99%+ navegadores modernos
 
 **Usabilidad**
+
 - Tiempo de aprendizaje: <30 minutos para usuarios básicos
 - Tasa de adopción: 90%+ en primeras 2 semanas
 - Satisfacción del usuario: 4.8/5 promedio
@@ -441,12 +481,14 @@ const validateCitaData = (data: CitaFormData): ValidationResult => {
 ### 🌐 **Estrategia de Despliegue y Escalabilidad**
 
 **Infraestructura Cloud-Native**
+
 - Despliegue en plataformas cloud (Vercel, Netlify, AWS)
 - CDN global para performance optimizada
 - Auto-scaling basado en demanda
 - Monitoreo 24/7 con alertas automáticas
 
 **Pipeline de Desarrollo**
+
 ```yaml
 # CI/CD automatizado
 deploy:
@@ -479,6 +521,7 @@ deploy:
 ## 🏗️ Arquitectura del Sistema
 
 ### Tecnologías
+
 - **Frontend**: React 18 + TypeScript + TailwindCSS
 - **Router**: React Router 6 (SPA)
 - **Estado**: Context API con localStorage
@@ -486,6 +529,7 @@ deploy:
 - **Styling**: TailwindCSS + CVA (Class Variance Authority)
 
 ### Estructura de Rutas
+
 ```
 /                           # Landing page público
 /login, /registro           # Autenticación
@@ -520,6 +564,7 @@ deploy:
 ## 👥 Roles y Permisos
 
 ### 🟦 Cliente
+
 - Gestiona sus mascotas
 - Agenda citas médicas
 - Sube comprobantes de pago
@@ -527,6 +572,7 @@ deploy:
 - Recibe notificaciones
 
 ### 🟩 Veterinario
+
 - Ve su agenda médica
 - Gestiona sus pacientes asignados
 - Completa consultas médicas
@@ -534,6 +580,7 @@ deploy:
 - Ve información completa de mascotas y propietarios
 
 ### 🟥 Admin
+
 - Gestiona todos los usuarios
 - Valida comprobantes de pago
 - Gestiona pre-citas del landing
@@ -546,18 +593,20 @@ deploy:
 ## 👤 Flujo del Cliente
 
 ### 1. **Registro e Inicio de Sesión**
+
 ```mermaid
 graph TD
     A[Landing Page] --> B[Formulario de Registro]
     B --> C[Crear Cuenta Cliente]
     C --> D[Login Automático]
     D --> E[Dashboard Cliente]
-    
+
     A --> F[Formulario Login]
     F --> E
 ```
 
 **Pasos detallados:**
+
 1. Visita el landing page en `/`
 2. Clic en "Registrarse" → `/registro`
 3. Completa formulario con datos personales
@@ -565,6 +614,7 @@ graph TD
 5. Redirección automática a `/dashboard`
 
 ### 2. **Gestión de Mascotas**
+
 ```mermaid
 graph TD
     A[Dashboard] --> B[Mis Mascotas]
@@ -579,12 +629,14 @@ graph TD
 ```
 
 **Funcionalidades:**
+
 - **Crear mascota**: Nombre, especie, raza, fecha nacimiento, foto opcional
 - **Editar información**: Actualizar datos, peso, microchip
 - **Eliminar mascota**: Con confirmación
 - **Subir foto**: Compresión automática de imágenes
 
 ### 3. **Agendamiento de Citas**
+
 ```mermaid
 graph TD
     A[Dashboard/Mascotas] --> B[Nueva Cita]
@@ -601,6 +653,7 @@ graph TD
 ```
 
 **Servicios Disponibles:**
+
 - Consulta General (S/. 80)
 - Vacunación (S/. 65)
 - Emergencia (S/. 150)
@@ -609,6 +662,7 @@ graph TD
 - Diagnóstico (S/. 120)
 
 ### 4. **Gestión de Pagos**
+
 ```mermaid
 graph TD
     A[Cita Pendiente Pago] --> B[Subir Comprobante]
@@ -620,6 +674,7 @@ graph TD
 ```
 
 **Métodos de Pago Aceptados:**
+
 - YAPE
 - PLIN
 - Banca Móvil BCP
@@ -627,6 +682,7 @@ graph TD
 - Otros bancos
 
 ### 5. **Seguimiento de Citas**
+
 ```mermaid
 graph TD
     A[Mis Citas] --> B{Estado de Cita}
@@ -635,11 +691,12 @@ graph TD
     B -->|aceptada| E[Cita Confirmada]
     B -->|atendida| F[Ver Detalles Consulta]
     B -->|cancelada/rechazada| G[Cita Cancelada]
-    
+
     F --> H[Historial Clínico]
 ```
 
 ### 6. **Historial Clínico**
+
 - **Vista por mascota**: Todas las consultas de cada mascota
 - **Detalles de consulta**: Diagnóstico, tratamiento, medicamentos
 - **Archivos adjuntos**: Exámenes, radiografías
@@ -650,6 +707,7 @@ graph TD
 ## 👨‍💼 Flujo del Admin
 
 ### 1. **Dashboard Principal**
+
 ```mermaid
 graph TD
     A[Login Admin] --> B[Dashboard Principal]
@@ -661,6 +719,7 @@ graph TD
 ```
 
 **Estadísticas Principales:**
+
 - Total de usuarios por rol
 - Citas del día/semana/mes
 - Ingresos y facturación
@@ -668,6 +727,7 @@ graph TD
 - Pre-citas pendientes
 
 ### 2. **Gestión de Pre-Citas**
+
 ```mermaid
 graph TD
     A[Pre-Citas] --> B[Lista de Solicitudes]
@@ -680,9 +740,10 @@ graph TD
 ```
 
 **Proceso Detallado:**
+
 1. **Recibir solicitud** desde el landing page
 2. **Evaluar información**: Verificar datos completos
-3. **Aprobar**: 
+3. **Aprobar**:
    - Crear cuenta de cliente automáticamente
    - Crear registro de mascota
    - Generar cita oficial
@@ -690,6 +751,7 @@ graph TD
 4. **Rechazar**: Marcar con motivo
 
 ### 3. **Validación de Pagos**
+
 ```mermaid
 graph TD
     A[Validación Pagos] --> B[Lista Citas Pendientes]
@@ -704,12 +766,14 @@ graph TD
 ```
 
 **Criterios de Validación:**
+
 - Monto correcto
 - Fecha de transferencia válida
 - Datos bancarios correctos
 - Comprobante legible
 
 ### 4. **Gestión de Usuarios**
+
 ```mermaid
 graph TD
     A[Usuarios] --> B[Lista Completa]
@@ -717,16 +781,17 @@ graph TD
     C --> D[Clientes]
     C --> E[Veterinarios]
     C --> F[Admins]
-    
+
     B --> G[Crear Usuario]
     B --> H[Editar Usuario]
     B --> I[Eliminar Usuario]
-    
+
     G --> J[Formulario Nuevo Usuario]
     J --> K[Asignar Rol y Permisos]
 ```
 
 ### 5. **Gestión de Servicios**
+
 ```mermaid
 graph TD
     A[Dashboard] --> B[Configurar Servicios]
@@ -734,18 +799,19 @@ graph TD
     C --> D[Editar Precio]
     C --> E[Activar/Desactivar]
     C --> F[Agregar Nuevo Servicio]
-    
+
     D --> G[Actualizar Sistema]
     G --> H[Notificar Cambios]
 ```
 
 ### 6. **Gestión de Newsletter**
+
 ```mermaid
 graph TD
     A[Newsletter] --> B[Suscriptores]
     B --> C[Lista de Emails]
     C --> D[Exportar Lista]
-    
+
     A --> E[Crear Email]
     E --> F[Editor de Contenido]
     F --> G[Previsualizar]
@@ -758,6 +824,7 @@ graph TD
 ## 👨‍⚕️ Flujo del Veterinario
 
 ### 1. **Dashboard Veterinario**
+
 ```mermaid
 graph TD
     A[Login Veterinario] --> B[Dashboard Específico]
@@ -768,6 +835,7 @@ graph TD
 ```
 
 ### 2. **Agenda Médica**
+
 ```mermaid
 graph TD
     A[Calendario] --> B[Vista Mensual/Semanal/Diaria]
@@ -775,31 +843,33 @@ graph TD
     C --> D{Estado de Cita}
     D -->|aceptada| E[Preparar Consulta]
     D -->|atendida| F[Ver Historial]
-    
+
     E --> G[Información del Paciente]
     G --> H[Datos del Propietario]
     G --> I[Historial Previo]
 ```
 
 ### 3. **Gestión de Pacientes**
+
 ```mermaid
 graph TD
     A[Mis Pacientes] --> B[Lista de Mascotas Asignadas]
     B --> C[Filtrar por Propietario]
     B --> D[Filtrar por Especie]
     B --> E[Filtrar por Urgencia]
-    
+
     B --> F[Seleccionar Paciente]
     F --> G[Información Completa]
     G --> H[Datos de la Mascota]
     G --> I[Información del Propietario]
     G --> J[Historial Clínico]
-    
+
     F --> K[Atender Cita]
     K --> L[Formulario de Consulta]
 ```
 
 ### 4. **Atención de Consultas**
+
 ```mermaid
 graph TD
     A[Atender Cita] --> B[Formulario de Consulta]
@@ -810,7 +880,7 @@ graph TD
     C --> G[Medicamentos]
     C --> H[Exámenes]
     C --> I[Observaciones]
-    
+
     B --> J[Guardar Consulta]
     J --> K[Actualizar Historial]
     K --> L[Cambiar Estado: atendida]
@@ -818,6 +888,7 @@ graph TD
 ```
 
 **Datos de Consulta:**
+
 - **Signos vitales**: Peso, temperatura, presión arterial, frecuencia cardíaca
 - **Diagnóstico**: Descripción detallada
 - **Tratamiento**: Plan de tratamiento
@@ -826,6 +897,7 @@ graph TD
 - **Próxima visita**: Fecha sugerida
 
 ### 5. **Historial Clínico Completo**
+
 ```mermaid
 graph TD
     A[Historial Clínico] --> B[Seleccionar Mascota]
@@ -835,7 +907,7 @@ graph TD
     D --> F[Vacunaciones]
     D --> G[Emergencias]
     D --> H[Cirugías]
-    
+
     C --> I[Ver Detalles]
     I --> J[Información Completa]
     J --> K[Editar si Necesario]
@@ -846,6 +918,7 @@ graph TD
 ## 🔄 Estados y Transiciones
 
 ### Estados de Citas
+
 ```mermaid
 stateDiagram-v2
     [*] --> pendiente_pago : Cita creada por cliente
@@ -856,7 +929,7 @@ stateDiagram-v2
     aceptada --> no_asistio : Cliente no asiste
     pendiente_pago --> cancelada : Cliente cancela
     pendiente_pago --> expirada : Tiempo límite excedido
-    
+
     rechazada --> pendiente_pago : Cliente corrige pago
     cancelada --> [*]
     expirada --> [*]
@@ -865,6 +938,7 @@ stateDiagram-v2
 ```
 
 ### Estados de Pre-Citas
+
 ```mermaid
 stateDiagram-v2
     [*] --> pendiente : Solicitud desde landing
@@ -875,6 +949,7 @@ stateDiagram-v2
 ```
 
 ### Estados de Usuarios
+
 ```mermaid
 stateDiagram-v2
     [*] --> registro : Nuevo usuario
@@ -890,6 +965,7 @@ stateDiagram-v2
 ## 💾 Gestión de Datos
 
 ### Almacenamiento Local
+
 ```javascript
 // Estructura de datos en localStorage
 {
@@ -906,6 +982,7 @@ stateDiagram-v2
 ```
 
 ### Relaciones de Datos
+
 ```mermaid
 erDiagram
     Usuario ||--o{ Mascota : "clienteId"
@@ -914,7 +991,7 @@ erDiagram
     Cita ||--|| HistorialClinico : "después de atendida"
     Usuario ||--o{ Notificacion : "usuarioId"
     Cita ||--o| ComprobanteData : "comprobantePago"
-    
+
     Usuario {
         string id PK
         string nombre
@@ -922,7 +999,7 @@ erDiagram
         string rol
         string telefono
     }
-    
+
     Mascota {
         string id PK
         string nombre
@@ -930,7 +1007,7 @@ erDiagram
         string raza
         string clienteId FK
     }
-    
+
     Cita {
         string id PK
         string mascota
@@ -944,6 +1021,7 @@ erDiagram
 ```
 
 ### Sistema de Reparación Automática
+
 El sistema incluye funciones de auto-reparación para mantener la integridad de datos:
 
 1. **Auto-detección de problemas**: Mascotas sin propietario, citas desvinculadas
@@ -956,6 +1034,7 @@ El sistema incluye funciones de auto-reparación para mantener la integridad de 
 ## 🔒 Seguridad y Validaciones
 
 ### Autenticación y Autorización
+
 ```mermaid
 graph TD
     A[Intento de Acceso] --> B{¿Usuario Autenticado?}
@@ -963,17 +1042,19 @@ graph TD
     B -->|Sí| D{¿Rol Permitido?}
     D -->|No| E[Acceso Denegado]
     D -->|Sí| F[Permitir Acceso]
-    
+
     C --> G[Login Exitoso]
     G --> D
 ```
 
 ### Validaciones por Rol
+
 - **Rutas protegidas**: `ProtectedRoute` component
 - **Validación de permisos**: Por rol en cada página
 - **Datos sensibles**: Solo accesibles por rol apropiado
 
 ### Validaciones de Datos
+
 - **Formularios**: Validación en tiempo real
 - **Subida de archivos**: Compresión y validación de tipo
 - **Integridad de relaciones**: Verificación automática
@@ -984,12 +1065,14 @@ graph TD
 ## 🔔 Sistema de Notificaciones
 
 ### Tipos de Notificaciones
+
 1. **bienvenida_cliente**: Nuevo usuario registrado
 2. **cita_aceptada**: Cita confirmada por admin
 3. **consulta_registrada**: Historial médico actualizado
 4. **sistema**: Notificaciones administrativas
 
 ### Flujo de Notificaciones
+
 ```mermaid
 graph TD
     A[Evento del Sistema] --> B[Crear Notificación]
@@ -1005,6 +1088,7 @@ graph TD
 ## 📱 Responsive Design
 
 El sistema está completamente optimizado para:
+
 - **Desktop**: Navegación completa con sidebar
 - **Tablet**: Navegación adaptada con menú desplegable
 - **Mobile**: Menú hamburguesa y diseño touch-friendly
@@ -1014,24 +1098,28 @@ El sistema está completamente optimizado para:
 ## 🚀 Funcionalidades Avanzadas
 
 ### 1. **Dashboard Inteligente**
+
 - Estadísticas en tiempo real
 - Gráficos interactivos
 - Filtros dinámicos
 - Exportación de datos
 
 ### 2. **Gestión de Archivos**
+
 - Compresión automática de imágenes
 - Optimización de almacenamiento
 - Previsualización de comprobantes
 - Respaldo automático
 
 ### 3. **Sistema de Búsqueda**
+
 - Búsqueda tolerante (case-insensitive)
 - Filtros múltiples
 - Búsqueda en tiempo real
 - Resultados organizados
 
 ### 4. **Herramientas de Admin**
+
 - Configuración de servicios en tiempo real
 - Gestión masiva de usuarios
 - Reportes y analytics
@@ -1042,6 +1130,7 @@ El sistema está completamente optimizado para:
 ## 📋 Flujo de Gestión de Citas (Admin)
 
 ### 1. **Dashboard de Gestión**
+
 ```mermaid
 graph TD
     A[Gestión de Citas] --> B[Vista Unificada de Citas]
@@ -1060,12 +1149,14 @@ graph TD
 ```
 
 **Funcionalidades Principales:**
+
 - **Vista completa**: Todas las citas del sistema ordenadas por fecha más reciente
 - **Filtros múltiples**: Por estado, fecha, veterinario, cliente
 - **Búsqueda inteligente**: Por mascota, veterinario, motivo de consulta
 - **Estadísticas en tiempo real**: Contadores automáticos por estado
 
 ### 2. **Gestión Individual de Citas**
+
 ```mermaid
 graph TD
     A[Seleccionar Cita] --> B[Opciones Disponibles]
@@ -1089,11 +1180,13 @@ graph TD
 ```
 
 **Acciones por Estado:**
+
 - **En validación**: Ver y validar comprobante de pago
 - **Aceptada**: Marcar como atendida o no asistió
 - **Cualquier estado**: Ver detalles, editar, eliminar
 
 ### 3. **Sistema de Validación de Pagos**
+
 ```mermaid
 graph TD
     A[Comprobante Subido] --> B[Vista de Validación]
@@ -1124,6 +1217,7 @@ graph TD
 ## 🩺 Flujo Completo del Veterinario
 
 ### 1. **Dashboard Veterinario Avanzado**
+
 ```mermaid
 graph TD
     A[Login Veterinario] --> B[Dashboard Personalizado]
@@ -1147,6 +1241,7 @@ graph TD
 ```
 
 ### 2. **Agenda Médica Completa**
+
 ```mermaid
 graph TD
     A[Calendario Veterinario] --> B[Vistas Disponibles]
@@ -1175,6 +1270,7 @@ graph TD
 ```
 
 ### 3. **Sistema de Gestión de Pacientes**
+
 ```mermaid
 graph TD
     A[Mis Pacientes] --> B[Lista de Mascotas Asignadas]
@@ -1204,6 +1300,7 @@ graph TD
 ```
 
 ### 4. **Atención de Consultas Avanzada**
+
 ```mermaid
 graph TD
     A[Seleccionar Cita para Atender] --> B[Modal de Atención]
@@ -1253,6 +1350,7 @@ graph TD
 ```
 
 ### 5. **Búsqueda Avanzada de Pacientes**
+
 ```mermaid
 graph TD
     A[Sistema de Búsqueda] --> B[Búsqueda Inteligente]
@@ -1280,6 +1378,7 @@ graph TD
 ```
 
 ### 6. **Historial Clínico Veterinario**
+
 ```mermaid
 graph TD
     A[Historial Clínico] --> B[Selección de Paciente]
@@ -1313,6 +1412,7 @@ graph TD
 ```
 
 ### 7. **Acciones Rápidas Veterinario**
+
 ```mermaid
 graph TD
     A[Panel de Acciones] --> B[Navegación Rápida]
@@ -1340,6 +1440,7 @@ graph TD
 ## 🔄 Sistema de Gestión Integral de Citas
 
 ### Estados y Transiciones Detalladas
+
 ```mermaid
 stateDiagram-v2
     [*] --> pendiente_pago : Cliente crea cita
@@ -1361,6 +1462,7 @@ stateDiagram-v2
 ```
 
 ### Flujo de Datos y Notificaciones
+
 ```mermaid
 graph TD
     A[Acción en Cita] --> B{Tipo de Cambio}

@@ -62,12 +62,12 @@ export default function CitaAttendModal({
   onSave,
 }: CitaAttendModalProps) {
   const { user, updateCita, addHistorialEntry } = useAppContext();
-  
+
   // Form state
   const [isProcessing, setIsProcessing] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  
+
   // Medical consultation form data
   const [formData, setFormData] = useState({
     peso: "",
@@ -79,7 +79,7 @@ export default function CitaAttendModal({
     observaciones: "",
     proximaVisita: "",
   });
-  
+
   const [medicamentos, setMedicamentos] = useState<Medicamento[]>([]);
   const [examenes, setExamenes] = useState<Examen[]>([]);
   const [attended, setAttended] = useState<boolean | null>(null);
@@ -118,7 +118,11 @@ export default function CitaAttendModal({
     setMedicamentos(medicamentos.filter((_, i) => i !== index));
   };
 
-  const updateMedicamento = (index: number, field: keyof Medicamento, value: string) => {
+  const updateMedicamento = (
+    index: number,
+    field: keyof Medicamento,
+    value: string,
+  ) => {
     const updated = [...medicamentos];
     updated[index] = { ...updated[index], [field]: value };
     setMedicamentos(updated);
@@ -156,7 +160,9 @@ export default function CitaAttendModal({
       // Update appointment status
       await updateCita(selectedCita.cita.id, {
         estado: attended ? "atendida" : "no_asistio",
-        notas: attended ? formData.observaciones : "El paciente no asistió a la cita",
+        notas: attended
+          ? formData.observaciones
+          : "El paciente no asistió a la cita",
       });
 
       // If attended, create medical history entry
@@ -170,14 +176,16 @@ export default function CitaAttendModal({
           motivo: selectedCita.cita.motivo,
           diagnostico: formData.diagnostico,
           tratamiento: formData.tratamiento,
-          medicamentos: medicamentos.filter(m => m.nombre.trim()),
-          examenes: examenes.filter(e => e.tipo.trim()),
+          medicamentos: medicamentos.filter((m) => m.nombre.trim()),
+          examenes: examenes.filter((e) => e.tipo.trim()),
           peso: formData.peso || undefined,
           temperatura: formData.temperatura || undefined,
           presionArterial: formData.presionArterial || undefined,
           frecuenciaCardiaca: formData.frecuenciaCardiaca || undefined,
           observaciones: formData.observaciones,
-          proximaVisita: formData.proximaVisita ? new Date(formData.proximaVisita) : undefined,
+          proximaVisita: formData.proximaVisita
+            ? new Date(formData.proximaVisita)
+            : undefined,
           estado: "completada" as const,
         };
 
@@ -185,16 +193,15 @@ export default function CitaAttendModal({
       }
 
       setMessage(
-        attended 
+        attended
           ? "Consulta registrada exitosamente"
-          : "Marcado como no asistió"
+          : "Marcado como no asistió",
       );
 
       setTimeout(() => {
         handleClose();
         onSave?.();
       }, 1500);
-
     } catch (error) {
       console.error("Error saving consultation:", error);
       setError("Error al guardar la consulta");
@@ -235,16 +242,22 @@ export default function CitaAttendModal({
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
               <div>
-                <span className="font-medium text-vet-gray-700">Mascota:</span> {cita.mascota}
+                <span className="font-medium text-vet-gray-700">Mascota:</span>{" "}
+                {cita.mascota}
               </div>
               <div>
-                <span className="font-medium text-vet-gray-700">Especie:</span> {mascota?.especie || cita.especie}
+                <span className="font-medium text-vet-gray-700">Especie:</span>{" "}
+                {mascota?.especie || cita.especie}
               </div>
               <div>
-                <span className="font-medium text-vet-gray-700">Propietario:</span> {propietario?.nombre || "Sin asignar"}
+                <span className="font-medium text-vet-gray-700">
+                  Propietario:
+                </span>{" "}
+                {propietario?.nombre || "Sin asignar"}
               </div>
               <div>
-                <span className="font-medium text-vet-gray-700">Motivo:</span> {cita.motivo}
+                <span className="font-medium text-vet-gray-700">Motivo:</span>{" "}
+                {cita.motivo}
               </div>
             </div>
           </div>
@@ -253,14 +266,18 @@ export default function CitaAttendModal({
           {message && (
             <Alert className="border-green-200 bg-green-50">
               <CheckCircle className="w-4 h-4 text-green-600" />
-              <AlertDescription className="text-green-800">{message}</AlertDescription>
+              <AlertDescription className="text-green-800">
+                {message}
+              </AlertDescription>
             </Alert>
           )}
 
           {error && (
             <Alert className="border-red-200 bg-red-50">
               <AlertCircle className="w-4 h-4 text-red-600" />
-              <AlertDescription className="text-red-800">{error}</AlertDescription>
+              <AlertDescription className="text-red-800">
+                {error}
+              </AlertDescription>
             </Alert>
           )}
 
@@ -274,7 +291,9 @@ export default function CitaAttendModal({
                 type="button"
                 variant={attended === true ? "default" : "outline"}
                 onClick={() => setAttended(true)}
-                className={attended === true ? "bg-green-600 hover:bg-green-700" : ""}
+                className={
+                  attended === true ? "bg-green-600 hover:bg-green-700" : ""
+                }
               >
                 <CheckCircle className="w-4 h-4 mr-2" />
                 Sí, fue atendido
@@ -283,7 +302,9 @@ export default function CitaAttendModal({
                 type="button"
                 variant={attended === false ? "default" : "outline"}
                 onClick={() => setAttended(false)}
-                className={attended === false ? "bg-orange-600 hover:bg-orange-700" : ""}
+                className={
+                  attended === false ? "bg-orange-600 hover:bg-orange-700" : ""
+                }
               >
                 <X className="w-4 h-4 mr-2" />
                 No asistió
@@ -309,7 +330,9 @@ export default function CitaAttendModal({
                     <Input
                       id="peso"
                       value={formData.peso}
-                      onChange={(e) => setFormData({ ...formData, peso: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, peso: e.target.value })
+                      }
                       placeholder="Ej: 5.2"
                     />
                   </div>
@@ -321,7 +344,12 @@ export default function CitaAttendModal({
                     <Input
                       id="temperatura"
                       value={formData.temperatura}
-                      onChange={(e) => setFormData({ ...formData, temperatura: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          temperatura: e.target.value,
+                        })
+                      }
                       placeholder="Ej: 38.5"
                     />
                   </div>
@@ -330,16 +358,28 @@ export default function CitaAttendModal({
                     <Input
                       id="presionArterial"
                       value={formData.presionArterial}
-                      onChange={(e) => setFormData({ ...formData, presionArterial: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          presionArterial: e.target.value,
+                        })
+                      }
                       placeholder="Ej: 120/80"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="frecuenciaCardiaca">Frecuencia Cardíaca (bpm)</Label>
+                    <Label htmlFor="frecuenciaCardiaca">
+                      Frecuencia Cardíaca (bpm)
+                    </Label>
                     <Input
                       id="frecuenciaCardiaca"
                       value={formData.frecuenciaCardiaca}
-                      onChange={(e) => setFormData({ ...formData, frecuenciaCardiaca: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          frecuenciaCardiaca: e.target.value,
+                        })
+                      }
                       placeholder="Ej: 80"
                     />
                   </div>
@@ -353,7 +393,9 @@ export default function CitaAttendModal({
                   <Textarea
                     id="diagnostico"
                     value={formData.diagnostico}
-                    onChange={(e) => setFormData({ ...formData, diagnostico: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, diagnostico: e.target.value })
+                    }
                     placeholder="Describe el diagnóstico médico..."
                     rows={4}
                     required
@@ -364,7 +406,9 @@ export default function CitaAttendModal({
                   <Textarea
                     id="tratamiento"
                     value={formData.tratamiento}
-                    onChange={(e) => setFormData({ ...formData, tratamiento: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, tratamiento: e.target.value })
+                    }
                     placeholder="Describe el plan de tratamiento..."
                     rows={4}
                   />
@@ -378,15 +422,25 @@ export default function CitaAttendModal({
                     <Pill className="w-4 h-4 mr-2 text-vet-primary" />
                     Medicamentos Recetados
                   </Label>
-                  <Button type="button" onClick={addMedicamento} size="sm" variant="outline">
+                  <Button
+                    type="button"
+                    onClick={addMedicamento}
+                    size="sm"
+                    variant="outline"
+                  >
                     <Plus className="w-4 h-4 mr-1" />
                     Agregar
                   </Button>
                 </div>
                 {medicamentos.map((med, index) => (
-                  <div key={index} className="border border-vet-gray-200 rounded-lg p-4 mb-3">
+                  <div
+                    key={index}
+                    className="border border-vet-gray-200 rounded-lg p-4 mb-3"
+                  >
                     <div className="flex justify-between items-start mb-3">
-                      <h5 className="font-medium text-vet-gray-900">Medicamento {index + 1}</h5>
+                      <h5 className="font-medium text-vet-gray-900">
+                        Medicamento {index + 1}
+                      </h5>
                       <Button
                         type="button"
                         onClick={() => removeMedicamento(index)}
@@ -401,7 +455,9 @@ export default function CitaAttendModal({
                         <Label>Nombre del medicamento</Label>
                         <Input
                           value={med.nombre}
-                          onChange={(e) => updateMedicamento(index, "nombre", e.target.value)}
+                          onChange={(e) =>
+                            updateMedicamento(index, "nombre", e.target.value)
+                          }
                           placeholder="Ej: Amoxicilina"
                         />
                       </div>
@@ -409,7 +465,9 @@ export default function CitaAttendModal({
                         <Label>Dosis</Label>
                         <Input
                           value={med.dosis}
-                          onChange={(e) => updateMedicamento(index, "dosis", e.target.value)}
+                          onChange={(e) =>
+                            updateMedicamento(index, "dosis", e.target.value)
+                          }
                           placeholder="Ej: 250mg"
                         />
                       </div>
@@ -417,7 +475,13 @@ export default function CitaAttendModal({
                         <Label>Frecuencia</Label>
                         <Input
                           value={med.frecuencia}
-                          onChange={(e) => updateMedicamento(index, "frecuencia", e.target.value)}
+                          onChange={(e) =>
+                            updateMedicamento(
+                              index,
+                              "frecuencia",
+                              e.target.value,
+                            )
+                          }
                           placeholder="Ej: Cada 8 horas"
                         />
                       </div>
@@ -425,7 +489,9 @@ export default function CitaAttendModal({
                         <Label>Duración</Label>
                         <Input
                           value={med.duracion}
-                          onChange={(e) => updateMedicamento(index, "duracion", e.target.value)}
+                          onChange={(e) =>
+                            updateMedicamento(index, "duracion", e.target.value)
+                          }
                           placeholder="Ej: 7 días"
                         />
                       </div>
@@ -433,7 +499,13 @@ export default function CitaAttendModal({
                         <Label>Indicaciones especiales</Label>
                         <Input
                           value={med.indicaciones}
-                          onChange={(e) => updateMedicamento(index, "indicaciones", e.target.value)}
+                          onChange={(e) =>
+                            updateMedicamento(
+                              index,
+                              "indicaciones",
+                              e.target.value,
+                            )
+                          }
                           placeholder="Instrucciones adicionales..."
                         />
                       </div>
@@ -445,16 +517,28 @@ export default function CitaAttendModal({
               {/* Exams */}
               <div>
                 <div className="flex items-center justify-between mb-3">
-                  <Label className="text-base font-medium">Exámenes Realizados</Label>
-                  <Button type="button" onClick={addExamen} size="sm" variant="outline">
+                  <Label className="text-base font-medium">
+                    Exámenes Realizados
+                  </Label>
+                  <Button
+                    type="button"
+                    onClick={addExamen}
+                    size="sm"
+                    variant="outline"
+                  >
                     <Plus className="w-4 h-4 mr-1" />
                     Agregar
                   </Button>
                 </div>
                 {examenes.map((exam, index) => (
-                  <div key={index} className="border border-vet-gray-200 rounded-lg p-4 mb-3">
+                  <div
+                    key={index}
+                    className="border border-vet-gray-200 rounded-lg p-4 mb-3"
+                  >
                     <div className="flex justify-between items-start mb-3">
-                      <h5 className="font-medium text-vet-gray-900">Examen {index + 1}</h5>
+                      <h5 className="font-medium text-vet-gray-900">
+                        Examen {index + 1}
+                      </h5>
                       <Button
                         type="button"
                         onClick={() => removeExamen(index)}
@@ -469,7 +553,9 @@ export default function CitaAttendModal({
                         <Label>Tipo de examen</Label>
                         <Input
                           value={exam.tipo}
-                          onChange={(e) => updateExamen(index, "tipo", e.target.value)}
+                          onChange={(e) =>
+                            updateExamen(index, "tipo", e.target.value)
+                          }
                           placeholder="Ej: Radiografía, Análisis de sangre"
                         />
                       </div>
@@ -477,7 +563,9 @@ export default function CitaAttendModal({
                         <Label>Resultado</Label>
                         <Input
                           value={exam.resultado}
-                          onChange={(e) => updateExamen(index, "resultado", e.target.value)}
+                          onChange={(e) =>
+                            updateExamen(index, "resultado", e.target.value)
+                          }
                           placeholder="Resultado del examen..."
                         />
                       </div>
@@ -493,19 +581,31 @@ export default function CitaAttendModal({
                   <Textarea
                     id="observaciones"
                     value={formData.observaciones}
-                    onChange={(e) => setFormData({ ...formData, observaciones: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        observaciones: e.target.value,
+                      })
+                    }
                     placeholder="Observaciones adicionales sobre la consulta..."
                     rows={4}
                   />
                 </div>
                 <div>
-                  <Label htmlFor="proximaVisita">Próxima Visita (opcional)</Label>
+                  <Label htmlFor="proximaVisita">
+                    Próxima Visita (opcional)
+                  </Label>
                   <Input
                     id="proximaVisita"
                     type="date"
                     value={formData.proximaVisita}
-                    onChange={(e) => setFormData({ ...formData, proximaVisita: e.target.value })}
-                    min={new Date().toISOString().split('T')[0]}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        proximaVisita: e.target.value,
+                      })
+                    }
+                    min={new Date().toISOString().split("T")[0]}
                   />
                 </div>
               </div>

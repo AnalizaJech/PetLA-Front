@@ -127,11 +127,10 @@ export default function HistorialClinicoVeterinario() {
     );
   }
 
-
   // Get my appointments as veterinarian
-  const misCitas = useMemo(() =>
-    citas.filter((cita) => cita.veterinario === user.nombre),
-    [citas, user.nombre]
+  const misCitas = useMemo(
+    () => citas.filter((cita) => cita.veterinario === user.nombre),
+    [citas, user.nombre],
   );
 
   // Get pets related to my appointments with enhanced matching
@@ -139,10 +138,10 @@ export default function HistorialClinicoVeterinario() {
     const mascotasEncontradas = new Set<string>();
     const mascotasValidas: Mascota[] = [];
 
-    misCitas.forEach(cita => {
+    misCitas.forEach((cita) => {
       // First try to find by mascotaId if available
       if (cita.mascotaId && !mascotasEncontradas.has(cita.mascotaId)) {
-        const mascota = mascotas.find(m => m.id === cita.mascotaId);
+        const mascota = mascotas.find((m) => m.id === cita.mascotaId);
         if (mascota) {
           mascotasValidas.push(mascota);
           mascotasEncontradas.add(cita.mascotaId);
@@ -151,8 +150,9 @@ export default function HistorialClinicoVeterinario() {
       }
 
       // Fallback to name matching
-      const mascotaPorNombre = mascotas.find(m => {
-        const nombreCoincide = m.nombre.toLowerCase() === cita.mascota.toLowerCase();
+      const mascotaPorNombre = mascotas.find((m) => {
+        const nombreCoincide =
+          m.nombre.toLowerCase() === cita.mascota.toLowerCase();
         return nombreCoincide && !mascotasEncontradas.has(m.id);
       });
 
@@ -170,44 +170,46 @@ export default function HistorialClinicoVeterinario() {
     const validation = validateDataRelationships();
 
     // Filter to only my patients
-    const myOrphanedPets = validation.orphanedPets.filter(pet =>
-      misCitas.some(cita =>
-        cita.mascota.toLowerCase() === pet.nombre.toLowerCase() ||
-        cita.mascotaId === pet.id
-      )
+    const myOrphanedPets = validation.orphanedPets.filter((pet) =>
+      misCitas.some(
+        (cita) =>
+          cita.mascota.toLowerCase() === pet.nombre.toLowerCase() ||
+          cita.mascotaId === pet.id,
+      ),
     );
 
-    const myIncompleteCitas = validation.incompleteCitas.filter(cita =>
-      cita.veterinario === user.nombre
+    const myIncompleteCitas = validation.incompleteCitas.filter(
+      (cita) => cita.veterinario === user.nombre,
     );
 
-    const myGhostPets = validation.ghostPets.filter(nombre =>
-      misCitas.some(cita => cita.mascota === nombre)
+    const myGhostPets = validation.ghostPets.filter((nombre) =>
+      misCitas.some((cita) => cita.mascota === nombre),
     );
 
     return {
       orphanedPets: myOrphanedPets,
       incompleteCitas: myIncompleteCitas,
       ghostPets: myGhostPets,
-      totalIssues: myOrphanedPets.length + myIncompleteCitas.length + myGhostPets.length
+      totalIssues:
+        myOrphanedPets.length + myIncompleteCitas.length + myGhostPets.length,
     };
   }, [validateDataRelationships, misCitas, user.nombre]);
 
   // Enhanced ghost pets detection with more details
   const mascotasFantasma = useMemo(() => {
-    return dataValidation.ghostPets.map(nombre => {
-      const citasRelacionadas = misCitas.filter(c => c.mascota === nombre);
-      const ultimaCita = citasRelacionadas.sort((a, b) =>
-        new Date(b.fecha).getTime() - new Date(a.fecha).getTime()
+    return dataValidation.ghostPets.map((nombre) => {
+      const citasRelacionadas = misCitas.filter((c) => c.mascota === nombre);
+      const ultimaCita = citasRelacionadas.sort(
+        (a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime(),
       )[0];
 
       return {
         nombre,
-        especie: ultimaCita?.especie || 'Desconocida',
+        especie: ultimaCita?.especie || "Desconocida",
         citasRelacionadas: citasRelacionadas.length,
         ultimaCita: ultimaCita?.fecha,
         clienteId: ultimaCita?.clienteId,
-        clienteNombre: ultimaCita?.clienteNombre
+        clienteNombre: ultimaCita?.clienteNombre,
       };
     });
   }, [dataValidation.ghostPets, misCitas]);
@@ -228,29 +230,31 @@ export default function HistorialClinicoVeterinario() {
     const clienteIds = new Set<string>();
 
     // Add clients from properly linked pets
-    misMascotas.forEach(mascota => {
+    misMascotas.forEach((mascota) => {
       const { propietario } = getMascotaWithOwner(mascota.id);
-      if (propietario && propietario.rol === 'cliente') {
+      if (propietario && propietario.rol === "cliente") {
         clienteIds.add(propietario.id);
       }
     });
 
     // Add clients from appointments with client information
-    misCitas.forEach(cita => {
+    misCitas.forEach((cita) => {
       if (cita.clienteId) {
-        const cliente = usuarios.find(u => u.id === cita.clienteId && u.rol === 'cliente');
+        const cliente = usuarios.find(
+          (u) => u.id === cita.clienteId && u.rol === "cliente",
+        );
         if (cliente) {
           clienteIds.add(cliente.id);
         }
       }
     });
 
-    return usuarios.filter(u => clienteIds.has(u.id));
+    return usuarios.filter((u) => clienteIds.has(u.id));
   }, [misMascotas, misCitas, usuarios, getMascotaWithOwner]);
 
   // Detect pets without valid owners (enhanced)
   const mascotasSinPropietario = useMemo(() => {
-    return misMascotas.filter(mascota => {
+    return misMascotas.filter((mascota) => {
       const { propietario } = getMascotaWithOwner(mascota.id);
       return !propietario;
     });
@@ -460,17 +464,20 @@ export default function HistorialClinicoVeterinario() {
                     <div className="space-y-2">
                       {dataValidation.orphanedPets.length > 0 && (
                         <div className="text-xs text-yellow-600 bg-yellow-50 p-2 rounded border">
-                          ⚠️ {dataValidation.orphanedPets.length} mascotas sin propietario válido
+                          ⚠️ {dataValidation.orphanedPets.length} mascotas sin
+                          propietario válido
                         </div>
                       )}
                       {dataValidation.ghostPets.length > 0 && (
                         <div className="text-xs text-orange-600 bg-orange-50 p-2 rounded border">
-                          👻 {dataValidation.ghostPets.length} mascotas en citas pero no registradas
+                          👻 {dataValidation.ghostPets.length} mascotas en citas
+                          pero no registradas
                         </div>
                       )}
                       {dataValidation.incompleteCitas.length > 0 && (
                         <div className="text-xs text-blue-600 bg-blue-50 p-2 rounded border">
-                          🔗 {dataValidation.incompleteCitas.length} citas con información incompleta
+                          🔗 {dataValidation.incompleteCitas.length} citas con
+                          información incompleta
                         </div>
                       )}
                       <Button
@@ -478,7 +485,7 @@ export default function HistorialClinicoVeterinario() {
                         variant="outline"
                         onClick={() => {
                           const result = repairDataIntegrity();
-                          console.log('Data repair result:', result);
+                          console.log("Data repair result:", result);
                           window.location.reload(); // Refresh to see the repaired data
                         }}
                         className="w-full text-xs mt-2"
@@ -530,18 +537,32 @@ export default function HistorialClinicoVeterinario() {
                         {mascotasFantasma.length > 0 && (
                           <div className="mt-4 p-3 bg-orange-50 rounded-lg border border-orange-200">
                             <p className="text-xs text-orange-800 font-medium mb-2">
-                              Mascotas en citas pero no registradas en el sistema:
+                              Mascotas en citas pero no registradas en el
+                              sistema:
                             </p>
                             {mascotasFantasma.map((fantasma, index) => (
-                              <div key={index} className="text-xs text-orange-700 mb-1">
-                                • <strong>{fantasma.nombre}</strong> ({fantasma.especie})
+                              <div
+                                key={index}
+                                className="text-xs text-orange-700 mb-1"
+                              >
+                                • <strong>{fantasma.nombre}</strong> (
+                                {fantasma.especie})
                                 <br />
                                 &nbsp;&nbsp;{fantasma.citasRelacionadas} citas
                                 {fantasma.clienteNombre && (
-                                  <span> - Cliente: {fantasma.clienteNombre}</span>
+                                  <span>
+                                    {" "}
+                                    - Cliente: {fantasma.clienteNombre}
+                                  </span>
                                 )}
                                 {fantasma.ultimaCita && (
-                                  <span> - Última: {new Date(fantasma.ultimaCita).toLocaleDateString('es-ES')}</span>
+                                  <span>
+                                    {" "}
+                                    - Última:{" "}
+                                    {new Date(
+                                      fantasma.ultimaCita,
+                                    ).toLocaleDateString("es-ES")}
+                                  </span>
                                 )}
                               </div>
                             ))}
@@ -554,7 +575,8 @@ export default function HistorialClinicoVeterinario() {
                           (u) => u.id === mascota.clienteId,
                         );
                         const isSelected = selectedMascota === mascota.id;
-                        const tienePropietarioValido = cliente && cliente.rol === 'cliente';
+                        const tienePropietarioValido =
+                          cliente && cliente.rol === "cliente";
 
                         return (
                           <button
@@ -564,8 +586,8 @@ export default function HistorialClinicoVeterinario() {
                               isSelected
                                 ? "border-vet-primary bg-vet-primary/5 shadow-sm"
                                 : tienePropietarioValido
-                                ? "border-vet-gray-200 hover:border-vet-primary/50 hover:bg-vet-gray-50"
-                                : "border-yellow-200 bg-yellow-50 hover:bg-yellow-100"
+                                  ? "border-vet-gray-200 hover:border-vet-primary/50 hover:bg-vet-gray-50"
+                                  : "border-yellow-200 bg-yellow-50 hover:bg-yellow-100"
                             }`}
                           >
                             <div className="flex items-center space-x-3">
@@ -574,8 +596,8 @@ export default function HistorialClinicoVeterinario() {
                                   isSelected
                                     ? "bg-vet-primary/20"
                                     : tienePropietarioValido
-                                    ? "bg-vet-gray-100"
-                                    : "bg-yellow-100"
+                                      ? "bg-vet-gray-100"
+                                      : "bg-yellow-100"
                                 }`}
                               >
                                 <PawPrint
@@ -583,8 +605,8 @@ export default function HistorialClinicoVeterinario() {
                                     isSelected
                                       ? "text-vet-primary"
                                       : tienePropietarioValido
-                                      ? "text-vet-gray-500"
-                                      : "text-yellow-600"
+                                        ? "text-vet-gray-500"
+                                        : "text-yellow-600"
                                   }`}
                                 />
                                 {!tienePropietarioValido && (
@@ -600,16 +622,22 @@ export default function HistorialClinicoVeterinario() {
                                 <p className="text-xs text-vet-gray-600">
                                   {mascota.especie} • {mascota.raza}
                                 </p>
-                                <p className={`text-xs font-medium ${
-                                  tienePropietarioValido
-                                    ? "text-vet-primary"
-                                    : "text-yellow-600"
-                                }`}>
-                                  Dueño: {tienePropietarioValido ? cliente.nombre : "⚠️ Sin asignar"}
+                                <p
+                                  className={`text-xs font-medium ${
+                                    tienePropietarioValido
+                                      ? "text-vet-primary"
+                                      : "text-yellow-600"
+                                  }`}
+                                >
+                                  Dueño:{" "}
+                                  {tienePropietarioValido
+                                    ? cliente.nombre
+                                    : "⚠️ Sin asignar"}
                                 </p>
                                 {!tienePropietarioValido && (
                                   <p className="text-xs text-yellow-600">
-                                    ID cliente: {mascota.clienteId || 'No definido'}
+                                    ID cliente:{" "}
+                                    {mascota.clienteId || "No definido"}
                                   </p>
                                 )}
                               </div>
@@ -657,11 +685,13 @@ export default function HistorialClinicoVeterinario() {
                               )}
                             </div>
                             {/* Información del propietario mejorada */}
-                            <div className={`flex items-center space-x-4 mt-2 p-2 rounded-lg ${
-                              clienteSeleccionado
-                                ? "bg-green-50 border border-green-200"
-                                : "bg-red-50 border border-red-200"
-                            }`}>
+                            <div
+                              className={`flex items-center space-x-4 mt-2 p-2 rounded-lg ${
+                                clienteSeleccionado
+                                  ? "bg-green-50 border border-green-200"
+                                  : "bg-red-50 border border-red-200"
+                              }`}
+                            >
                               {clienteSeleccionado ? (
                                 <>
                                   <div className="flex items-center space-x-2">
@@ -692,7 +722,9 @@ export default function HistorialClinicoVeterinario() {
                                     ⚠️ Propietario no encontrado
                                   </span>
                                   <span className="text-xs text-red-600">
-                                    ID cliente: {mascotaSeleccionada?.clienteId || 'No definido'}
+                                    ID cliente:{" "}
+                                    {mascotaSeleccionada?.clienteId ||
+                                      "No definido"}
                                   </span>
                                 </>
                               )}
@@ -759,10 +791,14 @@ export default function HistorialClinicoVeterinario() {
                     <Alert className="border-red-200 bg-red-50">
                       <AlertCircle className="w-4 h-4 text-red-600" />
                       <AlertDescription className="text-red-800">
-                        <strong>Atención:</strong> Esta mascota no tiene un propietario válido asignado.
-                        Esto puede afectar la gestión del historial clínico y las notificaciones.
+                        <strong>Atención:</strong> Esta mascota no tiene un
+                        propietario válido asignado. Esto puede afectar la
+                        gestión del historial clínico y las notificaciones.
                         <br />
-                        <small>Cliente ID actual: {mascotaSeleccionada.clienteId || 'No definido'}</small>
+                        <small>
+                          Cliente ID actual:{" "}
+                          {mascotaSeleccionada.clienteId || "No definido"}
+                        </small>
                       </AlertDescription>
                     </Alert>
                   )}
