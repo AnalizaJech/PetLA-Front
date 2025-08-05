@@ -195,7 +195,6 @@ export default function Dashboard() {
           {/* Client Dashboard */}
           {user?.rol === "cliente" && (
             <div className="space-y-8">
-              <NotasAdmin />
               <ClientDashboard stats={stats} />
             </div>
           )}
