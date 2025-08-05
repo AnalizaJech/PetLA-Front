@@ -283,14 +283,14 @@ export default function Login() {
             </CardHeader>
             <CardContent className="p-8">
               {error && (
-                <Alert className="mb-4 border-red-200 bg-red-50">
-                  <AlertDescription className="text-red-800">
+                <Alert className="mb-6 border-red-200 bg-red-50 rounded-lg">
+                  <AlertDescription className="text-red-800 text-sm">
                     {error}
                   </AlertDescription>
                 </Alert>
               )}
 
-              <form onSubmit={handleRegister} className="space-y-6">
+              <form onSubmit={handleRegister} className="space-y-5">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="register-name">Nombres</Label>
