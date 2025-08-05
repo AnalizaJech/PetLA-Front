@@ -508,11 +508,11 @@ export default function Login() {
                   </div>
                 </div>
 
-                <div className="flex items-start space-x-2">
+                <div className="flex items-start space-x-3">
                   <input
                     type="checkbox"
                     id="terms"
-                    className="mt-1 rounded border-vet-gray-300 text-vet-primary"
+                    className="mt-1.5 w-4 h-4 rounded border-vet-gray-300 text-vet-primary focus:ring-vet-primary/20 focus:ring-2"
                     required
                   />
                   <Label htmlFor="terms" className="text-sm text-vet-gray-600">
