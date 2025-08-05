@@ -588,4 +588,347 @@ El sistema está completamente optimizado para:
 
 ---
 
-Este documento proporciona una visión completa del sistema PetLA, desde la perspectiva de cada tipo de usuario hasta los detalles técnicos de implementación. El sistema está diseñado para ser intuitivo, robusto y escalable, con énfasis en la experiencia del usuario y la integridad de los datos.
+## 📋 Flujo de Gestión de Citas (Admin)
+
+### 1. **Dashboard de Gestión**
+```mermaid
+graph TD
+    A[Gestión de Citas] --> B[Vista Unificada de Citas]
+    B --> C[Filtros Avanzados]
+    C --> D[Estado]
+    C --> E[Fecha]
+    C --> F[Veterinario]
+    C --> G[Búsqueda por Texto]
+
+    B --> H[Estadísticas en Tiempo Real]
+    H --> I[Total de Citas]
+    H --> J[Pendientes]
+    H --> K[Confirmadas]
+    H --> L[Completadas]
+    H --> M[Citas del Día]
+```
+
+**Funcionalidades Principales:**
+- **Vista completa**: Todas las citas del sistema ordenadas por fecha más reciente
+- **Filtros múltiples**: Por estado, fecha, veterinario, cliente
+- **Búsqueda inteligente**: Por mascota, veterinario, motivo de consulta
+- **Estadísticas en tiempo real**: Contadores automáticos por estado
+
+### 2. **Gestión Individual de Citas**
+```mermaid
+graph TD
+    A[Seleccionar Cita] --> B[Opciones Disponibles]
+    B --> C{Estado Actual}
+
+    C -->|en_validacion| D[Validar Comprobante]
+    D --> E[Ver Imagen/PDF]
+    E --> F[Aprobar/Rechazar]
+    F --> G[Asignar Veterinario Automático]
+
+    C -->|aceptada| H[Registrar Atención]
+    H --> I[Atendida/No Asistió]
+
+    C -->|Cualquier Estado| J[Ver Detalles Completos]
+    J --> K[Información del Cliente]
+    J --> L[Datos de la Mascota]
+    J --> M[Historial de la Cita]
+
+    B --> N[Eliminar Cita]
+    N --> O[Confirmación de Seguridad]
+```
+
+**Acciones por Estado:**
+- **En validación**: Ver y validar comprobante de pago
+- **Aceptada**: Marcar como atendida o no asistió
+- **Cualquier estado**: Ver detalles, editar, eliminar
+
+### 3. **Sistema de Validación de Pagos**
+```mermaid
+graph TD
+    A[Comprobante Subido] --> B[Vista de Validación]
+    B --> C[Información de la Cita]
+    C --> D[Datos del Cliente]
+    C --> E[Monto a Validar]
+    C --> F[Fecha de la Cita]
+
+    B --> G[Visualización del Comprobante]
+    G --> H{Tipo de Archivo}
+    H -->|Imagen| I[Vista de Imagen Completa]
+    H -->|PDF| J[Opción de Descarga]
+
+    B --> K[Criterios de Validación]
+    K --> L[Monto Correcto]
+    K --> M[Fecha Válida]
+    K --> N[Información Legible]
+
+    B --> O[Decisión]
+    O -->|Aprobar| P[Asignar Veterinario]
+    O -->|Rechazar| Q[Agregar Notas]
+    P --> R[Notificar Cliente]
+    Q --> R
+```
+
+---
+
+## 🩺 Flujo Completo del Veterinario
+
+### 1. **Dashboard Veterinario Avanzado**
+```mermaid
+graph TD
+    A[Login Veterinario] --> B[Dashboard Personalizado]
+    B --> C[Estadísticas Personales]
+    C --> D[Total de Citas Asignadas]
+    C --> E[Citas del Día]
+    C --> F[Citas Pendientes]
+    C --> G[Consultas Completadas]
+    C --> H[Pacientes Únicos]
+
+    B --> I[Citas de Hoy]
+    I --> J[Lista Ordenada por Hora]
+    J --> K[Información del Paciente]
+    J --> L[Datos del Propietario]
+    J --> M[Motivo de Consulta]
+    J --> N[Nivel de Urgencia]
+
+    B --> O[Próximas Citas - 7 días]
+    O --> P[Vista Cronológica]
+    P --> Q[Acceso Rápido a Detalles]
+```
+
+### 2. **Agenda Médica Completa**
+```mermaid
+graph TD
+    A[Calendario Veterinario] --> B[Vistas Disponibles]
+    B --> C[Vista Mensual]
+    B --> D[Vista de Lista]
+
+    C --> E[Calendario Interactivo]
+    E --> F[Días con Citas Marcados]
+    E --> G[Selección de Fecha]
+    G --> H[Detalles del Día]
+    H --> I[Lista de Citas]
+    I --> J[Información Completa]
+    J --> K[Paciente y Propietario]
+    J --> L[Hora y Ubicación]
+    J --> M[Estado y Urgencia]
+
+    D --> N[Lista Filtrada]
+    N --> O[Filtros Avanzados]
+    O --> P[Por Estado]
+    O --> Q[Por Fecha]
+    O --> R[Búsqueda por Texto]
+    N --> S[Ordenamiento]
+    S --> T[Por Fecha]
+    S --> U[Por Urgencia]
+    S --> V[Por Estado]
+```
+
+### 3. **Sistema de Gestión de Pacientes**
+```mermaid
+graph TD
+    A[Mis Pacientes] --> B[Lista de Mascotas Asignadas]
+    B --> C[Información Enriquecida]
+    C --> D[Datos de la Mascota]
+    D --> E[Nombre, Especie, Raza]
+    D --> F[Edad y Peso]
+    D --> G[Foto si Disponible]
+
+    C --> H[Información del Propietario]
+    H --> I[Nombre y Contacto]
+    H --> J[Dirección y Email]
+    H --> K[Relación Verificada]
+
+    C --> L[Historial de Citas]
+    L --> M[Citas Previas]
+    L --> N[Próximas Citas]
+    L --> O[Estado de Cada Cita]
+
+    B --> P[Herramientas de Reparación]
+    P --> Q[Detectar Problemas]
+    Q --> R[Mascotas Sin Propietario]
+    Q --> S[Relaciones Rotas]
+    P --> T[Reparación Automática]
+    T --> U[Vincular por Patterns]
+    T --> V[Sugerir Correcciones]
+```
+
+### 4. **Atención de Consultas Avanzada**
+```mermaid
+graph TD
+    A[Seleccionar Cita para Atender] --> B[Modal de Atención]
+    B --> C[Información Pre-Consulta]
+    C --> D[Datos del Paciente]
+    C --> E[Motivo de la Cita]
+    C --> F[Historial Previo]
+    C --> G[Información del Propietario]
+
+    B --> H[Formulario de Consulta]
+    H --> I[Signos Vitales]
+    I --> J[Peso Actual]
+    I --> K[Temperatura]
+    I --> L[Frecuencia Cardíaca]
+    I --> M[Presión Arterial]
+
+    H --> N[Evaluación Clínica]
+    N --> O[Síntomas Observados]
+    N --> P[Examen Físico]
+    N --> Q[Pruebas Realizadas]
+
+    H --> R[Diagnóstico]
+    R --> S[Diagnóstico Principal]
+    R --> T[Diagnósticos Secundarios]
+    R --> U[Nivel de Gravedad]
+
+    H --> V[Plan de Tratamiento]
+    V --> W[Medicamentos]
+    W --> X[Nombre y Dosis]
+    W --> Y[Frecuencia]
+    W --> Z[Duración]
+
+    V --> AA[Procedimientos]
+    AA --> BB[Cirugías Requeridas]
+    AA --> CC[Exámenes Adicionales]
+    AA --> DD[Terapias]
+
+    H --> EE[Seguimiento]
+    EE --> FF[Próxima Cita]
+    EE --> GG[Instrucciones al Propietario]
+    EE --> HH[Cuidados en Casa]
+
+    B --> II[Guardar Consulta]
+    II --> JJ[Actualizar Historial]
+    JJ --> KK[Cambiar Estado a "Atendida"]
+    KK --> LL[Notificar al Cliente]
+```
+
+### 5. **Búsqueda Avanzada de Pacientes**
+```mermaid
+graph TD
+    A[Sistema de Búsqueda] --> B[Búsqueda Inteligente]
+    B --> C[Por Nombre de Mascota]
+    B --> D[Por Propietario]
+    B --> E[Por Especie/Raza]
+    B --> F[Por Historial Médico]
+
+    A --> G[Resultados Enriquecidos]
+    G --> H[Información Completa]
+    H --> I[Datos de la Mascota]
+    H --> J[Contacto del Propietario]
+    H --> K[Última Cita]
+    H --> L[Total de Consultas]
+
+    G --> M[Acciones Rápidas]
+    M --> N[Ver Historial Completo]
+    M --> O[Agendar Nueva Cita]
+    M --> P[Contactar Propietario]
+
+    A --> Q[Filtros Avanzados]
+    Q --> R[Por Fecha de Última Consulta]
+    Q --> S[Por Estado de Salud]
+    Q --> T[Por Tipo de Tratamiento]
+```
+
+### 6. **Historial Clínico Veterinario**
+```mermaid
+graph TD
+    A[Historial Clínico] --> B[Selección de Paciente]
+    B --> C[Vista Cronológica]
+    C --> D[Consultas Más Recientes]
+    D --> E[Información Detallada]
+    E --> F[Fecha y Hora]
+    E --> G[Veterinario Responsable]
+    E --> H[Diagnóstico]
+    E --> I[Tratamiento Aplicado]
+    E --> J[Medicamentos Recetados]
+    E --> K[Observaciones]
+
+    C --> L[Filtros Especializados]
+    L --> M[Por Tipo de Consulta]
+    M --> N[Consultas Generales]
+    M --> O[Vacunaciones]
+    M --> P[Emergencias]
+    M --> Q[Cirugías]
+    M --> R[Chequeos Rutinarios]
+
+    C --> S[Análisis de Tendencias]
+    S --> T[Peso Histórico]
+    S --> U[Medicamentos Frecuentes]
+    S --> V[Patrones de Enfermedad]
+
+    A --> W[Herramientas de Edición]
+    W --> X[Editar Consulta Reciente]
+    W --> Y[Agregar Notas Tardías]
+    W --> Z[Corregir Información]
+```
+
+### 7. **Acciones Rápidas Veterinario**
+```mermaid
+graph TD
+    A[Panel de Acciones] --> B[Navegación Rápida]
+    B --> C[Ver Agenda Completa]
+    B --> D[Buscar Paciente Específico]
+    B --> E[Registrar Consulta Directa]
+    B --> F[Revisar Historial Clínico]
+    B --> G[Gestionar Perfil]
+
+    A --> H[Notificaciones Inteligentes]
+    H --> I[Citas Próximas]
+    H --> J[Pacientes Urgentes]
+    H --> K[Recordatorios de Seguimiento]
+    H --> L[Actualizaciones del Sistema]
+
+    A --> M[Estadísticas Personales]
+    M --> N[Citas del Mes]
+    M --> O[Pacientes Únicos]
+    M --> P[Satisfacción Promedio]
+    M --> Q[Eficiencia de Consultas]
+```
+
+---
+
+## 🔄 Sistema de Gestión Integral de Citas
+
+### Estados y Transiciones Detalladas
+```mermaid
+stateDiagram-v2
+    [*] --> pendiente_pago : Cliente crea cita
+    pendiente_pago --> en_validacion : Cliente sube comprobante
+    en_validacion --> aceptada : Admin valida pago ✓
+    en_validacion --> rechazada : Admin rechaza pago ✗
+    aceptada --> atendida : Veterinario completa consulta
+    aceptada --> no_asistio : Cliente no se presenta
+    rechazada --> pendiente_pago : Cliente corrige pago
+    pendiente_pago --> cancelada : Cliente cancela
+    pendiente_pago --> expirada : Tiempo límite superado
+
+    aceptada --> atendida : Registrar consulta médica
+    atendida --> [*] : Proceso completado
+    no_asistio --> [*] : Registro cerrado
+    cancelada --> [*] : Cita cerrada
+    expirada --> [*] : Cita cerrada
+    rechazada --> [*] : Si cliente no corrige
+```
+
+### Flujo de Datos y Notificaciones
+```mermaid
+graph TD
+    A[Acción en Cita] --> B{Tipo de Cambio}
+
+    B -->|Estado Change| C[Actualizar Base de Datos]
+    C --> D[Generar Notificación]
+    D --> E[Enviar a Usuario Correspondiente]
+
+    B -->|Asignación Veterinario| F[Notificar Veterinario]
+    F --> G[Actualizar Agenda]
+
+    B -->|Validación Pago| H[Notificar Cliente]
+    H --> I[Actualizar Estado Cita]
+
+    B -->|Consulta Completada| J[Actualizar Historial]
+    J --> K[Notificar Cliente]
+    K --> L[Generar Registro Médico]
+```
+
+---
+
+Este documento proporciona una visión completa del sistema PetLA, incluyendo todos los flujos de gestión de citas y funcionalidades veterinarias. El sistema está diseñado para ser intuitivo, robusto y escalable, con énfasis en la experiencia del usuario, la integridad de los datos y la eficiencia en la gestión médica veterinaria.
