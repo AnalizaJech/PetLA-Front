@@ -220,18 +220,43 @@ export default function HistorialClinicoVeterinario() {
     misMascotasCount: misMascotas.length,
     historialClinicoCount: historialClinico.length,
     selectedMascotaId: selectedMascota,
+    dataIssues: dataValidation.totalIssues,
+    orphanedPets: dataValidation.orphanedPets.length,
+    ghostPets: dataValidation.ghostPets.length,
   });
 
-  // Obtener clientes únicos con validación mejorada
-  const misClientes = usuarios.filter((usuario) => {
-    if (usuario.rol !== 'cliente') return false;
-    return misMascotas.some((mascota) => mascota.clienteId === usuario.id);
-  });
+  // Get unique clients with enhanced validation
+  const misClientes = useMemo(() => {
+    const clienteIds = new Set<string>();
 
-  // Detectar mascotas sin propietario válido
-  const mascotasSinPropietario = misMascotas.filter(mascota => {
-    return !usuarios.find(u => u.id === mascota.clienteId && u.rol === 'cliente');
-  });
+    // Add clients from properly linked pets
+    misMascotas.forEach(mascota => {
+      const { propietario } = getMascotaWithOwner(mascota.id);
+      if (propietario && propietario.rol === 'cliente') {
+        clienteIds.add(propietario.id);
+      }
+    });
+
+    // Add clients from appointments with client information
+    misCitas.forEach(cita => {
+      if (cita.clienteId) {
+        const cliente = usuarios.find(u => u.id === cita.clienteId && u.rol === 'cliente');
+        if (cliente) {
+          clienteIds.add(cliente.id);
+        }
+      }
+    });
+
+    return usuarios.filter(u => clienteIds.has(u.id));
+  }, [misMascotas, misCitas, usuarios, getMascotaWithOwner]);
+
+  // Detect pets without valid owners (enhanced)
+  const mascotasSinPropietario = useMemo(() => {
+    return misMascotas.filter(mascota => {
+      const { propietario } = getMascotaWithOwner(mascota.id);
+      return !propietario;
+    });
+  }, [misMascotas, getMascotaWithOwner]);
 
   // Filtrar mascotas según criterios de búsqueda
   const filteredMascotas = misMascotas.filter((mascota) => {
