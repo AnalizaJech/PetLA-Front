@@ -741,7 +741,17 @@ export default function HistorialClinico() {
     XLSX.utils.book_append_sheet(wb, wsMascota, "Información");
 
     // Hoja 2: Consultas médicas
-    if (historialMascota.consultas.length > 0) {
+    // Obtener todas las consultas de todos los tipos
+    const todasLasConsultas = [
+      ...historialMascota.consulta_general,
+      ...historialMascota.vacunacion,
+      ...historialMascota.emergencia,
+      ...historialMascota.grooming,
+      ...historialMascota.cirugia,
+      ...historialMascota.diagnostico,
+    ];
+
+    if (todasLasConsultas.length > 0) {
       const consultasData = [
         ["CONSULTAS MÉDICAS"],
         [""],
