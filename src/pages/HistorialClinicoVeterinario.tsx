@@ -1112,10 +1112,27 @@ export default function HistorialClinicoVeterinario() {
                     <h3 className="text-xl font-semibold text-vet-gray-900 mb-2">
                       Selecciona una mascota
                     </h3>
-                    <p className="text-vet-gray-600">
+                    <p className="text-vet-gray-600 mb-6">
                       Elige una mascota de la lista para ver su historial
                       clínico completo
                     </p>
+
+                    <div className="space-y-3">
+                      <Button
+                        onClick={() => navigate("/mis-pacientes")}
+                        className="bg-vet-primary hover:bg-vet-primary-dark"
+                      >
+                        <UserCheck className="w-4 h-4 mr-2" />
+                        Ver Mis Pacientes
+                      </Button>
+
+                      {dataValidation.ghostPets.length > 0 && (
+                        <p className="text-sm text-orange-600">
+                          💡 Tienes {dataValidation.ghostPets.length} mascotas con historial pero sin registrar.
+                          Búscalas en la lista de la izquierda.
+                        </p>
+                      )}
+                    </div>
                   </CardContent>
                 </Card>
               )}
