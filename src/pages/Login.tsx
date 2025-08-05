@@ -14,6 +14,13 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Dog, Mail, Lock, User, Phone, Eye, EyeOff, MapPin, Calendar, UserCheck } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { LoginFormData, RegistroClienteFormData } from "@/lib/types";
 
 export default function Login() {
@@ -423,23 +430,25 @@ export default function Login() {
 
                   <div className="space-y-2">
                     <Label htmlFor="register-genero">Género (opcional)</Label>
-                    <select
-                      id="register-genero"
-                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    <Select
                       value={registerData.genero}
-                      onChange={(e) =>
+                      onValueChange={(value) =>
                         setRegisterData({
                           ...registerData,
-                          genero: e.target.value,
+                          genero: value,
                         })
                       }
                     >
-                      <option value="">Seleccionar género</option>
-                      <option value="masculino">Masculino</option>
-                      <option value="femenino">Femenino</option>
-                      <option value="otro">Otro</option>
-                      <option value="prefiero_no_decir">Prefiero no decir</option>
-                    </select>
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Seleccionar género" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="masculino">Masculino</SelectItem>
+                        <SelectItem value="femenino">Femenino</SelectItem>
+                        <SelectItem value="otro">Otro</SelectItem>
+                        <SelectItem value="prefiero_no_decir">Prefiero no decir</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
 
