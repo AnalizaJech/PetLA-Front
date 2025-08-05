@@ -82,6 +82,7 @@ export function DatePicker({
         fixedHeight
         todayButton="Hoy"
         autoComplete="off"
+        withPortal={false}
         popperModifiers={[
           {
             name: "preventOverflow",
@@ -89,6 +90,18 @@ export function DatePicker({
               rootBoundary: "viewport",
               tether: false,
               altAxis: true,
+            },
+          },
+          {
+            name: "flip",
+            options: {
+              fallbackPlacements: ["bottom-end", "top-start", "top-end"],
+            },
+          },
+          {
+            name: "offset",
+            options: {
+              offset: [0, 8],
             },
           },
         ]}
