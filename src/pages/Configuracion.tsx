@@ -135,9 +135,13 @@ export default function Configuracion() {
   // Profile form state
   const [profileData, setProfileData] = useState({
     nombre: user?.nombre || "",
+    apellidos: user?.apellidos || "",
+    username: user?.username || "",
     email: user?.email || "",
     telefono: user?.telefono || "",
-    direccion: loadSettings("user_direccion", ""),
+    direccion: user?.direccion || "",
+    fechaNacimiento: user?.fechaNacimiento ? user.fechaNacimiento.toISOString().split('T')[0] : "",
+    genero: user?.genero || "",
     bio: loadSettings("user_bio", ""),
     foto: user?.foto || null,
   });
@@ -193,8 +197,13 @@ export default function Configuracion() {
       setProfileData((prev) => ({
         ...prev,
         nombre: user.nombre || "",
+        apellidos: user.apellidos || "",
+        username: user.username || "",
         email: user.email || "",
         telefono: user.telefono || "",
+        direccion: user.direccion || "",
+        fechaNacimiento: user.fechaNacimiento ? user.fechaNacimiento.toISOString().split('T')[0] : "",
+        genero: user.genero || "",
         foto: user.foto || null,
       }));
     }
@@ -237,8 +246,13 @@ export default function Configuracion() {
         // Update user in both contexts (usuarios array and current user)
         const updatedUserData = {
           nombre: profileData.nombre.trim(),
+          apellidos: profileData.apellidos.trim(),
+          username: profileData.username.trim(),
           email: profileData.email.trim(),
           telefono: profileData.telefono.trim(),
+          direccion: profileData.direccion.trim(),
+          fechaNacimiento: profileData.fechaNacimiento ? new Date(profileData.fechaNacimiento) : undefined,
+          genero: profileData.genero,
           foto: profileData.foto,
         };
 
@@ -649,7 +663,7 @@ export default function Configuracion() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                     <div className="space-y-2">
-                      <Label htmlFor="nombre">Nombre completo</Label>
+                      <Label htmlFor="nombre">Nombres</Label>
                       <Input
                         id="nombre"
                         value={profileData.nombre}
@@ -659,8 +673,44 @@ export default function Configuracion() {
                             nombre: e.target.value,
                           })
                         }
-                        placeholder="Tu nombre completo"
+                        placeholder="Tus nombres"
+                        required
                       />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="apellidos">Apellidos</Label>
+                      <Input
+                        id="apellidos"
+                        value={profileData.apellidos}
+                        onChange={(e) =>
+                          setProfileData({
+                            ...profileData,
+                            apellidos: e.target.value,
+                          })
+                        }
+                        placeholder="Tus apellidos"
+                        required
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="username">Nombre de usuario</Label>
+                      <div className="relative">
+                        <User className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
+                        <Input
+                          id="username"
+                          className="pl-10"
+                          value={profileData.username}
+                          onChange={(e) =>
+                            setProfileData({
+                              ...profileData,
+                              username: e.target.value,
+                            })
+                          }
+                          placeholder="usuario123"
+                        />
+                      </div>
                     </div>
 
                     <div className="space-y-2">
@@ -704,18 +754,64 @@ export default function Configuracion() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="direccion">Dirección</Label>
-                      <Input
-                        id="direccion"
-                        value={profileData.direccion}
-                        onChange={(e) =>
+                      <Label htmlFor="direccion">Dirección (opcional)</Label>
+                      <div className="relative">
+                        <MapPin className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
+                        <Input
+                          id="direccion"
+                          className="pl-10"
+                          value={profileData.direccion}
+                          onChange={(e) =>
+                            setProfileData({
+                              ...profileData,
+                              direccion: e.target.value,
+                            })
+                          }
+                          placeholder="Tu dirección completa"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="fechaNacimiento">Fecha de nacimiento (opcional)</Label>
+                      <div className="relative">
+                        <Calendar className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
+                        <Input
+                          id="fechaNacimiento"
+                          type="date"
+                          className="pl-10"
+                          value={profileData.fechaNacimiento}
+                          onChange={(e) =>
+                            setProfileData({
+                              ...profileData,
+                              fechaNacimiento: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="genero">Género (opcional)</Label>
+                      <Select
+                        value={profileData.genero}
+                        onValueChange={(value) =>
                           setProfileData({
                             ...profileData,
-                            direccion: e.target.value,
+                            genero: value,
                           })
                         }
-                        placeholder="Tu dirección"
-                      />
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Seleccionar género" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="masculino">Masculino</SelectItem>
+                          <SelectItem value="femenino">Femenino</SelectItem>
+                          <SelectItem value="otro">Otro</SelectItem>
+                          <SelectItem value="prefiero_no_decir">Prefiero no decir</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
                   </div>
 
