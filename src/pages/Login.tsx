@@ -274,20 +274,64 @@ export default function Login() {
               )}
 
               <form onSubmit={handleRegister} className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="register-name">Nombres</Label>
+                    <div className="relative">
+                      <User className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
+                      <Input
+                        id="register-name"
+                        type="text"
+                        placeholder="Ej: Carlos"
+                        className="pl-10"
+                        value={registerData.nombre}
+                        onChange={(e) =>
+                          setRegisterData({
+                            ...registerData,
+                            nombre: e.target.value,
+                          })
+                        }
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="register-apellidos">Apellidos</Label>
+                    <div className="relative">
+                      <User className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
+                      <Input
+                        id="register-apellidos"
+                        type="text"
+                        placeholder="Ej: Ramírez"
+                        className="pl-10"
+                        value={registerData.apellidos}
+                        onChange={(e) =>
+                          setRegisterData({
+                            ...registerData,
+                            apellidos: e.target.value,
+                          })
+                        }
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+
                 <div className="space-y-2">
-                  <Label htmlFor="register-name">Nombre completo</Label>
+                  <Label htmlFor="register-username">Nombre de usuario</Label>
                   <div className="relative">
-                    <User className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
+                    <UserCheck className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
                     <Input
-                      id="register-name"
+                      id="register-username"
                       type="text"
-                      placeholder="Tu nombre completo"
+                      placeholder="Ej: carlos123"
                       className="pl-10"
-                      value={registerData.nombre}
+                      value={registerData.username}
                       onChange={(e) =>
                         setRegisterData({
                           ...registerData,
-                          nombre: e.target.value,
+                          username: e.target.value,
                         })
                       }
                       required
