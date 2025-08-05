@@ -768,7 +768,7 @@ export default function HistorialClinico() {
       ];
 
       todasLasConsultas.forEach((consulta) => {
-        const medicamentos = consulta.medicamentos
+        const medicamentos = (consulta.medicamentos || [])
           .map((med) => `${med.nombre}: ${med.dosis} (${med.duracion})`)
           .join("; ");
 
