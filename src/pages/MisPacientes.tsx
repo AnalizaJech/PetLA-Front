@@ -942,14 +942,19 @@ export default function MisPacientes() {
                                       </Badge>
                                     )}
                                   </div>
-                                  {mascota?.raza && (
-                                    <div className="flex items-center space-x-2">
-                                      <Info className="w-4 h-4 text-vet-gray-600" />
-                                      <span>
-                                        <strong>Raza:</strong> {mascota.raza}
-                                      </span>
-                                    </div>
+                                  {/* Always show breed information if available, even for unregistered pets */}
+                              <div className="flex items-center space-x-2">
+                                <Info className="w-4 h-4 text-vet-gray-600" />
+                                <span>
+                                  <strong>Raza:</strong>{" "}
+                                  {mascota?.raza || "No especificada"}
+                                  {!mascota?.raza && (
+                                    <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200 text-xs ml-2">
+                                      Sin registrar
+                                    </Badge>
                                   )}
+                                </span>
+                              </div>
                                   <div className="flex items-center space-x-2">
                                     <Calendar className="w-4 h-4 text-vet-gray-600" />
                                     <span>
