@@ -1047,14 +1047,21 @@ export function AppProvider({ children }: { children: ReactNode }) {
       return null; // User already exists
     }
 
-    // Create new user
+    // Create new user with ALL the provided fields
     const newUser: Usuario = {
       id: Date.now().toString(),
       nombre: userData.nombre,
+      apellidos: userData.apellidos, // Ahora se guarda
+      username: userData.username, // Ahora se guarda
       email: userData.email,
       rol: userData.rol,
       telefono: userData.telefono,
+      direccion: userData.direccion, // Ahora se guarda
+      fechaNacimiento: userData.fechaNacimiento, // Ahora se guarda
+      genero: userData.genero, // Ahora se guarda
+      password: userData.password, // También guardar la contraseña
       fechaRegistro: new Date(),
+      foto: userData.foto || null, // Incluir foto si existe
     };
 
     setUsuarios((prev) => [...prev, newUser]);
@@ -1527,7 +1534,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     };
     setHistorialClinico((prev) => [...prev, newEntry]);
 
-    // Generar notificación para el cliente cuando se registra una consulta
+    // Generar notificaci��n para el cliente cuando se registra una consulta
     const mascotaInfo = mascotas.find((m) => m.id === entryData.mascotaId);
     if (mascotaInfo) {
       addNotificacion({
