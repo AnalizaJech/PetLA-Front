@@ -439,7 +439,7 @@ export default function Login() {
                         })
                       }
                     >
-                      <SelectTrigger className="h-12">
+                      <SelectTrigger className="h-12 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10">
                         <SelectValue placeholder="Seleccionar género" />
                       </SelectTrigger>
                       <SelectContent>
