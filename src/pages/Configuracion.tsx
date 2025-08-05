@@ -336,6 +336,12 @@ export default function Configuracion() {
       }
 
       setSavedMessage("Perfil actualizado correctamente. Todos los datos han sido guardados en el sistema.");
+
+      // Scroll to top to show success message
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
     } catch (error) {
       setErrorMessage("Error al actualizar el perfil. Inténtalo de nuevo.");
     } finally {
@@ -355,6 +361,12 @@ export default function Configuracion() {
       saveSettings("notifications", notificationSettings);
 
       setSavedMessage("Configuración de notificaciones guardada correctamente");
+
+      // Scroll to top to show success message
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
     } catch (error) {
       setErrorMessage("Error al guardar las notificaciones");
     } finally {
@@ -406,6 +418,12 @@ export default function Configuracion() {
       }
 
       setSavedMessage("Configuración de seguridad actualizada correctamente");
+
+      // Scroll to top to show success message
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
 
       // Clear password fields
       setSecurityData((prev) => ({
@@ -619,18 +637,18 @@ export default function Configuracion() {
             </div>
 
             {savedMessage && (
-              <Alert className="bg-green-50 border-green-200 mb-4">
-                <CheckCircle className="w-4 h-4 text-green-600" />
-                <AlertDescription className="text-green-800">
+              <Alert className="bg-green-50 border-green-200 mb-6 shadow-md">
+                <CheckCircle className="w-5 h-5 text-green-600" />
+                <AlertDescription className="text-green-800 font-medium">
                   {savedMessage}
                 </AlertDescription>
               </Alert>
             )}
 
             {errorMessage && (
-              <Alert className="bg-red-50 border-red-200 mb-4">
-                <AlertTriangle className="w-4 h-4 text-red-600" />
-                <AlertDescription className="text-red-800">
+              <Alert className="bg-red-50 border-red-200 mb-6 shadow-md">
+                <AlertTriangle className="w-5 h-5 text-red-600" />
+                <AlertDescription className="text-red-800 font-medium">
                   {errorMessage}
                 </AlertDescription>
               </Alert>

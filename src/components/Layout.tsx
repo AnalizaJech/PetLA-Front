@@ -573,8 +573,16 @@ export default function Layout({
                         variant="ghost"
                         className="hidden md:flex items-center space-x-2"
                       >
-                        <div className="w-8 h-8 bg-vet-primary rounded-full flex items-center justify-center">
-                          <User className="w-4 h-4 text-white" />
+                        <div className="w-8 h-8 bg-vet-primary rounded-full flex items-center justify-center overflow-hidden">
+                          {user.foto ? (
+                            <img
+                              src={user.foto}
+                              alt={`Foto de ${user.nombre}`}
+                              className="w-full h-full object-cover rounded-full"
+                            />
+                          ) : (
+                            <User className="w-4 h-4 text-white" />
+                          )}
                         </div>
                         <span className="text-sm font-medium text-vet-gray-700">
                           {user.nombre}
