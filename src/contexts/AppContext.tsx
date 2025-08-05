@@ -1783,6 +1783,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
     deleteNotificacion,
     login,
     register,
+    getMascotaWithOwner,
+    getCitaWithRelations,
+    validateDataRelationships,
     getStats,
   };
 
