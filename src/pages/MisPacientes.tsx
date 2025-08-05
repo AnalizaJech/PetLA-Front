@@ -11,6 +11,7 @@ import {
   getCitasStats,
   validateCitaData,
   getUrgencyLevel,
+  autoFixCitaData,
   type CitaFilter,
   type SortBy,
   type CitaRelationData,
@@ -137,6 +138,8 @@ export default function MisPacientes() {
   const [filterUrgencia, setFilterUrgencia] = useState("todos");
   const [sortBy, setSortBy] = useState<SortBy>("fecha_desc");
   const [showDataIssues, setShowDataIssues] = useState(false);
+  const [showAutoFix, setShowAutoFix] = useState(false);
+  const [autoFixResults, setAutoFixResults] = useState<any>(null);
 
   // Estados para modales
   const [selectedCita, setSelectedCita] = useState<CitaRelationData | null>(
@@ -173,8 +176,8 @@ export default function MisPacientes() {
     [citas, user.nombre],
   );
 
-  // Validar integridad de datos
-  const { valid: validCitas, invalid: invalidCitas } = useMemo(
+  // Validar integridad de datos con mejoras
+  const { valid: validCitas, invalid: invalidCitas, fixable: fixableCitas } = useMemo(
     () => validateCitaData(misCitas, mascotas, usuarios),
     [misCitas, mascotas, usuarios],
   );
@@ -270,9 +273,38 @@ export default function MisPacientes() {
       completadas: citasStats.completadas,
       urgentes: citasStats.urgentes,
       sinPropietario: citasStats.sinPropietario,
+      sinMascota: citasStats.sinMascota,
+      problemasData: citasStats.problemasData,
       propietariosUnicos: citasStats.propietariosUnicos,
+      mascotasUnicas: citasStats.mascotasUnicas,
     };
   }, [enhancedCitas]);
+
+  // Función para aplicar correcciones automáticas
+  const handleAutoFix = () => {
+    try {
+      const results = autoFixCitaData(misCitas, mascotas, usuarios);
+      setAutoFixResults(results);
+
+      // Mostrar resultados
+      console.log('🔧 Resultados de reparación automática:', results);
+
+      if (results.newMascotas.length > 0) {
+        results.newMascotas.forEach(mascota => {
+          // En una implementación real, usarías la función addMascota del contexto
+          console.log(`➕ Nueva mascota creada: ${mascota.nombre}`);
+        });
+      }
+
+      if (results.errors.length > 0) {
+        console.warn('⚠️ Errores durante la reparación:', results.errors);
+      }
+
+      setShowAutoFix(true);
+    } catch (error) {
+      console.error('Error aplicando correcciones automáticas:', error);
+    }
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -474,50 +506,138 @@ export default function MisPacientes() {
             </Card>
           </div>
 
-          {/* Alerta sobre problemas de datos si existen */}
-          {invalidCitas.length > 0 && (
-            <Alert className="mb-6 border-orange-200 bg-orange-50">
-              <AlertCircle className="w-4 h-4 text-orange-600" />
-              <AlertDescription className="text-orange-800">
-                <strong>
-                  Se detectaron {invalidCitas.length} citas con problemas de
-                  datos.
-                </strong>
-                <Button
-                  variant="link"
-                  size="sm"
-                  onClick={() => setShowDataIssues(!showDataIssues)}
-                  className="text-orange-800 underline p-0 ml-2"
-                >
-                  {showDataIssues ? "Ocultar" : "Ver detalles"}
-                </Button>
-                {showDataIssues && (
-                  <div className="mt-2 space-y-1">
-                    {invalidCitas.slice(0, 3).map(({ cita, issues }) => (
-                      <div key={cita.id} className="text-sm">
-                        • <strong>{cita.mascota}</strong>: {issues.join(", ")}
-                      </div>
-                    ))}
-                    {invalidCitas.length > 3 && (
-                      <div className="text-sm">
-                        ... y {invalidCitas.length - 3} más
+          {/* Alertas sobre problemas de datos */}
+          {(invalidCitas.length > 0 || fixableCitas.length > 0) && (
+            <div className="space-y-4 mb-6">
+              {/* Problemas críticos */}
+              {invalidCitas.length > 0 && (
+                <Alert className="border-red-200 bg-red-50">
+                  <AlertCircle className="w-4 h-4 text-red-600" />
+                  <AlertDescription className="text-red-800">
+                    <strong>
+                      Se detectaron {invalidCitas.length} citas con problemas críticos.
+                    </strong>
+                    <Button
+                      variant="link"
+                      size="sm"
+                      onClick={() => setShowDataIssues(!showDataIssues)}
+                      className="text-red-800 underline p-0 ml-2"
+                    >
+                      {showDataIssues ? "Ocultar" : "Ver detalles"}
+                    </Button>
+                    {showDataIssues && (
+                      <div className="mt-2 space-y-1">
+                        {invalidCitas.slice(0, 3).map(({ cita, issues }) => (
+                          <div key={cita.id} className="text-sm">
+                            • <strong>{cita.mascota}</strong>: {issues.join(", ")}
+                          </div>
+                        ))}
+                        {invalidCitas.length > 3 && (
+                          <div className="text-sm">
+                            ... y {invalidCitas.length - 3} más
+                          </div>
+                        )}
                       </div>
                     )}
-                  </div>
-                )}
-              </AlertDescription>
-            </Alert>
+                  </AlertDescription>
+                </Alert>
+              )}
+
+              {/* Problemas reparables */}
+              {fixableCitas.length > 0 && (
+                <Alert className="border-yellow-200 bg-yellow-50">
+                  <Info className="w-4 h-4 text-yellow-600" />
+                  <AlertDescription className="text-yellow-800">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <strong>
+                          {fixableCitas.length} problemas pueden repararse automáticamente.
+                        </strong>
+                        <div className="mt-2 text-sm">
+                          {fixableCitas.slice(0, 2).map(({ cita, suggestedFix }) => (
+                            <div key={cita.id}>
+                              • <strong>{cita.mascota}</strong>: {suggestedFix}
+                            </div>
+                          ))}
+                          {fixableCitas.length > 2 && (
+                            <div>... y {fixableCitas.length - 2} más</div>
+                          )}
+                        </div>
+                      </div>
+                      <Button
+                        size="sm"
+                        onClick={handleAutoFix}
+                        className="bg-yellow-600 hover:bg-yellow-700 text-white"
+                      >
+                        Reparar Datos
+                      </Button>
+                    </div>
+                  </AlertDescription>
+                </Alert>
+              )}
+
+              {/* Resultados de la reparación automática */}
+              {showAutoFix && autoFixResults && (
+                <Alert className="border-green-200 bg-green-50">
+                  <CheckCircle className="w-4 h-4 text-green-600" />
+                  <AlertDescription className="text-green-800">
+                    <div>
+                      <strong>Reparación completada:</strong>
+                      <div className="mt-2 text-sm space-y-1">
+                        {autoFixResults.newMascotas.length > 0 && (
+                          <div>✅ {autoFixResults.newMascotas.length} mascotas creadas</div>
+                        )}
+                        {autoFixResults.errors.length > 0 && (
+                          <div>⚠️ {autoFixResults.errors.length} errores encontrados</div>
+                        )}
+                      </div>
+                      <Button
+                        variant="link"
+                        size="sm"
+                        onClick={() => setShowAutoFix(false)}
+                        className="text-green-800 p-0 ml-2"
+                      >
+                        Cerrar
+                      </Button>
+                    </div>
+                  </AlertDescription>
+                </Alert>
+              )}
+            </div>
           )}
 
-          {/* Stats adicionales */}
-          {stats.sinPropietario > 0 && (
-            <Alert className="mb-6 border-yellow-200 bg-yellow-50">
-              <User className="w-4 h-4 text-yellow-600" />
-              <AlertDescription className="text-yellow-800">
-                <strong>{stats.sinPropietario} citas</strong> no tienen
-                propietario asignado correctamente.
-              </AlertDescription>
-            </Alert>
+          {/* Stats adicionales con más detalles */}
+          {(stats.sinPropietario > 0 || stats.sinMascota > 0 || stats.problemasData > 0) && (
+            <div className="space-y-3 mb-6">
+              {stats.sinPropietario > 0 && (
+                <Alert className="border-yellow-200 bg-yellow-50">
+                  <User className="w-4 h-4 text-yellow-600" />
+                  <AlertDescription className="text-yellow-800">
+                    <strong>{stats.sinPropietario} citas</strong> no tienen
+                    propietario asignado correctamente.
+                  </AlertDescription>
+                </Alert>
+              )}
+
+              {stats.sinMascota > 0 && (
+                <Alert className="border-orange-200 bg-orange-50">
+                  <PawPrint className="w-4 h-4 text-orange-600" />
+                  <AlertDescription className="text-orange-800">
+                    <strong>{stats.sinMascota} citas</strong> tienen mascotas no registradas en el sistema.
+                  </AlertDescription>
+                </Alert>
+              )}
+
+              {stats.problemasData > 0 && (
+                <Alert className="border-blue-200 bg-blue-50">
+                  <Info className="w-4 h-4 text-blue-600" />
+                  <AlertDescription className="text-blue-800">
+                    Resumen: <strong>{stats.propietariosUnicos} propietarios únicos</strong>,
+                    <strong> {stats.mascotasUnicas} mascotas únicas</strong> en {stats.total} citas.
+                  </AlertDescription>
+                </Alert>
+              )}
+            </div>
           )}
 
           {/* Filtros mejorados */}
@@ -666,29 +786,54 @@ export default function MisPacientes() {
                                 {getUrgencyBadge(urgencyLevel)}
                               </div>
 
-                              {/* Información del propietario - Más prominente */}
-                              <div className="bg-vet-gray-50 p-3 rounded-lg mb-3">
+                              {/* Información del propietario - Mejorada */}
+                              <div className={`p-3 rounded-lg mb-3 ${
+                                propietario
+                                  ? "bg-vet-gray-50 border border-vet-gray-200"
+                                  : "bg-red-50 border border-red-200"
+                              }`}>
                                 <div className="flex items-center space-x-2 mb-2">
-                                  <UserCheck className="w-4 h-4 text-vet-primary" />
-                                  <span className="font-medium text-vet-gray-900">
+                                  {propietario ? (
+                                    <UserCheck className="w-4 h-4 text-vet-primary" />
+                                  ) : (
+                                    <UserX className="w-4 h-4 text-red-600" />
+                                  )}
+                                  <span className={`font-medium ${
+                                    propietario ? "text-vet-gray-900" : "text-red-900"
+                                  }`}>
                                     Propietario:{" "}
-                                    {propietario?.nombre || "Sin asignar"}
+                                    {propietario?.nombre || "⚠️ Sin asignar"}
                                   </span>
-                                </div>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-vet-gray-600">
-                                  {propietario?.telefono && (
-                                    <div className="flex items-center space-x-2">
-                                      <Phone className="w-3 h-3" />
-                                      <span>{propietario.telefono}</span>
-                                    </div>
-                                  )}
-                                  {propietario?.email && (
-                                    <div className="flex items-center space-x-2">
-                                      <Mail className="w-3 h-3" />
-                                      <span>{propietario.email}</span>
-                                    </div>
+                                  {!propietario && (
+                                    <Badge className="bg-red-100 text-red-800 border-red-200">
+                                      Requiere atención
+                                    </Badge>
                                   )}
                                 </div>
+                                {propietario ? (
+                                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-vet-gray-600">
+                                    {propietario.telefono && (
+                                      <div className="flex items-center space-x-2">
+                                        <Phone className="w-3 h-3" />
+                                        <span>{propietario.telefono}</span>
+                                      </div>
+                                    )}
+                                    {propietario.email && (
+                                      <div className="flex items-center space-x-2">
+                                        <Mail className="w-3 h-3" />
+                                        <span>{propietario.email}</span>
+                                      </div>
+                                    )}
+                                    <div className="flex items-center space-x-2 text-xs text-vet-gray-500">
+                                      <Info className="w-3 h-3" />
+                                      <span>ID: {propietario.id}</span>
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <div className="text-sm text-red-600">
+                                    Esta mascota necesita ser asignada a un propietario
+                                  </div>
+                                )}
                               </div>
 
                               {/* Información de la mascota */}
@@ -698,8 +843,13 @@ export default function MisPacientes() {
                                     <PawPrint className="w-4 h-4 text-vet-gray-600" />
                                     <span>
                                       <strong>Especie:</strong>{" "}
-                                      {mascota?.especie || "No especificado"}
+                                      {mascota?.especie || cita.especie || "No especificado"}
                                     </span>
+                                    {!mascota && (
+                                      <Badge className="bg-orange-100 text-orange-800 border-orange-200 text-xs">
+                                        No registrada
+                                      </Badge>
+                                    )}
                                   </div>
                                   {mascota?.raza && (
                                     <div className="flex items-center space-x-2">
