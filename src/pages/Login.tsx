@@ -209,7 +209,7 @@ export default function Login() {
                     />
                     <button
                       type="button"
-                      className="absolute right-3 top-3 text-vet-gray-400 hover:text-vet-gray-600"
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-vet-gray-400 hover:text-vet-gray-600 transition-colors"
                       onClick={() => setShowPassword(!showPassword)}
                     >
                       {showPassword ? (
