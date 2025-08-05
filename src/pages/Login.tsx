@@ -195,7 +195,7 @@ export default function Login() {
                 <div className="space-y-2">
                   <Label htmlFor="login-password">Contraseña</Label>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-vet-gray-400" />
                     <Input
                       id="login-password"
                       type={showPassword ? "text" : "password"}
