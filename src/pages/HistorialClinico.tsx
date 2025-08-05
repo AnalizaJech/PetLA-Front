@@ -767,16 +767,6 @@ export default function HistorialClinico() {
         ],
       ];
 
-      // Obtener todas las consultas de todos los tipos
-      const todasLasConsultas = [
-        ...historialMascota.consulta_general,
-        ...historialMascota.vacunacion,
-        ...historialMascota.emergencia,
-        ...historialMascota.grooming,
-        ...historialMascota.cirugia,
-        ...historialMascota.diagnostico,
-      ];
-
       todasLasConsultas.forEach((consulta) => {
         const medicamentos = (consulta.medicamentos || [])
           .map((med) => `${med.nombre}: ${med.dosis} (${med.duracion})`)
