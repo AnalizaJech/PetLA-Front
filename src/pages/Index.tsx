@@ -606,13 +606,18 @@ export default function Index() {
                     }
                     onDateChange={(date) => {
                       if (date) {
-                        console.log('Fecha recibida:', date);
-                        console.log('Fecha toString:', date.toString());
-                        console.log('Timezone offset:', date.getTimezoneOffset());
+                        console.log("Fecha recibida:", date);
+                        console.log("Fecha toString:", date.toString());
+                        console.log(
+                          "Timezone offset:",
+                          date.getTimezoneOffset(),
+                        );
 
                         // Crear una nueva fecha ajustada para zona horaria local
-                        const localDate = new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
-                        console.log('Fecha local ajustada:', localDate);
+                        const localDate = new Date(
+                          date.getTime() - date.getTimezoneOffset() * 60000,
+                        );
+                        console.log("Fecha local ajustada:", localDate);
 
                         // Crear fecha de hoy sin horas para comparación
                         const today = new Date();
@@ -626,11 +631,16 @@ export default function Index() {
                         if (selectedDate >= today) {
                           // Usar la fecha ajustada para el formateo
                           const year = localDate.getFullYear();
-                          const month = String(localDate.getMonth() + 1).padStart(2, '0');
-                          const day = String(localDate.getDate()).padStart(2, '0');
+                          const month = String(
+                            localDate.getMonth() + 1,
+                          ).padStart(2, "0");
+                          const day = String(localDate.getDate()).padStart(
+                            2,
+                            "0",
+                          );
                           const formattedDate = `${year}-${month}-${day}`;
 
-                          console.log('Fecha formateada:', formattedDate);
+                          console.log("Fecha formateada:", formattedDate);
 
                           setFormData({
                             ...formData,
@@ -648,7 +658,11 @@ export default function Index() {
                     fromYear={new Date().getFullYear()}
                     toYear={new Date().getFullYear() + 1}
                     minDate={new Date()}
-                    className={showValidationErrors && !formData.fechaPreferida ? "border-red-300" : ""}
+                    className={
+                      showValidationErrors && !formData.fechaPreferida
+                        ? "border-red-300"
+                        : ""
+                    }
                   />
                 </div>
                 <div className="space-y-2">
@@ -660,7 +674,13 @@ export default function Index() {
                     }
                     required
                   >
-                    <SelectTrigger className={showValidationErrors && !formData.horaPreferida ? "border-red-300" : ""}>
+                    <SelectTrigger
+                      className={
+                        showValidationErrors && !formData.horaPreferida
+                          ? "border-red-300"
+                          : ""
+                      }
+                    >
                       <SelectValue placeholder="Selecciona una hora *" />
                     </SelectTrigger>
                     <SelectContent>
@@ -697,12 +717,15 @@ export default function Index() {
                     placeholder="Describe brevemente el motivo de la consulta veterinaria... *"
                     required
                     className={`w-full min-h-[100px] max-h-[100px] resize-none overflow-y-auto px-3 py-2 border rounded-lg focus:ring-2 focus:ring-vet-primary focus:border-vet-primary transition-all duration-200 ${
-                      showValidationErrors && !formData.motivoConsulta.trim() ? "border-red-300" : "border-vet-gray-300"
+                      showValidationErrors && !formData.motivoConsulta.trim()
+                        ? "border-red-300"
+                        : "border-vet-gray-300"
                     }`}
                   />
                   <p className="text-xs text-vet-gray-500 mt-1">
-                    <span className="text-red-500">*Obligatorio</span> - Máximo 500 caracteres. Describe síntomas, comportamientos o
-                    motivos de la consulta.
+                    <span className="text-red-500">*Obligatorio</span> - Máximo
+                    500 caracteres. Describe síntomas, comportamientos o motivos
+                    de la consulta.
                   </p>
                 </div>
               </div>
