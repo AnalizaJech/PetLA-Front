@@ -606,21 +606,31 @@ export default function Index() {
                     }
                     onDateChange={(date) => {
                       if (date) {
+                        console.log('Fecha recibida:', date);
+                        console.log('Fecha toString:', date.toString());
+                        console.log('Timezone offset:', date.getTimezoneOffset());
+
+                        // Crear una nueva fecha ajustada para zona horaria local
+                        const localDate = new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
+                        console.log('Fecha local ajustada:', localDate);
+
                         // Crear fecha de hoy sin horas para comparación
                         const today = new Date();
                         today.setHours(0, 0, 0, 0);
 
-                        // Crear fecha seleccionada sin horas para comparación
-                        const selectedDate = new Date(date);
+                        // Crear fecha seleccionada sin horas para comparación usando la fecha ajustada
+                        const selectedDate = new Date(localDate);
                         selectedDate.setHours(0, 0, 0, 0);
 
                         // Permitir fecha de hoy o fechas futuras
                         if (selectedDate >= today) {
-                          // Formatear fecha sin conversión a UTC para evitar cambios de zona horaria
-                          const year = date.getFullYear();
-                          const month = String(date.getMonth() + 1).padStart(2, '0');
-                          const day = String(date.getDate()).padStart(2, '0');
+                          // Usar la fecha ajustada para el formateo
+                          const year = localDate.getFullYear();
+                          const month = String(localDate.getMonth() + 1).padStart(2, '0');
+                          const day = String(localDate.getDate()).padStart(2, '0');
                           const formattedDate = `${year}-${month}-${day}`;
+
+                          console.log('Fecha formateada:', formattedDate);
 
                           setFormData({
                             ...formData,
