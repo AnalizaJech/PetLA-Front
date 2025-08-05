@@ -454,7 +454,7 @@ export default function HistorialClinico() {
     if (estado === "aceptada") return "Servicio confirmado y programado";
 
     const tipo = tipoConsulta.toLowerCase();
-    // Notas específicas por servicio
+    // Notas espec��ficas por servicio
     if (tipo.includes("consulta general"))
       return "Consulta general completada. Mascota en buen estado de salud. Continuar con cuidados preventivos.";
     if (tipo.includes("vacunación") || tipo.includes("vacunacion"))
@@ -794,11 +794,11 @@ export default function HistorialClinico() {
     const resumenData = [
       ["RESUMEN DEL HISTORIAL"],
       [""],
-      ["Total de consultas", historialMascota.consultas.length.toString()],
+      ["Total de consultas", todasLasConsultas.length.toString()],
       [
         "Última consulta",
-        historialMascota.consultas.length > 0
-          ? historialMascota.consultas[0].fecha.toLocaleDateString("es-ES")
+        todasLasConsultas.length > 0
+          ? todasLasConsultas[0].fecha.toLocaleDateString("es-ES")
           : "No hay consultas",
       ],
       [""],
