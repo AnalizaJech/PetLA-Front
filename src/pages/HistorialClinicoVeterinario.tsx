@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
 import { useAppContext } from "@/contexts/AppContext";
@@ -58,6 +58,7 @@ import {
   AlertCircle,
   CheckCircle,
   UserCheck,
+  UserX,
   Heart,
   MapPin,
   Weight,
@@ -65,6 +66,7 @@ import {
   Plus,
   ChevronRight,
   Info,
+  Badge,
 } from "lucide-react";
 
 export default function HistorialClinicoVeterinario() {
@@ -122,11 +124,36 @@ export default function HistorialClinicoVeterinario() {
     );
   }
 
-  // Obtener mascotas de mis pacientes
+  // Obtener mascotas de mis pacientes con validación mejorada
   const misCitas = citas.filter((cita) => cita.veterinario === user.nombre);
-  const misMascotas = mascotas.filter((mascota) =>
-    misCitas.some((cita) => cita.mascota === mascota.nombre),
-  );
+
+  // Encontrar mascotas relacionadas con mis citas (más tolerante)
+  const misMascotas = mascotas.filter((mascota) => {
+    return misCitas.some((cita) => {
+      // Búsqueda exacta
+      if (cita.mascota === mascota.nombre) return true;
+      // Búsqueda case-insensitive
+      if (cita.mascota.toLowerCase() === mascota.nombre.toLowerCase()) return true;
+      // Búsqueda parcial
+      return cita.mascota.toLowerCase().includes(mascota.nombre.toLowerCase()) ||
+             mascota.nombre.toLowerCase().includes(cita.mascota.toLowerCase());
+    });
+  });
+
+  // Detectar mascotas "fantasma" (mencionadas en citas pero no registradas)
+  const mascotasFantasma = useMemo(() => {
+    const nombresRegistrados = mascotas.map(m => m.nombre.toLowerCase());
+    const mascotasEnCitas = new Set(
+      misCitas.map(c => c.mascota).filter(nombre =>
+        !nombresRegistrados.includes(nombre.toLowerCase())
+      )
+    );
+    return Array.from(mascotasEnCitas).map(nombre => ({
+      nombre,
+      especie: misCitas.find(c => c.mascota === nombre)?.especie || 'Desconocida',
+      citasRelacionadas: misCitas.filter(c => c.mascota === nombre).length
+    }));
+  }, [misCitas, mascotas]);
 
   // Debug: verificar datos disponibles
   console.log("HistorialClinicoVeterinario - Datos disponibles:", {
@@ -136,10 +163,16 @@ export default function HistorialClinicoVeterinario() {
     selectedMascotaId: selectedMascota,
   });
 
-  // Obtener clientes únicos
-  const misClientes = usuarios.filter((usuario) =>
-    misMascotas.some((mascota) => mascota.clienteId === usuario.id),
-  );
+  // Obtener clientes únicos con validación mejorada
+  const misClientes = usuarios.filter((usuario) => {
+    if (usuario.rol !== 'cliente') return false;
+    return misMascotas.some((mascota) => mascota.clienteId === usuario.id);
+  });
+
+  // Detectar mascotas sin propietario válido
+  const mascotasSinPropietario = misMascotas.filter(mascota => {
+    return !usuarios.find(u => u.id === mascota.clienteId && u.rol === 'cliente');
+  });
 
   // Filtrar mascotas según criterios de búsqueda
   const filteredMascotas = misMascotas.filter((mascota) => {
@@ -186,6 +219,8 @@ export default function HistorialClinicoVeterinario() {
     clienteSeleccionado,
     historialCount: historialMascota.length,
     historialData: historialMascota,
+    mascotasFantasma: mascotasFantasma.length,
+    mascotasSinPropietario: mascotasSinPropietario.length,
   });
 
   // Organizar datos por tipo con filtros aplicados
@@ -325,13 +360,34 @@ export default function HistorialClinicoVeterinario() {
             <div className="lg:col-span-1">
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <PawPrint className="w-5 h-5 text-vet-primary" />
-                    <span>Mis Pacientes</span>
+                  <CardTitle className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <PawPrint className="w-5 h-5 text-vet-primary" />
+                      <span>Mis Pacientes</span>
+                    </div>
+                    <Badge variant="outline">
+                      {misMascotas.length} registradas
+                    </Badge>
                   </CardTitle>
                   <CardDescription>
                     Selecciona una mascota para ver su historial
                   </CardDescription>
+
+                  {/* Alertas sobre problemas de datos */}
+                  {(mascotasSinPropietario.length > 0 || mascotasFantasma.length > 0) && (
+                    <div className="space-y-2">
+                      {mascotasSinPropietario.length > 0 && (
+                        <div className="text-xs text-yellow-600 bg-yellow-50 p-2 rounded border">
+                          ⚠️ {mascotasSinPropietario.length} mascotas sin propietario válido
+                        </div>
+                      )}
+                      {mascotasFantasma.length > 0 && (
+                        <div className="text-xs text-orange-600 bg-orange-50 p-2 rounded border">
+                          👻 {mascotasFantasma.length} mascotas en citas pero no registradas
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {/* Búsqueda */}
@@ -372,6 +428,18 @@ export default function HistorialClinicoVeterinario() {
                         <p className="text-vet-gray-500 text-sm">
                           No se encontraron mascotas
                         </p>
+                        {mascotasFantasma.length > 0 && (
+                          <div className="mt-4 p-3 bg-orange-50 rounded-lg border border-orange-200">
+                            <p className="text-xs text-orange-800 font-medium mb-2">
+                              Mascotas en citas pero no registradas:
+                            </p>
+                            {mascotasFantasma.map((fantasma, index) => (
+                              <div key={index} className="text-xs text-orange-700">
+                                • {fantasma.nombre} ({fantasma.especie}) - {fantasma.citasRelacionadas} citas
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     ) : (
                       filteredMascotas.map((mascota) => {
@@ -379,6 +447,7 @@ export default function HistorialClinicoVeterinario() {
                           (u) => u.id === mascota.clienteId,
                         );
                         const isSelected = selectedMascota === mascota.id;
+                        const tienePropietarioValido = cliente && cliente.rol === 'cliente';
 
                         return (
                           <button
@@ -387,24 +456,35 @@ export default function HistorialClinicoVeterinario() {
                             className={`w-full text-left p-3 rounded-lg border transition-all ${
                               isSelected
                                 ? "border-vet-primary bg-vet-primary/5 shadow-sm"
-                                : "border-vet-gray-200 hover:border-vet-primary/50 hover:bg-vet-gray-50"
+                                : tienePropietarioValido
+                                ? "border-vet-gray-200 hover:border-vet-primary/50 hover:bg-vet-gray-50"
+                                : "border-yellow-200 bg-yellow-50 hover:bg-yellow-100"
                             }`}
                           >
                             <div className="flex items-center space-x-3">
                               <div
-                                className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                                className={`w-10 h-10 rounded-full flex items-center justify-center relative ${
                                   isSelected
                                     ? "bg-vet-primary/20"
-                                    : "bg-vet-gray-100"
+                                    : tienePropietarioValido
+                                    ? "bg-vet-gray-100"
+                                    : "bg-yellow-100"
                                 }`}
                               >
                                 <PawPrint
                                   className={`w-5 h-5 ${
                                     isSelected
                                       ? "text-vet-primary"
-                                      : "text-vet-gray-500"
+                                      : tienePropietarioValido
+                                      ? "text-vet-gray-500"
+                                      : "text-yellow-600"
                                   }`}
                                 />
+                                {!tienePropietarioValido && (
+                                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-yellow-500 rounded-full flex items-center justify-center">
+                                    <AlertCircle className="w-2 h-2 text-white" />
+                                  </div>
+                                )}
                               </div>
                               <div className="flex-1 min-w-0">
                                 <p className="font-medium text-vet-gray-900 text-sm">
@@ -413,9 +493,18 @@ export default function HistorialClinicoVeterinario() {
                                 <p className="text-xs text-vet-gray-600">
                                   {mascota.especie} • {mascota.raza}
                                 </p>
-                                <p className="text-xs text-vet-primary font-medium">
-                                  Dueño: {cliente?.nombre || "No registrado"}
+                                <p className={`text-xs font-medium ${
+                                  tienePropietarioValido
+                                    ? "text-vet-primary"
+                                    : "text-yellow-600"
+                                }`}>
+                                  Dueño: {tienePropietarioValido ? cliente.nombre : "⚠️ Sin asignar"}
                                 </p>
+                                {!tienePropietarioValido && (
+                                  <p className="text-xs text-yellow-600">
+                                    ID cliente: {mascota.clienteId || 'No definido'}
+                                  </p>
+                                )}
                               </div>
                               {isSelected && (
                                 <ChevronRight className="w-4 h-4 text-vet-primary" />
@@ -460,24 +549,47 @@ export default function HistorialClinicoVeterinario() {
                                 </div>
                               )}
                             </div>
-                            {clienteSeleccionado && (
-                              <div className="flex items-center space-x-4 mt-2">
-                                <div className="flex items-center space-x-2">
-                                  <User className="w-4 h-4 text-vet-primary" />
-                                  <span className="text-sm font-medium text-vet-primary">
-                                    {clienteSeleccionado.nombre}
-                                  </span>
-                                </div>
-                                {clienteSeleccionado.telefono && (
+                            {/* Información del propietario mejorada */}
+                            <div className={`flex items-center space-x-4 mt-2 p-2 rounded-lg ${
+                              clienteSeleccionado
+                                ? "bg-green-50 border border-green-200"
+                                : "bg-red-50 border border-red-200"
+                            }`}>
+                              {clienteSeleccionado ? (
+                                <>
                                   <div className="flex items-center space-x-2">
-                                    <Phone className="w-4 h-4 text-vet-gray-500" />
-                                    <span className="text-sm text-vet-gray-600">
-                                      {clienteSeleccionado.telefono}
+                                    <UserCheck className="w-4 h-4 text-green-600" />
+                                    <span className="text-sm font-medium text-green-800">
+                                      {clienteSeleccionado.nombre}
                                     </span>
                                   </div>
-                                )}
-                              </div>
-                            )}
+                                  {clienteSeleccionado.telefono && (
+                                    <div className="flex items-center space-x-2">
+                                      <Phone className="w-4 h-4 text-green-600" />
+                                      <span className="text-sm text-green-700">
+                                        {clienteSeleccionado.telefono}
+                                      </span>
+                                    </div>
+                                  )}
+                                  <div className="flex items-center space-x-2">
+                                    <Info className="w-3 h-3 text-green-500" />
+                                    <span className="text-xs text-green-600">
+                                      ID: {clienteSeleccionado.id}
+                                    </span>
+                                  </div>
+                                </>
+                              ) : (
+                                <>
+                                  <UserX className="w-4 h-4 text-red-600" />
+                                  <span className="text-sm font-medium text-red-800">
+                                    ⚠️ Propietario no encontrado
+                                  </span>
+                                  <span className="text-xs text-red-600">
+                                    ID cliente: {mascotaSeleccionada?.clienteId || 'No definido'}
+                                  </span>
+                                </>
+                              )}
+                            </div>
                           </div>
                         </div>
                         <div className="flex space-x-2">
@@ -493,7 +605,7 @@ export default function HistorialClinicoVeterinario() {
                     </CardContent>
                   </Card>
 
-                  {/* Estadísticas */}
+                  {/* Estadísticas mejoradas */}
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <Card>
                       <CardContent className="p-4 text-center">
@@ -534,6 +646,19 @@ export default function HistorialClinicoVeterinario() {
                       </CardContent>
                     </Card>
                   </div>
+
+                  {/* Alerta si no hay propietario */}
+                  {mascotaSeleccionada && !clienteSeleccionado && (
+                    <Alert className="border-red-200 bg-red-50">
+                      <AlertCircle className="w-4 h-4 text-red-600" />
+                      <AlertDescription className="text-red-800">
+                        <strong>Atención:</strong> Esta mascota no tiene un propietario válido asignado.
+                        Esto puede afectar la gestión del historial clínico y las notificaciones.
+                        <br />
+                        <small>Cliente ID actual: {mascotaSeleccionada.clienteId || 'No definido'}</small>
+                      </AlertDescription>
+                    </Alert>
+                  )}
 
                   {/* Filtros */}
                   <Card>
