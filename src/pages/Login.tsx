@@ -382,6 +382,68 @@ export default function Login() {
                 </div>
 
                 <div className="space-y-2">
+                  <Label htmlFor="register-direccion">Dirección (opcional)</Label>
+                  <div className="relative">
+                    <MapPin className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
+                    <Input
+                      id="register-direccion"
+                      type="text"
+                      placeholder="Tu dirección completa"
+                      className="pl-10"
+                      value={registerData.direccion}
+                      onChange={(e) =>
+                        setRegisterData({
+                          ...registerData,
+                          direccion: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="register-birthdate">Fecha de nacimiento (opcional)</Label>
+                    <div className="relative">
+                      <Calendar className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
+                      <Input
+                        id="register-birthdate"
+                        type="date"
+                        className="pl-10"
+                        value={registerData.fechaNacimiento}
+                        onChange={(e) =>
+                          setRegisterData({
+                            ...registerData,
+                            fechaNacimiento: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="register-genero">Género (opcional)</Label>
+                    <select
+                      id="register-genero"
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                      value={registerData.genero}
+                      onChange={(e) =>
+                        setRegisterData({
+                          ...registerData,
+                          genero: e.target.value,
+                        })
+                      }
+                    >
+                      <option value="">Seleccionar género</option>
+                      <option value="masculino">Masculino</option>
+                      <option value="femenino">Femenino</option>
+                      <option value="otro">Otro</option>
+                      <option value="prefiero_no_decir">Prefiero no decir</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
                   <Label htmlFor="register-password">Contraseña</Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
