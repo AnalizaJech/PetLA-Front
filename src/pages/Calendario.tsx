@@ -66,14 +66,14 @@ import {
 } from "@/lib/citaUtils";
 
 const estadoColors = {
-  pendiente_pago: "bg-yellow-100 text-yellow-800 border-yellow-200",
-  en_validacion: "bg-gray-100 text-gray-800 border-gray-200",
-  aceptada: "bg-green-100 text-green-800 border-green-200",
-  atendida: "bg-gray-100 text-gray-800 border-gray-200",
-  cancelada: "bg-red-100 text-red-800 border-red-200",
-  expirada: "bg-red-100 text-red-800 border-red-200",
-  rechazada: "bg-red-100 text-red-800 border-red-200",
-  no_asistio: "bg-orange-100 text-orange-800 border-orange-200",
+  pendiente_pago: "bg-yellow-100 text-yellow-800 border-yellow-300",
+  en_validacion: "bg-blue-100 text-blue-800 border-blue-300",
+  aceptada: "bg-green-100 text-green-800 border-green-300",
+  atendida: "bg-emerald-100 text-emerald-800 border-emerald-300",
+  cancelada: "bg-red-100 text-red-800 border-red-300",
+  expirada: "bg-red-100 text-red-800 border-red-300",
+  rechazada: "bg-red-100 text-red-800 border-red-300",
+  no_asistio: "bg-orange-100 text-orange-800 border-orange-300",
 };
 
 const estadoLabels = {
@@ -244,17 +244,17 @@ export default function Calendario() {
   const getUrgencyBadge = (urgencyLevel: "alta" | "media" | "baja") => {
     const configs = {
       alta: {
-        color: "bg-red-100 text-red-800 border-red-200",
+        color: "bg-red-100 text-red-800 border-red-300",
         label: "Urgente",
         icon: AlertCircle,
       },
       media: {
-        color: "bg-yellow-100 text-yellow-800 border-yellow-200",
+        color: "bg-yellow-100 text-yellow-800 border-yellow-300",
         label: "Moderada",
         icon: Clock,
       },
       baja: {
-        color: "bg-gray-100 text-gray-800 border-gray-200",
+        color: "bg-green-100 text-green-800 border-green-300",
         label: "Normal",
         icon: Info,
       },
@@ -716,7 +716,28 @@ export default function Calendario() {
                                         }}
                                       >
                                         <Eye className="w-4 h-4 mr-1" />
-                                        Detalle
+                                        Detalle de la Cita
+                                      </Button>
+                                      <Button
+                                        size="sm"
+                                        variant="outline"
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          if (mascota) {
+                                            const propietario = selectedCita.propietario;
+                                            navigate(
+                                              `/historial-clinico-veterinario?view=history&ownerId=${propietario?.id || 'unknown'}&petId=${mascota.id}`,
+                                            );
+                                          } else {
+                                            // Fallback para mascotas no registradas
+                                            navigate(
+                                              `/historial-clinico-veterinario?view=history&petName=${encodeURIComponent(cita.mascota)}&especie=${encodeURIComponent(cita.especie)}`,
+                                            );
+                                          }
+                                        }}
+                                      >
+                                        <FileText className="w-4 h-4 mr-1" />
+                                        Ver Historial
                                       </Button>
                                     </div>
                                   </CardContent>
@@ -942,7 +963,7 @@ export default function Calendario() {
                                     className="h-9"
                                   >
                                     <Eye className="w-4 h-4 mr-2" />
-                                    Ver Detalle
+                                    Detalle de la Cita
                                   </Button>
                                   <Button
                                     variant="outline"
