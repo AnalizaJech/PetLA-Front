@@ -163,7 +163,7 @@ export default function Login() {
                 </Alert>
               )}
 
-              <form onSubmit={handleLogin} className="space-y-4">
+              <form onSubmit={handleLogin} className="space-y-6">
                 <div className="space-y-2">
                   <Label htmlFor="login-identifier">Correo / Teléfono / Usuario</Label>
                   <div className="relative">
