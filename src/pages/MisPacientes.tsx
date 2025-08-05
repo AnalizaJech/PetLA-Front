@@ -266,9 +266,27 @@ export default function MisPacientes() {
     sortBy,
   ]);
 
-  // Estadísticas mejoradas usando utilidades
+  // Enhanced statistics with data validation
   const stats = useMemo(() => {
     const citasStats = getCitasStats(enhancedCitas);
+    const dataValidation = validateDataRelationships();
+
+    // Filter validation results to only include this veterinarian's patients
+    const myDataIssues = {
+      orphanedPets: dataValidation.orphanedPets.filter(pet =>
+        misCitas.some(cita =>
+          cita.mascota.toLowerCase() === pet.nombre.toLowerCase() ||
+          cita.mascotaId === pet.id
+        )
+      ).length,
+      incompleteCitas: dataValidation.incompleteCitas.filter(cita =>
+        cita.veterinario === user?.nombre
+      ).length,
+      ghostPets: dataValidation.ghostPets.filter(nombre =>
+        misCitas.some(cita => cita.mascota === nombre)
+      ).length,
+    };
+
     return {
       total: citasStats.total,
       hoy: citasStats.hoy,
@@ -276,13 +294,14 @@ export default function MisPacientes() {
       pendientes: citasStats.pendientes,
       completadas: citasStats.completadas,
       urgentes: citasStats.urgentes,
-      sinPropietario: citasStats.sinPropietario,
-      sinMascota: citasStats.sinMascota,
-      problemasData: citasStats.problemasData,
+      sinPropietario: myDataIssues.orphanedPets,
+      sinMascota: myDataIssues.ghostPets,
+      problemasData: myDataIssues.orphanedPets + myDataIssues.incompleteCitas + myDataIssues.ghostPets,
       propietariosUnicos: citasStats.propietariosUnicos,
       mascotasUnicas: citasStats.mascotasUnicas,
+      citasIncompletas: myDataIssues.incompleteCitas,
     };
-  }, [enhancedCitas]);
+  }, [enhancedCitas, validateDataRelationships, misCitas, user?.nombre]);
 
   // Enhanced auto-fix handler using context repair functionality
   const handleAutoFix = () => {
