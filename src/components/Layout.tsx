@@ -237,7 +237,7 @@ export default function Layout({
                   >
                     <Home className="w-4 h-4" />
                     <span>
-                      {user.rol === "admin" ? "Panel Principal" : "Resumen"}
+                      {user.rol === "admin" ? "Dashboard" : "Resumen"}
                     </span>
                   </Link>
 
