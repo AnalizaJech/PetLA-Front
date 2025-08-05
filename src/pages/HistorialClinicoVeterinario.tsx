@@ -255,6 +255,28 @@ export default function HistorialClinicoVeterinario() {
     return usuarios.filter((u) => clienteIds.has(u.id));
   }, [misMascotas, misCitas, usuarios, getMascotaWithOwner]);
 
+  // Handle initial pet selection from URL parameters
+  useEffect(() => {
+    const mascotaParam = searchParams.get("mascota");
+    const nombreParam = searchParams.get("nombre");
+
+    if (mascotaParam && mascotaParam !== selectedMascota) {
+      setSelectedMascota(mascotaParam);
+    } else if (nombreParam && nombreParam !== selectedPetByName) {
+      // For unregistered pets, try to find a registered pet with the same name
+      const foundPet = misMascotas.find(pet =>
+        pet.nombre.toLowerCase() === nombreParam.toLowerCase()
+      );
+      if (foundPet) {
+        setSelectedMascota(foundPet.id);
+        setSelectedPetByName("");
+      } else {
+        setSelectedPetByName(nombreParam);
+        setSelectedMascota("");
+      }
+    }
+  }, [searchParams, misMascotas, selectedMascota, selectedPetByName]);
+
   // Detect pets without valid owners (enhanced)
   const mascotasSinPropietario = useMemo(() => {
     return misMascotas.filter((mascota) => {
