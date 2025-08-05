@@ -205,3 +205,40 @@ html {
 .animate-float {
   animation: float 6s ease-in-out infinite;
 }
+
+/* React DatePicker positioning fix */
+.react-datepicker-popper-custom {
+  z-index: 50 !important;
+}
+
+.react-datepicker-custom {
+  border: 1px solid hsl(var(--border)) !important;
+  border-radius: 0.75rem !important;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1) !important;
+  background-color: hsl(var(--background)) !important;
+  font-family: inherit !important;
+}
+
+.react-datepicker__header {
+  background-color: hsl(var(--muted)) !important;
+  border-bottom: 1px solid hsl(var(--border)) !important;
+  border-radius: 0.75rem 0.75rem 0 0 !important;
+}
+
+.react-datepicker__day--selected {
+  background-color: hsl(var(--primary)) !important;
+  color: hsl(var(--primary-foreground)) !important;
+}
+
+.react-datepicker__day--today {
+  background-color: hsl(var(--muted)) !important;
+  color: hsl(var(--foreground)) !important;
+  font-weight: 600 !important;
+}
+
+.react-datepicker__today-button {
+  background-color: hsl(var(--primary)) !important;
+  color: hsl(var(--primary-foreground)) !important;
+  border: none !important;
+  border-radius: 0 0 0.75rem 0.75rem !important;
+}
