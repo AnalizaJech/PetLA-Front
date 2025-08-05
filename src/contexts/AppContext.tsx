@@ -86,6 +86,13 @@ interface Usuario {
   password?: string;
   fechaRegistro?: Date;
   foto?: string | null;
+  // Campos de documento
+  documento?: string;
+  tipoDocumento?: "dni" | "pasaporte" | "carnet_extranjeria" | "cedula";
+  // Campos específicos para veterinarios
+  especialidad?: string;
+  experiencia?: string;
+  colegiatura?: string;
 }
 
 interface HistorialClinico {
@@ -680,7 +687,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         }));
         localStorage.setItem("mascotas", JSON.stringify(mascotasSinFotos));
         console.warn(
-          "Mascotas guardadas sin fotos para preservar datos básicos",
+          "Mascotas guardadas sin fotos para preservar datos b��sicos",
         );
       } catch (fallbackError) {
         console.error("Error crítico guardando mascotas:", fallbackError);
@@ -1534,7 +1541,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     };
     setHistorialClinico((prev) => [...prev, newEntry]);
 
-    // Generar notificaci��n para el cliente cuando se registra una consulta
+    // Generar notificación para el cliente cuando se registra una consulta
     const mascotaInfo = mascotas.find((m) => m.id === entryData.mascotaId);
     if (mascotaInfo) {
       addNotificacion({
