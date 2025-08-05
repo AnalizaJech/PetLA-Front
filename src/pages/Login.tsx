@@ -57,12 +57,12 @@ export default function Login() {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      const user = await login(loginData.email, loginData.password);
+      const user = await login(loginData.identifier, loginData.password);
 
       if (user) {
         navigate("/dashboard");
       } else {
-        setError("Credenciales inválidas. Verifica tu email y contraseña.");
+        setError("Credenciales inválidas. Verifica tu email/teléfono/usuario y contraseña.");
       }
     } catch (error) {
       setError("Error al iniciar sesión. Intenta nuevamente.");
