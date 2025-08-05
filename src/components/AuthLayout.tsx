@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { Heart } from "lucide-react";
+import { Dog } from "lucide-react";
 
 interface AuthLayoutProps {
   children: ReactNode;
@@ -17,21 +17,21 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 w-full max-w-md">
+      <div className="relative z-10 w-full max-w-4xl">
         {/* Logo */}
         <div className="text-center mb-8">
           <Link
             to="/"
             className="inline-flex items-center justify-center space-x-3 mb-4 hover:opacity-80 transition-opacity duration-200"
           >
-            <div className="flex items-center justify-center w-12 h-12 bg-vet-primary rounded-xl shadow-lg">
-              <Heart className="w-6 h-6 text-white" />
+            <div className="flex items-center justify-center w-14 h-14 bg-vet-primary rounded-xl shadow-lg">
+              <Dog className="w-8 h-8 text-white" />
             </div>
-            <span className="text-3xl font-bold text-vet-gray-900">
+            <span className="text-4xl font-bold text-vet-gray-900">
               Pet<span className="text-vet-primary">LA</span>
             </span>
           </Link>
-          <p className="text-vet-gray-600">
+          <p className="text-lg text-vet-gray-600">
             Plataforma veterinaria líder en Latinoamérica
           </p>
         </div>
