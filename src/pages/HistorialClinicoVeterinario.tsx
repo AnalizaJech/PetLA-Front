@@ -483,9 +483,9 @@ export default function HistorialClinicoVeterinario() {
                         size="sm"
                         variant="outline"
                         onClick={() => {
-                          const { repairDataIntegrity } = useAppContext();
                           const result = repairDataIntegrity();
                           console.log('Data repair result:', result);
+                          window.location.reload(); // Refresh to see the repaired data
                         }}
                         className="w-full text-xs mt-2"
                       >
