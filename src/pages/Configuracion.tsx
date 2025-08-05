@@ -1420,7 +1420,7 @@ export default function Configuracion() {
                             🇲🇽 Pesos Mexicanos (MXN)
                           </SelectItem>
                           <SelectItem value="COP">
-                            ��🇴 Pesos Colombianos (COP)
+                            🇨🇴 Pesos Colombianos (COP)
                           </SelectItem>
                         </SelectContent>
                       </Select>
