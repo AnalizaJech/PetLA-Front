@@ -128,7 +128,7 @@ export default function Login() {
 
       <Tabs
         defaultValue={defaultTab}
-        className="w-full"
+        className="w-full max-w-2xl mx-auto"
         onValueChange={(value) => {
           if (value === "login") {
             navigate("/login");
