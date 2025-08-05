@@ -479,7 +479,33 @@ export default function HistorialClinicoVeterinario() {
                   <p className="text-sm sm:text-base text-vet-gray-600">
                     Gestiona el historial médico de tus pacientes
                   </p>
+
+                  {/* Breadcrumb for current selection */}
+                  {(selectedMascota || selectedPetByName || searchParams.get("nombre")) && (
+                    <div className="flex items-center space-x-2 mt-2 text-sm text-vet-gray-500">
+                      <span>Viendo:</span>
+                      <ChevronRight className="w-3 h-3" />
+                      <span className="font-medium text-vet-primary">
+                        {mascotaSeleccionada?.nombre || selectedPetByName || searchParams.get("nombre")}
+                      </span>
+                      {!mascotaSeleccionada && (
+                        <span className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded">
+                          No registrada
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </div>
+              </div>
+
+              <div className="flex space-x-2">
+                <Button
+                  onClick={() => navigate("/mis-pacientes")}
+                  variant="outline"
+                >
+                  <UserCheck className="w-4 h-4 mr-2" />
+                  Mis Pacientes
+                </Button>
               </div>
             </div>
           </div>
