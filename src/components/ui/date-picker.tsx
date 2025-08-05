@@ -60,7 +60,7 @@ export function DatePicker({
   CustomInput.displayName = "CustomInput";
 
   return (
-    <div className="w-full">
+    <div className="w-full relative">
       <ReactDatePicker
         selected={date}
         onChange={(date: Date | null) => onDateChange?.(date || undefined)}
@@ -75,13 +75,18 @@ export function DatePicker({
         placeholderText={placeholder}
         disabled={disabled}
         className="w-full"
-        calendarClassName="!z-[1000]"
-        popperClassName="!z-[1000]"
+        calendarClassName="react-datepicker-custom"
+        popperClassName="react-datepicker-popper-custom"
         popperPlacement="bottom-start"
         showPopperArrow={false}
         fixedHeight
         todayButton="Hoy"
+        onTodayButtonClick={(date) => {
+          onDateChange?.(date);
+        }}
         autoComplete="off"
+        withPortal={false}
+        preventOpenOnFocus={false}
         popperModifiers={[
           {
             name: "preventOverflow",
@@ -89,6 +94,18 @@ export function DatePicker({
               rootBoundary: "viewport",
               tether: false,
               altAxis: true,
+            },
+          },
+          {
+            name: "flip",
+            options: {
+              fallbackPlacements: ["bottom-end", "top-start", "top-end"],
+            },
+          },
+          {
+            name: "offset",
+            options: {
+              offset: [0, 4],
             },
           },
         ]}
