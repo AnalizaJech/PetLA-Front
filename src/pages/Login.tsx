@@ -13,7 +13,18 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Dog, Mail, Lock, User, Phone, Eye, EyeOff, MapPin, Calendar, UserCheck } from "lucide-react";
+import {
+  Dog,
+  Mail,
+  Lock,
+  User,
+  Phone,
+  Eye,
+  EyeOff,
+  MapPin,
+  Calendar,
+  UserCheck,
+} from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -69,7 +80,9 @@ export default function Login() {
       if (user) {
         navigate("/dashboard");
       } else {
-        setError("Credenciales inválidas. Verifica tu email/teléfono/usuario y contraseña.");
+        setError(
+          "Credenciales inválidas. Verifica tu email/teléfono/usuario y contraseña.",
+        );
       }
     } catch (error) {
       setError("Error al iniciar sesión. Intenta nuevamente.");
@@ -100,7 +113,9 @@ export default function Login() {
         email: registerData.email,
         telefono: registerData.telefono,
         direccion: registerData.direccion,
-        fechaNacimiento: registerData.fechaNacimiento ? new Date(registerData.fechaNacimiento) : undefined,
+        fechaNacimiento: registerData.fechaNacimiento
+          ? new Date(registerData.fechaNacimiento)
+          : undefined,
         genero: registerData.genero,
         rol: "cliente" as const,
         password: registerData.password,
@@ -124,7 +139,6 @@ export default function Login() {
 
   return (
     <div className="w-full space-y-6">
-
       <Tabs
         defaultValue={defaultTab}
         className="w-full max-w-2xl mx-auto"
@@ -174,7 +188,9 @@ export default function Login() {
 
               <form onSubmit={handleLogin} className="space-y-5">
                 <div className="space-y-2">
-                  <Label htmlFor="login-identifier">Correo / Teléfono / Usuario</Label>
+                  <Label htmlFor="login-identifier">
+                    Correo / Teléfono / Usuario
+                  </Label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-vet-gray-400" />
                     <Input
@@ -184,13 +200,17 @@ export default function Login() {
                       className="pl-10 h-10 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
                       value={loginData.identifier}
                       onChange={(e) =>
-                        setLoginData({ ...loginData, identifier: e.target.value })
+                        setLoginData({
+                          ...loginData,
+                          identifier: e.target.value,
+                        })
                       }
                       required
                     />
                   </div>
                   <p className="text-xs text-vet-gray-500">
-                    Puedes usar tu correo electrónico, número de teléfono o nombre de usuario
+                    Puedes usar tu correo electrónico, número de teléfono o
+                    nombre de usuario
                   </p>
                 </div>
 
@@ -394,7 +414,9 @@ export default function Login() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="register-direccion">Dirección (opcional)</Label>
+                    <Label htmlFor="register-direccion">
+                      Dirección (opcional)
+                    </Label>
                     <div className="relative">
                       <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-vet-gray-400" />
                       <Input
@@ -416,7 +438,9 @@ export default function Login() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="register-birthdate">Fecha de nacimiento (opcional)</Label>
+                    <Label htmlFor="register-birthdate">
+                      Fecha de nacimiento (opcional)
+                    </Label>
                     <div className="relative">
                       <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-vet-gray-400" />
                       <Input
@@ -452,7 +476,9 @@ export default function Login() {
                         <SelectItem value="masculino">Masculino</SelectItem>
                         <SelectItem value="femenino">Femenino</SelectItem>
                         <SelectItem value="otro">Otro</SelectItem>
-                        <SelectItem value="prefiero_no_decir">Prefiero no decir</SelectItem>
+                        <SelectItem value="prefiero_no_decir">
+                          Prefiero no decir
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -521,7 +547,10 @@ export default function Login() {
                     className="mt-1 w-4 h-4 rounded border-vet-gray-300 text-vet-primary focus:ring-vet-primary/20 focus:ring-2 shrink-0"
                     required
                   />
-                  <Label htmlFor="terms" className="text-sm text-vet-gray-600 leading-relaxed cursor-pointer">
+                  <Label
+                    htmlFor="terms"
+                    className="text-sm text-vet-gray-600 leading-relaxed cursor-pointer"
+                  >
                     Acepto los{" "}
                     <Link
                       to="/terminos"
