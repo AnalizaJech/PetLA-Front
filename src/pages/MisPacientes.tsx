@@ -439,11 +439,11 @@ export default function MisPacientes() {
               </div>
 
               <Button
-                onClick={() => navigate("/calendario")}
+                onClick={() => navigate("/historial-clinico-veterinario")}
                 className="w-full sm:w-auto bg-vet-primary hover:bg-vet-primary-dark"
               >
-                <Calendar className="w-4 h-4 mr-2" />
-                Ver Agenda
+                <FileText className="w-4 h-4 mr-2" />
+                Historial Clínico
               </Button>
             </div>
           </div>
