@@ -258,18 +258,37 @@ export default function CitaAttendModal({
               <div>
                 <span className="font-medium text-vet-gray-700">Mascota:</span>{" "}
                 {cita.mascota}
+                {!mascota && (
+                  <span className="ml-2 text-xs text-orange-600 bg-orange-100 px-2 py-1 rounded">
+                    No registrada
+                  </span>
+                )}
               </div>
               <div>
                 <span className="font-medium text-vet-gray-700">Especie:</span>{" "}
                 {mascota?.especie || cita.especie}
               </div>
               <div>
+                <span className="font-medium text-vet-gray-700">Raza:</span>{" "}
+                {mascota?.raza || "No especificada"}
+                {mascota && !mascota.raza && (
+                  <span className="ml-2 text-xs text-yellow-600 bg-yellow-100 px-2 py-1 rounded">
+                    Sin registrar
+                  </span>
+                )}
+              </div>
+              <div>
                 <span className="font-medium text-vet-gray-700">
                   Propietario:
                 </span>{" "}
                 {propietario?.nombre || "Sin asignar"}
+                {!propietario && (
+                  <span className="ml-2 text-xs text-red-600 bg-red-100 px-2 py-1 rounded">
+                    Requerido
+                  </span>
+                )}
               </div>
-              <div>
+              <div className="md:col-span-2">
                 <span className="font-medium text-vet-gray-700">Motivo:</span>{" "}
                 {cita.motivo}
               </div>
