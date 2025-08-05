@@ -1,14 +1,16 @@
 import * as React from "react";
-import ReactDatePicker, { registerLocale } from "react-datepicker";
-import { es } from "date-fns/locale";
 import { format } from "date-fns";
+import { es } from "date-fns/locale";
 import { Calendar as CalendarIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-
-// Registrar el locale español
-registerLocale("es", es);
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 interface DatePickerProps {
   date?: Date;
@@ -33,79 +35,46 @@ export function DatePicker({
   minDate,
   maxDate,
 }: DatePickerProps) {
-  const CustomInput = React.forwardRef<
-    HTMLButtonElement,
-    { value?: string; onClick?: () => void }
-  >(({ value, onClick }, ref) => (
-    <Button
-      ref={ref}
-      variant="outline"
-      className={cn(
-        "w-full justify-start text-left font-normal h-10 px-3 py-2 text-sm border-input bg-transparent hover:bg-accent hover:text-accent-foreground",
-        !value && "text-muted-foreground",
-        disabled && "cursor-not-allowed opacity-50",
-        className,
-      )}
-      onClick={onClick}
-      disabled={disabled}
-      type="button"
-    >
-      <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0 opacity-70" />
-      <span className="truncate flex-1 text-left">
-        {value || <span className="text-muted-foreground">{placeholder}</span>}
-      </span>
-    </Button>
-  ));
-
-  CustomInput.displayName = "CustomInput";
-
   return (
-    <div className="w-full">
-      <ReactDatePicker
-        selected={date}
-        onChange={(date: Date | null) => onDateChange?.(date || undefined)}
-        customInput={<CustomInput />}
-        dateFormat="dd/MM/yyyy"
-        locale="es"
-        showYearDropdown
-        showMonthDropdown
-        dropdownMode="select"
-        minDate={minDate}
-        maxDate={maxDate}
-        placeholderText={placeholder}
-        disabled={disabled}
-        className="w-full"
-        calendarClassName="!z-50"
-        popperClassName="!z-50"
-        popperPlacement="bottom-start"
-        showPopperArrow={false}
-        fixedHeight
-        todayButton="Hoy"
-        autoComplete="off"
-        withPortal={false}
-        popperModifiers={[
-          {
-            name: "preventOverflow",
-            options: {
-              rootBoundary: "viewport",
-              tether: false,
-              altAxis: true,
-            },
-          },
-          {
-            name: "flip",
-            options: {
-              fallbackPlacements: ["bottom-end", "top-start", "top-end"],
-            },
-          },
-          {
-            name: "offset",
-            options: {
-              offset: [0, 8],
-            },
-          },
-        ]}
-      />
-    </div>
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          className={cn(
+            "w-full justify-start text-left font-normal h-10 px-3 py-2 text-sm border-input bg-transparent hover:bg-accent hover:text-accent-foreground",
+            !date && "text-muted-foreground",
+            disabled && "cursor-not-allowed opacity-50",
+            className,
+          )}
+          disabled={disabled}
+        >
+          <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0 opacity-70" />
+          <span className="truncate flex-1 text-left">
+            {date ? (
+              format(date, "dd/MM/yyyy", { locale: es })
+            ) : (
+              <span className="text-muted-foreground">{placeholder}</span>
+            )}
+          </span>
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto p-0" align="start">
+        <Calendar
+          mode="single"
+          selected={date}
+          onSelect={onDateChange}
+          disabled={(calendarDate) => {
+            if (disabled) return true;
+            if (minDate && calendarDate < minDate) return true;
+            if (maxDate && calendarDate > maxDate) return true;
+            return false;
+          }}
+          captionLayout="dropdown-buttons"
+          fromYear={fromYear}
+          toYear={toYear}
+          initialFocus
+        />
+      </PopoverContent>
+    </Popover>
   );
 }
