@@ -190,11 +190,21 @@ export default function HistorialClinicoVeterinario() {
   // Get clinical history for selected pet
   const historialMascota = useMemo(() => {
     if (!selectedPet) return [];
-    
-    return getHistorialByMascota(selectedPet.id).sort(
+
+    // Try to get by pet ID first
+    let records = getHistorialByMascota(selectedPet.id);
+
+    // If no records by ID, search by pet name (for unregistered pets or name matches)
+    if (records.length === 0 && selectedPet.nombre) {
+      records = historialClinico.filter(entry =>
+        entry.mascotaNombre.toLowerCase() === selectedPet.nombre.toLowerCase()
+      );
+    }
+
+    return records.sort(
       (a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime()
     );
-  }, [selectedPet, getHistorialByMascota]);
+  }, [selectedPet, getHistorialByMascota, historialClinico]);
 
   // Filter clients based on search
   const filteredClientes = useMemo(() => {
