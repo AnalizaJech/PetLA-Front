@@ -222,11 +222,11 @@ export default function Login() {
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-3">
                     <input
                       type="checkbox"
                       id="remember"
-                      className="rounded border-vet-gray-300 text-vet-primary"
+                      className="w-4 h-4 rounded border-vet-gray-300 text-vet-primary focus:ring-vet-primary/20 focus:ring-2"
                     />
                     <Label htmlFor="remember" className="text-sm">
                       Recordarme
