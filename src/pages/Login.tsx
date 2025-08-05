@@ -264,7 +264,7 @@ export default function Login() {
                 Regístrate para acceder a todos nuestros servicios
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-8">
               {error && (
                 <Alert className="mb-4 border-red-200 bg-red-50">
                   <AlertDescription className="text-red-800">
