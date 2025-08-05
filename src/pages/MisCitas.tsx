@@ -421,7 +421,9 @@ export default function MisCitas() {
                                 {cita.mascota}
                               </h4>
                               <div className="flex space-x-2">
-                                <Badge className="text-xs sm:text-sm">{cita.especie}</Badge>
+                                <Badge className="text-xs sm:text-sm">
+                                  {cita.especie}
+                                </Badge>
                                 <Badge className={estadoColors[cita.estado]}>
                                   {estadoLabels[cita.estado]}
                                 </Badge>
@@ -431,8 +433,14 @@ export default function MisCitas() {
                               <span className="font-medium text-vet-primary">
                                 {cita.tipoConsulta}
                               </span>
-                              <span className="block sm:inline"> • {cita.motivo}</span>
-                              <span className="block sm:inline"> • {cita.veterinario}</span>
+                              <span className="block sm:inline">
+                                {" "}
+                                • {cita.motivo}
+                              </span>
+                              <span className="block sm:inline">
+                                {" "}
+                                • {cita.veterinario}
+                              </span>
                             </p>
                             <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-6 text-sm sm:text-base text-vet-gray-500">
                               <div className="flex items-center space-x-2">
@@ -456,7 +464,9 @@ export default function MisCitas() {
                               </div>
                               <div className="flex items-center space-x-2">
                                 <MapPin className="w-5 h-5 sm:w-4 sm:h-4 text-vet-primary" />
-                                <span className="font-medium">{cita.ubicacion}</span>
+                                <span className="font-medium">
+                                  {cita.ubicacion}
+                                </span>
                               </div>
                             </div>
                             {cita.notas && (

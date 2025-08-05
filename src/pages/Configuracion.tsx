@@ -311,7 +311,9 @@ export default function Configuracion() {
         return;
       }
       if (!profileData.colegiatura.trim()) {
-        setErrorMessage("El número de colegiatura es obligatorio para veterinarios");
+        setErrorMessage(
+          "El número de colegiatura es obligatorio para veterinarios",
+        );
         setIsLoading(false);
         return;
       }
@@ -365,12 +367,14 @@ export default function Configuracion() {
         }
       }
 
-      setSavedMessage("Perfil actualizado correctamente. Todos los datos han sido guardados en el sistema.");
+      setSavedMessage(
+        "Perfil actualizado correctamente. Todos los datos han sido guardados en el sistema.",
+      );
 
       // Scroll to top to show success message
       window.scrollTo({
         top: 0,
-        behavior: 'smooth'
+        behavior: "smooth",
       });
     } catch (error) {
       setErrorMessage("Error al actualizar el perfil. Inténtalo de nuevo.");
@@ -395,7 +399,7 @@ export default function Configuracion() {
       // Scroll to top to show success message
       window.scrollTo({
         top: 0,
-        behavior: 'smooth'
+        behavior: "smooth",
       });
     } catch (error) {
       setErrorMessage("Error al guardar las notificaciones");
@@ -452,7 +456,7 @@ export default function Configuracion() {
       // Scroll to top to show success message
       window.scrollTo({
         top: 0,
-        behavior: 'smooth'
+        behavior: "smooth",
       });
 
       // Clear password fields
@@ -902,7 +906,9 @@ export default function Configuracion() {
                         <SelectContent>
                           <SelectItem value="dni">DNI</SelectItem>
                           <SelectItem value="pasaporte">Pasaporte</SelectItem>
-                          <SelectItem value="carnet_extranjeria">Carnet de Extranjería</SelectItem>
+                          <SelectItem value="carnet_extranjeria">
+                            Carnet de Extranjería
+                          </SelectItem>
                           <SelectItem value="cedula">Cédula</SelectItem>
                         </SelectContent>
                       </Select>
@@ -925,7 +931,9 @@ export default function Configuracion() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="fechaNacimiento">Fecha de nacimiento</Label>
+                      <Label htmlFor="fechaNacimiento">
+                        Fecha de nacimiento
+                      </Label>
                       <div className="relative">
                         <Calendar className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
                         <Input
@@ -997,7 +1005,9 @@ export default function Configuracion() {
                           </div>
 
                           <div className="space-y-2">
-                            <Label htmlFor="colegiatura">Número de Colegiatura *</Label>
+                            <Label htmlFor="colegiatura">
+                              Número de Colegiatura *
+                            </Label>
                             <Input
                               id="colegiatura"
                               value={profileData.colegiatura}
@@ -1014,7 +1024,9 @@ export default function Configuracion() {
                           </div>
 
                           <div className="space-y-2 md:col-span-2">
-                            <Label htmlFor="experiencia">Años de Experiencia</Label>
+                            <Label htmlFor="experiencia">
+                              Años de Experiencia
+                            </Label>
                             <Input
                               id="experiencia"
                               value={profileData.experiencia}
@@ -1071,10 +1083,14 @@ export default function Configuracion() {
                     <div className="flex items-start space-x-2">
                       <Info className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
                       <div>
-                        <h4 className="font-medium text-blue-900 mb-1">Importante</h4>
+                        <h4 className="font-medium text-blue-900 mb-1">
+                          Importante
+                        </h4>
                         <p className="text-sm text-blue-700">
-                          Todos los datos de tu perfil son importantes para el funcionamiento del sistema.
-                          Los campos marcados con * son obligatorios. Asegúrate de mantener tu información actualizada.
+                          Todos los datos de tu perfil son importantes para el
+                          funcionamiento del sistema. Los campos marcados con *
+                          son obligatorios. Asegúrate de mantener tu información
+                          actualizada.
                         </p>
                       </div>
                     </div>
@@ -1510,7 +1526,6 @@ export default function Configuracion() {
                 </CardContent>
               </Card>
             </TabsContent>
-
           </Tabs>
 
           {/* Photo Management Modal */}
