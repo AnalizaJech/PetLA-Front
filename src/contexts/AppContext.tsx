@@ -276,6 +276,23 @@ interface AppContextType {
     userData: Omit<Usuario, "id" | "fechaRegistro"> & { password: string },
   ) => Promise<Usuario | null>;
 
+  // Data relationship helpers
+  getMascotaWithOwner: (mascotaId: string) => {
+    mascota: Mascota | null;
+    propietario: Usuario | null;
+  };
+  getCitaWithRelations: (citaId: string) => {
+    cita: Cita | null;
+    mascota: Mascota | null;
+    propietario: Usuario | null;
+  };
+  validateDataRelationships: () => {
+    orphanedPets: Mascota[];
+    incompleteCitas: Cita[];
+    ghostPets: string[];
+    totalIssues: number;
+  };
+
   // Statistics
   getStats: () => {
     totalMascotas: number;
@@ -1021,7 +1038,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       addNotificacion({
         usuarioId: newUser.id,
         tipo: "bienvenida_cliente",
-        titulo: "¡Bienvenido a nuestra clínica veterinaria!",
+        titulo: "��Bienvenido a nuestra clínica veterinaria!",
         mensaje: `Hola ${newUser.nombre}, nos alegra tenerte en nuestra familia. Aquí podrás gestionar el cuidado de tus mascotas de manera fácil y segura.`,
         leida: false,
       });
