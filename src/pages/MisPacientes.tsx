@@ -849,8 +849,19 @@ export default function MisPacientes() {
                       <CardContent className="p-4 sm:p-6">
                         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between space-y-4 sm:space-y-0">
                           <div className="flex items-start space-x-4 flex-1">
-                            <div className="w-12 h-12 bg-vet-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                              <PawPrint className="w-6 h-6 text-vet-primary" />
+                            <div className="w-12 h-12 bg-vet-primary/10 rounded-full flex items-center justify-center flex-shrink-0 relative">
+                              {mascota?.foto ? (
+                                <img
+                                  src={mascota.foto}
+                                  alt={`${cita.mascota}`}
+                                  className="w-full h-full rounded-full object-cover"
+                                  onError={(e) => {
+                                    e.currentTarget.style.display = 'none';
+                                    e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                                  }}
+                                />
+                              ) : null}
+                              <PawPrint className={`w-6 h-6 text-vet-primary ${mascota?.foto ? 'hidden' : ''}`} />
                             </div>
 
                             <div className="flex-1 min-w-0">
