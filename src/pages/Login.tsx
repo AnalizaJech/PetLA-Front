@@ -154,7 +154,7 @@ export default function Login() {
                 Ingresa tus credenciales para acceder a tu cuenta
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-8">
               {error && (
                 <Alert className="mb-4 border-red-200 bg-red-50">
                   <AlertDescription className="text-red-800">
