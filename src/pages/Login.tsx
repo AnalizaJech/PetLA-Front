@@ -420,7 +420,7 @@ export default function Login() {
                       <Input
                         id="register-birthdate"
                         type="date"
-                        className="pl-10 h-12 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
+                        className="pl-10 h-10 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
                         value={registerData.fechaNacimiento}
                         onChange={(e) =>
                           setRegisterData({
@@ -443,7 +443,7 @@ export default function Login() {
                         })
                       }
                     >
-                      <SelectTrigger className="h-12 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10">
+                      <SelectTrigger className="h-10 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10">
                         <SelectValue placeholder="Seleccionar género" />
                       </SelectTrigger>
                       <SelectContent>
@@ -464,7 +464,7 @@ export default function Login() {
                       id="register-password"
                       type={showPassword ? "text" : "password"}
                       placeholder="Mínimo 8 caracteres"
-                      className="pl-10 pr-10 h-12 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
+                      className="pl-10 pr-10 h-10 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
                       value={registerData.password}
                       onChange={(e) =>
                         setRegisterData({
@@ -499,7 +499,7 @@ export default function Login() {
                       id="register-confirm-password"
                       type={showPassword ? "text" : "password"}
                       placeholder="Repite tu contraseña"
-                      className="pl-10 h-12 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
+                      className="pl-10 h-10 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
                       value={registerData.confirmPassword}
                       onChange={(e) =>
                         setRegisterData({
