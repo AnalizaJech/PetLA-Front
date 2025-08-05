@@ -592,10 +592,10 @@ export default function DashboardVeterinario() {
                   <Button
                     variant="outline"
                     className="w-full"
-                    onClick={handleRegisterConsultation}
+                    onClick={() => navigate("/mis-pacientes")}
                   >
-                    <FileText className="w-4 h-4 mr-2" />
-                    Registrar Consulta
+                    <UserCheck className="w-4 h-4 mr-2" />
+                    Mis Pacientes
                   </Button>
                   <Button
                     variant="outline"
@@ -604,14 +604,6 @@ export default function DashboardVeterinario() {
                   >
                     <FileText className="w-4 h-4 mr-2" />
                     Historial Clínico
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full"
-                    onClick={handleViewProfile}
-                  >
-                    <User className="w-4 h-4 mr-2" />
-                    Mi Perfil
                   </Button>
                 </CardContent>
               </Card>
