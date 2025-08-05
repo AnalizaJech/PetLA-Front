@@ -118,6 +118,10 @@ export default function MisPacientes() {
     user,
     addHistorialEntry,
     historialClinico,
+    validateDataRelationships,
+    getMascotaWithOwner,
+    getCitaWithRelations,
+    repairDataIntegrity,
   } = useAppContext();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
