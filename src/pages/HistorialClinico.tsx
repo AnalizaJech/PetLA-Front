@@ -671,7 +671,7 @@ export default function HistorialClinico() {
         addText(`Diagnóstico: ${consulta.diagnostico}`);
         addText(`Tratamiento: ${consulta.tratamiento}`);
 
-        if (consulta.medicamentos.length > 0) {
+        if (consulta.medicamentos && consulta.medicamentos.length > 0) {
           addText("Medicamentos:", 11, "bold");
           consulta.medicamentos.forEach((med) => {
             addText(`  • ${med.nombre}: ${med.dosis} (${med.duracion})`);
