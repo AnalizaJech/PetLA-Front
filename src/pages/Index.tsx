@@ -601,7 +601,10 @@ export default function Index() {
                   <DatePicker
                     date={
                       formData.fechaPreferida
-                        ? new Date(formData.fechaPreferida)
+                        ? (() => {
+                            const [year, month, day] = formData.fechaPreferida.split('-').map(Number);
+                            return new Date(year, month - 1, day);
+                          })()
                         : undefined
                     }
                     onDateChange={(date) => {
