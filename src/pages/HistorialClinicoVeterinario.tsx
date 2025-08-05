@@ -329,8 +329,8 @@ export default function HistorialClinicoVeterinario() {
       return getHistorialByMascota(mascotaSeleccionada.id);
     }
 
-    // Fallback: search clinical history by pet name if pet is not registered
-    const nombreBuscado = searchParams.get("nombre");
+    // Search clinical history by pet name for unregistered pets
+    const nombreBuscado = selectedPetByName || searchParams.get("nombre");
     if (nombreBuscado) {
       return historialClinico.filter(entry =>
         entry.mascotaNombre.toLowerCase() === nombreBuscado.toLowerCase()
@@ -338,7 +338,7 @@ export default function HistorialClinicoVeterinario() {
     }
 
     return [];
-  }, [mascotaSeleccionada, searchParams, historialClinico, getHistorialByMascota]);
+  }, [mascotaSeleccionada, selectedPetByName, searchParams, historialClinico, getHistorialByMascota]);
 
   // Debug: verificar mascota seleccionada y su historial
   console.log("HistorialClinicoVeterinario - Mascota seleccionada:", {
