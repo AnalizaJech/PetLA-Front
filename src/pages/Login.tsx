@@ -88,8 +88,13 @@ export default function Login() {
 
       const userData = {
         nombre: registerData.nombre,
+        apellidos: registerData.apellidos,
+        username: registerData.username,
         email: registerData.email,
         telefono: registerData.telefono,
+        direccion: registerData.direccion,
+        fechaNacimiento: registerData.fechaNacimiento ? new Date(registerData.fechaNacimiento) : undefined,
+        genero: registerData.genero,
         rol: "cliente" as const,
         password: registerData.password,
       };
