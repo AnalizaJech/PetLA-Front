@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { useAppContext } from "@/contexts/AppContext";
 import Layout from "@/components/Layout";
 import DashboardVeterinario from "./DashboardVeterinario";
-import NotasAdmin from "@/components/NotasAdmin";
 import { Button } from "@/components/ui/button";
 import {
   Card,
