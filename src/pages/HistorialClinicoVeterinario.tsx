@@ -780,8 +780,8 @@ export default function HistorialClinicoVeterinario() {
                         {/* Test button to create sample record */}
                         <div className="mt-4">
                           <Button
-                            onClick={() => {
-                              if (selectedPet) {
+                            onClick={async () => {
+                              if (selectedPet && addHistorialEntry) {
                                 const testRecord = {
                                   mascotaId: selectedPet.id,
                                   mascotaNombre: selectedPet.nombre,
@@ -796,12 +796,17 @@ export default function HistorialClinicoVeterinario() {
                                   observaciones: "Registro creado para prueba del sistema",
                                   estado: "completada" as const,
                                 };
-                                console.log("Creating test record:", testRecord);
-                                // Assuming addHistorialEntry is available in context
+
                                 if (window.confirm("¿Crear registro de prueba para esta mascota?")) {
-                                  // This would normally use the context function
-                                  console.log("Test record would be created:", testRecord);
-                                  alert("Registro de prueba creado (consulta la consola para detalles)");
+                                  try {
+                                    console.log("Creating test record:", testRecord);
+                                    await addHistorialEntry(testRecord);
+                                    alert("Registro de prueba creado exitosamente!");
+                                    // The component should re-render automatically due to context update
+                                  } catch (error) {
+                                    console.error("Error creating test record:", error);
+                                    alert("Error al crear el registro de prueba");
+                                  }
                                 }
                               }
                             }}
