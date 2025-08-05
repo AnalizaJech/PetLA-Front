@@ -70,8 +70,10 @@ export default function HistorialClinicoVeterinario() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  // Navigation states
-  const [currentView, setCurrentView] = useState<"owners" | "pets" | "history">("owners");
+  // Navigation states - check URL params for direct navigation
+  const [currentView, setCurrentView] = useState<"owners" | "pets" | "history">(
+    searchParams.get("view") === "history" ? "history" : "owners"
+  );
   const [selectedOwner, setSelectedOwner] = useState<any>(null);
   const [selectedPet, setSelectedPet] = useState<any>(null);
   const [selectedRecord, setSelectedRecord] = useState<any>(null);
