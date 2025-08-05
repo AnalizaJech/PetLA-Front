@@ -113,21 +113,28 @@ export default function GestionCitas() {
     };
   });
 
-  // Filter citas
-  const filteredCitas = enhancedCitas.filter((cita) => {
-    const matchesSearch =
-      cita.mascota.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      cita.veterinario.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      cita.motivo.toLowerCase().includes(searchTerm.toLowerCase());
+  // Filter and sort citas by most recent first
+  const filteredCitas = enhancedCitas
+    .filter((cita) => {
+      const matchesSearch =
+        cita.mascota.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        cita.veterinario.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        cita.motivo.toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesStatus =
-      selectedStatus === "todos" || cita.estado === selectedStatus;
+      const matchesStatus =
+        selectedStatus === "todos" || cita.estado === selectedStatus;
 
-    const matchesDate =
-      !selectedDate || cita.fecha.toISOString().split("T")[0] === selectedDate;
+      const matchesDate =
+        !selectedDate || cita.fecha.toISOString().split("T")[0] === selectedDate;
 
-    return matchesSearch && matchesStatus && matchesDate;
-  });
+      return matchesSearch && matchesStatus && matchesDate;
+    })
+    .sort((a, b) => {
+      // Ordenar por fecha más reciente primero
+      const dateA = new Date(a.fecha);
+      const dateB = new Date(b.fecha);
+      return dateB.getTime() - dateA.getTime();
+    });
 
   const handleUpdateCita = async (id: string, updates: any) => {
     setIsProcessing(true);

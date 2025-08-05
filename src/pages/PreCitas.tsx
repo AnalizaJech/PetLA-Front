@@ -85,16 +85,23 @@ export default function PreCitas() {
 
   const veterinarios = usuarios.filter((u) => u.rol === "veterinario");
 
-  // Filter pre-citas
-  const filteredPreCitas = preCitas.filter((preCita) => {
-    const matchesSearch =
-      preCita.nombreCliente.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      preCita.nombreMascota.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      preCita.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus =
-      selectedStatus === "todos" || preCita.estado === selectedStatus;
-    return matchesSearch && matchesStatus;
-  });
+  // Filter and sort pre-citas by most recent first
+  const filteredPreCitas = preCitas
+    .filter((preCita) => {
+      const matchesSearch =
+        preCita.nombreCliente.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        preCita.nombreMascota.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        preCita.email.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesStatus =
+        selectedStatus === "todos" || preCita.estado === selectedStatus;
+      return matchesSearch && matchesStatus;
+    })
+    .sort((a, b) => {
+      // Ordenar por fecha de creación más reciente primero
+      const dateA = new Date(a.fechaCreacion);
+      const dateB = new Date(b.fechaCreacion);
+      return dateB.getTime() - dateA.getTime();
+    });
 
   const handleProcessPreCita = async (
     id: string,
