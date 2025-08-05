@@ -142,7 +142,9 @@ export default function Configuracion() {
     email: user?.email || "",
     telefono: user?.telefono || "",
     direccion: user?.direccion || "",
-    fechaNacimiento: user?.fechaNacimiento ? user.fechaNacimiento.toISOString().split('T')[0] : "",
+    fechaNacimiento: user?.fechaNacimiento
+      ? user.fechaNacimiento.toISOString().split("T")[0]
+      : "",
     genero: user?.genero || "",
     bio: loadSettings("user_bio", ""),
     foto: user?.foto || null,
@@ -204,7 +206,9 @@ export default function Configuracion() {
         email: user.email || "",
         telefono: user.telefono || "",
         direccion: user.direccion || "",
-        fechaNacimiento: user.fechaNacimiento ? user.fechaNacimiento.toISOString().split('T')[0] : "",
+        fechaNacimiento: user.fechaNacimiento
+          ? user.fechaNacimiento.toISOString().split("T")[0]
+          : "",
         genero: user.genero || "",
         foto: user.foto || null,
       }));
@@ -253,7 +257,9 @@ export default function Configuracion() {
           email: profileData.email.trim(),
           telefono: profileData.telefono.trim(),
           direccion: profileData.direccion.trim(),
-          fechaNacimiento: profileData.fechaNacimiento ? new Date(profileData.fechaNacimiento) : undefined,
+          fechaNacimiento: profileData.fechaNacimiento
+            ? new Date(profileData.fechaNacimiento)
+            : undefined,
           genero: profileData.genero,
           foto: profileData.foto,
         };
@@ -502,9 +508,9 @@ export default function Configuracion() {
           const compressedBase64 = canvas.toDataURL("image/jpeg", 0.7);
 
           // Update profile data with optimized image
-          setProfileData(prev => ({
+          setProfileData((prev) => ({
             ...prev,
-            foto: compressedBase64
+            foto: compressedBase64,
           }));
 
           handleClosePhotoModal();
@@ -514,9 +520,9 @@ export default function Configuracion() {
       } catch (error) {
         console.error("Error processing image:", error);
         // Fallback: save original image if there's an error
-        setProfileData(prev => ({
+        setProfileData((prev) => ({
           ...prev,
-          foto: photoPreviewURL
+          foto: photoPreviewURL,
         }));
         handleClosePhotoModal();
       }
@@ -524,9 +530,9 @@ export default function Configuracion() {
   };
 
   const handleRemovePhoto = () => {
-    setProfileData(prev => ({
+    setProfileData((prev) => ({
       ...prev,
-      foto: null
+      foto: null,
     }));
     handleClosePhotoModal();
   };
@@ -658,8 +664,12 @@ export default function Configuracion() {
                       </div>
                     </div>
                     <div className="text-center">
-                      <h4 className="text-sm font-medium text-vet-gray-900">Foto de perfil</h4>
-                      <p className="text-xs text-vet-gray-600">Haz clic para cambiar tu foto</p>
+                      <h4 className="text-sm font-medium text-vet-gray-900">
+                        Foto de perfil
+                      </h4>
+                      <p className="text-xs text-vet-gray-600">
+                        Haz clic para cambiar tu foto
+                      </p>
                     </div>
                   </div>
 
@@ -775,7 +785,9 @@ export default function Configuracion() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="fechaNacimiento">Fecha de nacimiento (opcional)</Label>
+                      <Label htmlFor="fechaNacimiento">
+                        Fecha de nacimiento (opcional)
+                      </Label>
                       <div className="relative">
                         <Calendar className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
                         <Input
@@ -811,7 +823,9 @@ export default function Configuracion() {
                           <SelectItem value="masculino">Masculino</SelectItem>
                           <SelectItem value="femenino">Femenino</SelectItem>
                           <SelectItem value="otro">Otro</SelectItem>
-                          <SelectItem value="prefiero_no_decir">Prefiero no decir</SelectItem>
+                          <SelectItem value="prefiero_no_decir">
+                            Prefiero no decir
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -1205,7 +1219,6 @@ export default function Configuracion() {
                     <h3 className="text-lg font-semibold text-vet-gray-900">
                       Configuración adicional de seguridad
                     </h3>
-
 
                     <div className="space-y-2">
                       <Label htmlFor="sessionTimeout">

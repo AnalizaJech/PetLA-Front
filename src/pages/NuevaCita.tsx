@@ -930,7 +930,9 @@ export default function NuevaCita() {
               <div className="flex justify-between pt-8 border-t">
                 <Button
                   variant="outline"
-                  onClick={currentStep === 1 ? () => navigate("/mis-citas") : prevStep}
+                  onClick={
+                    currentStep === 1 ? () => navigate("/mis-citas") : prevStep
+                  }
                   className="flex items-center"
                 >
                   <ArrowLeft className="w-4 h-4 mr-2" />

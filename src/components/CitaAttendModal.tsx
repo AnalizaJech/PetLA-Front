@@ -169,7 +169,8 @@ export default function CitaAttendModal({
       if (attended) {
         // Ensure we have minimum required data for clinical history
         const mascotaData = selectedCita.mascota;
-        const mascotaId = mascotaData?.id || `temp_${selectedCita.cita.id}_${Date.now()}`;
+        const mascotaId =
+          mascotaData?.id || `temp_${selectedCita.cita.id}_${Date.now()}`;
         const mascotaNombre = mascotaData?.nombre || selectedCita.cita.mascota;
 
         const historialEntry = {
@@ -202,7 +203,7 @@ export default function CitaAttendModal({
           mascotaId,
           mascotaNombre,
           citaId: selectedCita.cita.id,
-          veterinario: user.nombre
+          veterinario: user.nombre,
         });
       }
 

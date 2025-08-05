@@ -595,17 +595,20 @@ export default function DashboardVeterinario() {
                     className="w-full"
                     onClick={() => {
                       // Generate and download a summary report
-                      const currentMonth = new Date().toLocaleDateString("es-ES", {
-                        month: "long",
-                        year: "numeric"
-                      });
+                      const currentMonth = new Date().toLocaleDateString(
+                        "es-ES",
+                        {
+                          month: "long",
+                          year: "numeric",
+                        },
+                      );
 
                       const reportData = {
                         veterinario: user?.nombre || "Veterinario",
                         periodo: currentMonth,
                         citasCompletadas: monthlyStats.citasCompletadas,
                         pacientesUnicos: monthlyStats.pacientesUnicos,
-                        fecha: new Date().toLocaleDateString("es-ES")
+                        fecha: new Date().toLocaleDateString("es-ES"),
                       };
 
                       const reportContent = `
@@ -624,11 +627,13 @@ ESTADÍSTICAS:
 Generado automáticamente por PetLA
                       `;
 
-                      const blob = new Blob([reportContent], { type: 'text/plain' });
+                      const blob = new Blob([reportContent], {
+                        type: "text/plain",
+                      });
                       const url = window.URL.createObjectURL(blob);
-                      const a = document.createElement('a');
+                      const a = document.createElement("a");
                       a.href = url;
-                      a.download = `reporte_${currentMonth.replace(' ', '_')}_${user?.nombre?.replace(' ', '_') || 'veterinario'}.txt`;
+                      a.download = `reporte_${currentMonth.replace(" ", "_")}_${user?.nombre?.replace(" ", "_") || "veterinario"}.txt`;
                       document.body.appendChild(a);
                       a.click();
                       document.body.removeChild(a);

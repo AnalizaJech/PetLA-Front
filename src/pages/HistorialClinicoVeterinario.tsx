@@ -73,7 +73,7 @@ export default function HistorialClinicoVeterinario() {
 
   // Navigation states - check URL params for direct navigation
   const [currentView, setCurrentView] = useState<"owners" | "pets" | "history">(
-    searchParams.get("view") === "history" ? "history" : "owners"
+    searchParams.get("view") === "history" ? "history" : "owners",
   );
   const [selectedOwner, setSelectedOwner] = useState<any>(null);
   const [selectedPet, setSelectedPet] = useState<any>(null);
@@ -98,20 +98,20 @@ export default function HistorialClinicoVeterinario() {
     if (view === "history") {
       if (petId) {
         // Direct navigation to specific pet by ID
-        const pet = mascotas.find(m => m.id === petId);
+        const pet = mascotas.find((m) => m.id === petId);
         if (pet) {
-          const owner = usuarios.find(u => u.id === pet.clienteId);
+          const owner = usuarios.find((u) => u.id === pet.clienteId);
           setSelectedPet(pet);
           setSelectedOwner(owner || null);
           setCurrentView("history");
         }
       } else if (petName) {
         // Fallback: navigation to pet by name (for unregistered pets)
-        const pet = mascotas.find(m =>
-          m.nombre.toLowerCase() === petName.toLowerCase()
+        const pet = mascotas.find(
+          (m) => m.nombre.toLowerCase() === petName.toLowerCase(),
         );
         if (pet) {
-          const owner = usuarios.find(u => u.id === pet.clienteId);
+          const owner = usuarios.find((u) => u.id === pet.clienteId);
           setSelectedPet(pet);
           setSelectedOwner(owner || null);
           setCurrentView("history");
@@ -122,7 +122,7 @@ export default function HistorialClinicoVeterinario() {
             nombre: petName,
             especie: searchParams.get("especie") || "Desconocida",
             raza: "Por determinar",
-            sexo: "No especificado"
+            sexo: "No especificado",
           };
           setSelectedPet(tempPet);
           setCurrentView("history");
@@ -160,32 +160,30 @@ export default function HistorialClinicoVeterinario() {
   // Get all clients with pets that have clinical history
   const clientesConHistorial = useMemo(() => {
     const clienteIds = new Set<string>();
-    
+
     // Get clients from pets with clinical history
-    historialClinico.forEach(entry => {
-      const mascota = mascotas.find(m => m.id === entry.mascotaId);
+    historialClinico.forEach((entry) => {
+      const mascota = mascotas.find((m) => m.id === entry.mascotaId);
       if (mascota) {
         clienteIds.add(mascota.clienteId);
       }
     });
 
     // Get clients from appointments
-    misCitas.forEach(cita => {
+    misCitas.forEach((cita) => {
       if (cita.clienteId) {
         clienteIds.add(cita.clienteId);
       }
     });
 
-    return usuarios.filter(u => 
-      u.rol === "cliente" && clienteIds.has(u.id)
-    );
+    return usuarios.filter((u) => u.rol === "cliente" && clienteIds.has(u.id));
   }, [usuarios, mascotas, historialClinico, misCitas]);
 
   // Get pets for selected owner
   const mascotasDelDueño = useMemo(() => {
     if (!selectedOwner) return [];
-    
-    return mascotas.filter(m => m.clienteId === selectedOwner.id);
+
+    return mascotas.filter((m) => m.clienteId === selectedOwner.id);
   }, [mascotas, selectedOwner]);
 
   // Get clinical history for selected pet
@@ -197,51 +195,58 @@ export default function HistorialClinicoVeterinario() {
 
     // If no records by ID, search by pet name (for unregistered pets or name matches)
     if (records.length === 0 && selectedPet.nombre) {
-      records = historialClinico.filter(entry =>
-        entry.mascotaNombre.toLowerCase() === selectedPet.nombre.toLowerCase()
+      records = historialClinico.filter(
+        (entry) =>
+          entry.mascotaNombre.toLowerCase() ===
+          selectedPet.nombre.toLowerCase(),
       );
     }
 
     return records.sort(
-      (a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime()
+      (a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime(),
     );
   }, [selectedPet, getHistorialByMascota, historialClinico]);
 
   // Filter clients based on search
   const filteredClientes = useMemo(() => {
-    return clientesConHistorial.filter(cliente => {
-      const matchesSearch = !searchTerm || 
+    return clientesConHistorial.filter((cliente) => {
+      const matchesSearch =
+        !searchTerm ||
         cliente.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
         cliente.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
         cliente.telefono?.includes(searchTerm);
-      
+
       return matchesSearch;
     });
   }, [clientesConHistorial, searchTerm]);
 
   // Filter pets based on search and filters
   const filteredPets = useMemo(() => {
-    return mascotasDelDueño.filter(pet => {
-      const matchesSearch = !searchTerm || 
+    return mascotasDelDueño.filter((pet) => {
+      const matchesSearch =
+        !searchTerm ||
         pet.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
         pet.especie.toLowerCase().includes(searchTerm.toLowerCase()) ||
         pet.raza.toLowerCase().includes(searchTerm.toLowerCase());
-      
-      const matchesSpecies = filterSpecies === "todos" || pet.especie === filterSpecies;
+
+      const matchesSpecies =
+        filterSpecies === "todos" || pet.especie === filterSpecies;
       const matchesSex = filterSex === "todos" || pet.sexo === filterSex;
-      
+
       return matchesSearch && matchesSpecies && matchesSex;
     });
   }, [mascotasDelDueño, searchTerm, filterSpecies, filterSex]);
 
   // Filter clinical history
   const filteredHistory = useMemo(() => {
-    return historialMascota.filter(record => {
+    return historialMascota.filter((record) => {
       if (filterType === "todos") return true;
-      
+
       switch (filterType) {
         case "consultas":
-          return ["consulta_general", "grooming", "emergencia"].includes(record.tipoConsulta);
+          return ["consulta_general", "grooming", "emergencia"].includes(
+            record.tipoConsulta,
+          );
         case "vacunas":
           return record.tipoConsulta === "vacunacion";
         case "examenes":
@@ -256,7 +261,7 @@ export default function HistorialClinicoVeterinario() {
 
   // Get unique species for filter
   const especiesUnicas = useMemo(() => {
-    const especies = new Set(mascotas.map(m => m.especie));
+    const especies = new Set(mascotas.map((m) => m.especie));
     return Array.from(especies);
   }, [mascotas]);
 
@@ -286,21 +291,33 @@ export default function HistorialClinicoVeterinario() {
     if (selectedPet.fechaNacimiento) {
       const birthDate = new Date(selectedPet.fechaNacimiento);
       const today = new Date();
-      const ageInYears = Math.floor((today.getTime() - birthDate.getTime()) / (365.25 * 24 * 60 * 60 * 1000));
-      const ageInMonths = Math.floor((today.getTime() - birthDate.getTime()) / (30.44 * 24 * 60 * 60 * 1000));
+      const ageInYears = Math.floor(
+        (today.getTime() - birthDate.getTime()) /
+          (365.25 * 24 * 60 * 60 * 1000),
+      );
+      const ageInMonths = Math.floor(
+        (today.getTime() - birthDate.getTime()) / (30.44 * 24 * 60 * 60 * 1000),
+      );
 
       let ageText;
       if (ageInYears >= 2) {
         ageText = `${ageInYears} años`;
       } else if (ageInYears === 1) {
         const extraMonths = ageInMonths - 12;
-        ageText = extraMonths > 0 ? `1 año ${extraMonths} mes${extraMonths > 1 ? 'es' : ''}` : '1 año';
+        ageText =
+          extraMonths > 0
+            ? `1 año ${extraMonths} mes${extraMonths > 1 ? "es" : ""}`
+            : "1 año";
       } else {
-        ageText = `${ageInMonths} mes${ageInMonths > 1 ? 'es' : ''}`;
+        ageText = `${ageInMonths} mes${ageInMonths > 1 ? "es" : ""}`;
       }
 
       doc.text(`Edad: ${ageText}`, 20, 83);
-      doc.text(`Fecha de nacimiento: ${birthDate.toLocaleDateString("es-ES")}`, 20, 90);
+      doc.text(
+        `Fecha de nacimiento: ${birthDate.toLocaleDateString("es-ES")}`,
+        20,
+        90,
+      );
     }
 
     if (selectedPet.peso) {
@@ -315,7 +332,7 @@ export default function HistorialClinicoVeterinario() {
     }
 
     let y = 125;
-    
+
     // Medical records header
     doc.setFontSize(14);
     doc.text("REGISTROS MÉDICOS", 20, y);
@@ -328,13 +345,21 @@ export default function HistorialClinicoVeterinario() {
       }
 
       doc.setFontSize(12);
-      doc.text(`${index + 1}. ${new Date(record.fecha).toLocaleDateString("es-ES")}`, 20, y);
+      doc.text(
+        `${index + 1}. ${new Date(record.fecha).toLocaleDateString("es-ES")}`,
+        20,
+        y,
+      );
       y += 8;
 
       doc.setFontSize(10);
       doc.text(`Veterinario: Dr. ${record.veterinario}`, 30, y);
       y += 6;
-      doc.text(`Tipo: ${record.tipoConsulta.replace("_", " ").toUpperCase()}`, 30, y);
+      doc.text(
+        `Tipo: ${record.tipoConsulta.replace("_", " ").toUpperCase()}`,
+        30,
+        y,
+      );
       y += 6;
       doc.text(`Motivo: ${record.motivo}`, 30, y);
       y += 6;
@@ -364,8 +389,12 @@ export default function HistorialClinicoVeterinario() {
       if (record.medicamentos && record.medicamentos.length > 0) {
         doc.text(`Medicamentos:`, 30, y);
         y += 6;
-        record.medicamentos.forEach(med => {
-          doc.text(`  - ${med.nombre}: ${med.dosis}, ${med.frecuencia}, ${med.duracion}`, 35, y);
+        record.medicamentos.forEach((med) => {
+          doc.text(
+            `  - ${med.nombre}: ${med.dosis}, ${med.frecuencia}, ${med.duracion}`,
+            35,
+            y,
+          );
           y += 5;
         });
       }
@@ -377,8 +406,10 @@ export default function HistorialClinicoVeterinario() {
 
       y += 8; // Space between records
     });
-    
-    doc.save(`historial_${selectedPet.nombre}_${new Date().toISOString().split('T')[0]}.pdf`);
+
+    doc.save(
+      `historial_${selectedPet.nombre}_${new Date().toISOString().split("T")[0]}.pdf`,
+    );
   };
 
   // Navigation functions
@@ -452,10 +483,10 @@ export default function HistorialClinicoVeterinario() {
                   <p className="text-sm sm:text-base text-vet-gray-600">
                     Gestiona el historial médico completo
                   </p>
-                  
+
                   {/* Breadcrumb */}
                   <div className="flex items-center space-x-2 mt-2 text-sm text-vet-gray-500">
-                    <span 
+                    <span
                       className={`cursor-pointer hover:text-vet-primary ${currentView === "owners" ? "text-vet-primary font-medium" : ""}`}
                       onClick={handleBackToOwners}
                     >
@@ -464,7 +495,7 @@ export default function HistorialClinicoVeterinario() {
                     {selectedOwner && (
                       <>
                         <ChevronRight className="w-3 h-3" />
-                        <span 
+                        <span
                           className={`cursor-pointer hover:text-vet-primary ${currentView === "pets" ? "text-vet-primary font-medium" : ""}`}
                           onClick={handleBackToPets}
                         >
@@ -483,16 +514,18 @@ export default function HistorialClinicoVeterinario() {
                   </div>
                 </div>
               </div>
-              
-              {currentView === "history" && selectedPet && historialMascota.length > 0 && (
-                <Button
-                  onClick={downloadHistorialPDF}
-                  className="bg-vet-primary hover:bg-vet-primary-dark"
-                >
-                  <Download className="w-4 h-4 mr-2" />
-                  Descargar PDF
-                </Button>
-              )}
+
+              {currentView === "history" &&
+                selectedPet &&
+                historialMascota.length > 0 && (
+                  <Button
+                    onClick={downloadHistorialPDF}
+                    className="bg-vet-primary hover:bg-vet-primary-dark"
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                    Descargar PDF
+                  </Button>
+                )}
             </div>
           </div>
 
@@ -505,9 +538,11 @@ export default function HistorialClinicoVeterinario() {
                     <Search className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
                     <Input
                       placeholder={
-                        currentView === "owners" ? "Buscar propietarios..." :
-                        currentView === "pets" ? "Buscar mascotas..." :
-                        "Buscar en historial..."
+                        currentView === "owners"
+                          ? "Buscar propietarios..."
+                          : currentView === "pets"
+                            ? "Buscar mascotas..."
+                            : "Buscar en historial..."
                       }
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
@@ -515,16 +550,21 @@ export default function HistorialClinicoVeterinario() {
                     />
                   </div>
                 </div>
-                
+
                 {currentView === "pets" && (
                   <>
-                    <Select value={filterSpecies} onValueChange={setFilterSpecies}>
+                    <Select
+                      value={filterSpecies}
+                      onValueChange={setFilterSpecies}
+                    >
                       <SelectTrigger>
                         <PawPrint className="w-4 h-4 mr-2" />
                         <SelectValue placeholder="Especie" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="todos">Todas las especies</SelectItem>
+                        <SelectItem value="todos">
+                          Todas las especies
+                        </SelectItem>
                         {especiesUnicas.map((especie) => (
                           <SelectItem key={especie} value={especie}>
                             {especie}
@@ -532,7 +572,7 @@ export default function HistorialClinicoVeterinario() {
                         ))}
                       </SelectContent>
                     </Select>
-                    
+
                     <Select value={filterSex} onValueChange={setFilterSex}>
                       <SelectTrigger>
                         <Heart className="w-4 h-4 mr-2" />
@@ -546,7 +586,7 @@ export default function HistorialClinicoVeterinario() {
                     </Select>
                   </>
                 )}
-                
+
                 {currentView === "history" && (
                   <Select value={filterType} onValueChange={setFilterType}>
                     <SelectTrigger>
@@ -563,7 +603,9 @@ export default function HistorialClinicoVeterinario() {
                   </Select>
                 )}
 
-                {(filterSpecies !== "todos" || filterSex !== "todos" || filterType !== "todos") && (
+                {(filterSpecies !== "todos" ||
+                  filterSex !== "todos" ||
+                  filterType !== "todos") && (
                   <Button
                     variant="outline"
                     onClick={() => {
@@ -600,9 +642,11 @@ export default function HistorialClinicoVeterinario() {
                 </div>
               ) : (
                 filteredClientes.map((cliente) => {
-                  const mascotasCount = mascotas.filter(m => m.clienteId === cliente.id).length;
-                  const historialCount = historialClinico.filter(h => {
-                    const mascota = mascotas.find(m => m.id === h.mascotaId);
+                  const mascotasCount = mascotas.filter(
+                    (m) => m.clienteId === cliente.id,
+                  ).length;
+                  const historialCount = historialClinico.filter((h) => {
+                    const mascota = mascotas.find((m) => m.id === h.mascotaId);
                     return mascota && mascota.clienteId === cliente.id;
                   }).length;
 
@@ -637,10 +681,12 @@ export default function HistorialClinicoVeterinario() {
                             </div>
                             <div className="flex items-center space-x-4 mt-3">
                               <Badge variant="outline">
-                                {mascotasCount} mascota{mascotasCount !== 1 ? 's' : ''}
+                                {mascotasCount} mascota
+                                {mascotasCount !== 1 ? "s" : ""}
                               </Badge>
                               <Badge className="bg-vet-primary/10 text-vet-primary">
-                                {historialCount} registro{historialCount !== 1 ? 's' : ''}
+                                {historialCount} registro
+                                {historialCount !== 1 ? "s" : ""}
                               </Badge>
                             </div>
                           </div>
@@ -670,7 +716,9 @@ export default function HistorialClinicoVeterinario() {
                     Mascotas de {selectedOwner.nombre}
                   </h2>
                   <p className="text-vet-gray-600">
-                    {filteredPets.length} mascota{filteredPets.length !== 1 ? 's' : ''} encontrada{filteredPets.length !== 1 ? 's' : ''}
+                    {filteredPets.length} mascota
+                    {filteredPets.length !== 1 ? "s" : ""} encontrada
+                    {filteredPets.length !== 1 ? "s" : ""}
                   </p>
                 </div>
               </div>
@@ -685,7 +733,8 @@ export default function HistorialClinicoVeterinario() {
                           No hay mascotas
                         </h3>
                         <p className="text-vet-gray-600">
-                          No se encontraron mascotas que coincidan con los filtros
+                          No se encontraron mascotas que coincidan con los
+                          filtros
                         </p>
                       </CardContent>
                     </Card>
@@ -693,8 +742,11 @@ export default function HistorialClinicoVeterinario() {
                 ) : (
                   filteredPets.map((pet) => {
                     const historialCount = getHistorialByMascota(pet.id).length;
-                    const ultimaVisita = getHistorialByMascota(pet.id)
-                      .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())[0];
+                    const ultimaVisita = getHistorialByMascota(pet.id).sort(
+                      (a, b) =>
+                        new Date(b.fecha).getTime() -
+                        new Date(a.fecha).getTime(),
+                    )[0];
 
                     return (
                       <Card
@@ -706,26 +758,33 @@ export default function HistorialClinicoVeterinario() {
                           <div className="flex items-start space-x-4">
                             <div className="w-12 h-12 bg-vet-secondary/10 rounded-full flex items-center justify-center flex-shrink-0 relative">
                               {pet.foto ? (
-                                <img 
-                                  src={pet.foto} 
+                                <img
+                                  src={pet.foto}
                                   alt={pet.nombre}
                                   className="w-full h-full rounded-full object-cover"
                                   onError={(e) => {
-                                    e.currentTarget.style.display = 'none';
-                                    e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                                    e.currentTarget.style.display = "none";
+                                    e.currentTarget.nextElementSibling?.classList.remove(
+                                      "hidden",
+                                    );
                                   }}
                                 />
                               ) : null}
-                              <PawPrint className={`w-6 h-6 text-vet-secondary ${pet.foto ? 'hidden' : ''}`} />
+                              <PawPrint
+                                className={`w-6 h-6 text-vet-secondary ${pet.foto ? "hidden" : ""}`}
+                              />
                             </div>
                             <div className="flex-1 min-w-0">
                               <h4 className="font-bold text-lg text-vet-gray-900 mb-1">
                                 {pet.nombre}
                               </h4>
                               <div className="space-y-1 text-sm text-vet-gray-600">
-                                <p><strong>Especie:</strong> {pet.especie}</p>
                                 <p>
-                                  <strong>Raza:</strong> {pet.raza || "No especificada"}
+                                  <strong>Especie:</strong> {pet.especie}
+                                </p>
+                                <p>
+                                  <strong>Raza:</strong>{" "}
+                                  {pet.raza || "No especificada"}
                                   {!pet.raza && (
                                     <span className="ml-2 text-xs text-yellow-600 bg-yellow-100 px-1 py-0.5 rounded">
                                       Sin registrar
@@ -733,7 +792,8 @@ export default function HistorialClinicoVeterinario() {
                                   )}
                                 </p>
                                 <p>
-                                  <strong>Sexo:</strong> {pet.sexo || "No especificado"}
+                                  <strong>Sexo:</strong>{" "}
+                                  {pet.sexo || "No especificado"}
                                   {!pet.sexo && (
                                     <span className="ml-2 text-xs text-yellow-600 bg-yellow-100 px-1 py-0.5 rounded">
                                       Sin registrar
@@ -741,31 +801,54 @@ export default function HistorialClinicoVeterinario() {
                                   )}
                                 </p>
                                 {pet.fechaNacimiento && (
-                                  <p><strong>Edad:</strong> {(() => {
-                                    const birthDate = new Date(pet.fechaNacimiento);
-                                    const today = new Date();
-                                    const ageInYears = Math.floor((today.getTime() - birthDate.getTime()) / (365.25 * 24 * 60 * 60 * 1000));
-                                    const ageInMonths = Math.floor((today.getTime() - birthDate.getTime()) / (30.44 * 24 * 60 * 60 * 1000));
+                                  <p>
+                                    <strong>Edad:</strong>{" "}
+                                    {(() => {
+                                      const birthDate = new Date(
+                                        pet.fechaNacimiento,
+                                      );
+                                      const today = new Date();
+                                      const ageInYears = Math.floor(
+                                        (today.getTime() -
+                                          birthDate.getTime()) /
+                                          (365.25 * 24 * 60 * 60 * 1000),
+                                      );
+                                      const ageInMonths = Math.floor(
+                                        (today.getTime() -
+                                          birthDate.getTime()) /
+                                          (30.44 * 24 * 60 * 60 * 1000),
+                                      );
 
-                                    if (ageInYears >= 2) {
-                                      return `${ageInYears} años`;
-                                    } else if (ageInYears === 1) {
-                                      const extraMonths = ageInMonths - 12;
-                                      return extraMonths > 0 ? `1 año ${extraMonths} mes${extraMonths > 1 ? 'es' : ''}` : '1 año';
-                                    } else {
-                                      return `${ageInMonths} mes${ageInMonths > 1 ? 'es' : ''}`;
-                                    }
-                                  })()}</p>
+                                      if (ageInYears >= 2) {
+                                        return `${ageInYears} años`;
+                                      } else if (ageInYears === 1) {
+                                        const extraMonths = ageInMonths - 12;
+                                        return extraMonths > 0
+                                          ? `1 año ${extraMonths} mes${extraMonths > 1 ? "es" : ""}`
+                                          : "1 año";
+                                      } else {
+                                        return `${ageInMonths} mes${ageInMonths > 1 ? "es" : ""}`;
+                                      }
+                                    })()}
+                                  </p>
                                 )}
-                                {pet.peso && <p><strong>Peso:</strong> {pet.peso} kg</p>}
+                                {pet.peso && (
+                                  <p>
+                                    <strong>Peso:</strong> {pet.peso} kg
+                                  </p>
+                                )}
                               </div>
                               <div className="flex items-center space-x-4 mt-3">
                                 <Badge className="bg-green-100 text-green-800">
-                                  {historialCount} registro{historialCount !== 1 ? 's' : ''}
+                                  {historialCount} registro
+                                  {historialCount !== 1 ? "s" : ""}
                                 </Badge>
                                 {ultimaVisita && (
                                   <Badge variant="outline" className="text-xs">
-                                    Última: {new Date(ultimaVisita.fecha).toLocaleDateString("es-ES")}
+                                    Última:{" "}
+                                    {new Date(
+                                      ultimaVisita.fecha,
+                                    ).toLocaleDateString("es-ES")}
                                   </Badge>
                                 )}
                               </div>
@@ -798,11 +881,13 @@ export default function HistorialClinicoVeterinario() {
                       Historial de {selectedPet.nombre}
                     </h2>
                     <p className="text-vet-gray-600">
-                      Propietario: {selectedOwner.nombre} • {filteredHistory.length} registro{filteredHistory.length !== 1 ? 's' : ''}
+                      Propietario: {selectedOwner.nombre} •{" "}
+                      {filteredHistory.length} registro
+                      {filteredHistory.length !== 1 ? "s" : ""}
                     </p>
                   </div>
                 </div>
-                
+
                 {historialMascota.length > 0 && (
                   <Button
                     onClick={downloadHistorialPDF}
@@ -826,9 +911,12 @@ export default function HistorialClinicoVeterinario() {
                         {selectedPet.nombre}
                       </h3>
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2 text-sm text-vet-gray-600">
-                        <div><strong>Especie:</strong> {selectedPet.especie}</div>
                         <div>
-                          <strong>Raza:</strong> {selectedPet.raza || "No especificada"}
+                          <strong>Especie:</strong> {selectedPet.especie}
+                        </div>
+                        <div>
+                          <strong>Raza:</strong>{" "}
+                          {selectedPet.raza || "No especificada"}
                           {!selectedPet.raza && (
                             <span className="ml-2 text-xs text-yellow-600 bg-yellow-100 px-2 py-1 rounded">
                               Sin registrar
@@ -836,35 +924,53 @@ export default function HistorialClinicoVeterinario() {
                           )}
                         </div>
                         <div>
-                          <strong>Sexo:</strong> {selectedPet.sexo || "No especificado"}
+                          <strong>Sexo:</strong>{" "}
+                          {selectedPet.sexo || "No especificado"}
                           {!selectedPet.sexo && (
                             <span className="ml-2 text-xs text-yellow-600 bg-yellow-100 px-2 py-1 rounded">
                               Sin registrar
                             </span>
                           )}
                         </div>
-                        {selectedPet.peso && <div><strong>Peso:</strong> {selectedPet.peso} kg</div>}
+                        {selectedPet.peso && (
+                          <div>
+                            <strong>Peso:</strong> {selectedPet.peso} kg
+                          </div>
+                        )}
                         {selectedPet.fechaNacimiento && (
                           <div>
-                            <strong>Edad:</strong> {(() => {
-                              const birthDate = new Date(selectedPet.fechaNacimiento);
+                            <strong>Edad:</strong>{" "}
+                            {(() => {
+                              const birthDate = new Date(
+                                selectedPet.fechaNacimiento,
+                              );
                               const today = new Date();
-                              const ageInYears = Math.floor((today.getTime() - birthDate.getTime()) / (365.25 * 24 * 60 * 60 * 1000));
-                              const ageInMonths = Math.floor((today.getTime() - birthDate.getTime()) / (30.44 * 24 * 60 * 60 * 1000));
+                              const ageInYears = Math.floor(
+                                (today.getTime() - birthDate.getTime()) /
+                                  (365.25 * 24 * 60 * 60 * 1000),
+                              );
+                              const ageInMonths = Math.floor(
+                                (today.getTime() - birthDate.getTime()) /
+                                  (30.44 * 24 * 60 * 60 * 1000),
+                              );
 
                               if (ageInYears >= 2) {
                                 return `${ageInYears} años`;
                               } else if (ageInYears === 1) {
                                 const extraMonths = ageInMonths - 12;
-                                return extraMonths > 0 ? `1 año ${extraMonths} mes${extraMonths > 1 ? 'es' : ''}` : '1 año';
+                                return extraMonths > 0
+                                  ? `1 año ${extraMonths} mes${extraMonths > 1 ? "es" : ""}`
+                                  : "1 año";
                               } else {
-                                return `${ageInMonths} mes${ageInMonths > 1 ? 'es' : ''}`;
+                                return `${ageInMonths} mes${ageInMonths > 1 ? "es" : ""}`;
                               }
                             })()}
                           </div>
                         )}
                         {selectedPet.microchip && (
-                          <div><strong>Microchip:</strong> {selectedPet.microchip}</div>
+                          <div>
+                            <strong>Microchip:</strong> {selectedPet.microchip}
+                          </div>
                         )}
                       </div>
                     </div>
@@ -886,20 +992,42 @@ export default function HistorialClinicoVeterinario() {
 
                     {/* Debug information */}
                     <div className="text-left bg-blue-50 p-4 rounded-lg">
-                      <h4 className="font-medium text-blue-900 mb-2">Información de depuración:</h4>
+                      <h4 className="font-medium text-blue-900 mb-2">
+                        Información de depuración:
+                      </h4>
                       <div className="text-sm text-blue-800 space-y-1">
-                        <p><strong>Mascota ID:</strong> {selectedPet?.id}</p>
-                        <p><strong>Nombre:</strong> {selectedPet?.nombre}</p>
-                        <p><strong>Total de registros en sistema:</strong> {historialClinico.length}</p>
-                        <p><strong>Registros encontrados para esta mascota:</strong> {historialMascota.length}</p>
-                        <p><strong>Registros después de filtros:</strong> {filteredHistory.length}</p>
+                        <p>
+                          <strong>Mascota ID:</strong> {selectedPet?.id}
+                        </p>
+                        <p>
+                          <strong>Nombre:</strong> {selectedPet?.nombre}
+                        </p>
+                        <p>
+                          <strong>Total de registros en sistema:</strong>{" "}
+                          {historialClinico.length}
+                        </p>
+                        <p>
+                          <strong>
+                            Registros encontrados para esta mascota:
+                          </strong>{" "}
+                          {historialMascota.length}
+                        </p>
+                        <p>
+                          <strong>Registros después de filtros:</strong>{" "}
+                          {filteredHistory.length}
+                        </p>
 
                         {historialClinico.length > 0 && (
                           <div className="mt-2">
-                            <p><strong>Ejemplos de mascotaId en sistema:</strong></p>
+                            <p>
+                              <strong>Ejemplos de mascotaId en sistema:</strong>
+                            </p>
                             <ul className="list-disc ml-4">
                               {historialClinico.slice(0, 3).map((record, i) => (
-                                <li key={i}>ID: {record.mascotaId}, Nombre: {record.mascotaNombre}</li>
+                                <li key={i}>
+                                  ID: {record.mascotaId}, Nombre:{" "}
+                                  {record.mascotaNombre}
+                                </li>
                               ))}
                             </ul>
                           </div>
@@ -914,26 +1042,43 @@ export default function HistorialClinicoVeterinario() {
                                   mascotaId: selectedPet.id,
                                   mascotaNombre: selectedPet.nombre,
                                   fecha: new Date(),
-                                  veterinario: user?.nombre || "Veterinario Test",
+                                  veterinario:
+                                    user?.nombre || "Veterinario Test",
                                   tipoConsulta: "consulta_general" as const,
                                   motivo: "Consulta de prueba",
-                                  diagnostico: "Diagnóstico de prueba para verificar funcionamiento",
+                                  diagnostico:
+                                    "Diagnóstico de prueba para verificar funcionamiento",
                                   tratamiento: "Tratamiento de prueba",
                                   medicamentos: [],
                                   examenes: [],
-                                  observaciones: "Registro creado para prueba del sistema",
+                                  observaciones:
+                                    "Registro creado para prueba del sistema",
                                   estado: "completada" as const,
                                 };
 
-                                if (window.confirm("¿Crear registro de prueba para esta mascota?")) {
+                                if (
+                                  window.confirm(
+                                    "¿Crear registro de prueba para esta mascota?",
+                                  )
+                                ) {
                                   try {
-                                    console.log("Creating test record:", testRecord);
+                                    console.log(
+                                      "Creating test record:",
+                                      testRecord,
+                                    );
                                     await addHistorialEntry(testRecord);
-                                    alert("Registro de prueba creado exitosamente!");
+                                    alert(
+                                      "Registro de prueba creado exitosamente!",
+                                    );
                                     // The component should re-render automatically due to context update
                                   } catch (error) {
-                                    console.error("Error creating test record:", error);
-                                    alert("Error al crear el registro de prueba");
+                                    console.error(
+                                      "Error creating test record:",
+                                      error,
+                                    );
+                                    alert(
+                                      "Error al crear el registro de prueba",
+                                    );
                                   }
                                 }
                               }
@@ -971,7 +1116,9 @@ export default function HistorialClinicoVeterinario() {
                                   {record.motivo || "Consulta médica"}
                                 </h4>
                                 <Badge
-                                  className={getBadgeVariant(record.tipoConsulta)}
+                                  className={getBadgeVariant(
+                                    record.tipoConsulta,
+                                  )}
                                 >
                                   {record.tipoConsulta.replace("_", " ")}
                                 </Badge>
@@ -980,7 +1127,9 @@ export default function HistorialClinicoVeterinario() {
                                 <div className="flex items-center space-x-2">
                                   <Calendar className="w-4 h-4" />
                                   <span>
-                                    {new Date(record.fecha).toLocaleDateString("es-ES")}
+                                    {new Date(record.fecha).toLocaleDateString(
+                                      "es-ES",
+                                    )}
                                   </span>
                                 </div>
                                 <div className="flex items-center space-x-2">
@@ -989,18 +1138,24 @@ export default function HistorialClinicoVeterinario() {
                                 </div>
                                 <div className="flex items-center space-x-2">
                                   <CheckCircle className="w-4 h-4" />
-                                  <span className="capitalize">{record.estado}</span>
+                                  <span className="capitalize">
+                                    {record.estado}
+                                  </span>
                                 </div>
                               </div>
                               {record.diagnostico && (
                                 <p className="text-sm text-vet-gray-700 mb-2">
-                                  <span className="font-medium">Diagnóstico:</span>{" "}
+                                  <span className="font-medium">
+                                    Diagnóstico:
+                                  </span>{" "}
                                   {record.diagnostico}
                                 </p>
                               )}
                               {record.tratamiento && (
                                 <p className="text-sm text-vet-gray-700 mb-2">
-                                  <span className="font-medium">Tratamiento:</span>{" "}
+                                  <span className="font-medium">
+                                    Tratamiento:
+                                  </span>{" "}
                                   {record.tratamiento}
                                 </p>
                               )}
@@ -1017,12 +1172,16 @@ export default function HistorialClinicoVeterinario() {
                                     <span>{record.temperatura}°C</span>
                                   </div>
                                 )}
-                                {record.medicamentos && record.medicamentos.length > 0 && (
-                                  <div className="flex items-center space-x-1">
-                                    <Pill className="w-3 h-3" />
-                                    <span>{record.medicamentos.length} medicamento(s)</span>
-                                  </div>
-                                )}
+                                {record.medicamentos &&
+                                  record.medicamentos.length > 0 && (
+                                    <div className="flex items-center space-x-1">
+                                      <Pill className="w-3 h-3" />
+                                      <span>
+                                        {record.medicamentos.length}{" "}
+                                        medicamento(s)
+                                      </span>
+                                    </div>
+                                  )}
                               </div>
                             </div>
                           </div>
@@ -1051,7 +1210,8 @@ export default function HistorialClinicoVeterinario() {
             <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle className="flex items-center space-x-2">
-                  {selectedRecord && getConsultationIcon(selectedRecord.tipoConsulta)}
+                  {selectedRecord &&
+                    getConsultationIcon(selectedRecord.tipoConsulta)}
                   <span>Detalles del Registro Médico</span>
                 </DialogTitle>
                 <DialogDescription>
@@ -1064,46 +1224,74 @@ export default function HistorialClinicoVeterinario() {
                   {/* Basic information */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <Label className="text-sm font-medium text-vet-gray-700">Fecha</Label>
+                      <Label className="text-sm font-medium text-vet-gray-700">
+                        Fecha
+                      </Label>
                       <p className="text-vet-gray-900">
-                        {new Date(selectedRecord.fecha).toLocaleDateString("es-ES")}
+                        {new Date(selectedRecord.fecha).toLocaleDateString(
+                          "es-ES",
+                        )}
                       </p>
                     </div>
                     <div>
-                      <Label className="text-sm font-medium text-vet-gray-700">Veterinario</Label>
-                      <p className="text-vet-gray-900">Dr. {selectedRecord.veterinario}</p>
+                      <Label className="text-sm font-medium text-vet-gray-700">
+                        Veterinario
+                      </Label>
+                      <p className="text-vet-gray-900">
+                        Dr. {selectedRecord.veterinario}
+                      </p>
                     </div>
                     <div>
-                      <Label className="text-sm font-medium text-vet-gray-700">Tipo de Consulta</Label>
-                      <Badge className={getBadgeVariant(selectedRecord.tipoConsulta)}>
+                      <Label className="text-sm font-medium text-vet-gray-700">
+                        Tipo de Consulta
+                      </Label>
+                      <Badge
+                        className={getBadgeVariant(selectedRecord.tipoConsulta)}
+                      >
                         {selectedRecord.tipoConsulta.replace("_", " ")}
                       </Badge>
                     </div>
                     <div>
-                      <Label className="text-sm font-medium text-vet-gray-700">Estado</Label>
-                      <p className="text-vet-gray-900 capitalize">{selectedRecord.estado}</p>
+                      <Label className="text-sm font-medium text-vet-gray-700">
+                        Estado
+                      </Label>
+                      <p className="text-vet-gray-900 capitalize">
+                        {selectedRecord.estado}
+                      </p>
                     </div>
                   </div>
 
                   {/* Reason */}
                   <div>
-                    <Label className="text-sm font-medium text-vet-gray-700">Motivo de la Consulta</Label>
-                    <p className="text-vet-gray-900 mt-1">{selectedRecord.motivo}</p>
+                    <Label className="text-sm font-medium text-vet-gray-700">
+                      Motivo de la Consulta
+                    </Label>
+                    <p className="text-vet-gray-900 mt-1">
+                      {selectedRecord.motivo}
+                    </p>
                   </div>
 
                   {/* Diagnosis */}
                   {selectedRecord.diagnostico && (
                     <div>
-                      <Label className="text-sm font-medium text-vet-gray-700">Diagnóstico</Label>
-                      <p className="text-vet-gray-900 mt-1">{selectedRecord.diagnostico}</p>
+                      <Label className="text-sm font-medium text-vet-gray-700">
+                        Diagnóstico
+                      </Label>
+                      <p className="text-vet-gray-900 mt-1">
+                        {selectedRecord.diagnostico}
+                      </p>
                     </div>
                   )}
 
                   {/* Treatment */}
                   {selectedRecord.tratamiento && (
                     <div>
-                      <Label className="text-sm font-medium text-vet-gray-700">Tratamiento</Label>
-                      <p className="text-vet-gray-900 mt-1">{selectedRecord.tratamiento}</p>
+                      <Label className="text-sm font-medium text-vet-gray-700">
+                        Tratamiento
+                      </Label>
+                      <p className="text-vet-gray-900 mt-1">
+                        {selectedRecord.tratamiento}
+                      </p>
                     </div>
                   )}
 
@@ -1111,85 +1299,135 @@ export default function HistorialClinicoVeterinario() {
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     {selectedRecord.peso && (
                       <div>
-                        <Label className="text-sm font-medium text-vet-gray-700">Peso</Label>
-                        <p className="text-vet-gray-900">{selectedRecord.peso} kg</p>
+                        <Label className="text-sm font-medium text-vet-gray-700">
+                          Peso
+                        </Label>
+                        <p className="text-vet-gray-900">
+                          {selectedRecord.peso} kg
+                        </p>
                       </div>
                     )}
                     {selectedRecord.temperatura && (
                       <div>
-                        <Label className="text-sm font-medium text-vet-gray-700">Temperatura</Label>
-                        <p className="text-vet-gray-900">{selectedRecord.temperatura}°C</p>
+                        <Label className="text-sm font-medium text-vet-gray-700">
+                          Temperatura
+                        </Label>
+                        <p className="text-vet-gray-900">
+                          {selectedRecord.temperatura}°C
+                        </p>
                       </div>
                     )}
                     {selectedRecord.presionArterial && (
                       <div>
-                        <Label className="text-sm font-medium text-vet-gray-700">Presión Arterial</Label>
-                        <p className="text-vet-gray-900">{selectedRecord.presionArterial}</p>
+                        <Label className="text-sm font-medium text-vet-gray-700">
+                          Presión Arterial
+                        </Label>
+                        <p className="text-vet-gray-900">
+                          {selectedRecord.presionArterial}
+                        </p>
                       </div>
                     )}
                     {selectedRecord.frecuenciaCardiaca && (
                       <div>
-                        <Label className="text-sm font-medium text-vet-gray-700">Frecuencia Cardíaca</Label>
-                        <p className="text-vet-gray-900">{selectedRecord.frecuenciaCardiaca} bpm</p>
+                        <Label className="text-sm font-medium text-vet-gray-700">
+                          Frecuencia Cardíaca
+                        </Label>
+                        <p className="text-vet-gray-900">
+                          {selectedRecord.frecuenciaCardiaca} bpm
+                        </p>
                       </div>
                     )}
                   </div>
 
                   {/* Medications */}
-                  {selectedRecord.medicamentos && selectedRecord.medicamentos.length > 0 && (
-                    <div>
-                      <Label className="text-sm font-medium text-vet-gray-700">Medicamentos Recetados</Label>
-                      <div className="mt-2 space-y-2">
-                        {selectedRecord.medicamentos.map((med: any, index: number) => (
-                          <div key={index} className="border border-vet-gray-200 rounded-lg p-3">
-                            <div className="font-medium text-vet-gray-900">{med.nombre}</div>
-                            <div className="text-sm text-vet-gray-600 mt-1">
-                              <span>Dosis: {med.dosis}</span> •{" "}
-                              <span>Frecuencia: {med.frecuencia}</span> •{" "}
-                              <span>Duración: {med.duracion}</span>
-                            </div>
-                            {med.indicaciones && (
-                              <div className="text-sm text-vet-gray-600 mt-1">
-                                <span className="font-medium">Indicaciones:</span> {med.indicaciones}
+                  {selectedRecord.medicamentos &&
+                    selectedRecord.medicamentos.length > 0 && (
+                      <div>
+                        <Label className="text-sm font-medium text-vet-gray-700">
+                          Medicamentos Recetados
+                        </Label>
+                        <div className="mt-2 space-y-2">
+                          {selectedRecord.medicamentos.map(
+                            (med: any, index: number) => (
+                              <div
+                                key={index}
+                                className="border border-vet-gray-200 rounded-lg p-3"
+                              >
+                                <div className="font-medium text-vet-gray-900">
+                                  {med.nombre}
+                                </div>
+                                <div className="text-sm text-vet-gray-600 mt-1">
+                                  <span>Dosis: {med.dosis}</span> •{" "}
+                                  <span>Frecuencia: {med.frecuencia}</span> •{" "}
+                                  <span>Duración: {med.duracion}</span>
+                                </div>
+                                {med.indicaciones && (
+                                  <div className="text-sm text-vet-gray-600 mt-1">
+                                    <span className="font-medium">
+                                      Indicaciones:
+                                    </span>{" "}
+                                    {med.indicaciones}
+                                  </div>
+                                )}
                               </div>
-                            )}
-                          </div>
-                        ))}
+                            ),
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
 
                   {/* Exams */}
-                  {selectedRecord.examenes && selectedRecord.examenes.length > 0 && (
-                    <div>
-                      <Label className="text-sm font-medium text-vet-gray-700">Exámenes Realizados</Label>
-                      <div className="mt-2 space-y-2">
-                        {selectedRecord.examenes.map((exam: any, index: number) => (
-                          <div key={index} className="border border-vet-gray-200 rounded-lg p-3">
-                            <div className="font-medium text-vet-gray-900">{exam.tipo}</div>
-                            <div className="text-sm text-vet-gray-600 mt-1">
-                              <span className="font-medium">Resultado:</span> {exam.resultado}
-                            </div>
-                          </div>
-                        ))}
+                  {selectedRecord.examenes &&
+                    selectedRecord.examenes.length > 0 && (
+                      <div>
+                        <Label className="text-sm font-medium text-vet-gray-700">
+                          Exámenes Realizados
+                        </Label>
+                        <div className="mt-2 space-y-2">
+                          {selectedRecord.examenes.map(
+                            (exam: any, index: number) => (
+                              <div
+                                key={index}
+                                className="border border-vet-gray-200 rounded-lg p-3"
+                              >
+                                <div className="font-medium text-vet-gray-900">
+                                  {exam.tipo}
+                                </div>
+                                <div className="text-sm text-vet-gray-600 mt-1">
+                                  <span className="font-medium">
+                                    Resultado:
+                                  </span>{" "}
+                                  {exam.resultado}
+                                </div>
+                              </div>
+                            ),
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
 
                   {/* Observations */}
                   {selectedRecord.observaciones && (
                     <div>
-                      <Label className="text-sm font-medium text-vet-gray-700">Observaciones</Label>
-                      <p className="text-vet-gray-900 mt-1">{selectedRecord.observaciones}</p>
+                      <Label className="text-sm font-medium text-vet-gray-700">
+                        Observaciones
+                      </Label>
+                      <p className="text-vet-gray-900 mt-1">
+                        {selectedRecord.observaciones}
+                      </p>
                     </div>
                   )}
 
                   {/* Next visit */}
                   {selectedRecord.proximaVisita && (
                     <div>
-                      <Label className="text-sm font-medium text-vet-gray-700">Próxima Visita</Label>
+                      <Label className="text-sm font-medium text-vet-gray-700">
+                        Próxima Visita
+                      </Label>
                       <p className="text-vet-gray-900 mt-1">
-                        {new Date(selectedRecord.proximaVisita).toLocaleDateString("es-ES")}
+                        {new Date(
+                          selectedRecord.proximaVisita,
+                        ).toLocaleDateString("es-ES")}
                       </p>
                     </div>
                   )}

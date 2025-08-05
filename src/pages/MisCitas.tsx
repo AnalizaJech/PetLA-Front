@@ -502,12 +502,18 @@ export default function MisCitas() {
                                   </Button>
                                 )}
                                 {cita.estado === "atendida" && (
-                                  <Button variant="outline" className="w-full sm:w-auto">
+                                  <Button
+                                    variant="outline"
+                                    className="w-full sm:w-auto"
+                                  >
                                     <FileText className="w-4 h-4 mr-2" />
                                     Ver Historial
                                   </Button>
                                 )}
-                                <Button variant="outline" className="w-full sm:w-auto">
+                                <Button
+                                  variant="outline"
+                                  className="w-full sm:w-auto"
+                                >
                                   <User className="w-4 h-4 mr-2" />
                                   Info Paciente
                                 </Button>
@@ -549,13 +555,19 @@ export default function MisCitas() {
                                   </Button>
                                 )}
                                 {cita.estado === "atendida" && (
-                                  <Button variant="outline" className="w-full sm:w-auto">
+                                  <Button
+                                    variant="outline"
+                                    className="w-full sm:w-auto"
+                                  >
                                     <FileText className="w-4 h-4 mr-2" />
                                     Ver Reporte
                                   </Button>
                                 )}
                                 {cita.estado === "aceptada" && (
-                                  <Button variant="outline" className="w-full sm:w-auto">
+                                  <Button
+                                    variant="outline"
+                                    className="w-full sm:w-auto"
+                                  >
                                     <Phone className="w-4 h-4 mr-2" />
                                     Contactar
                                   </Button>

@@ -151,18 +151,28 @@ export default function CitaDetailModal({
                     </Label>
                     <p className="text-vet-gray-900">
                       {(() => {
-                        const birthDate = new Date(selectedCita.mascota.fechaNacimiento);
+                        const birthDate = new Date(
+                          selectedCita.mascota.fechaNacimiento,
+                        );
                         const today = new Date();
-                        const ageInYears = Math.floor((today.getTime() - birthDate.getTime()) / (365.25 * 24 * 60 * 60 * 1000));
-                        const ageInMonths = Math.floor((today.getTime() - birthDate.getTime()) / (30.44 * 24 * 60 * 60 * 1000));
+                        const ageInYears = Math.floor(
+                          (today.getTime() - birthDate.getTime()) /
+                            (365.25 * 24 * 60 * 60 * 1000),
+                        );
+                        const ageInMonths = Math.floor(
+                          (today.getTime() - birthDate.getTime()) /
+                            (30.44 * 24 * 60 * 60 * 1000),
+                        );
 
                         if (ageInYears >= 2) {
                           return `${ageInYears} años`;
                         } else if (ageInYears === 1) {
                           const extraMonths = ageInMonths - 12;
-                          return extraMonths > 0 ? `1 año ${extraMonths} mes${extraMonths > 1 ? 'es' : ''}` : '1 año';
+                          return extraMonths > 0
+                            ? `1 año ${extraMonths} mes${extraMonths > 1 ? "es" : ""}`
+                            : "1 año";
                         } else {
-                          return `${ageInMonths} mes${ageInMonths > 1 ? 'es' : ''}`;
+                          return `${ageInMonths} mes${ageInMonths > 1 ? "es" : ""}`;
                         }
                       })()}
                     </p>
@@ -320,10 +330,11 @@ export default function CitaDetailModal({
                     Tipo de Consulta
                   </Label>
                   <p className="text-vet-gray-900 font-medium">
-                    {selectedCita.cita.tipoConsulta ?
-                      selectedCita.cita.tipoConsulta.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) :
-                      'Consulta General'
-                    }
+                    {selectedCita.cita.tipoConsulta
+                      ? selectedCita.cita.tipoConsulta
+                          .replace("_", " ")
+                          .replace(/\b\w/g, (l) => l.toUpperCase())
+                      : "Consulta General"}
                   </p>
                 </div>
                 <div>
@@ -331,7 +342,7 @@ export default function CitaDetailModal({
                     Ubicación
                   </Label>
                   <p className="text-vet-gray-900">
-                    {selectedCita.cita.ubicacion || 'Clínica'}
+                    {selectedCita.cita.ubicacion || "Clínica"}
                   </p>
                 </div>
                 <div>
@@ -339,7 +350,10 @@ export default function CitaDetailModal({
                     Precio del Servicio
                   </Label>
                   <p className="text-vet-gray-900 font-semibold text-lg">
-                    S/. {selectedCita.cita.precio ? selectedCita.cita.precio.toLocaleString() : '0'}
+                    S/.{" "}
+                    {selectedCita.cita.precio
+                      ? selectedCita.cita.precio.toLocaleString()
+                      : "0"}
                   </p>
                 </div>
               </div>
@@ -362,20 +376,20 @@ export default function CitaDetailModal({
                   <p className="text-blue-900 text-sm">
                     {(() => {
                       switch (selectedCita.cita.tipoConsulta) {
-                        case 'consulta_general':
-                          return 'Revisión médica completa, evaluación del estado general de salud, revisión de signos vitales y recomendaciones preventivas.';
-                        case 'vacunacion':
-                          return 'Aplicación de vacunas según el esquema de vacunación apropiado para la edad y especie de la mascota.';
-                        case 'emergencia':
-                          return 'Atención médica urgente para casos que requieren intervención inmediata para preservar la salud del animal.';
-                        case 'grooming':
-                          return 'Servicios de higiene y estética que incluyen baño, corte de pelo, limpieza de oídos y corte de uñas.';
-                        case 'cirugia':
-                          return 'Procedimiento quirúrgico especializado realizado en instalaciones equipadas con la tecnología necesaria.';
-                        case 'diagnostico':
-                          return 'Estudios y análisis especializados para determinar el diagnóstico correcto mediante pruebas específicas.';
+                        case "consulta_general":
+                          return "Revisión médica completa, evaluación del estado general de salud, revisión de signos vitales y recomendaciones preventivas.";
+                        case "vacunacion":
+                          return "Aplicación de vacunas según el esquema de vacunación apropiado para la edad y especie de la mascota.";
+                        case "emergencia":
+                          return "Atención médica urgente para casos que requieren intervención inmediata para preservar la salud del animal.";
+                        case "grooming":
+                          return "Servicios de higiene y estética que incluyen baño, corte de pelo, limpieza de oídos y corte de uñas.";
+                        case "cirugia":
+                          return "Procedimiento quirúrgico especializado realizado en instalaciones equipadas con la tecnología necesaria.";
+                        case "diagnostico":
+                          return "Estudios y análisis especializados para determinar el diagnóstico correcto mediante pruebas específicas.";
                         default:
-                          return 'Servicio veterinario profesional adaptado a las necesidades específicas de su mascota.';
+                          return "Servicio veterinario profesional adaptado a las necesidades específicas de su mascota.";
                       }
                     })()}
                   </p>
@@ -420,7 +434,6 @@ export default function CitaDetailModal({
                 Atender Cita
               </Button>
             )}
-
           </div>
         </div>
       </DialogContent>
