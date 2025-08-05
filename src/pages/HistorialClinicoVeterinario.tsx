@@ -96,6 +96,9 @@ export default function HistorialClinicoVeterinario() {
   const [selectedMascota, setSelectedMascota] = useState(
     searchParams.get("mascota") || "",
   );
+  const [selectedPetByName, setSelectedPetByName] = useState(
+    searchParams.get("nombre") || "",
+  );
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedOwner, setSelectedOwner] = useState("todos");
   const [filterType, setFilterType] = useState("todos");
