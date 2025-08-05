@@ -77,6 +77,10 @@ export default function HistorialClinicoVeterinario() {
     historialClinico,
     getHistorialByMascota,
     updateCita,
+    validateDataRelationships,
+    getCitaWithRelations,
+    getMascotaWithOwner,
+    repairDataIntegrity,
   } = useAppContext();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
