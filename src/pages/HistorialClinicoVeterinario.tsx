@@ -302,9 +302,22 @@ export default function HistorialClinicoVeterinario() {
   const clienteSeleccionado = mascotaSeleccionada
     ? usuarios.find((u) => u.id === mascotaSeleccionada.clienteId)
     : null;
-  const historialMascota = mascotaSeleccionada
-    ? getHistorialByMascota(mascotaSeleccionada.id)
-    : [];
+  // Get clinical history for selected pet, including by name if pet is not registered
+  const historialMascota = useMemo(() => {
+    if (mascotaSeleccionada) {
+      return getHistorialByMascota(mascotaSeleccionada.id);
+    }
+
+    // Fallback: search clinical history by pet name if pet is not registered
+    const nombreBuscado = searchParams.get("nombre");
+    if (nombreBuscado) {
+      return historialClinico.filter(entry =>
+        entry.mascotaNombre.toLowerCase() === nombreBuscado.toLowerCase()
+      );
+    }
+
+    return [];
+  }, [mascotaSeleccionada, searchParams, historialClinico, getHistorialByMascota]);
 
   // Debug: verificar mascota seleccionada y su historial
   console.log("HistorialClinicoVeterinario - Mascota seleccionada:", {
@@ -485,7 +498,7 @@ export default function HistorialClinicoVeterinario() {
                       )}
                       {dataValidation.incompleteCitas.length > 0 && (
                         <div className="text-xs text-blue-600 bg-blue-50 p-2 rounded border">
-                          🔗 {dataValidation.incompleteCitas.length} citas con
+                          �� {dataValidation.incompleteCitas.length} citas con
                           información incompleta
                         </div>
                       )}
