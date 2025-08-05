@@ -785,51 +785,8 @@ export default function MisPacientes() {
             </CardContent>
           </Card>
 
-          <Tabs
-            value={selectedTab}
-            onValueChange={setSelectedTab}
-            className="space-y-4 sm:space-y-6"
-          >
-            <TabsList className="grid w-full grid-cols-3 md:grid-cols-6 h-auto">
-              <TabsTrigger
-                value="proximas"
-                className="text-xs sm:text-sm p-2 sm:p-3"
-              >
-                Próximas
-              </TabsTrigger>
-              <TabsTrigger
-                value="hoy"
-                className="text-xs sm:text-sm p-2 sm:p-3"
-              >
-                Hoy
-              </TabsTrigger>
-              <TabsTrigger
-                value="pendientes"
-                className="text-xs sm:text-sm p-2 sm:p-3"
-              >
-                Pendientes
-              </TabsTrigger>
-              <TabsTrigger
-                value="urgentes"
-                className="text-xs sm:text-sm p-2 sm:p-3"
-              >
-                Urgentes
-              </TabsTrigger>
-              <TabsTrigger
-                value="completadas"
-                className="text-xs sm:text-sm p-2 sm:p-3"
-              >
-                Completadas
-              </TabsTrigger>
-              <TabsTrigger
-                value="todas"
-                className="text-xs sm:text-sm p-2 sm:p-3"
-              >
-                Todas
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value={selectedTab} className="space-y-4">
+          {/* Lista de citas */}
+          <div className="space-y-4">
               {filteredCitas.length === 0 ? (
                 <Card>
                   <CardContent className="p-12 text-center">
@@ -1065,8 +1022,7 @@ export default function MisPacientes() {
                   );
                 })
               )}
-            </TabsContent>
-          </Tabs>
+          </div>
 
           {/* Modales reutilizables */}
           <CitaDetailModal
