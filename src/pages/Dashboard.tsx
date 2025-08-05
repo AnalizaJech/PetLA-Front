@@ -561,14 +561,14 @@ function AdminDashboard({
         <Card className="border-l-4 border-l-blue-500">
           <CardContent className="p-4 sm:p-6">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-100 rounded-xl flex items-center justify-center">
-                <Stethoscope className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600" />
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                <Stethoscope className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
               </div>
               <div>
                 <p className="text-xs sm:text-sm text-vet-gray-600">
                   Veterinarios
                 </p>
-                <p className="text-2xl sm:text-3xl font-bold text-gray-600">
+                <p className="text-2xl sm:text-3xl font-bold text-blue-600">
                   {adminStats.veterinarios}
                 </p>
               </div>
@@ -739,7 +739,7 @@ function AdminDashboard({
                                 ? "bg-orange-100"
                                 : activity.color === "purple"
                                   ? "bg-purple-100"
-                                  : "bg-gray-100"
+                                  : "bg-indigo-100"
                         }`}
                       >
                         {activity.icon === "CheckCircle" && (
@@ -747,7 +747,7 @@ function AdminDashboard({
                             className={`w-4 h-4 ${
                               activity.color === "green"
                                 ? "text-green-600"
-                                : "text-gray-600"
+                                : "text-indigo-600"
                             }`}
                           />
                         )}
@@ -756,7 +756,7 @@ function AdminDashboard({
                             className={`w-4 h-4 ${
                               activity.color === "blue"
                                 ? "text-blue-600"
-                                : "text-gray-600"
+                                : "text-indigo-600"
                             }`}
                           />
                         )}
@@ -765,7 +765,7 @@ function AdminDashboard({
                             className={`w-4 h-4 ${
                               activity.color === "orange"
                                 ? "text-orange-600"
-                                : "text-gray-600"
+                                : "text-indigo-600"
                             }`}
                           />
                         )}
@@ -774,7 +774,7 @@ function AdminDashboard({
                             className={`w-4 h-4 ${
                               activity.color === "purple"
                                 ? "text-purple-600"
-                                : "text-gray-600"
+                                : "text-indigo-600"
                             }`}
                           />
                         )}
