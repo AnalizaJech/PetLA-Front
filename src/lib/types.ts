@@ -5,8 +5,13 @@ export type UserRole = "cliente" | "veterinario" | "admin";
 export interface User {
   id: string;
   nombre: string;
+  apellidos?: string;
+  username?: string;
   email: string;
   telefono?: string;
+  direccion?: string;
+  fechaNacimiento?: Date;
+  genero?: string;
   rol: UserRole;
   emailVerificado: boolean;
   fechaCreacion: Date;
@@ -119,14 +124,19 @@ export interface PreCitaFormData {
 }
 
 export interface LoginFormData {
-  email: string;
+  identifier: string; // email, phone, or username
   password: string;
 }
 
 export interface RegistroClienteFormData {
   nombre: string;
+  apellidos: string;
+  username: string;
   email: string;
   telefono: string;
+  direccion?: string;
+  fechaNacimiento?: string;
+  genero?: string;
   password: string;
   confirmPassword: string;
 }
