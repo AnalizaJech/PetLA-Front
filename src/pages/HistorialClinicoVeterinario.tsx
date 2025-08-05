@@ -484,24 +484,15 @@ export default function HistorialClinicoVeterinario() {
                 </div>
               </div>
               
-              <div className="flex space-x-2">
+              {currentView === "history" && selectedPet && historialMascota.length > 0 && (
                 <Button
-                  onClick={() => navigate("/mis-pacientes")}
-                  variant="outline"
+                  onClick={downloadHistorialPDF}
+                  className="bg-vet-primary hover:bg-vet-primary-dark"
                 >
-                  <UserCheck className="w-4 h-4 mr-2" />
-                  Mis Pacientes
+                  <Download className="w-4 h-4 mr-2" />
+                  Descargar PDF
                 </Button>
-                {currentView === "history" && selectedPet && historialMascota.length > 0 && (
-                  <Button
-                    onClick={downloadHistorialPDF}
-                    className="bg-vet-primary hover:bg-vet-primary-dark"
-                  >
-                    <Download className="w-4 h-4 mr-2" />
-                    Descargar PDF
-                  </Button>
-                )}
-              </div>
+              )}
             </div>
           </div>
 
