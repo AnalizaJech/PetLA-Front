@@ -457,19 +457,36 @@ export default function HistorialClinicoVeterinario() {
                     Selecciona una mascota para ver su historial
                   </CardDescription>
 
-                  {/* Alertas sobre problemas de datos */}
-                  {(mascotasSinPropietario.length > 0 || mascotasFantasma.length > 0) && (
+                  {/* Enhanced alerts about data problems */}
+                  {dataValidation.totalIssues > 0 && (
                     <div className="space-y-2">
-                      {mascotasSinPropietario.length > 0 && (
+                      {dataValidation.orphanedPets.length > 0 && (
                         <div className="text-xs text-yellow-600 bg-yellow-50 p-2 rounded border">
-                          ⚠️ {mascotasSinPropietario.length} mascotas sin propietario válido
+                          ⚠️ {dataValidation.orphanedPets.length} mascotas sin propietario válido
                         </div>
                       )}
-                      {mascotasFantasma.length > 0 && (
+                      {dataValidation.ghostPets.length > 0 && (
                         <div className="text-xs text-orange-600 bg-orange-50 p-2 rounded border">
-                          👻 {mascotasFantasma.length} mascotas en citas pero no registradas
+                          👻 {dataValidation.ghostPets.length} mascotas en citas pero no registradas
                         </div>
                       )}
+                      {dataValidation.incompleteCitas.length > 0 && (
+                        <div className="text-xs text-blue-600 bg-blue-50 p-2 rounded border">
+                          🔗 {dataValidation.incompleteCitas.length} citas con información incompleta
+                        </div>
+                      )}
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => {
+                          const { repairDataIntegrity } = useAppContext();
+                          const result = repairDataIntegrity();
+                          console.log('Data repair result:', result);
+                        }}
+                        className="w-full text-xs mt-2"
+                      >
+                        🔧 Reparar Datos
+                      </Button>
                     </div>
                   )}
                 </CardHeader>
