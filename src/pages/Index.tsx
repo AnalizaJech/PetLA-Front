@@ -118,7 +118,10 @@ export default function Index() {
         nombreMascota: formData.nombreMascota,
         tipoMascota: formData.tipoMascota,
         motivoConsulta: formData.motivoConsulta,
-        fechaPreferida: new Date(formData.fechaPreferida),
+        fechaPreferida: (() => {
+          const [year, month, day] = formData.fechaPreferida.split('-').map(Number);
+          return new Date(year, month - 1, day);
+        })(),
         horaPreferida: formData.horaPreferida,
       });
 
