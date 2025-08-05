@@ -407,11 +407,11 @@ export default function MisCitas() {
                               <img
                                 src={mascota.foto}
                                 alt={cita.mascota}
-                                className="w-12 h-12 rounded-full object-cover border-2 border-vet-primary/20"
+                                className="w-16 h-16 rounded-full object-cover border-2 border-vet-primary/20"
                               />
                             ) : (
-                              <div className="w-12 h-12 bg-vet-primary/10 rounded-full flex items-center justify-center">
-                                <PawPrint className="w-6 h-6 text-vet-primary" />
+                              <div className="w-16 h-16 bg-vet-primary/10 rounded-full flex items-center justify-center">
+                                <PawPrint className="w-8 h-8 text-vet-primary" />
                               </div>
                             );
                           })()}
