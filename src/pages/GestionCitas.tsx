@@ -477,7 +477,7 @@ export default function GestionCitas() {
                       <SelectItem value="atendida">Atendida</SelectItem>
                       <SelectItem value="cancelada">Cancelada</SelectItem>
                       <SelectItem value="rechazada">Rechazada</SelectItem>
-                      <SelectItem value="no_asistio">No Asisti��</SelectItem>
+                      <SelectItem value="no_asistio">No Asistió</SelectItem>
                     </SelectContent>
                   </Select>
                   <Input

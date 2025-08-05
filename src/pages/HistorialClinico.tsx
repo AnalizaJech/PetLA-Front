@@ -482,7 +482,7 @@ export default function HistorialClinico() {
         diagnostico: [],
       };
 
-  // Funci��n para descargar el historial clínico en formato texto
+  // Función para descargar el historial clínico en formato texto
   const descargarHistorial = () => {
     if (!selectedMascota) return;
 
@@ -573,7 +573,7 @@ export default function HistorialClinico() {
         contenido += `\n${"·".repeat(40)}\n`;
       });
     } else {
-      contenido += `EX��MENES Y LABORATORIOS\n`;
+      contenido += `EXÁMENES Y LABORATORIOS\n`;
       contenido += `-`.repeat(30) + `\n`;
       contenido += `No hay exámenes registrados.\n\n`;
     }
@@ -737,7 +737,7 @@ export default function HistorialClinico() {
     const wsMascota = XLSX.utils.aoa_to_sheet(mascotaData);
     XLSX.utils.book_append_sheet(wb, wsMascota, "Información");
 
-    // Hoja 2: Consultas m��dicas
+    // Hoja 2: Consultas médicas
     if (historialMascota.consultas.length > 0) {
       const consultasData = [
         ["CONSULTAS MÉDICAS"],
@@ -1117,7 +1117,7 @@ export default function HistorialClinico() {
                                         </span>
                                       </div>
                                       <p className="text-sm text-vet-gray-600">
-                                        {med.dosis} �� {med.duracion}
+                                        {med.dosis} • {med.duracion}
                                       </p>
                                     </div>
                                   ))}

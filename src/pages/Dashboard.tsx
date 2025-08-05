@@ -447,7 +447,7 @@ function AdminDashboard({
         time:
           hoursAgo < 24
             ? `Hace ${hoursAgo} horas`
-            : `Hace ${Math.floor(hoursAgo / 24)} d��as`,
+            : `Hace ${Math.floor(hoursAgo / 24)} días`,
         icon: "CheckCircle",
         color: "green",
         timestamp: timestamp,
@@ -966,7 +966,7 @@ function ClientDashboard({ stats }: { stats: any }) {
               <span>Gestión de Mascotas</span>
             </CardTitle>
             <CardDescription>
-              Administra la información de tus compa��eros peludos
+              Administra la información de tus compañeros peludos
             </CardDescription>
           </CardHeader>
           <CardContent className="grid grid-cols-2 gap-4">
