@@ -8,12 +8,14 @@ interface AuthLayoutProps {
 
 export default function AuthLayout({ children }: AuthLayoutProps) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-vet-gray-50 to-vet-gray-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-vet-gray-50 via-white to-vet-gray-100 flex items-center justify-center p-4 lg:p-8">
       {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 left-20 w-40 h-40 bg-vet-primary/10 rounded-full blur-xl"></div>
-        <div className="absolute bottom-20 right-20 w-60 h-60 bg-vet-secondary/10 rounded-full blur-xl"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-green-500/5 rounded-full blur-2xl"></div>
+        <div className="absolute top-20 left-20 w-40 h-40 bg-vet-primary/10 rounded-full blur-xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-20 w-60 h-60 bg-vet-secondary/10 rounded-full blur-xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-green-500/5 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-1/4 right-1/4 w-32 h-32 bg-vet-primary/5 rounded-full blur-lg animate-pulse" style={{ animationDelay: '0.5s' }}></div>
+        <div className="absolute bottom-1/4 left-1/4 w-48 h-48 bg-vet-secondary/5 rounded-full blur-xl animate-pulse" style={{ animationDelay: '1.5s' }}></div>
       </div>
 
       {/* Content */}
