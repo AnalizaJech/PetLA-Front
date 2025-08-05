@@ -210,6 +210,11 @@ interface AppContextType {
   updateMascota: (id: string, updates: Partial<Mascota>) => void;
   deleteMascota: (id: string) => void;
   fixOrphanedPets: () => void;
+  repairDataIntegrity: () => {
+    repairedPets: number;
+    createdPets: number;
+    errors: string[];
+  };
 
   // Citas state
   citas: Cita[];
@@ -923,6 +928,104 @@ export function AppProvider({ children }: { children: ReactNode }) {
     );
   };
 
+  // Comprehensive data integrity repair function
+  const repairDataIntegrity = () => {
+    let repairedPets = 0;
+    let createdPets = 0;
+    const errors: string[] = [];
+
+    try {
+      // Step 1: Find pets without valid owners and assign them to available clients
+      const clientesDisponibles = usuarios.filter(u => u.rol === 'cliente');
+
+      setMascotas((prevMascotas) => {
+        return prevMascotas.map((mascota) => {
+          const propietarioActual = usuarios.find(u => u.id === mascota.clienteId && u.rol === 'cliente');
+
+          if (!propietarioActual) {
+            if (clientesDisponibles.length > 0) {
+              // Find the best match based on existing pets of same species
+              let mejorCliente = clientesDisponibles.find(cliente => {
+                return prevMascotas.some(m =>
+                  m.clienteId === cliente.id &&
+                  m.especie === mascota.especie &&
+                  m.id !== mascota.id
+                );
+              });
+
+              // If no perfect match, assign to first available client
+              if (!mejorCliente) {
+                mejorCliente = clientesDisponibles[0];
+              }
+
+              repairedPets++;
+              console.log(`✅ Mascota "${mascota.nombre}" asignada a ${mejorCliente.nombre}`);
+
+              return { ...mascota, clienteId: mejorCliente.id };
+            } else {
+              errors.push(`No se pudo asignar propietario a mascota "${mascota.nombre}" - no hay clientes disponibles`);
+            }
+          }
+
+          return mascota;
+        });
+      });
+
+      // Step 2: Create missing pets for existing appointments
+      const mascotasEnCitas = new Set(citas.map(c => c.mascota));
+      const mascotasRegistradas = new Set(mascotas.map(m => m.nombre));
+
+      mascotasEnCitas.forEach(nombreMascota => {
+        if (!mascotasRegistradas.has(nombreMascota)) {
+          // Find the most recent appointment to get pet details
+          const citaReciente = citas
+            .filter(c => c.mascota === nombreMascota)
+            .sort((a, b) => b.fecha.getTime() - a.fecha.getTime())[0];
+
+          if (citaReciente && clientesDisponibles.length > 0) {
+            // Create the missing pet
+            const nuevaMascota: Mascota = {
+              id: `repair-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+              nombre: nombreMascota,
+              especie: citaReciente.especie || 'No especificado',
+              raza: 'Por determinar',
+              sexo: 'No especificado',
+              fechaNacimiento: new Date(2020, 0, 1), // Default date
+              peso: undefined,
+              microchip: undefined,
+              estado: 'Activo',
+              clienteId: clientesDisponibles[0].id, // Assign to first available client
+              proximaCita: citaReciente.fecha > new Date() ? citaReciente.fecha : null,
+              ultimaVacuna: null,
+              foto: null
+            };
+
+            setMascotas(prev => [...prev, nuevaMascota]);
+            createdPets++;
+            console.log(`➕ Mascota creada: "${nombreMascota}" asignada a ${clientesDisponibles[0].nombre}`);
+          } else {
+            errors.push(`No se pudo crear mascota "${nombreMascota}" - no hay clientes disponibles`);
+          }
+        }
+      });
+
+      // Step 3: Update appointment references if needed
+      // This would involve checking if pet names in appointments match registered pets
+
+      console.log(`🔧 Reparación completada: ${repairedPets} mascotas reparadas, ${createdPets} mascotas creadas`);
+
+      if (errors.length > 0) {
+        console.warn('⚠️ Errores durante la reparación:', errors);
+      }
+
+    } catch (error) {
+      console.error('❌ Error durante la reparación de datos:', error);
+      errors.push(`Error general: ${error instanceof Error ? error.message : 'Error desconocido'}`);
+    }
+
+    return { repairedPets, createdPets, errors };
+  };
+
   // Mascota functions
   const addMascota = (
     mascotaData: Omit<
@@ -1342,6 +1445,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     updateMascota,
     deleteMascota,
     fixOrphanedPets,
+    repairDataIntegrity,
     citas,
     addCita,
     updateCita,
