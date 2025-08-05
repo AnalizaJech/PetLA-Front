@@ -749,11 +749,34 @@ export default function HistorialClinicoVeterinario() {
                   <CardContent className="p-12 text-center">
                     <FileText className="w-16 h-16 text-vet-gray-400 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold text-vet-gray-900 mb-2">
-                      No hay registros
+                      No hay registros médicos
                     </h3>
-                    <p className="text-vet-gray-600">
-                      No se encontraron registros médicos para los filtros aplicados
+                    <p className="text-vet-gray-600 mb-4">
+                      No se encontraron registros médicos para esta mascota
                     </p>
+
+                    {/* Debug information */}
+                    <div className="text-left bg-blue-50 p-4 rounded-lg">
+                      <h4 className="font-medium text-blue-900 mb-2">Información de depuración:</h4>
+                      <div className="text-sm text-blue-800 space-y-1">
+                        <p><strong>Mascota ID:</strong> {selectedPet?.id}</p>
+                        <p><strong>Nombre:</strong> {selectedPet?.nombre}</p>
+                        <p><strong>Total de registros en sistema:</strong> {historialClinico.length}</p>
+                        <p><strong>Registros encontrados para esta mascota:</strong> {historialMascota.length}</p>
+                        <p><strong>Registros después de filtros:</strong> {filteredHistory.length}</p>
+
+                        {historialClinico.length > 0 && (
+                          <div className="mt-2">
+                            <p><strong>Ejemplos de mascotaId en sistema:</strong></p>
+                            <ul className="list-disc ml-4">
+                              {historialClinico.slice(0, 3).map((record, i) => (
+                                <li key={i}>ID: {record.mascotaId}, Nombre: {record.mascotaNombre}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
               ) : (
