@@ -20,6 +20,7 @@ import {
   Clock,
   AlertCircle,
   Info,
+  CheckCircle,
 } from "lucide-react";
 import type { CitaRelationData } from "@/lib/citaUtils";
 
