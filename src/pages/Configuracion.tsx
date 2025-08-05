@@ -39,6 +39,10 @@ import {
   Info,
   Stethoscope,
   DollarSign,
+  Camera,
+  Upload,
+  X,
+  ImageIcon,
 } from "lucide-react";
 
 export default function Configuracion() {
@@ -127,7 +131,13 @@ export default function Configuracion() {
     telefono: user?.telefono || "",
     direccion: loadSettings("user_direccion", ""),
     bio: loadSettings("user_bio", ""),
+    foto: user?.foto || null,
   });
+
+  // Photo management state
+  const [photoFile, setPhotoFile] = useState<File | null>(null);
+  const [photoPreviewURL, setPhotoPreviewURL] = useState<string | null>(null);
+  const [showPhotoModal, setShowPhotoModal] = useState(false);
 
   // Notifications settings
   const [notificationSettings, setNotificationSettings] = useState(
@@ -177,6 +187,7 @@ export default function Configuracion() {
         nombre: user.nombre || "",
         email: user.email || "",
         telefono: user.telefono || "",
+        foto: user.foto || null,
       }));
     }
   }, [user]);
@@ -220,6 +231,7 @@ export default function Configuracion() {
           nombre: profileData.nombre.trim(),
           email: profileData.email.trim(),
           telefono: profileData.telefono.trim(),
+          foto: profileData.foto,
         };
 
         // Update in usuarios array
@@ -502,6 +514,40 @@ export default function Configuracion() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4 sm:space-y-6 p-4 sm:p-6">
+                  {/* Photo Section */}
+                  <div className="flex flex-col items-center space-y-4 mb-6">
+                    <div className="relative">
+                      <div
+                        className="w-24 h-24 bg-vet-primary/10 rounded-full flex items-center justify-center cursor-pointer overflow-hidden group hover:bg-vet-primary/20 transition-colors"
+                        onClick={() => setShowPhotoModal(true)}
+                      >
+                        {profileData.foto ? (
+                          <>
+                            <img
+                              src={profileData.foto}
+                              alt={`Foto de ${profileData.nombre}`}
+                              className="w-full h-full object-cover rounded-full"
+                            />
+                            <div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                              <Camera className="w-6 h-6 text-white" />
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <User className="w-12 h-12 text-vet-primary" />
+                            <div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                              <Camera className="w-6 h-6 text-white" />
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    <div className="text-center">
+                      <h4 className="text-sm font-medium text-vet-gray-900">Foto de perfil</h4>
+                      <p className="text-xs text-vet-gray-600">Haz clic para cambiar tu foto</p>
+                    </div>
+                  </div>
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                     <div className="space-y-2">
                       <Label htmlFor="nombre">Nombre completo</Label>
@@ -963,46 +1009,6 @@ export default function Configuracion() {
                       Configuración adicional de seguridad
                     </h3>
 
-                    <div className="flex items-center justify-between p-4 border border-vet-gray-200 rounded-lg">
-                      <div>
-                        <h4 className="font-medium text-vet-gray-900">
-                          Autenticación de dos factores
-                        </h4>
-                        <p className="text-sm text-vet-gray-600">
-                          Añade una capa extra de seguridad a tu cuenta
-                        </p>
-                      </div>
-                      <Switch
-                        checked={securityData.twoFactorEnabled}
-                        onCheckedChange={(checked) =>
-                          setSecurityData({
-                            ...securityData,
-                            twoFactorEnabled: checked,
-                          })
-                        }
-                      />
-                    </div>
-
-                    <div className="flex items-center justify-between p-4 border border-vet-gray-200 rounded-lg">
-                      <div>
-                        <h4 className="font-medium text-vet-gray-900">
-                          Alertas de inicio de sesión
-                        </h4>
-                        <p className="text-sm text-vet-gray-600">
-                          Recibe notificaciones cuando alguien acceda a tu
-                          cuenta
-                        </p>
-                      </div>
-                      <Switch
-                        checked={securityData.loginAlerts}
-                        onCheckedChange={(checked) =>
-                          setSecurityData({
-                            ...securityData,
-                            loginAlerts: checked,
-                          })
-                        }
-                      />
-                    </div>
 
                     <div className="space-y-2">
                       <Label htmlFor="sessionTimeout">
@@ -1046,9 +1052,9 @@ export default function Configuracion() {
                               • Usa una contraseña fuerte con al menos 8
                               caracteres
                             </li>
-                            <li>• Habilita la autenticación de dos factores</li>
                             <li>• No compartas tu contraseña con nadie</li>
                             <li>• Cierra sesión en dispositivos compartidos</li>
+                            <li>• Actualiza tu contraseña regularmente</li>
                           </ul>
                         </div>
                       </div>
