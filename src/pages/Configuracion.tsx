@@ -1043,7 +1043,7 @@ export default function Configuracion() {
                           </p>
                           <ul className="mt-1 space-y-1 text-xs">
                             <li>
-                              • Usa una contrase��a fuerte con al menos 8
+                              • Usa una contraseña fuerte con al menos 8
                               caracteres
                             </li>
                             <li>• Habilita la autenticación de dos factores</li>

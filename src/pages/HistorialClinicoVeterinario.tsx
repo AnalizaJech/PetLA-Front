@@ -886,7 +886,7 @@ export default function HistorialClinicoVeterinario() {
                               <div className="text-sm text-vet-gray-600 mt-1">
                                 <span>Dosis: {med.dosis}</span> •
                                 <span> Frecuencia: {med.frecuencia}</span> •
-                                <span> Duraci��n: {med.duracion}</span>
+                                <span> Duración: {med.duracion}</span>
                               </div>
                               {med.indicaciones && (
                                 <div className="text-sm text-vet-gray-600 mt-1">
