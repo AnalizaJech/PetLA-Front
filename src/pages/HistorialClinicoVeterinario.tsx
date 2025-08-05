@@ -824,10 +824,17 @@ export default function HistorialClinicoVeterinario() {
                         </div>
                         <div className="flex space-x-2">
                           <Button
+                            onClick={() => navigate("/mis-pacientes")}
+                            variant="outline"
+                          >
+                            <ChevronRight className="w-4 h-4 mr-2 rotate-180" />
+                            Volver a Pacientes
+                          </Button>
+                          <Button
                             onClick={() => handleAttendAppointment(null)}
                             className="bg-vet-primary hover:bg-vet-primary-dark"
                           >
-                            <UserCheck className="w-4 h-4 mr-2" />
+                            <Plus className="w-4 h-4 mr-2" />
                             Nueva Consulta
                           </Button>
                         </div>
