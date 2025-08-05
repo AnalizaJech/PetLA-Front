@@ -123,36 +123,96 @@ export default function HistorialClinicoVeterinario() {
     );
   }
 
-  // Obtener mascotas de mis pacientes con validación mejorada
-  const misCitas = citas.filter((cita) => cita.veterinario === user.nombre);
+  // Enhanced data retrieval with better relationship management
+  const {
+    validateDataRelationships,
+    getCitaWithRelations,
+    getMascotaWithOwner,
+  } = useAppContext();
 
-  // Encontrar mascotas relacionadas con mis citas (más tolerante)
-  const misMascotas = mascotas.filter((mascota) => {
-    return misCitas.some((cita) => {
-      // Búsqueda exacta
-      if (cita.mascota === mascota.nombre) return true;
-      // Búsqueda case-insensitive
-      if (cita.mascota.toLowerCase() === mascota.nombre.toLowerCase()) return true;
-      // Búsqueda parcial
-      return cita.mascota.toLowerCase().includes(mascota.nombre.toLowerCase()) ||
-             mascota.nombre.toLowerCase().includes(cita.mascota.toLowerCase());
+  // Get my appointments as veterinarian
+  const misCitas = useMemo(() =>
+    citas.filter((cita) => cita.veterinario === user.nombre),
+    [citas, user.nombre]
+  );
+
+  // Get pets related to my appointments with enhanced matching
+  const misMascotas = useMemo(() => {
+    const mascotasEncontradas = new Set<string>();
+    const mascotasValidas: Mascota[] = [];
+
+    misCitas.forEach(cita => {
+      // First try to find by mascotaId if available
+      if (cita.mascotaId && !mascotasEncontradas.has(cita.mascotaId)) {
+        const mascota = mascotas.find(m => m.id === cita.mascotaId);
+        if (mascota) {
+          mascotasValidas.push(mascota);
+          mascotasEncontradas.add(cita.mascotaId);
+          return;
+        }
+      }
+
+      // Fallback to name matching
+      const mascotaPorNombre = mascotas.find(m => {
+        const nombreCoincide = m.nombre.toLowerCase() === cita.mascota.toLowerCase();
+        return nombreCoincide && !mascotasEncontradas.has(m.id);
+      });
+
+      if (mascotaPorNombre) {
+        mascotasValidas.push(mascotaPorNombre);
+        mascotasEncontradas.add(mascotaPorNombre.id);
+      }
     });
-  });
 
-  // Detectar mascotas "fantasma" (mencionadas en citas pero no registradas)
-  const mascotasFantasma = useMemo(() => {
-    const nombresRegistrados = mascotas.map(m => m.nombre.toLowerCase());
-    const mascotasEnCitas = new Set(
-      misCitas.map(c => c.mascota).filter(nombre =>
-        !nombresRegistrados.includes(nombre.toLowerCase())
+    return mascotasValidas;
+  }, [misCitas, mascotas]);
+
+  // Validate data relationships
+  const dataValidation = useMemo(() => {
+    const validation = validateDataRelationships();
+
+    // Filter to only my patients
+    const myOrphanedPets = validation.orphanedPets.filter(pet =>
+      misCitas.some(cita =>
+        cita.mascota.toLowerCase() === pet.nombre.toLowerCase() ||
+        cita.mascotaId === pet.id
       )
     );
-    return Array.from(mascotasEnCitas).map(nombre => ({
-      nombre,
-      especie: misCitas.find(c => c.mascota === nombre)?.especie || 'Desconocida',
-      citasRelacionadas: misCitas.filter(c => c.mascota === nombre).length
-    }));
-  }, [misCitas, mascotas]);
+
+    const myIncompleteCitas = validation.incompleteCitas.filter(cita =>
+      cita.veterinario === user.nombre
+    );
+
+    const myGhostPets = validation.ghostPets.filter(nombre =>
+      misCitas.some(cita => cita.mascota === nombre)
+    );
+
+    return {
+      orphanedPets: myOrphanedPets,
+      incompleteCitas: myIncompleteCitas,
+      ghostPets: myGhostPets,
+      totalIssues: myOrphanedPets.length + myIncompleteCitas.length + myGhostPets.length
+    };
+  }, [validateDataRelationships, misCitas, user.nombre]);
+
+  // Enhanced ghost pets detection with more details
+  const mascotasFantasma = useMemo(() => {
+    return dataValidation.ghostPets.map(nombre => {
+      const citasRelacionadas = misCitas.filter(c => c.mascota === nombre);
+      const ultimaCita = citasRelacionadas.sort((a, b) =>
+        new Date(b.fecha).getTime() - new Date(a.fecha).getTime()
+      )[0];
+
+      return {
+        nombre,
+        especie: ultimaCita?.especie || 'Desconocida',
+        citasRelacionadas: citasRelacionadas.length,
+        ultimaCita: ultimaCita?.fecha,
+        clienteId: ultimaCita?.clienteId,
+        clienteNombre: ultimaCita?.clienteNombre
+      };
+    });
+  }, [dataValidation.ghostPets, misCitas]);
 
   // Debug: verificar datos disponibles
   console.log("HistorialClinicoVeterinario - Datos disponibles:", {
