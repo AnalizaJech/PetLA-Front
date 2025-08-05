@@ -529,18 +529,18 @@ export default function Login() {
                     className="mt-1 w-4 h-4 rounded border-vet-gray-300 text-vet-primary focus:ring-vet-primary/20 focus:ring-2 shrink-0"
                     required
                   />
-                  <Label htmlFor="terms" className="text-sm text-vet-gray-600">
+                  <Label htmlFor="terms" className="text-sm text-vet-gray-600 leading-relaxed cursor-pointer">
                     Acepto los{" "}
                     <Link
                       to="/terminos"
-                      className="text-vet-primary hover:text-vet-primary-dark"
+                      className="text-vet-primary hover:text-vet-primary-dark underline decoration-1 underline-offset-2 transition-colors"
                     >
                       términos y condiciones
                     </Link>{" "}
                     y la{" "}
                     <Link
                       to="/privacidad"
-                      className="text-vet-primary hover:text-vet-primary-dark"
+                      className="text-vet-primary hover:text-vet-primary-dark underline decoration-1 underline-offset-2 transition-colors"
                     >
                       política de privacidad
                     </Link>
