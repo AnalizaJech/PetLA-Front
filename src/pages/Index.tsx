@@ -172,7 +172,7 @@ export default function Index() {
             <div className="animate-fade-in z-10 relative">
               <div className="flex items-center space-x-2 mb-6">
                 <Badge className="bg-vet-primary/10 text-vet-primary border-vet-primary/20 cursor-default">
-                  <Heart className="w-3 h-3 mr-1" />
+                  <PawPrint className="w-3 h-3 mr-1" />
                   Atención profesional 24/7
                 </Badge>
               </div>
