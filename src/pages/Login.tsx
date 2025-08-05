@@ -369,44 +369,46 @@ export default function Login() {
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="register-phone">Teléfono</Label>
-                  <div className="relative">
-                    <Phone className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
-                    <Input
-                      id="register-phone"
-                      type="tel"
-                      placeholder="+52 55 1234 5678"
-                      className="pl-10 h-12 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
-                      value={registerData.telefono}
-                      onChange={(e) =>
-                        setRegisterData({
-                          ...registerData,
-                          telefono: e.target.value,
-                        })
-                      }
-                      required
-                    />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="register-phone">Teléfono</Label>
+                    <div className="relative">
+                      <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-vet-gray-400" />
+                      <Input
+                        id="register-phone"
+                        type="tel"
+                        placeholder="+52 55 1234 5678"
+                        className="pl-10 h-10 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
+                        value={registerData.telefono}
+                        onChange={(e) =>
+                          setRegisterData({
+                            ...registerData,
+                            telefono: e.target.value,
+                          })
+                        }
+                        required
+                      />
+                    </div>
                   </div>
-                </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="register-direccion">Dirección (opcional)</Label>
-                  <div className="relative">
-                    <MapPin className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
-                    <Input
-                      id="register-direccion"
-                      type="text"
-                      placeholder="Tu dirección completa"
-                      className="pl-10 h-12 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
-                      value={registerData.direccion}
-                      onChange={(e) =>
-                        setRegisterData({
-                          ...registerData,
-                          direccion: e.target.value,
-                        })
-                      }
-                    />
+                  <div className="space-y-2">
+                    <Label htmlFor="register-direccion">Dirección (opcional)</Label>
+                    <div className="relative">
+                      <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-vet-gray-400" />
+                      <Input
+                        id="register-direccion"
+                        type="text"
+                        placeholder="Tu dirección completa"
+                        className="pl-10 h-10 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
+                        value={registerData.direccion}
+                        onChange={(e) =>
+                          setRegisterData({
+                            ...registerData,
+                            direccion: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
                   </div>
                 </div>
 
