@@ -325,45 +325,47 @@ export default function Login() {
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="register-username">Nombre de usuario</Label>
-                  <div className="relative">
-                    <UserCheck className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
-                    <Input
-                      id="register-username"
-                      type="text"
-                      placeholder="Ej: carlos123"
-                      className="pl-10 h-12 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
-                      value={registerData.username}
-                      onChange={(e) =>
-                        setRegisterData({
-                          ...registerData,
-                          username: e.target.value,
-                        })
-                      }
-                      required
-                    />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="register-username">Nombre de usuario</Label>
+                    <div className="relative">
+                      <UserCheck className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-vet-gray-400" />
+                      <Input
+                        id="register-username"
+                        type="text"
+                        placeholder="Ej: carlos123"
+                        className="pl-10 h-10 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
+                        value={registerData.username}
+                        onChange={(e) =>
+                          setRegisterData({
+                            ...registerData,
+                            username: e.target.value,
+                          })
+                        }
+                        required
+                      />
+                    </div>
                   </div>
-                </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="register-email">Email</Label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
-                    <Input
-                      id="register-email"
-                      type="email"
-                      placeholder="tu@email.com"
-                      className="pl-10 h-12 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
-                      value={registerData.email}
-                      onChange={(e) =>
-                        setRegisterData({
-                          ...registerData,
-                          email: e.target.value,
-                        })
-                      }
-                      required
-                    />
+                  <div className="space-y-2">
+                    <Label htmlFor="register-email">Email</Label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-vet-gray-400" />
+                      <Input
+                        id="register-email"
+                        type="email"
+                        placeholder="tu@email.com"
+                        className="pl-10 h-10 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
+                        value={registerData.email}
+                        onChange={(e) =>
+                          setRegisterData({
+                            ...registerData,
+                            email: e.target.value,
+                          })
+                        }
+                        required
+                      />
+                    </div>
                   </div>
                 </div>
 
