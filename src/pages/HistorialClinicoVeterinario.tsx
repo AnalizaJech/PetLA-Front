@@ -364,7 +364,7 @@ export default function HistorialClinicoVeterinario() {
 
   // Obtener estadísticas de la mascota
   const getStats = () => {
-    if (!selectedMascota)
+    if (!selectedMascota && !searchParams.get("nombre"))
       return { total: 0, consultas: 0, vacunas: 0, examenes: 0 };
 
     return {
