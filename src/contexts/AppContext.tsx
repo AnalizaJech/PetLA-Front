@@ -75,11 +75,17 @@ interface PreCita {
 interface Usuario {
   id: string;
   nombre: string;
+  apellidos?: string;
+  username?: string;
   email: string;
-  rol: "admin" | "cliente" | "veterinario";
   telefono?: string;
+  direccion?: string;
+  fechaNacimiento?: Date;
+  genero?: string;
+  rol: "admin" | "cliente" | "veterinario";
   password?: string;
   fechaRegistro?: Date;
+  foto?: string | null;
 }
 
 interface HistorialClinico {
