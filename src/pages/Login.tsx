@@ -173,14 +173,14 @@ export default function Login() {
             </CardHeader>
             <CardContent className="p-8">
               {error && (
-                <Alert className="mb-4 border-red-200 bg-red-50">
-                  <AlertDescription className="text-red-800">
+                <Alert className="mb-6 border-red-200 bg-red-50 rounded-lg">
+                  <AlertDescription className="text-red-800 text-sm">
                     {error}
                   </AlertDescription>
                 </Alert>
               )}
 
-              <form onSubmit={handleLogin} className="space-y-6">
+              <form onSubmit={handleLogin} className="space-y-5">
                 <div className="space-y-2">
                   <Label htmlFor="login-identifier">Correo / Teléfono / Usuario</Label>
                   <div className="relative">
