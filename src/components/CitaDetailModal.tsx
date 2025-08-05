@@ -149,11 +149,21 @@ export default function CitaDetailModal({
                       Edad
                     </Label>
                     <p className="text-vet-gray-900">
-                      {new Date().getFullYear() -
-                        new Date(
-                          selectedCita.mascota.fechaNacimiento,
-                        ).getFullYear()}{" "}
-                      años
+                      {(() => {
+                        const birthDate = new Date(selectedCita.mascota.fechaNacimiento);
+                        const today = new Date();
+                        const ageInYears = Math.floor((today.getTime() - birthDate.getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+                        const ageInMonths = Math.floor((today.getTime() - birthDate.getTime()) / (30.44 * 24 * 60 * 60 * 1000));
+
+                        if (ageInYears >= 2) {
+                          return `${ageInYears} años`;
+                        } else if (ageInYears === 1) {
+                          const extraMonths = ageInMonths - 12;
+                          return extraMonths > 0 ? `1 año ${extraMonths} mes${extraMonths > 1 ? 'es' : ''}` : '1 año';
+                        } else {
+                          return `${ageInMonths} mes${ageInMonths > 1 ? 'es' : ''}`;
+                        }
+                      })()}
                     </p>
                   </div>
                 )}
