@@ -735,8 +735,25 @@ export default function HistorialClinicoVeterinario() {
                         {selectedPet.peso && <div><strong>Peso:</strong> {selectedPet.peso} kg</div>}
                         {selectedPet.fechaNacimiento && (
                           <div>
-                            <strong>Edad:</strong> {Math.floor((Date.now() - new Date(selectedPet.fechaNacimiento).getTime()) / (365.25 * 24 * 60 * 60 * 1000))} años
+                            <strong>Edad:</strong> {(() => {
+                              const birthDate = new Date(selectedPet.fechaNacimiento);
+                              const today = new Date();
+                              const ageInYears = Math.floor((today.getTime() - birthDate.getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+                              const ageInMonths = Math.floor((today.getTime() - birthDate.getTime()) / (30.44 * 24 * 60 * 60 * 1000));
+
+                              if (ageInYears >= 2) {
+                                return `${ageInYears} años`;
+                              } else if (ageInYears === 1) {
+                                const extraMonths = ageInMonths - 12;
+                                return extraMonths > 0 ? `1 año ${extraMonths} mes${extraMonths > 1 ? 'es' : ''}` : '1 año';
+                              } else {
+                                return `${ageInMonths} mes${ageInMonths > 1 ? 'es' : ''}`;
+                              }
+                            })()}
                           </div>
+                        )}
+                        {selectedPet.microchip && (
+                          <div><strong>Microchip:</strong> {selectedPet.microchip}</div>
                         )}
                       </div>
                     </div>
