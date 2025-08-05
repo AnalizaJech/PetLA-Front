@@ -179,7 +179,7 @@ export default function Login() {
                       id="login-identifier"
                       type="text"
                       placeholder="correo@vetcare.com"
-                      className="pl-10 h-12 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
+                      className="pl-10 h-10 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
                       value={loginData.identifier}
                       onChange={(e) =>
                         setLoginData({ ...loginData, identifier: e.target.value })
@@ -200,7 +200,7 @@ export default function Login() {
                       id="login-password"
                       type={showPassword ? "text" : "password"}
                       placeholder="Tu contraseña"
-                      className="pl-10 pr-10 h-12 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
+                      className="pl-10 pr-10 h-10 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
                       value={loginData.password}
                       onChange={(e) =>
                         setLoginData({ ...loginData, password: e.target.value })
@@ -290,7 +290,7 @@ export default function Login() {
                         id="register-name"
                         type="text"
                         placeholder="Ej: Carlos"
-                        className="pl-10 h-12 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
+                        className="pl-10 h-10 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
                         value={registerData.nombre}
                         onChange={(e) =>
                           setRegisterData({
@@ -311,7 +311,7 @@ export default function Login() {
                         id="register-apellidos"
                         type="text"
                         placeholder="Ej: Ramírez"
-                        className="pl-10 h-12 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
+                        className="pl-10 h-10 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
                         value={registerData.apellidos}
                         onChange={(e) =>
                           setRegisterData({
