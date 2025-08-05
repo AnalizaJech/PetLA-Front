@@ -651,8 +651,18 @@ export default function HistorialClinico() {
     addText("CONSULTAS MÉDICAS", 14, "bold");
     yPosition += 2;
 
-    if (historialMascota.consultas.length > 0) {
-      historialMascota.consultas.forEach((consulta, index) => {
+    // Obtener todas las consultas de todos los tipos
+    const todasLasConsultas = [
+      ...historialMascota.consulta_general,
+      ...historialMascota.vacunacion,
+      ...historialMascota.emergencia,
+      ...historialMascota.grooming,
+      ...historialMascota.cirugia,
+      ...historialMascota.diagnostico,
+    ];
+
+    if (todasLasConsultas.length > 0) {
+      todasLasConsultas.forEach((consulta, index) => {
         checkNewPage(40);
         addText(`Consulta #${index + 1}`, 12, "bold");
         addText(`Fecha: ${consulta.fecha.toLocaleDateString("es-ES")}`);
