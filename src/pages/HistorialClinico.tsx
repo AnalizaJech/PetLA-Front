@@ -958,58 +958,14 @@ export default function HistorialClinico() {
               onValueChange={setSelectedTab}
               className="space-y-6"
             >
-              <div className="w-full overflow-x-auto">
-                <TabsList className="grid w-full grid-cols-3 sm:grid-cols-6 text-xs gap-1 min-w-max">
-                  <TabsTrigger
-                    value="consulta_general"
-                    className="flex items-center justify-center space-x-1 min-w-0 px-2 sm:px-3"
-                  >
-                    <Stethoscope className="w-3 h-3 flex-shrink-0" />
-                    <span className="hidden sm:inline">General</span>
-                    <span className="sm:hidden">Gen</span>
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="vacunacion"
-                    className="flex items-center justify-center space-x-1 min-w-0 px-2 sm:px-3"
-                  >
-                    <Syringe className="w-3 h-3 flex-shrink-0" />
-                    <span className="hidden sm:inline">Vacunas</span>
-                    <span className="sm:hidden">Vac</span>
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="emergencia"
-                    className="flex items-center justify-center space-x-1 min-w-0 px-2 sm:px-3"
-                  >
-                    <Activity className="w-3 h-3 flex-shrink-0" />
-                    <span className="hidden sm:inline">Emergencia</span>
-                    <span className="sm:hidden">Emer</span>
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="grooming"
-                    className="flex items-center justify-center space-x-1 min-w-0 px-2 sm:px-3"
-                  >
-                    <PawPrint className="w-3 h-3 flex-shrink-0" />
-                    <span className="hidden sm:inline">Grooming</span>
-                    <span className="sm:hidden">Grm</span>
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="cirugia"
-                    className="flex items-center justify-center space-x-1 min-w-0 px-2 sm:px-3"
-                  >
-                    <Pill className="w-3 h-3 flex-shrink-0" />
-                    <span className="hidden sm:inline">Cirugía</span>
-                    <span className="sm:hidden">Cir</span>
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="diagnostico"
-                    className="flex items-center justify-center space-x-1 min-w-0 px-2 sm:px-3"
-                  >
-                    <FileText className="w-3 h-3 flex-shrink-0" />
-                    <span className="hidden sm:inline">Diagnóstico</span>
-                    <span className="sm:hidden">Diag</span>
-                  </TabsTrigger>
-                </TabsList>
-              </div>
+              <TabsList className="grid w-full grid-cols-3 sm:grid-cols-6 mb-8">
+                <TabsTrigger value="consulta_general">General</TabsTrigger>
+                <TabsTrigger value="vacunacion">Vacunas</TabsTrigger>
+                <TabsTrigger value="emergencia">Emergencia</TabsTrigger>
+                <TabsTrigger value="grooming">Grooming</TabsTrigger>
+                <TabsTrigger value="cirugia">Cirugía</TabsTrigger>
+                <TabsTrigger value="diagnostico">Diagnóstico</TabsTrigger>
+              </TabsList>
 
               {/* Consulta General Tab */}
               <TabsContent value="consulta_general" className="space-y-4">
@@ -1187,7 +1143,7 @@ export default function HistorialClinico() {
                         Sin servicios de vacunación registrados
                       </h3>
                       <p className="text-vet-gray-600 mb-6">
-                        {selectedMascota} no tiene servicios de vacunaci��n en
+                        {selectedMascota} no tiene servicios de vacunación en
                         su historial.
                       </p>
                       <Button
