@@ -716,7 +716,9 @@ export default function HistorialClinicoVeterinario() {
                               className={`flex items-center space-x-4 mt-2 p-2 rounded-lg ${
                                 clienteSeleccionado
                                   ? "bg-green-50 border border-green-200"
-                                  : "bg-red-50 border border-red-200"
+                                  : mascotaSeleccionada
+                                    ? "bg-red-50 border border-red-200"
+                                    : "bg-yellow-50 border border-yellow-200"
                               }`}
                             >
                               {clienteSeleccionado ? (
