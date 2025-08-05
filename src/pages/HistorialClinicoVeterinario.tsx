@@ -851,7 +851,7 @@ export default function HistorialClinicoVeterinario() {
                     </Card>
                   </div>
 
-                  {/* Alerta si no hay propietario */}
+                  {/* Alertas sobre el estado de la mascota */}
                   {mascotaSeleccionada && !clienteSeleccionado && (
                     <Alert className="border-red-200 bg-red-50">
                       <AlertCircle className="w-4 h-4 text-red-600" />
@@ -864,6 +864,29 @@ export default function HistorialClinicoVeterinario() {
                           Cliente ID actual:{" "}
                           {mascotaSeleccionada.clienteId || "No definido"}
                         </small>
+                      </AlertDescription>
+                    </Alert>
+                  )}
+
+                  {/* Alerta para mascotas no registradas */}
+                  {!mascotaSeleccionada && (selectedPetByName || searchParams.get("nombre")) && (
+                    <Alert className="border-blue-200 bg-blue-50">
+                      <Info className="w-4 h-4 text-blue-600" />
+                      <AlertDescription className="text-blue-800">
+                        <strong>Información:</strong> Esta mascota no está registrada en el sistema.
+                        Para una gestión completa, considera registrarla con su propietario.
+                        <br />
+                        <div className="mt-2">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => navigate("/mis-mascotas")}
+                            className="text-blue-700 border-blue-300 hover:bg-blue-100"
+                          >
+                            <Plus className="w-4 h-4 mr-2" />
+                            Registrar Mascota
+                          </Button>
+                        </div>
                       </AlertDescription>
                     </Alert>
                   )}
