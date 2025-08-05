@@ -108,25 +108,7 @@ export default function HistorialClinicoVeterinario() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-
-    // Handle initial pet selection from URL parameters
-    const mascotaParam = searchParams.get("mascota");
-    const nombreParam = searchParams.get("nombre");
-
-    if (mascotaParam) {
-      setSelectedMascota(mascotaParam);
-    } else if (nombreParam) {
-      // For unregistered pets, try to find a registered pet with the same name
-      const foundPet = misMascotas.find(pet =>
-        pet.nombre.toLowerCase() === nombreParam.toLowerCase()
-      );
-      if (foundPet) {
-        setSelectedMascota(foundPet.id);
-      } else {
-        setSelectedPetByName(nombreParam);
-      }
-    }
-  }, [searchParams, misMascotas]);
+  }, []);
 
   if (!user || user.rol !== "veterinario") {
     return (
