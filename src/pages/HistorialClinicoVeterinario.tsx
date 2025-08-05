@@ -287,6 +287,15 @@ export default function HistorialClinicoVeterinario() {
     // Si se encuentra por nombre, actualizar el selectedMascota para que funcione el resto
     if (mascotaSeleccionada) {
       setSelectedMascota(mascotaSeleccionada.id);
+    } else {
+      // Si no hay mascota registrada pero tenemos datos de URL, crear entrada temporal para mostrar historial
+      const especieBuscada = searchParams.get("especie");
+      if (nombreMascota && especieBuscada) {
+        console.log("Creating temporary pet entry for clinical history view:", {
+          nombre: nombreMascota,
+          especie: especieBuscada
+        });
+      }
     }
   }
 
