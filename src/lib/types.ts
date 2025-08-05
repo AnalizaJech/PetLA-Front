@@ -17,16 +17,23 @@ export interface User {
   fechaCreacion: Date;
 }
 
-// Pet entity
+// Pet entity (compatible with AppContext structure)
 export interface Mascota {
   id: string;
   nombre: string;
   especie: string;
   raza: string;
+  sexo?: string;
   fechaNacimiento: Date;
-  imagen?: Blob;
+  peso?: string;
+  microchip?: string;
+  estado: string;
   clienteId: string;
-  fechaCreacion: Date;
+  proximaCita?: Date | null;
+  ultimaVacuna?: Date | null;
+  foto?: string | null;
+  imagen?: Blob; // legacy support
+  fechaCreacion?: Date;
 }
 
 // Pre-appointment states
@@ -55,20 +62,36 @@ export type EstadoCita =
   | "rechazada"
   | "no_asistio";
 
-// Appointment entity
+// Appointment entity (compatible with AppContext structure)
 export interface Cita {
   id: string;
-  mascotaId: string;
-  veterinarioId: string;
-  clienteId: string;
-  fechaInicio: Date;
-  fechaFin: Date;
+  mascota: string; // nombre de la mascota para compatibilidad
+  mascotaId?: string; // ID opcional para futuras mejoras
+  especie: string;
+  fecha: Date;
   estado: EstadoCita;
-  motivoConsulta: string;
-  comprobantePago?: Blob;
-  observaciones?: string;
-  fechaCreacion: Date;
-  fechaActualizacion: Date;
+  veterinario: string; // nombre del veterinario
+  veterinarioId?: string; // ID opcional para futuras mejoras
+  motivo: string; // motivo de la consulta
+  tipoConsulta: string;
+  ubicacion: string;
+  precio: number;
+  notas?: string;
+  comprobantePago?: string;
+  comprobanteData?: ComprobanteData;
+  notasAdmin?: string;
+  fechaCreacion?: Date;
+  fechaActualizacion?: Date;
+}
+
+// Receipt/Voucher data structure
+export interface ComprobanteData {
+  id: string;
+  data: string; // base64
+  originalName: string;
+  size: number;
+  type: string;
+  timestamp: number;
 }
 
 // Medical history entry

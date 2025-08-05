@@ -358,10 +358,13 @@ export default function NuevaCita() {
         assignedVeterinario = veterinarios[0].nombre;
       }
 
-      // Create appointment
+      // Create appointment with client information
       const nuevaCita = {
         mascota: selectedMascota.nombre,
+        mascotaId: selectedMascota.id, // ID de la mascota para referencia
         especie: selectedMascota.especie,
+        clienteId: user.id, // ID del cliente propietario
+        clienteNombre: user.nombre, // Nombre del cliente para referencia rápida
         fecha: new Date(`${citaData.fecha}T${citaData.hora}:00`),
         estado: "pendiente_pago" as const,
         veterinario: assignedVeterinario || "Veterinario no disponible",
