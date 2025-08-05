@@ -179,7 +179,7 @@ export default function Login() {
                       id="login-identifier"
                       type="text"
                       placeholder="correo@vetcare.com"
-                      className="pl-10"
+                      className="pl-10 h-12 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
                       value={loginData.identifier}
                       onChange={(e) =>
                         setLoginData({ ...loginData, identifier: e.target.value })
@@ -200,7 +200,7 @@ export default function Login() {
                       id="login-password"
                       type={showPassword ? "text" : "password"}
                       placeholder="Tu contraseña"
-                      className="pl-10 pr-10"
+                      className="pl-10 pr-10 h-12 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
                       value={loginData.password}
                       onChange={(e) =>
                         setLoginData({ ...loginData, password: e.target.value })
@@ -290,7 +290,7 @@ export default function Login() {
                         id="register-name"
                         type="text"
                         placeholder="Ej: Carlos"
-                        className="pl-10"
+                        className="pl-10 h-12 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
                         value={registerData.nombre}
                         onChange={(e) =>
                           setRegisterData({
@@ -311,7 +311,7 @@ export default function Login() {
                         id="register-apellidos"
                         type="text"
                         placeholder="Ej: Ramírez"
-                        className="pl-10"
+                        className="pl-10 h-12 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
                         value={registerData.apellidos}
                         onChange={(e) =>
                           setRegisterData({
@@ -333,7 +333,7 @@ export default function Login() {
                       id="register-username"
                       type="text"
                       placeholder="Ej: carlos123"
-                      className="pl-10"
+                      className="pl-10 h-12 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
                       value={registerData.username}
                       onChange={(e) =>
                         setRegisterData({
@@ -354,7 +354,7 @@ export default function Login() {
                       id="register-email"
                       type="email"
                       placeholder="tu@email.com"
-                      className="pl-10"
+                      className="pl-10 h-12 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
                       value={registerData.email}
                       onChange={(e) =>
                         setRegisterData({
@@ -375,7 +375,7 @@ export default function Login() {
                       id="register-phone"
                       type="tel"
                       placeholder="+52 55 1234 5678"
-                      className="pl-10"
+                      className="pl-10 h-12 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
                       value={registerData.telefono}
                       onChange={(e) =>
                         setRegisterData({
@@ -396,7 +396,7 @@ export default function Login() {
                       id="register-direccion"
                       type="text"
                       placeholder="Tu dirección completa"
-                      className="pl-10"
+                      className="pl-10 h-12 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
                       value={registerData.direccion}
                       onChange={(e) =>
                         setRegisterData({
@@ -416,7 +416,7 @@ export default function Login() {
                       <Input
                         id="register-birthdate"
                         type="date"
-                        className="pl-10"
+                        className="pl-10 h-12 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
                         value={registerData.fechaNacimiento}
                         onChange={(e) =>
                           setRegisterData({
@@ -460,7 +460,7 @@ export default function Login() {
                       id="register-password"
                       type={showPassword ? "text" : "password"}
                       placeholder="Mínimo 8 caracteres"
-                      className="pl-10 pr-10"
+                      className="pl-10 pr-10 h-12 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
                       value={registerData.password}
                       onChange={(e) =>
                         setRegisterData({
@@ -495,7 +495,7 @@ export default function Login() {
                       id="register-confirm-password"
                       type={showPassword ? "text" : "password"}
                       placeholder="Repite tu contraseña"
-                      className="pl-10"
+                      className="pl-10 h-12 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
                       value={registerData.confirmPassword}
                       onChange={(e) =>
                         setRegisterData({
