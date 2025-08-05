@@ -81,8 +81,9 @@ export function DatePicker({
         showPopperArrow={false}
         fixedHeight
         todayButton="Hoy"
-        onTodayButtonClick={(date) => {
-          onDateChange?.(date);
+        onTodayButtonClick={() => {
+          const today = new Date();
+          onDateChange?.(today);
         }}
         autoComplete="off"
         withPortal={false}

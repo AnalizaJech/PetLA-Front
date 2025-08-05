@@ -453,7 +453,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         const parsedPreCitas = JSON.parse(preCitasStr);
         return parsedPreCitas.map((preCita: any) => ({
           ...preCita,
-          fechaPreferida: new Date(preCita.fechaPreferida),
+          fechaPreferida: createSafeDate(preCita.fechaPreferida),
           fechaCreacion: new Date(preCita.fechaCreacion),
           ...(preCita.fechaNueva && {
             fechaNueva: new Date(preCita.fechaNueva),
@@ -1062,6 +1062,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  // Helper function to create dates safely
+  const createSafeDate = (dateInput: string | Date): Date => {
+    if (dateInput instanceof Date) return dateInput;
+    if (typeof dateInput === "string" && dateInput.includes("-")) {
+      const [year, month, day] = dateInput.split("-").map(Number);
+      return new Date(year, month - 1, day);
+    }
+    return new Date(dateInput);
+  };
+
   // Pre-cita functions
   const addPreCita = (
     preCitaData: Omit<PreCita, "id" | "estado" | "fechaCreacion">,
@@ -1071,7 +1081,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       id: Date.now().toString(),
       estado: "pendiente",
       fechaCreacion: new Date(),
-      fechaPreferida: new Date(preCitaData.fechaPreferida),
+      fechaPreferida: createSafeDate(preCitaData.fechaPreferida),
     };
     setPreCitas((prev) => [...prev, newPreCita]);
   };
@@ -1080,7 +1090,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     const processedUpdates = {
       ...updates,
       ...(updates.fechaPreferida && {
-        fechaPreferida: new Date(updates.fechaPreferida),
+        fechaPreferida: createSafeDate(updates.fechaPreferida),
       }),
       ...(updates.fechaNueva && { fechaNueva: new Date(updates.fechaNueva) }),
       ...(updates.fechaCreacion && {

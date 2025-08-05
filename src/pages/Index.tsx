@@ -118,7 +118,12 @@ export default function Index() {
         nombreMascota: formData.nombreMascota,
         tipoMascota: formData.tipoMascota,
         motivoConsulta: formData.motivoConsulta,
-        fechaPreferida: new Date(formData.fechaPreferida),
+        fechaPreferida: (() => {
+          const [year, month, day] = formData.fechaPreferida
+            .split("-")
+            .map(Number);
+          return new Date(year, month - 1, day);
+        })(),
         horaPreferida: formData.horaPreferida,
       });
 
@@ -601,46 +606,34 @@ export default function Index() {
                   <DatePicker
                     date={
                       formData.fechaPreferida
-                        ? new Date(formData.fechaPreferida)
+                        ? (() => {
+                            const [year, month, day] = formData.fechaPreferida
+                              .split("-")
+                              .map(Number);
+                            return new Date(year, month - 1, day);
+                          })()
                         : undefined
                     }
                     onDateChange={(date) => {
                       if (date) {
-                        console.log("Fecha recibida:", date);
-                        console.log("Fecha toString:", date.toString());
-                        console.log(
-                          "Timezone offset:",
-                          date.getTimezoneOffset(),
-                        );
-
-                        // Crear una nueva fecha ajustada para zona horaria local
-                        const localDate = new Date(
-                          date.getTime() - date.getTimezoneOffset() * 60000,
-                        );
-                        console.log("Fecha local ajustada:", localDate);
-
                         // Crear fecha de hoy sin horas para comparación
                         const today = new Date();
                         today.setHours(0, 0, 0, 0);
 
-                        // Crear fecha seleccionada sin horas para comparación usando la fecha ajustada
-                        const selectedDate = new Date(localDate);
+                        // Crear fecha seleccionada sin horas para comparación
+                        const selectedDate = new Date(date);
                         selectedDate.setHours(0, 0, 0, 0);
 
                         // Permitir fecha de hoy o fechas futuras
                         if (selectedDate >= today) {
-                          // Usar la fecha ajustada para el formateo
-                          const year = localDate.getFullYear();
-                          const month = String(
-                            localDate.getMonth() + 1,
-                          ).padStart(2, "0");
-                          const day = String(localDate.getDate()).padStart(
+                          // Formatear fecha directamente sin ajustes de zona horaria
+                          const year = date.getFullYear();
+                          const month = String(date.getMonth() + 1).padStart(
                             2,
                             "0",
                           );
+                          const day = String(date.getDate()).padStart(2, "0");
                           const formattedDate = `${year}-${month}-${day}`;
-
-                          console.log("Fecha formateada:", formattedDate);
 
                           setFormData({
                             ...formData,

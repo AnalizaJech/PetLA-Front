@@ -482,7 +482,7 @@ export default function HistorialClinico() {
         diagnostico: [],
       };
 
-  // Funci��n para descargar el historial clínico en formato texto
+  // Función para descargar el historial clínico en formato texto
   const descargarHistorial = () => {
     if (!selectedMascota) return;
 
@@ -505,10 +505,20 @@ export default function HistorialClinico() {
     contenido += `Sexo: ${mascotaInfo.sexo || "No registrado"}\n`;
     contenido += `Microchip: ${mascotaInfo.microchip || "No registrado"}\n\n`;
 
-    if (historialMascota.consultas.length > 0) {
+    // Obtener todas las consultas de todos los tipos
+    const todasLasConsultas = [
+      ...historialMascota.consulta_general,
+      ...historialMascota.vacunacion,
+      ...historialMascota.emergencia,
+      ...historialMascota.grooming,
+      ...historialMascota.cirugia,
+      ...historialMascota.diagnostico,
+    ];
+
+    if (todasLasConsultas.length > 0) {
       contenido += `CONSULTAS MÉDICAS\n`;
       contenido += `-`.repeat(30) + `\n`;
-      historialMascota.consultas.forEach((consulta, index) => {
+      todasLasConsultas.forEach((consulta, index) => {
         contenido += `\nConsulta #${index + 1}\n`;
         contenido += `Fecha: ${consulta.fecha.toLocaleDateString("es-ES")}\n`;
         contenido += `Veterinario: ${consulta.veterinario}\n`;
@@ -516,7 +526,7 @@ export default function HistorialClinico() {
         contenido += `Diagnóstico: ${consulta.diagnostico}\n`;
         contenido += `Tratamiento: ${consulta.tratamiento}\n`;
 
-        if (consulta.medicamentos.length > 0) {
+        if (consulta.medicamentos && consulta.medicamentos.length > 0) {
           contenido += `Medicamentos:\n`;
           consulta.medicamentos.forEach((med) => {
             contenido += `  - ${med.nombre}: ${med.dosis} (${med.duracion})\n`;
@@ -538,11 +548,11 @@ export default function HistorialClinico() {
       contenido += `No hay consultas registradas.\n\n`;
     }
 
-    // VACUNAS
-    if (historialMascota.vacunas.length > 0) {
+    // VACUNAS (incluidas en las consultas médicas)
+    if (historialMascota.vacunacion.length > 0) {
       contenido += `VACUNAS\n`;
       contenido += `-`.repeat(30) + `\n`;
-      historialMascota.vacunas.forEach((vacuna, index) => {
+      historialMascota.vacunacion.forEach((vacuna, index) => {
         contenido += `\nVacuna #${index + 1}\n`;
         contenido += `Fecha: ${vacuna.fecha.toLocaleDateString("es-ES")}\n`;
         contenido += `Veterinario: ${vacuna.veterinario}\n`;
@@ -559,24 +569,7 @@ export default function HistorialClinico() {
       contenido += `No hay vacunas registradas.\n\n`;
     }
 
-    // EXÁMENES
-    if (historialMascota.examenes.length > 0) {
-      contenido += `EXÁMENES Y LABORATORIOS\n`;
-      contenido += `-`.repeat(30) + `\n`;
-      historialMascota.examenes.forEach((examen, index) => {
-        contenido += `\nExamen #${index + 1}\n`;
-        contenido += `Fecha: ${examen.fecha.toLocaleDateString("es-ES")}\n`;
-        contenido += `Veterinario: ${examen.veterinario}\n`;
-        contenido += `Tipo: ${examen.tipo}\n`;
-        contenido += `Resultados: ${examen.resultados}\n`;
-        contenido += `Archivo: ${examen.archivo}\n`;
-        contenido += `\n${"·".repeat(40)}\n`;
-      });
-    } else {
-      contenido += `EX��MENES Y LABORATORIOS\n`;
-      contenido += `-`.repeat(30) + `\n`;
-      contenido += `No hay exámenes registrados.\n\n`;
-    }
+    // Nota: Los exámenes están incluidos en las consultas médicas
 
     contenido += `\nDOCUMENTO GENERADO\n`;
     contenido += `-`.repeat(30) + `\n`;
@@ -658,8 +651,18 @@ export default function HistorialClinico() {
     addText("CONSULTAS MÉDICAS", 14, "bold");
     yPosition += 2;
 
-    if (historialMascota.consultas.length > 0) {
-      historialMascota.consultas.forEach((consulta, index) => {
+    // Obtener todas las consultas de todos los tipos
+    const todasLasConsultas = [
+      ...historialMascota.consulta_general,
+      ...historialMascota.vacunacion,
+      ...historialMascota.emergencia,
+      ...historialMascota.grooming,
+      ...historialMascota.cirugia,
+      ...historialMascota.diagnostico,
+    ];
+
+    if (todasLasConsultas.length > 0) {
+      todasLasConsultas.forEach((consulta, index) => {
         checkNewPage(40);
         addText(`Consulta #${index + 1}`, 12, "bold");
         addText(`Fecha: ${consulta.fecha.toLocaleDateString("es-ES")}`);
@@ -668,7 +671,7 @@ export default function HistorialClinico() {
         addText(`Diagnóstico: ${consulta.diagnostico}`);
         addText(`Tratamiento: ${consulta.tratamiento}`);
 
-        if (consulta.medicamentos.length > 0) {
+        if (consulta.medicamentos && consulta.medicamentos.length > 0) {
           addText("Medicamentos:", 11, "bold");
           consulta.medicamentos.forEach((med) => {
             addText(`  • ${med.nombre}: ${med.dosis} (${med.duracion})`);
@@ -738,7 +741,17 @@ export default function HistorialClinico() {
     XLSX.utils.book_append_sheet(wb, wsMascota, "Información");
 
     // Hoja 2: Consultas médicas
-    if (historialMascota.consultas.length > 0) {
+    // Obtener todas las consultas de todos los tipos
+    const todasLasConsultas = [
+      ...historialMascota.consulta_general,
+      ...historialMascota.vacunacion,
+      ...historialMascota.emergencia,
+      ...historialMascota.grooming,
+      ...historialMascota.cirugia,
+      ...historialMascota.diagnostico,
+    ];
+
+    if (todasLasConsultas.length > 0) {
       const consultasData = [
         ["CONSULTAS MÉDICAS"],
         [""],
@@ -754,8 +767,8 @@ export default function HistorialClinico() {
         ],
       ];
 
-      historialMascota.consultas.forEach((consulta) => {
-        const medicamentos = consulta.medicamentos
+      todasLasConsultas.forEach((consulta) => {
+        const medicamentos = (consulta.medicamentos || [])
           .map((med) => `${med.nombre}: ${med.dosis} (${med.duracion})`)
           .join("; ");
 
@@ -781,11 +794,11 @@ export default function HistorialClinico() {
     const resumenData = [
       ["RESUMEN DEL HISTORIAL"],
       [""],
-      ["Total de consultas", historialMascota.consultas.length.toString()],
+      ["Total de consultas", todasLasConsultas.length.toString()],
       [
         "Última consulta",
-        historialMascota.consultas.length > 0
-          ? historialMascota.consultas[0].fecha.toLocaleDateString("es-ES")
+        todasLasConsultas.length > 0
+          ? todasLasConsultas[0].fecha.toLocaleDateString("es-ES")
           : "No hay consultas",
       ],
       [""],
@@ -1071,7 +1084,7 @@ export default function HistorialClinico() {
                                             </span>
                                             {servicio.precio && (
                                               <span className="text-sm font-medium text-vet-primary">
-                                                ${servicio.precio}
+                                                S/{servicio.precio}
                                               </span>
                                             )}
                                           </div>
@@ -1117,7 +1130,7 @@ export default function HistorialClinico() {
                                         </span>
                                       </div>
                                       <p className="text-sm text-vet-gray-600">
-                                        {med.dosis} �� {med.duracion}
+                                        {med.dosis} • {med.duracion}
                                       </p>
                                     </div>
                                   ))}
@@ -1166,8 +1179,8 @@ export default function HistorialClinico() {
                         Sin servicios de vacunación registrados
                       </h3>
                       <p className="text-vet-gray-600 mb-6">
-                        {selectedMascota} no tiene servicios de vacunación en su
-                        historial.
+                        {selectedMascota} no tiene servicios de vacunaci��n en
+                        su historial.
                       </p>
                       <Button
                         onClick={() => (window.location.href = "/mis-citas")}
@@ -1194,7 +1207,7 @@ export default function HistorialClinico() {
                             </CardDescription>
                           </div>
                           <Badge className="bg-vet-primary/10 text-vet-primary">
-                            ${servicio.precio}
+                            S/{servicio.precio}
                           </Badge>
                         </div>
                       </CardHeader>
@@ -1279,7 +1292,7 @@ export default function HistorialClinico() {
                             </CardDescription>
                           </div>
                           <Badge className="bg-red-100 text-red-800">
-                            ${servicio.precio}
+                            S/{servicio.precio}
                           </Badge>
                         </div>
                       </CardHeader>
@@ -1364,7 +1377,7 @@ export default function HistorialClinico() {
                             </CardDescription>
                           </div>
                           <Badge className="bg-orange-100 text-orange-800">
-                            ${servicio.precio}
+                            S/{servicio.precio}
                           </Badge>
                         </div>
                       </CardHeader>
@@ -1449,7 +1462,7 @@ export default function HistorialClinico() {
                             </CardDescription>
                           </div>
                           <Badge className="bg-purple-100 text-purple-800">
-                            ${servicio.precio}
+                            S/{servicio.precio}
                           </Badge>
                         </div>
                       </CardHeader>
@@ -1534,7 +1547,7 @@ export default function HistorialClinico() {
                             </CardDescription>
                           </div>
                           <Badge className="bg-gray-100 text-gray-800">
-                            ${servicio.precio}
+                            S/{servicio.precio}
                           </Badge>
                         </div>
                       </CardHeader>

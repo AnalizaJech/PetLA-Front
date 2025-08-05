@@ -660,7 +660,7 @@ export default function NuevaCita() {
                           className="w-full min-h-[120px] max-h-[120px] resize-none overflow-y-auto px-3 py-2 border border-vet-gray-300 rounded-lg focus:ring-2 focus:ring-vet-primary focus:border-vet-primary transition-all duration-200"
                         />
                         <p className="text-xs text-vet-gray-500 mt-1">
-                          💬 Describe s��ntomas, comportamientos o motivos
+                          💬 Describe síntomas, comportamientos o motivos
                           específicos para una mejor atención
                         </p>
                       </div>
