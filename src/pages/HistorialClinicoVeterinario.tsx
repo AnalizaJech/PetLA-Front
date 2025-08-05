@@ -66,7 +66,6 @@ import {
   Plus,
   ChevronRight,
   Info,
-  Badge,
 } from "lucide-react";
 
 export default function HistorialClinicoVeterinario() {
