@@ -127,12 +127,6 @@ export default function HistorialClinicoVeterinario() {
     );
   }
 
-  // Enhanced data retrieval with better relationship management
-  const {
-    validateDataRelationships,
-    getCitaWithRelations,
-    getMascotaWithOwner,
-  } = useAppContext();
 
   // Get my appointments as veterinarian
   const misCitas = useMemo(() =>
