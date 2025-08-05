@@ -1000,12 +1000,12 @@ export default function MisPacientes() {
                               onClick={() => {
                                 if (mascota) {
                                   navigate(
-                                    `/historial-clinico-veterinario?mascota=${mascota.id}&nombre=${encodeURIComponent(mascota.nombre)}`,
+                                    `/historial-clinico-veterinario?view=history&ownerId=${propietario?.id || 'unknown'}&petId=${mascota.id}`,
                                   );
                                 } else {
                                   // Fallback para cuando no hay mascota, usar datos de la cita
                                   navigate(
-                                    `/historial-clinico-veterinario?nombre=${encodeURIComponent(cita.mascota)}&especie=${encodeURIComponent(cita.especie)}`,
+                                    `/historial-clinico-veterinario?view=history&petName=${encodeURIComponent(cita.mascota)}&especie=${encodeURIComponent(cita.especie)}`,
                                   );
                                 }
                               }}
