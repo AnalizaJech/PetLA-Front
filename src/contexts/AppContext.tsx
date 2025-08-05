@@ -1038,7 +1038,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       addNotificacion({
         usuarioId: newUser.id,
         tipo: "bienvenida_cliente",
-        titulo: "��Bienvenido a nuestra clínica veterinaria!",
+        titulo: "¡Bienvenido a nuestra clínica veterinaria!",
         mensaje: `Hola ${newUser.nombre}, nos alegra tenerte en nuestra familia. Aquí podrás gestionar el cuidado de tus mascotas de manera fácil y segura.`,
         leida: false,
       });
@@ -1640,6 +1640,75 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const deleteNotificacion = (id: string) => {
     setNotificaciones((prev) => prev.filter((notif) => notif.id !== id));
+  };
+
+  // Data relationship helper functions
+  const getMascotaWithOwner = (mascotaId: string) => {
+    const mascota = mascotas.find(m => m.id === mascotaId) || null;
+    const propietario = mascota
+      ? usuarios.find(u => u.id === mascota.clienteId && u.rol === 'cliente') || null
+      : null;
+
+    return { mascota, propietario };
+  };
+
+  const getCitaWithRelations = (citaId: string) => {
+    const cita = citas.find(c => c.id === citaId) || null;
+    let mascota: Mascota | null = null;
+    let propietario: Usuario | null = null;
+
+    if (cita) {
+      // First try to find by mascotaId if available
+      if (cita.mascotaId) {
+        mascota = mascotas.find(m => m.id === cita.mascotaId) || null;
+      }
+
+      // Fallback to find by name
+      if (!mascota) {
+        mascota = mascotas.find(m =>
+          m.nombre.toLowerCase() === cita.mascota.toLowerCase()
+        ) || null;
+      }
+
+      // Find owner from cita or from mascota
+      if (cita.clienteId) {
+        propietario = usuarios.find(u => u.id === cita.clienteId && u.rol === 'cliente') || null;
+      } else if (mascota) {
+        propietario = usuarios.find(u => u.id === mascota.clienteId && u.rol === 'cliente') || null;
+      }
+    }
+
+    return { cita, mascota, propietario };
+  };
+
+  const validateDataRelationships = () => {
+    // Find pets without valid owners
+    const orphanedPets = mascotas.filter(mascota => {
+      const propietario = usuarios.find(u => u.id === mascota.clienteId && u.rol === 'cliente');
+      return !propietario;
+    });
+
+    // Find appointments without complete information
+    const incompleteCitas = citas.filter(cita => {
+      return !cita.clienteId || !cita.clienteNombre || !cita.mascotaId;
+    });
+
+    // Find "ghost" pets (mentioned in appointments but not registered)
+    const mascotasRegistradas = new Set(mascotas.map(m => m.nombre.toLowerCase()));
+    const ghostPets = Array.from(new Set(
+      citas
+        .map(c => c.mascota)
+        .filter(nombre => !mascotasRegistradas.has(nombre.toLowerCase()))
+    ));
+
+    const totalIssues = orphanedPets.length + incompleteCitas.length + ghostPets.length;
+
+    return {
+      orphanedPets,
+      incompleteCitas,
+      ghostPets,
+      totalIssues
+    };
   };
 
   // Statistics function
