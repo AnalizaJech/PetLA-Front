@@ -530,11 +530,19 @@ export default function HistorialClinicoVeterinario() {
                         {mascotasFantasma.length > 0 && (
                           <div className="mt-4 p-3 bg-orange-50 rounded-lg border border-orange-200">
                             <p className="text-xs text-orange-800 font-medium mb-2">
-                              Mascotas en citas pero no registradas:
+                              Mascotas en citas pero no registradas en el sistema:
                             </p>
                             {mascotasFantasma.map((fantasma, index) => (
-                              <div key={index} className="text-xs text-orange-700">
-                                • {fantasma.nombre} ({fantasma.especie}) - {fantasma.citasRelacionadas} citas
+                              <div key={index} className="text-xs text-orange-700 mb-1">
+                                • <strong>{fantasma.nombre}</strong> ({fantasma.especie})
+                                <br />
+                                &nbsp;&nbsp;{fantasma.citasRelacionadas} citas
+                                {fantasma.clienteNombre && (
+                                  <span> - Cliente: {fantasma.clienteNombre}</span>
+                                )}
+                                {fantasma.ultimaCita && (
+                                  <span> - Última: {new Date(fantasma.ultimaCita).toLocaleDateString('es-ES')}</span>
+                                )}
                               </div>
                             ))}
                           </div>
