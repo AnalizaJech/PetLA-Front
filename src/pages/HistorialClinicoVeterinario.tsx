@@ -699,7 +699,7 @@ export default function HistorialClinicoVeterinario() {
 
             {/* Panel derecho - Historial de la mascota seleccionada */}
             <div className="lg:col-span-3">
-              {(selectedMascota && mascotaSeleccionada) || (searchParams.get("nombre") && historialMascota.length > 0) ? (
+              {(selectedMascota && mascotaSeleccionada) || selectedPetByName || (searchParams.get("nombre") && historialMascota.length > 0) ? (
                 <div className="space-y-6">
                   {/* Información de la mascota */}
                   <Card>
