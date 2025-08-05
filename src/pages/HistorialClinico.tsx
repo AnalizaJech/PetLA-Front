@@ -569,24 +569,7 @@ export default function HistorialClinico() {
       contenido += `No hay vacunas registradas.\n\n`;
     }
 
-    // EXÁMENES
-    if (historialMascota.examenes.length > 0) {
-      contenido += `EXÁMENES Y LABORATORIOS\n`;
-      contenido += `-`.repeat(30) + `\n`;
-      historialMascota.examenes.forEach((examen, index) => {
-        contenido += `\nExamen #${index + 1}\n`;
-        contenido += `Fecha: ${examen.fecha.toLocaleDateString("es-ES")}\n`;
-        contenido += `Veterinario: ${examen.veterinario}\n`;
-        contenido += `Tipo: ${examen.tipo}\n`;
-        contenido += `Resultados: ${examen.resultados}\n`;
-        contenido += `Archivo: ${examen.archivo}\n`;
-        contenido += `\n${"·".repeat(40)}\n`;
-      });
-    } else {
-      contenido += `EXÁMENES Y LABORATORIOS\n`;
-      contenido += `-`.repeat(30) + `\n`;
-      contenido += `No hay exámenes registrados.\n\n`;
-    }
+    // Nota: Los exámenes están incluidos en las consultas médicas
 
     contenido += `\nDOCUMENTO GENERADO\n`;
     contenido += `-`.repeat(30) + `\n`;
