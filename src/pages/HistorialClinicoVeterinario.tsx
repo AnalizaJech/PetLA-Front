@@ -87,7 +87,48 @@ export default function HistorialClinicoVeterinario() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+
+    // Handle direct navigation from URL parameters
+    const view = searchParams.get("view");
+    const ownerId = searchParams.get("ownerId");
+    const petId = searchParams.get("petId");
+    const petName = searchParams.get("petName");
+
+    if (view === "history") {
+      if (petId) {
+        // Direct navigation to specific pet by ID
+        const pet = mascotas.find(m => m.id === petId);
+        if (pet) {
+          const owner = usuarios.find(u => u.id === pet.clienteId);
+          setSelectedPet(pet);
+          setSelectedOwner(owner || null);
+          setCurrentView("history");
+        }
+      } else if (petName) {
+        // Fallback: navigation to pet by name (for unregistered pets)
+        const pet = mascotas.find(m =>
+          m.nombre.toLowerCase() === petName.toLowerCase()
+        );
+        if (pet) {
+          const owner = usuarios.find(u => u.id === pet.clienteId);
+          setSelectedPet(pet);
+          setSelectedOwner(owner || null);
+          setCurrentView("history");
+        } else {
+          // Create a temporary pet object for unregistered pets
+          const tempPet = {
+            id: `temp-${petName}`,
+            nombre: petName,
+            especie: searchParams.get("especie") || "Desconocida",
+            raza: "Por determinar",
+            sexo: "No especificado"
+          };
+          setSelectedPet(tempPet);
+          setCurrentView("history");
+        }
+      }
+    }
+  }, [searchParams, mascotas, usuarios]);
 
   if (!user || user.rol !== "veterinario") {
     return (
