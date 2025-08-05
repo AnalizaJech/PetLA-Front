@@ -1,27 +1,143 @@
 # 🩺 Documentación de Flujos del Sistema Veterinario PetLA
 
+## 🌟 Resumen Ejecutivo del Sistema
+
+**PetLA** es una plataforma web integral diseñada para revolucionar la gestión de clínicas veterinarias, conectando de manera eficiente a propietarios de mascotas, veterinarios y administradores en un ecosistema digital completo.
+
+### 🎯 ¿Qué es PetLA?
+
+PetLA es un sistema de gestión veterinaria que digitaliza y optimiza todos los procesos de una clínica moderna, desde el agendamiento inicial hasta el seguimiento post-consulta. La plataforma facilita la comunicación entre todas las partes involucradas y garantiza un servicio de calidad para las mascotas.
+
+### 🚀 Propósito Principal
+
+Transformar la experiencia veterinaria tradicional en un proceso digital fluido que:
+- **Simplifica** el agendamiento de citas para los dueños de mascotas
+- **Optimiza** la gestión de pacientes para los veterinarios
+- **Automatiza** los procesos administrativos para el personal
+- **Centraliza** toda la información médica en un historial digital completo
+
+### 👥 Usuarios del Sistema
+
+**🟦 Clientes (Propietarios de Mascotas)**
+- Registran y gestionan la información de sus mascotas
+- Agendan citas médicas de forma autónoma
+- Suben comprobantes de pago digital
+- Consultan el historial médico de sus mascotas
+- Reciben notificaciones sobre el estado de sus citas
+
+**🟩 Veterinarios**
+- Acceden a su agenda médica personalizada
+- Gestionan información completa de pacientes y propietarios
+- Registran consultas y actualizan historiales clínicos
+- Utilizan herramientas de búsqueda avanzada de pacientes
+- Monitorean estadísticas de su práctica profesional
+
+**🟥 Administradores**
+- Supervisan todas las operaciones de la clínica
+- Validan comprobantes de pago y gestionan facturación
+- Administran usuarios y asignan veterinarios
+- Procesan pre-citas del sitio web público
+- Configuran servicios, precios y parámetros del sistema
+
+### 🔧 Características Principales
+
+**📅 Gestión Inteligente de Citas**
+- Sistema de estados automatizado (pendiente → validación → confirmada → atendida)
+- Asignación automática de veterinarios
+- Validación digital de comprobantes de pago
+- Notificaciones en tiempo real
+
+**🏥 Historial Clínico Digital**
+- Registro completo de consultas médicas
+- Seguimiento de tratamientos y medicamentos
+- Análisis de tendencias de salud
+- Acceso controlado por roles
+
+**💳 Sistema de Pagos Integrado**
+- Múltiples métodos de pago (YAPE, PLIN, bancos)
+- Validación automática de comprobantes
+- Gestión de facturación
+- Seguimiento de pagos pendientes
+
+**🔍 Búsqueda y Filtrado Avanzado**
+- Búsqueda inteligente de pacientes
+- Filtros por múltiples criterios
+- Resultados en tiempo real
+- Información contextual enriquecida
+
+**📊 Dashboard y Estadísticas**
+- Métricas en tiempo real por rol
+- Indicadores de rendimiento
+- Análisis de tendencias
+- Reportes automatizados
+
+### 🏗️ Arquitectura Técnica
+
+**Frontend**
+- React 18 con TypeScript para máxima confiabilidad
+- TailwindCSS + Radix UI para interfaz moderna y accesible
+- React Router 6 para navegación fluida (SPA)
+- Context API + localStorage para gestión de estado
+
+**Características Técnicas**
+- Diseño responsive (desktop, tablet, móvil)
+- Compresión automática de imágenes
+- Sistema de notificaciones inteligentes
+- Validación en tiempo real
+- Auto-reparación de datos inconsistentes
+
+### 🌊 Flujo General del Sistema
+
+```mermaid
+graph TD
+    A[Usuario Accede al Sistema] --> B{Tipo de Usuario}
+
+    B -->|Cliente| C[Dashboard Cliente]
+    C --> D[Gestionar Mascotas]
+    C --> E[Agendar Citas]
+    C --> F[Ver Historial]
+
+    B -->|Veterinario| G[Dashboard Veterinario]
+    G --> H[Agenda Médica]
+    G --> I[Mis Pacientes]
+    G --> J[Registrar Consultas]
+
+    B -->|Admin| K[Dashboard Admin]
+    K --> L[Validar Pagos]
+    K --> M[Gestionar Usuarios]
+    K --> N[Configurar Sistema]
+
+    E --> O[Subir Comprobante]
+    O --> P[Validación Admin]
+    P --> Q[Asignación Veterinario]
+    Q --> R[Atención Médica]
+    R --> S[Actualizar Historial]
+```
+
+### 🎨 Experiencia de Usuario
+
+**Simplicidad**: Interfaz intuitiva que reduce la curva de aprendizaje
+**Eficiencia**: Procesos optimizados que ahorran tiempo a todos los usuarios
+**Transparencia**: Seguimiento en tiempo real del estado de las citas
+**Accesibilidad**: Diseño responsive y accesible desde cualquier dispositivo
+**Confiabilidad**: Sistema robusto con validaciones y auto-reparación de datos
+
+---
+
 ## 📋 Tabla de Contenidos
 
-1. [Introducción](#introducción)
+1. [Resumen Ejecutivo](#resumen-ejecutivo-del-sistema)
 2. [Arquitectura del Sistema](#arquitectura-del-sistema)
 3. [Roles y Permisos](#roles-y-permisos)
 4. [Flujo del Cliente](#flujo-del-cliente)
 5. [Flujo del Admin](#flujo-del-admin)
 6. [Flujo del Veterinario](#flujo-del-veterinario)
-7. [Estados y Transiciones](#estados-y-transiciones)
-8. [Gestión de Datos](#gestión-de-datos)
-9. [Seguridad y Validaciones](#seguridad-y-validaciones)
+7. [Gestión de Citas](#flujo-de-gestión-de-citas-admin)
+8. [Estados y Transiciones](#estados-y-transiciones)
+9. [Gestión de Datos](#gestión-de-datos)
+10. [Seguridad y Validaciones](#seguridad-y-validaciones)
 
 ---
-
-## 🎯 Introducción
-
-El sistema PetLA es una aplicación web completa para la gestión de una clínica veterinaria que permite:
-- **Gestión de citas médicas** para mascotas
-- **Administración de usuarios** (clientes, veterinarios, admin)
-- **Historial clínico completo** de las mascotas
-- **Sistema de pagos** y validación de comprobantes
-- **Gestión de pre-citas** desde el landing page público
 
 ---
 
