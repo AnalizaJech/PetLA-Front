@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Heart, Mail, Lock, User, Phone, Eye, EyeOff, MapPin, Calendar, UserCheck } from "lucide-react";
+import { Dog, Mail, Lock, User, Phone, Eye, EyeOff, MapPin, Calendar, UserCheck } from "lucide-react";
 import { LoginFormData, RegistroClienteFormData } from "@/lib/types";
 
 export default function Login() {
