@@ -257,7 +257,7 @@ export default function Login() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
-                <Heart className="w-5 h-5 text-vet-primary" />
+                <Dog className="w-5 h-5 text-vet-primary" />
                 <span>Crear Cuenta</span>
               </CardTitle>
               <CardDescription>
