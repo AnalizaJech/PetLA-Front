@@ -165,21 +165,24 @@ export default function Login() {
 
               <form onSubmit={handleLogin} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="login-email">Email</Label>
+                  <Label htmlFor="login-identifier">Correo / Teléfono / Usuario</Label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
+                    <User className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
                     <Input
-                      id="login-email"
-                      type="email"
-                      placeholder="tu@email.com"
+                      id="login-identifier"
+                      type="text"
+                      placeholder="correo@vetcare.com"
                       className="pl-10"
-                      value={loginData.email}
+                      value={loginData.identifier}
                       onChange={(e) =>
-                        setLoginData({ ...loginData, email: e.target.value })
+                        setLoginData({ ...loginData, identifier: e.target.value })
                       }
                       required
                     />
                   </div>
+                  <p className="text-xs text-vet-gray-500">
+                    Puedes usar tu correo electrónico, número de teléfono o nombre de usuario
+                  </p>
                 </div>
 
                 <div className="space-y-2">
