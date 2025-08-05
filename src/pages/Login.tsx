@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Heart, Mail, Lock, User, Phone, Eye, EyeOff } from "lucide-react";
+import { Heart, Mail, Lock, User, Phone, Eye, EyeOff, MapPin, Calendar, UserCheck } from "lucide-react";
 import { LoginFormData, RegistroClienteFormData } from "@/lib/types";
 
 export default function Login() {
@@ -30,15 +30,20 @@ export default function Login() {
 
   // Login form state
   const [loginData, setLoginData] = useState<LoginFormData>({
-    email: "",
+    identifier: "",
     password: "",
   });
 
   // Registration form state
   const [registerData, setRegisterData] = useState<RegistroClienteFormData>({
     nombre: "",
+    apellidos: "",
+    username: "",
     email: "",
     telefono: "",
+    direccion: "",
+    fechaNacimiento: "",
+    genero: "",
     password: "",
     confirmPassword: "",
   });
