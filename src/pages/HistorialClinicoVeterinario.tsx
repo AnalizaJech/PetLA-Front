@@ -744,7 +744,7 @@ export default function HistorialClinicoVeterinario() {
                                     </span>
                                   </div>
                                 </>
-                              ) : (
+                              ) : mascotaSeleccionada ? (
                                 <>
                                   <UserX className="w-4 h-4 text-red-600" />
                                   <span className="text-sm font-medium text-red-800">
@@ -752,8 +752,18 @@ export default function HistorialClinicoVeterinario() {
                                   </span>
                                   <span className="text-xs text-red-600">
                                     ID cliente:{" "}
-                                    {mascotaSeleccionada?.clienteId ||
+                                    {mascotaSeleccionada.clienteId ||
                                       "No definido"}
+                                  </span>
+                                </>
+                              ) : (
+                                <>
+                                  <AlertCircle className="w-4 h-4 text-yellow-600" />
+                                  <span className="text-sm font-medium text-yellow-800">
+                                    Mascota no registrada - Solo historial médico disponible
+                                  </span>
+                                  <span className="text-xs text-yellow-600">
+                                    Considere registrar la mascota para gestión completa
                                   </span>
                                 </>
                               )}
