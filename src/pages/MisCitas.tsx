@@ -355,13 +355,13 @@ export default function MisCitas() {
           <Tabs
             value={selectedTab}
             onValueChange={setSelectedTab}
-            className="space-y-6"
+            className="space-y-8"
           >
-            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 gap-1">
-              <TabsTrigger value="todas" className="text-xs sm:text-sm">Todas</TabsTrigger>
-              <TabsTrigger value="pendientes" className="text-xs sm:text-sm">Pendientes</TabsTrigger>
-              <TabsTrigger value="proximas" className="text-xs sm:text-sm">Próximas</TabsTrigger>
-              <TabsTrigger value="completadas" className="text-xs sm:text-sm">Completadas</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 mb-6">
+              <TabsTrigger value="todas">Todas</TabsTrigger>
+              <TabsTrigger value="pendientes">Pendientes</TabsTrigger>
+              <TabsTrigger value="proximas">Próximas</TabsTrigger>
+              <TabsTrigger value="completadas">Completadas</TabsTrigger>
             </TabsList>
 
             <TabsContent value={selectedTab} className="space-y-4">
@@ -483,97 +483,81 @@ export default function MisCitas() {
                         </div>
 
                         <div className="text-right">
-                          <div className="text-lg font-bold text-vet-gray-900 mb-2">
+                          <div className="text-xl sm:text-2xl font-bold text-vet-gray-900 mb-3">
                             S/. {cita.precio.toLocaleString()}
                           </div>
-                          <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:justify-end">
+                          <div className="flex flex-col gap-2">
                             {user?.rol === "veterinario" ? (
                               <>
                                 {cita.estado === "aceptada" && (
                                   <Button
-                                    size="sm"
-                                    className="bg-vet-primary hover:bg-vet-primary-dark min-w-0 flex-shrink-0"
+                                    className="bg-vet-primary hover:bg-vet-primary-dark w-full sm:w-auto"
                                     onClick={() => {
                                       // Marcar como atendida y navegar al historial
                                       // Esta lógica se implementaría con el contexto
                                     }}
                                   >
-                                    <CheckCircle className="w-4 h-4 mr-1 sm:mr-2" />
-                                    <span className="hidden sm:inline">Registrar Consulta</span>
-                                    <span className="sm:hidden">Registrar</span>
+                                    <CheckCircle className="w-4 h-4 mr-2" />
+                                    Registrar Consulta
                                   </Button>
                                 )}
                                 {cita.estado === "atendida" && (
-                                  <Button variant="outline" size="sm" className="min-w-0 flex-shrink-0">
-                                    <FileText className="w-4 h-4 mr-1 sm:mr-2" />
-                                    <span className="hidden sm:inline">Ver Historial</span>
-                                    <span className="sm:hidden">Historial</span>
+                                  <Button variant="outline" className="w-full sm:w-auto">
+                                    <FileText className="w-4 h-4 mr-2" />
+                                    Ver Historial
                                   </Button>
                                 )}
-                                <Button variant="outline" size="sm" className="min-w-0 flex-shrink-0">
-                                  <User className="w-4 h-4 mr-1 sm:mr-2" />
-                                  <span className="hidden sm:inline">Info Paciente</span>
-                                  <span className="sm:hidden">Info</span>
+                                <Button variant="outline" className="w-full sm:w-auto">
+                                  <User className="w-4 h-4 mr-2" />
+                                  Info Paciente
                                 </Button>
                               </>
                             ) : (
                               <>
                                 {cita.estado === "pendiente_pago" && (
                                   <Button
-                                    size="sm"
                                     onClick={() => handleUploadProof(cita.id)}
                                     disabled={uploadingCitaId === cita.id}
-                                    className="bg-vet-primary hover:bg-vet-primary-dark min-w-0 flex-shrink-0"
+                                    className="bg-vet-primary hover:bg-vet-primary-dark w-full sm:w-auto"
                                   >
-                                    <Upload className="w-4 h-4 mr-1 sm:mr-2" />
-                                    <span className="hidden sm:inline">
-                                      {uploadingCitaId === cita.id
-                                        ? "Subiendo..."
-                                        : "Subir Comprobante"}
-                                    </span>
-                                    <span className="sm:hidden">
-                                      {uploadingCitaId === cita.id ? "..." : "Subir"}
-                                    </span>
+                                    <Upload className="w-4 h-4 mr-2" />
+                                    {uploadingCitaId === cita.id
+                                      ? "Subiendo..."
+                                      : "Subir Comprobante"}
                                   </Button>
                                 )}
                                 {(cita.estado === "en_validacion" ||
                                   cita.estado === "aceptada") &&
                                   cita.comprobantePago && (
                                     <Button
-                                      size="sm"
                                       variant="outline"
                                       onClick={() => handleViewReceipt(cita.id)}
-                                      className="border-vet-primary text-vet-primary hover:bg-vet-primary/10 min-w-0 flex-shrink-0"
+                                      className="border-vet-primary text-vet-primary hover:bg-vet-primary/10 w-full sm:w-auto"
                                     >
-                                      <Eye className="w-4 h-4 mr-1 sm:mr-2" />
-                                      <span className="hidden sm:inline">Ver Comprobante</span>
-                                      <span className="sm:hidden">Ver</span>
+                                      <Eye className="w-4 h-4 mr-2" />
+                                      Ver Comprobante
                                     </Button>
                                   )}
                                 {cita.estado === "rechazada" && (
                                   <Button
-                                    size="sm"
                                     onClick={() => handleDeleteCita(cita.id)}
                                     variant="outline"
-                                    className="border-red-300 text-red-700 hover:bg-red-50 min-w-0 flex-shrink-0"
+                                    className="border-red-300 text-red-700 hover:bg-red-50 w-full sm:w-auto"
                                   >
-                                    <Trash2 className="w-4 h-4 mr-1 sm:mr-2" />
-                                    <span className="hidden sm:inline">Eliminar Cita</span>
-                                    <span className="sm:hidden">Eliminar</span>
+                                    <Trash2 className="w-4 h-4 mr-2" />
+                                    Eliminar Cita
                                   </Button>
                                 )}
                                 {cita.estado === "atendida" && (
-                                  <Button variant="outline" size="sm" className="min-w-0 flex-shrink-0">
-                                    <FileText className="w-4 h-4 mr-1 sm:mr-2" />
-                                    <span className="hidden sm:inline">Ver Reporte</span>
-                                    <span className="sm:hidden">Reporte</span>
+                                  <Button variant="outline" className="w-full sm:w-auto">
+                                    <FileText className="w-4 h-4 mr-2" />
+                                    Ver Reporte
                                   </Button>
                                 )}
                                 {cita.estado === "aceptada" && (
-                                  <Button variant="outline" size="sm" className="min-w-0 flex-shrink-0">
-                                    <Phone className="w-4 h-4 mr-1 sm:mr-2" />
-                                    <span className="hidden sm:inline">Contactar</span>
-                                    <span className="sm:hidden">Llamar</span>
+                                  <Button variant="outline" className="w-full sm:w-auto">
+                                    <Phone className="w-4 h-4 mr-2" />
+                                    Contactar
                                   </Button>
                                 )}
                               </>
