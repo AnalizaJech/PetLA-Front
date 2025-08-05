@@ -711,8 +711,8 @@ export default function HistorialClinicoVeterinario() {
                           </div>
                           <div>
                             <h2 className="text-2xl font-bold text-vet-gray-900">
-                              {mascotaSeleccionada?.nombre || searchParams.get("nombre")}
-                              {!mascotaSeleccionada && (
+                              {mascotaSeleccionada?.nombre || selectedPetByName || searchParams.get("nombre")}
+                              {!mascotaSeleccionada && (selectedPetByName || searchParams.get("nombre")) && (
                                 <span className="ml-3 text-sm font-medium text-orange-600 bg-orange-100 px-3 py-1 rounded-full">
                                   No registrada en el sistema
                                 </span>
