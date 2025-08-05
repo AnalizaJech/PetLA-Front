@@ -171,8 +171,8 @@ export default function Index() {
             {/* Left Column - Content */}
             <div className="animate-fade-in z-10 relative">
               <div className="flex items-center space-x-2 mb-6">
-                <Badge className="bg-vet-primary/10 text-vet-primary border-vet-primary/20 hover:bg-vet-primary hover:text-white transition-all duration-300 cursor-default">
-                  <Heart className="w-3 h-3 mr-1" />
+                <Badge className="bg-vet-primary/10 text-vet-primary border-vet-primary/20 cursor-default">
+                  <PawPrint className="w-3 h-3 mr-1" />
                   Atención profesional 24/7
                 </Badge>
               </div>
@@ -584,16 +584,22 @@ export default function Index() {
                         : undefined
                     }
                     onDateChange={(date) => {
-                      setFormData({
-                        ...formData,
-                        fechaPreferida: date
-                          ? date.toISOString().split("T")[0]
-                          : "",
-                      });
+                      if (date && date >= new Date()) {
+                        setFormData({
+                          ...formData,
+                          fechaPreferida: date.toISOString().split("T")[0],
+                        });
+                      } else if (!date) {
+                        setFormData({
+                          ...formData,
+                          fechaPreferida: "",
+                        });
+                      }
                     }}
                     placeholder="Selecciona fecha"
                     fromYear={new Date().getFullYear()}
                     toYear={new Date().getFullYear() + 1}
+                    minDate={new Date()}
                   />
                 </div>
                 <div className="space-y-2">

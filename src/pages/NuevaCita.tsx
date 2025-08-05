@@ -53,13 +53,15 @@ interface NuevaCitaData {
   notas?: string;
 }
 
-const tiposConsulta = [
+// Default services configuration
+const defaultTiposConsulta = [
   {
     id: "consulta_general",
     nombre: "Consulta General",
     precio: 80,
     icono: "Stethoscope",
     descripcion: "Examen médico rutinario y evaluación de salud general",
+    activo: true,
   },
   {
     id: "vacunacion",
@@ -67,6 +69,7 @@ const tiposConsulta = [
     precio: 65,
     icono: "Syringe",
     descripcion: "Aplicación de vacunas preventivas y refuerzos",
+    activo: true,
   },
   {
     id: "emergencia",
@@ -74,6 +77,7 @@ const tiposConsulta = [
     precio: 150,
     icono: "AlertCircle",
     descripcion: "Atención médica urgente las 24 horas",
+    activo: true,
   },
   {
     id: "grooming",
@@ -81,6 +85,7 @@ const tiposConsulta = [
     precio: 45,
     icono: "Heart",
     descripcion: "Baño, corte de pelo, limpieza de oídos y uñas",
+    activo: true,
   },
   {
     id: "cirugia",
@@ -88,6 +93,7 @@ const tiposConsulta = [
     precio: 250,
     icono: "Activity",
     descripcion: "Procedimientos quirúrgicos especializados",
+    activo: true,
   },
   {
     id: "diagnostico",
@@ -95,8 +101,25 @@ const tiposConsulta = [
     precio: 120,
     icono: "Search",
     descripcion: "Exámenes y análisis para determinar diagnósticos",
+    activo: true,
   },
 ];
+
+// Function to get services from localStorage or default
+const getTiposConsulta = () => {
+  try {
+    const savedServices = localStorage.getItem("veterinary_services");
+    if (savedServices) {
+      const services = JSON.parse(savedServices);
+      // Only return active services
+      return services.filter((service: any) => service.activo);
+    }
+  } catch (error) {
+    console.error("Error loading services from localStorage:", error);
+  }
+  // Return default services if localStorage is empty or error
+  return defaultTiposConsulta;
+};
 
 const ubicaciones = [
   "Clínica Principal",
@@ -152,6 +175,7 @@ export default function NuevaCita() {
   const navigate = useNavigate();
   const { user, mascotas, usuarios, citas, addCita, fixOrphanedPets } =
     useAppContext();
+  const [tiposConsulta, setTiposConsulta] = useState(getTiposConsulta());
   const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -177,6 +201,26 @@ export default function NuevaCita() {
     console.log("Mascotas changed:", mascotas);
     console.log("User changed:", user);
   }, [mascotas, user]);
+
+  // Reload services when component mounts or when localStorage changes
+  useEffect(() => {
+    const updateServices = () => {
+      setTiposConsulta(getTiposConsulta());
+    };
+
+    // Update services on mount
+    updateServices();
+
+    // Listen for storage changes (when admin updates services)
+    window.addEventListener("storage", updateServices);
+    // Listen for custom event when services are updated
+    window.addEventListener("servicesUpdated", updateServices);
+
+    return () => {
+      window.removeEventListener("storage", updateServices);
+      window.removeEventListener("servicesUpdated", updateServices);
+    };
+  }, []);
 
   if (!user || user.rol !== "cliente") {
     return (
@@ -616,7 +660,7 @@ export default function NuevaCita() {
                           className="w-full min-h-[120px] max-h-[120px] resize-none overflow-y-auto px-3 py-2 border border-vet-gray-300 rounded-lg focus:ring-2 focus:ring-vet-primary focus:border-vet-primary transition-all duration-200"
                         />
                         <p className="text-xs text-vet-gray-500 mt-1">
-                          💬 Describe síntomas, comportamientos o motivos
+                          💬 Describe s��ntomas, comportamientos o motivos
                           específicos para una mejor atención
                         </p>
                       </div>
@@ -666,10 +710,17 @@ export default function NuevaCita() {
                           citaData.fecha ? new Date(citaData.fecha) : undefined
                         }
                         onDateChange={(date) => {
-                          setCitaData({
-                            ...citaData,
-                            fecha: date ? date.toISOString().split("T")[0] : "",
-                          });
+                          if (date && date >= new Date()) {
+                            setCitaData({
+                              ...citaData,
+                              fecha: date.toISOString().split("T")[0],
+                            });
+                          } else if (!date) {
+                            setCitaData({
+                              ...citaData,
+                              fecha: "",
+                            });
+                          }
                         }}
                         placeholder="Selecciona fecha"
                         fromYear={new Date().getFullYear()}

@@ -160,7 +160,7 @@ export default function DashboardVeterinario() {
         );
       case "en_validacion":
         return (
-          <Badge className="bg-blue-100 text-blue-800 border-blue-200">
+          <Badge className="bg-gray-100 text-gray-800 border-gray-200">
             <Clock className="w-3 h-3 mr-1" />
             En Validación
           </Badge>
@@ -249,12 +249,12 @@ export default function DashboardVeterinario() {
             <Card>
               <CardContent className="p-4 sm:p-6">
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                    <Clock className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-100 rounded-xl flex items-center justify-center">
+                    <Clock className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600" />
                   </div>
                   <div>
                     <p className="text-xs sm:text-sm text-vet-gray-600">Hoy</p>
-                    <p className="text-2xl sm:text-3xl font-bold text-blue-600">
+                    <p className="text-2xl sm:text-3xl font-bold text-gray-600">
                       {stats.citasHoy}
                     </p>
                   </div>
@@ -328,7 +328,7 @@ export default function DashboardVeterinario() {
                     <Calendar className="w-5 h-5 text-vet-primary" />
                     <span>Citas de Hoy</span>
                     {stats.citasHoy > 0 && (
-                      <Badge className="bg-blue-100 text-blue-800">
+                      <Badge className="bg-gray-100 text-gray-800">
                         {stats.citasHoy}
                       </Badge>
                     )}

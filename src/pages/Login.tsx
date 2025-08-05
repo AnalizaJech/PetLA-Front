@@ -13,7 +13,25 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Heart, Mail, Lock, User, Phone, Eye, EyeOff } from "lucide-react";
+import {
+  Dog,
+  Mail,
+  Lock,
+  User,
+  Phone,
+  Eye,
+  EyeOff,
+  MapPin,
+  Calendar,
+  UserCheck,
+} from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { LoginFormData, RegistroClienteFormData } from "@/lib/types";
 
 export default function Login() {
@@ -30,15 +48,20 @@ export default function Login() {
 
   // Login form state
   const [loginData, setLoginData] = useState<LoginFormData>({
-    email: "",
+    identifier: "",
     password: "",
   });
 
   // Registration form state
   const [registerData, setRegisterData] = useState<RegistroClienteFormData>({
     nombre: "",
+    apellidos: "",
+    username: "",
     email: "",
     telefono: "",
+    direccion: "",
+    fechaNacimiento: "",
+    genero: "",
     password: "",
     confirmPassword: "",
   });
@@ -52,12 +75,14 @@ export default function Login() {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      const user = await login(loginData.email, loginData.password);
+      const user = await login(loginData.identifier, loginData.password);
 
       if (user) {
         navigate("/dashboard");
       } else {
-        setError("Credenciales inválidas. Verifica tu email y contraseña.");
+        setError(
+          "Credenciales inválidas. Verifica tu email/teléfono/usuario y contraseña.",
+        );
       }
     } catch (error) {
       setError("Error al iniciar sesión. Intenta nuevamente.");
@@ -83,8 +108,15 @@ export default function Login() {
 
       const userData = {
         nombre: registerData.nombre,
+        apellidos: registerData.apellidos,
+        username: registerData.username,
         email: registerData.email,
         telefono: registerData.telefono,
+        direccion: registerData.direccion,
+        fechaNacimiento: registerData.fechaNacimiento
+          ? new Date(registerData.fechaNacimiento)
+          : undefined,
+        genero: registerData.genero,
         rol: "cliente" as const,
         password: registerData.password,
       };
@@ -107,18 +139,9 @@ export default function Login() {
 
   return (
     <div className="w-full space-y-6">
-      <div className="text-center">
-        <h2 className="text-3xl font-bold text-vet-gray-900">
-          Bienvenido a PetLA
-        </h2>
-        <p className="mt-2 text-vet-gray-600">
-          Accede a tu cuenta o crea una nueva
-        </p>
-      </div>
-
       <Tabs
         defaultValue={defaultTab}
-        className="w-full"
+        className="w-full max-w-2xl mx-auto"
         onValueChange={(value) => {
           if (value === "login") {
             navigate("/login");
@@ -127,60 +150,79 @@ export default function Login() {
           }
         }}
       >
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="login">Iniciar Sesión</TabsTrigger>
-          <TabsTrigger value="register">Registrarse</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-2 h-12 mb-8 bg-vet-gray-100 rounded-xl p-1 border-0">
+          <TabsTrigger
+            value="login"
+            className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-vet-primary data-[state=active]:shadow-sm font-medium transition-all duration-200 text-vet-gray-600 hover:text-vet-gray-900"
+          >
+            Iniciar Sesión
+          </TabsTrigger>
+          <TabsTrigger
+            value="register"
+            className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-vet-primary data-[state=active]:shadow-sm font-medium transition-all duration-200 text-vet-gray-600 hover:text-vet-gray-900"
+          >
+            Registrarse
+          </TabsTrigger>
         </TabsList>
 
         {/* Login Tab */}
         <TabsContent value="login">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
+          <Card className="border-0 shadow-2xl bg-white/95 backdrop-blur-sm">
+            <CardHeader className="text-center pb-3">
+              <CardTitle className="flex items-center justify-center space-x-2 text-xl">
                 <User className="w-5 h-5 text-vet-primary" />
-                <span>Iniciar Sesión</span>
+                <span className="text-vet-gray-900">Iniciar Sesión</span>
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-vet-gray-600 mt-2">
                 Ingresa tus credenciales para acceder a tu cuenta
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="px-8 pt-2 pb-8">
               {error && (
-                <Alert className="mb-4 border-red-200 bg-red-50">
-                  <AlertDescription className="text-red-800">
+                <Alert className="mb-6 border-red-200 bg-red-50 rounded-lg">
+                  <AlertDescription className="text-red-800 text-sm">
                     {error}
                   </AlertDescription>
                 </Alert>
               )}
 
-              <form onSubmit={handleLogin} className="space-y-4">
+              <form onSubmit={handleLogin} className="space-y-5">
                 <div className="space-y-2">
-                  <Label htmlFor="login-email">Email</Label>
+                  <Label htmlFor="login-identifier">
+                    Correo / Teléfono / Usuario
+                  </Label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
+                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-vet-gray-400" />
                     <Input
-                      id="login-email"
-                      type="email"
-                      placeholder="tu@email.com"
-                      className="pl-10"
-                      value={loginData.email}
+                      id="login-identifier"
+                      type="text"
+                      placeholder="correo@vetcare.com"
+                      className="pl-10 h-10 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
+                      value={loginData.identifier}
                       onChange={(e) =>
-                        setLoginData({ ...loginData, email: e.target.value })
+                        setLoginData({
+                          ...loginData,
+                          identifier: e.target.value,
+                        })
                       }
                       required
                     />
                   </div>
+                  <p className="text-xs text-vet-gray-500">
+                    Puedes usar tu correo electrónico, número de teléfono o
+                    nombre de usuario
+                  </p>
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="login-password">Contraseña</Label>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-vet-gray-400" />
                     <Input
                       id="login-password"
                       type={showPassword ? "text" : "password"}
                       placeholder="Tu contraseña"
-                      className="pl-10 pr-10"
+                      className="pl-10 pr-10 h-10 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
                       value={loginData.password}
                       onChange={(e) =>
                         setLoginData({ ...loginData, password: e.target.value })
@@ -189,7 +231,7 @@ export default function Login() {
                     />
                     <button
                       type="button"
-                      className="absolute right-3 top-3 text-vet-gray-400 hover:text-vet-gray-600"
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-vet-gray-400 hover:text-vet-gray-600 transition-colors"
                       onClick={() => setShowPassword(!showPassword)}
                     >
                       {showPassword ? (
@@ -202,11 +244,11 @@ export default function Login() {
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-3">
                     <input
                       type="checkbox"
                       id="remember"
-                      className="rounded border-vet-gray-300 text-vet-primary"
+                      className="w-4 h-4 rounded border-vet-gray-300 text-vet-primary focus:ring-vet-primary/20 focus:ring-2"
                     />
                     <Label htmlFor="remember" className="text-sm">
                       Recordarme
@@ -222,7 +264,7 @@ export default function Login() {
 
                 <Button
                   type="submit"
-                  className="w-full bg-vet-primary hover:bg-vet-primary-dark"
+                  className="w-full h-10 bg-vet-primary hover:bg-vet-primary-dark text-white font-semibold rounded-lg transition-all duration-200 shadow-sm hover:shadow-md"
                   disabled={isLoading}
                 >
                   {isLoading ? (
@@ -241,98 +283,216 @@ export default function Login() {
 
         {/* Register Tab */}
         <TabsContent value="register">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <Heart className="w-5 h-5 text-vet-primary" />
-                <span>Crear Cuenta</span>
+          <Card className="border-0 shadow-2xl bg-white/95 backdrop-blur-sm">
+            <CardHeader className="text-center pb-3">
+              <CardTitle className="flex items-center justify-center space-x-2 text-xl">
+                <Dog className="w-5 h-5 text-vet-primary" />
+                <span className="text-vet-gray-900">Crear Cuenta</span>
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-vet-gray-600 mt-2">
                 Regístrate para acceder a todos nuestros servicios
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="px-8 pt-2 pb-8">
               {error && (
-                <Alert className="mb-4 border-red-200 bg-red-50">
-                  <AlertDescription className="text-red-800">
+                <Alert className="mb-6 border-red-200 bg-red-50 rounded-lg">
+                  <AlertDescription className="text-red-800 text-sm">
                     {error}
                   </AlertDescription>
                 </Alert>
               )}
 
-              <form onSubmit={handleRegister} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="register-name">Nombre completo</Label>
-                  <div className="relative">
-                    <User className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
-                    <Input
-                      id="register-name"
-                      type="text"
-                      placeholder="Tu nombre completo"
-                      className="pl-10"
-                      value={registerData.nombre}
-                      onChange={(e) =>
-                        setRegisterData({
-                          ...registerData,
-                          nombre: e.target.value,
-                        })
-                      }
-                      required
-                    />
+              <form onSubmit={handleRegister} className="space-y-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="register-name">Nombres</Label>
+                    <div className="relative">
+                      <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-vet-gray-400" />
+                      <Input
+                        id="register-name"
+                        type="text"
+                        placeholder="Ej: Carlos"
+                        className="pl-10 h-10 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
+                        value={registerData.nombre}
+                        onChange={(e) =>
+                          setRegisterData({
+                            ...registerData,
+                            nombre: e.target.value,
+                          })
+                        }
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="register-apellidos">Apellidos</Label>
+                    <div className="relative">
+                      <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-vet-gray-400" />
+                      <Input
+                        id="register-apellidos"
+                        type="text"
+                        placeholder="Ej: Ramírez"
+                        className="pl-10 h-10 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
+                        value={registerData.apellidos}
+                        onChange={(e) =>
+                          setRegisterData({
+                            ...registerData,
+                            apellidos: e.target.value,
+                          })
+                        }
+                        required
+                      />
+                    </div>
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="register-email">Email</Label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
-                    <Input
-                      id="register-email"
-                      type="email"
-                      placeholder="tu@email.com"
-                      className="pl-10"
-                      value={registerData.email}
-                      onChange={(e) =>
-                        setRegisterData({
-                          ...registerData,
-                          email: e.target.value,
-                        })
-                      }
-                      required
-                    />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="register-username">Nombre de usuario</Label>
+                    <div className="relative">
+                      <UserCheck className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-vet-gray-400" />
+                      <Input
+                        id="register-username"
+                        type="text"
+                        placeholder="Ej: carlos123"
+                        className="pl-10 h-10 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
+                        value={registerData.username}
+                        onChange={(e) =>
+                          setRegisterData({
+                            ...registerData,
+                            username: e.target.value,
+                          })
+                        }
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="register-email">Email</Label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-vet-gray-400" />
+                      <Input
+                        id="register-email"
+                        type="email"
+                        placeholder="tu@email.com"
+                        className="pl-10 h-10 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
+                        value={registerData.email}
+                        onChange={(e) =>
+                          setRegisterData({
+                            ...registerData,
+                            email: e.target.value,
+                          })
+                        }
+                        required
+                      />
+                    </div>
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="register-phone">Teléfono</Label>
-                  <div className="relative">
-                    <Phone className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
-                    <Input
-                      id="register-phone"
-                      type="tel"
-                      placeholder="+52 55 1234 5678"
-                      className="pl-10"
-                      value={registerData.telefono}
-                      onChange={(e) =>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="register-phone">Teléfono</Label>
+                    <div className="relative">
+                      <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-vet-gray-400" />
+                      <Input
+                        id="register-phone"
+                        type="tel"
+                        placeholder="+52 55 1234 5678"
+                        className="pl-10 h-10 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
+                        value={registerData.telefono}
+                        onChange={(e) =>
+                          setRegisterData({
+                            ...registerData,
+                            telefono: e.target.value,
+                          })
+                        }
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="register-direccion">
+                      Dirección (opcional)
+                    </Label>
+                    <div className="relative">
+                      <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-vet-gray-400" />
+                      <Input
+                        id="register-direccion"
+                        type="text"
+                        placeholder="Tu dirección completa"
+                        className="pl-10 h-10 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
+                        value={registerData.direccion}
+                        onChange={(e) =>
+                          setRegisterData({
+                            ...registerData,
+                            direccion: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="register-birthdate">
+                      Fecha de nacimiento (opcional)
+                    </Label>
+                    <div className="relative">
+                      <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-vet-gray-400" />
+                      <Input
+                        id="register-birthdate"
+                        type="date"
+                        className="pl-10 h-10 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
+                        value={registerData.fechaNacimiento}
+                        onChange={(e) =>
+                          setRegisterData({
+                            ...registerData,
+                            fechaNacimiento: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="register-genero">Género (opcional)</Label>
+                    <Select
+                      value={registerData.genero}
+                      onValueChange={(value) =>
                         setRegisterData({
                           ...registerData,
-                          telefono: e.target.value,
+                          genero: value,
                         })
                       }
-                      required
-                    />
+                    >
+                      <SelectTrigger className="h-10 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10">
+                        <SelectValue placeholder="Seleccionar género" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="masculino">Masculino</SelectItem>
+                        <SelectItem value="femenino">Femenino</SelectItem>
+                        <SelectItem value="otro">Otro</SelectItem>
+                        <SelectItem value="prefiero_no_decir">
+                          Prefiero no decir
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="register-password">Contraseña</Label>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-vet-gray-400" />
                     <Input
                       id="register-password"
                       type={showPassword ? "text" : "password"}
                       placeholder="Mínimo 8 caracteres"
-                      className="pl-10 pr-10"
+                      className="pl-10 pr-10 h-10 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
                       value={registerData.password}
                       onChange={(e) =>
                         setRegisterData({
@@ -345,7 +505,7 @@ export default function Login() {
                     />
                     <button
                       type="button"
-                      className="absolute right-3 top-3 text-vet-gray-400 hover:text-vet-gray-600"
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-vet-gray-400 hover:text-vet-gray-600 transition-colors"
                       onClick={() => setShowPassword(!showPassword)}
                     >
                       {showPassword ? (
@@ -362,12 +522,12 @@ export default function Login() {
                     Confirmar contraseña
                   </Label>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-vet-gray-400" />
                     <Input
                       id="register-confirm-password"
                       type={showPassword ? "text" : "password"}
                       placeholder="Repite tu contraseña"
-                      className="pl-10"
+                      className="pl-10 h-10 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
                       value={registerData.confirmPassword}
                       onChange={(e) =>
                         setRegisterData({
@@ -380,25 +540,28 @@ export default function Login() {
                   </div>
                 </div>
 
-                <div className="flex items-start space-x-2">
+                <div className="flex items-start space-x-3">
                   <input
                     type="checkbox"
                     id="terms"
-                    className="mt-1 rounded border-vet-gray-300 text-vet-primary"
+                    className="mt-1 w-4 h-4 rounded border-vet-gray-300 text-vet-primary focus:ring-vet-primary/20 focus:ring-2 shrink-0"
                     required
                   />
-                  <Label htmlFor="terms" className="text-sm text-vet-gray-600">
+                  <Label
+                    htmlFor="terms"
+                    className="text-sm text-vet-gray-600 leading-relaxed cursor-pointer"
+                  >
                     Acepto los{" "}
                     <Link
                       to="/terminos"
-                      className="text-vet-primary hover:text-vet-primary-dark"
+                      className="text-vet-primary hover:text-vet-primary-dark underline decoration-1 underline-offset-2 transition-colors"
                     >
                       términos y condiciones
                     </Link>{" "}
                     y la{" "}
                     <Link
                       to="/privacidad"
-                      className="text-vet-primary hover:text-vet-primary-dark"
+                      className="text-vet-primary hover:text-vet-primary-dark underline decoration-1 underline-offset-2 transition-colors"
                     >
                       política de privacidad
                     </Link>
@@ -408,7 +571,7 @@ export default function Login() {
 
                 <Button
                   type="submit"
-                  className="w-full bg-vet-primary hover:bg-vet-primary-dark"
+                  className="w-full h-10 bg-vet-primary hover:bg-vet-primary-dark text-white font-semibold rounded-lg transition-all duration-200 shadow-sm hover:shadow-md"
                   disabled={isLoading}
                 >
                   {isLoading ? (

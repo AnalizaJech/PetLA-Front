@@ -37,6 +37,8 @@ import {
   EyeOff,
   AlertTriangle,
   Info,
+  Stethoscope,
+  DollarSign,
 } from "lucide-react";
 
 export default function Configuracion() {
@@ -46,6 +48,58 @@ export default function Configuracion() {
   const [errorMessage, setErrorMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [activeTab, setActiveTab] = useState("profile");
+
+  // Services state
+  const [services, setServices] = useState([
+    {
+      id: "consulta_general",
+      nombre: "Consulta General",
+      precio: 80,
+      icono: "Stethoscope",
+      descripcion: "Examen médico rutinario y evaluación de salud general",
+      activo: true,
+    },
+    {
+      id: "vacunacion",
+      nombre: "Vacunación",
+      precio: 65,
+      icono: "Syringe",
+      descripcion: "Aplicación de vacunas preventivas y refuerzos",
+      activo: true,
+    },
+    {
+      id: "emergencia",
+      nombre: "Emergencia",
+      precio: 150,
+      icono: "AlertCircle",
+      descripcion: "Atención médica urgente las 24 horas",
+      activo: true,
+    },
+    {
+      id: "grooming",
+      nombre: "Grooming",
+      precio: 45,
+      icono: "Heart",
+      descripcion: "Baño, corte de pelo, limpieza de oídos y uñas",
+      activo: true,
+    },
+    {
+      id: "cirugia",
+      nombre: "Cirugía",
+      precio: 250,
+      icono: "Activity",
+      descripcion: "Procedimientos quirúrgicos especializados",
+      activo: true,
+    },
+    {
+      id: "diagnostico",
+      nombre: "Diagnóstico",
+      precio: 120,
+      icono: "Search",
+      descripcion: "Exámenes y análisis para determinar diagnósticos",
+      activo: true,
+    },
+  ]);
 
   // Load settings from localStorage
   const loadSettings = (key: string, defaultValue: any) => {
@@ -323,6 +377,38 @@ export default function Configuracion() {
     }, 500);
     return () => clearTimeout(timer);
   }, [themeSettings]);
+
+  // Handle service updates
+  const handleServiceUpdate = (
+    serviceId: string,
+    field: string,
+    value: any,
+  ) => {
+    setServices((prev) =>
+      prev.map((service) =>
+        service.id === serviceId ? { ...service, [field]: value } : service,
+      ),
+    );
+  };
+
+  const handleSaveServices = async () => {
+    setIsLoading(true);
+    setSavedMessage("");
+    setErrorMessage("");
+
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Save to localStorage
+      saveSettings("veterinary_services", services);
+
+      setSavedMessage("Configuración de servicios actualizada correctamente");
+    } catch (error) {
+      setErrorMessage("Error al actualizar los servicios");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <Layout>
@@ -957,7 +1043,7 @@ export default function Configuracion() {
                           </p>
                           <ul className="mt-1 space-y-1 text-xs">
                             <li>
-                              • Usa una contraseña fuerte con al menos 8
+                              • Usa una contrase��a fuerte con al menos 8
                               caracteres
                             </li>
                             <li>• Habilita la autenticación de dos factores</li>

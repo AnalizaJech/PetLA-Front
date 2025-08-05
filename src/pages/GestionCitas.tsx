@@ -257,7 +257,7 @@ export default function GestionCitas() {
         );
       case "en_validacion":
         return (
-          <Badge className="bg-blue-100 text-blue-800 border-blue-200">
+          <Badge className="bg-gray-100 text-gray-800 border-gray-200">
             <Clock className="w-3 h-3 mr-1" />
             En Validación
           </Badge>
@@ -423,12 +423,12 @@ export default function GestionCitas() {
             <Card>
               <CardContent className="p-4 sm:p-6">
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                    <Calendar className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-100 rounded-xl flex items-center justify-center">
+                    <Calendar className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600" />
                   </div>
                   <div>
                     <p className="text-xs sm:text-sm text-vet-gray-600">Hoy</p>
-                    <p className="text-2xl sm:text-3xl font-bold text-blue-600">
+                    <p className="text-2xl sm:text-3xl font-bold text-gray-600">
                       {stats.hoy}
                     </p>
                   </div>
@@ -604,7 +604,7 @@ export default function GestionCitas() {
                                 }}
                                 className="flex items-center cursor-pointer hover:bg-vet-gray-50"
                               >
-                                <Eye className="w-4 h-4 mr-2 text-blue-600" />
+                                <Eye className="w-4 h-4 mr-2 text-vet-gray-600" />
                                 Ver detalles
                               </DropdownMenuItem>
 
@@ -872,9 +872,9 @@ export default function GestionCitas() {
                           <span className="text-xs font-medium text-vet-gray-500 uppercase tracking-wide">
                             Comprobante de Pago
                           </span>
-                          <div className="mt-2 flex items-center space-x-2 p-3 bg-blue-50 border border-blue-200 rounded">
-                            <FileText className="w-5 h-5 text-blue-600" />
-                            <span className="text-sm font-medium text-blue-900">
+                          <div className="mt-2 flex items-center space-x-2 p-3 bg-green-50 border border-green-200 rounded">
+                            <FileText className="w-5 h-5 text-green-600" />
+                            <span className="text-sm font-medium text-green-900">
                               Comprobante subido por el cliente
                             </span>
                           </div>
@@ -892,9 +892,9 @@ export default function GestionCitas() {
                           </h4>
                         </div>
 
-                        <Alert className="border-blue-200 bg-blue-50">
-                          <AlertCircle className="w-4 h-4 text-blue-600" />
-                          <AlertDescription className="text-blue-800">
+                        <Alert className="border-vet-gray-200 bg-vet-gray-50">
+                          <AlertCircle className="w-4 h-4 text-vet-gray-600" />
+                          <AlertDescription className="text-vet-gray-800">
                             El cliente ha subido su comprobante de pago. Revisa
                             la información y decide si aprobar o rechazar la
                             cita.
@@ -1108,8 +1108,8 @@ export default function GestionCitas() {
           <div className="max-h-[calc(90vh-8rem)] overflow-y-auto scrollbar-hide">
             <DialogHeader className="pb-4 border-b border-vet-gray-200">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <FileText className="w-5 h-5 text-blue-600" />
+                <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                  <FileText className="w-5 h-5 text-green-600" />
                 </div>
                 <div>
                   <DialogTitle className="text-xl font-semibold text-vet-gray-900">
@@ -1157,14 +1157,14 @@ export default function GestionCitas() {
                 {selectedCita?.comprobantePago ? (
                   <div className="space-y-4">
                     {/* File Info */}
-                    <div className="bg-blue-50 p-4">
+                    <div className="bg-green-50 p-4">
                       <div className="flex items-center space-x-3">
-                        <FileText className="w-8 h-8 text-blue-600" />
+                        <FileText className="w-8 h-8 text-green-600" />
                         <div>
-                          <h4 className="font-medium text-blue-900">
+                          <h4 className="font-medium text-green-900">
                             Comprobante de Pago
                           </h4>
-                          <p className="text-sm text-blue-700">
+                          <p className="text-sm text-green-700">
                             Archivo subido por el cliente
                           </p>
                         </div>

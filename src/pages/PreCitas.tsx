@@ -643,7 +643,7 @@ export default function PreCitas() {
                           <span className="text-xs font-medium text-vet-gray-500 uppercase tracking-wide">
                             Notas Previas
                           </span>
-                          <p className="mt-1 text-blue-700 bg-blue-50 p-3 rounded border border-blue-200">
+                          <p className="mt-1 text-vet-gray-700 bg-vet-gray-50 p-3 rounded border border-vet-gray-200">
                             {selectedPreCita.notasAdmin}
                           </p>
                         </div>
@@ -751,8 +751,8 @@ export default function PreCitas() {
 
                     {/* New Date Selection - only show if changing date */}
                     {processAction === "cambiar_fecha" && (
-                      <div className="space-y-3 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                        <h4 className="font-medium text-blue-900">
+                      <div className="space-y-3 p-4 bg-vet-gray-50 border border-vet-gray-200 rounded-lg">
+                        <h4 className="font-medium text-vet-gray-900">
                           Nueva fecha y hora
                         </h4>
                         <div className="grid grid-cols-2 gap-3">
@@ -770,13 +770,14 @@ export default function PreCitas() {
                               toYear={new Date().getFullYear() + 1}
                             />
                           </div>
-                          <div>
+                          <div className="space-y-2">
                             <Label htmlFor="nueva-hora">Nueva hora *</Label>
                             <Input
                               id="nueva-hora"
                               type="time"
                               value={newTime}
                               onChange={(e) => setNewTime(e.target.value)}
+                              className="h-10"
                             />
                           </div>
                         </div>
@@ -864,7 +865,7 @@ export default function PreCitas() {
                           processAction === "rechazar"
                             ? "bg-red-600 hover:bg-red-700"
                             : processAction === "cambiar_fecha"
-                              ? "bg-blue-600 hover:bg-blue-700"
+                              ? "bg-vet-primary hover:bg-vet-primary-dark"
                               : "bg-vet-primary hover:bg-vet-primary-dark"
                         }`}
                       >

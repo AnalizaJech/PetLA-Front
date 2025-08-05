@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAppContext } from "@/contexts/AppContext";
 import Layout from "@/components/Layout";
@@ -31,10 +31,82 @@ import {
   CreditCard,
   Activity,
   Mail,
+  User,
+  Settings,
+  DollarSign,
+  Save,
+  AlertTriangle,
 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export default function Dashboard() {
   const { user, getStats } = useAppContext();
+  const [showServicesModal, setShowServicesModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [savedMessage, setSavedMessage] = useState("");
+
+  // Services state
+  const [services, setServices] = useState([
+    {
+      id: "consulta_general",
+      nombre: "Consulta General",
+      precio: 80,
+      icono: "Stethoscope",
+      descripcion: "Examen médico rutinario y evaluación de salud general",
+      activo: true,
+    },
+    {
+      id: "vacunacion",
+      nombre: "Vacunación",
+      precio: 65,
+      icono: "Syringe",
+      descripcion: "Aplicación de vacunas preventivas y refuerzos",
+      activo: true,
+    },
+    {
+      id: "emergencia",
+      nombre: "Emergencia",
+      precio: 150,
+      icono: "AlertCircle",
+      descripcion: "Atención médica urgente las 24 horas",
+      activo: true,
+    },
+    {
+      id: "grooming",
+      nombre: "Grooming",
+      precio: 45,
+      icono: "Heart",
+      descripcion: "Baño, corte de pelo, limpieza de oídos y uñas",
+      activo: true,
+    },
+    {
+      id: "cirugia",
+      nombre: "Cirugía",
+      precio: 250,
+      icono: "Activity",
+      descripcion: "Procedimientos quirúrgicos especializados",
+      activo: true,
+    },
+    {
+      id: "diagnostico",
+      nombre: "Diagnóstico",
+      precio: 120,
+      icono: "Search",
+      descripcion: "Exámenes y análisis para determinar diagnósticos",
+      activo: true,
+    },
+  ]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -46,6 +118,46 @@ export default function Dashboard() {
   }
 
   const stats = getStats();
+
+  // Handle service updates
+  const handleServiceUpdate = (
+    serviceId: string,
+    field: string,
+    value: any,
+  ) => {
+    setServices((prev) =>
+      prev.map((service) =>
+        service.id === serviceId ? { ...service, [field]: value } : service,
+      ),
+    );
+  };
+
+  const handleSaveServices = async () => {
+    setIsLoading(true);
+    setSavedMessage("");
+
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Save to localStorage
+      localStorage.setItem("veterinary_services", JSON.stringify(services));
+
+      // Dispatch custom event to notify other components
+      window.dispatchEvent(
+        new CustomEvent("servicesUpdated", { detail: services }),
+      );
+
+      setSavedMessage("Configuración de servicios actualizada correctamente");
+      setTimeout(() => {
+        setSavedMessage("");
+        setShowServicesModal(false);
+      }, 2000);
+    } catch (error) {
+      console.error("Error al actualizar los servicios:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <Layout>
@@ -76,7 +188,9 @@ export default function Dashboard() {
           </div>
 
           {/* Admin Dashboard */}
-          {user?.rol === "admin" && <AdminDashboard />}
+          {user?.rol === "admin" && (
+            <AdminDashboard setShowServicesModal={setShowServicesModal} />
+          )}
 
           {/* Client Dashboard */}
           {user?.rol === "cliente" && (
@@ -87,11 +201,179 @@ export default function Dashboard() {
           )}
         </div>
       </div>
+
+      {/* Services Configuration Modal */}
+      <Dialog open={showServicesModal} onOpenChange={setShowServicesModal}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center space-x-2">
+              <Stethoscope className="w-5 h-5 text-vet-primary" />
+              <span>Configuración de Servicios Veterinarios</span>
+            </DialogTitle>
+            <DialogDescription>
+              Gestiona los 6 servicios veterinarios principales: precios,
+              descripciones y disponibilidad
+            </DialogDescription>
+          </DialogHeader>
+
+          {savedMessage && (
+            <Alert className="bg-green-50 border-green-200 mb-4">
+              <CheckCircle className="w-4 h-4 text-green-600" />
+              <AlertDescription className="text-green-800">
+                {savedMessage}
+              </AlertDescription>
+            </Alert>
+          )}
+
+          <div className="space-y-6">
+            <div className="grid gap-6">
+              {services.map((service) => (
+                <Card
+                  key={service.id}
+                  className="border-l-4 border-l-vet-primary"
+                >
+                  <CardContent className="p-6">
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-10 h-10 bg-vet-primary/10 rounded-lg flex items-center justify-center">
+                            <Stethoscope className="w-5 h-5 text-vet-primary" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold text-vet-gray-900">
+                              {service.nombre}
+                            </h3>
+                            <p className="text-sm text-vet-gray-600">
+                              {service.id}
+                            </p>
+                          </div>
+                        </div>
+                        <Switch
+                          checked={service.activo}
+                          onCheckedChange={(checked) =>
+                            handleServiceUpdate(service.id, "activo", checked)
+                          }
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor={`precio-${service.id}`}>
+                            Precio (S/)
+                          </Label>
+                          <div className="relative">
+                            <DollarSign className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
+                            <Input
+                              id={`precio-${service.id}`}
+                              type="number"
+                              min="0"
+                              step="0.01"
+                              className="pl-10"
+                              value={service.precio}
+                              onChange={(e) =>
+                                handleServiceUpdate(
+                                  service.id,
+                                  "precio",
+                                  parseFloat(e.target.value) || 0,
+                                )
+                              }
+                              placeholder="0.00"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor={`nombre-${service.id}`}>
+                            Nombre del servicio
+                          </Label>
+                          <Input
+                            id={`nombre-${service.id}`}
+                            value={service.nombre}
+                            onChange={(e) =>
+                              handleServiceUpdate(
+                                service.id,
+                                "nombre",
+                                e.target.value,
+                              )
+                            }
+                            placeholder="Nombre del servicio"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor={`descripcion-${service.id}`}>
+                          Descripción
+                        </Label>
+                        <Textarea
+                          id={`descripcion-${service.id}`}
+                          value={service.descripcion}
+                          onChange={(e) =>
+                            handleServiceUpdate(
+                              service.id,
+                              "descripcion",
+                              e.target.value,
+                            )
+                          }
+                          placeholder="Descripción del servicio..."
+                          rows={2}
+                        />
+                      </div>
+
+                      {!service.activo && (
+                        <Alert className="border-orange-200 bg-orange-50">
+                          <AlertTriangle className="w-4 h-4 text-orange-600" />
+                          <AlertDescription className="text-orange-800">
+                            Este servicio está desactivado y no aparecerá en las
+                            opciones de citas
+                          </AlertDescription>
+                        </Alert>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            <div className="pt-4 border-t border-vet-gray-200">
+              <div className="flex justify-between items-center">
+                <div className="text-sm text-vet-gray-600">
+                  <p>
+                    Los cambios se aplicarán inmediatamente en toda la
+                    plataforma
+                  </p>
+                </div>
+                <Button
+                  onClick={handleSaveServices}
+                  disabled={isLoading}
+                  className="bg-vet-primary hover:bg-vet-primary-dark"
+                >
+                  {isLoading ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2" />
+                      Guardando...
+                    </>
+                  ) : (
+                    <>
+                      <Save className="mr-2 w-4 h-4" />
+                      Guardar configuración
+                    </>
+                  )}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </Layout>
   );
 }
 
-function AdminDashboard() {
+function AdminDashboard({
+  setShowServicesModal,
+}: {
+  setShowServicesModal: (show: boolean) => void;
+}) {
   const { usuarios, citas, preCitas, suscriptoresNewsletter } = useAppContext();
 
   const adminStats = {
@@ -279,14 +561,14 @@ function AdminDashboard() {
         <Card className="border-l-4 border-l-blue-500">
           <CardContent className="p-4 sm:p-6">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                <Stethoscope className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-100 rounded-xl flex items-center justify-center">
+                <Stethoscope className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600" />
               </div>
               <div>
                 <p className="text-xs sm:text-sm text-vet-gray-600">
                   Veterinarios
                 </p>
-                <p className="text-2xl sm:text-3xl font-bold text-blue-600">
+                <p className="text-2xl sm:text-3xl font-bold text-gray-600">
                   {adminStats.veterinarios}
                 </p>
               </div>
@@ -412,10 +694,19 @@ function AdminDashboard() {
                 variant="outline"
                 className="w-full h-20 flex flex-col items-center justify-center space-y-2"
               >
-                <Stethoscope className="w-6 h-6 text-vet-primary" />
+                <User className="w-6 h-6 text-vet-primary" />
                 <span className="text-sm">Veterinarios</span>
               </Button>
             </Link>
+
+            <Button
+              variant="outline"
+              className="w-full h-20 flex flex-col items-center justify-center space-y-2"
+              onClick={() => setShowServicesModal(true)}
+            >
+              <Stethoscope className="w-6 h-6 text-vet-primary" />
+              <span className="text-sm">Servicios</span>
+            </Button>
           </CardContent>
         </Card>
 
@@ -675,7 +966,7 @@ function ClientDashboard({ stats }: { stats: any }) {
               <span>Gestión de Mascotas</span>
             </CardTitle>
             <CardDescription>
-              Administra la información de tus compañeros peludos
+              Administra la información de tus compa��eros peludos
             </CardDescription>
           </CardHeader>
           <CardContent className="grid grid-cols-2 gap-4">

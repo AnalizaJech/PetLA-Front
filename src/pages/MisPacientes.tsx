@@ -77,7 +77,7 @@ import {
 
 const estadoColors = {
   pendiente_pago: "bg-yellow-100 text-yellow-800 border-yellow-200",
-  en_validacion: "bg-blue-100 text-blue-800 border-blue-200",
+  en_validacion: "bg-gray-100 text-gray-800 border-gray-200",
   aceptada: "bg-green-100 text-green-800 border-green-200",
   atendida: "bg-gray-100 text-gray-800 border-gray-200",
   cancelada: "bg-red-100 text-red-800 border-red-200",
@@ -392,11 +392,11 @@ export default function MisPacientes() {
             <Card>
               <CardContent className="p-3 sm:p-4">
                 <div className="flex items-center space-x-2 sm:space-x-3">
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-lg sm:text-xl font-bold text-blue-600">
+                    <p className="text-lg sm:text-xl font-bold text-gray-600">
                       {stats.hoy}
                     </p>
                     <p className="text-xs sm:text-sm text-vet-gray-600">Hoy</p>
