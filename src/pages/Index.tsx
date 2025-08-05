@@ -51,6 +51,7 @@ export default function Index() {
   const { isAuthenticated, user, addPreCita } = useAppContext();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showValidationErrors, setShowValidationErrors] = useState(false);
   const [formData, setFormData] = useState<PreCitaFormData>({
     nombreMascota: "",
     tipoMascota: "perro",
@@ -87,6 +88,7 @@ export default function Index() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setShowValidationErrors(true);
 
     // Validar campos obligatorios
     if (!formData.fechaPreferida) {
@@ -619,7 +621,7 @@ export default function Index() {
                     fromYear={new Date().getFullYear()}
                     toYear={new Date().getFullYear() + 1}
                     minDate={new Date()}
-                    className={!formData.fechaPreferida ? "border-red-300" : ""}
+                    className={showValidationErrors && !formData.fechaPreferida ? "border-red-300" : ""}
                   />
                 </div>
                 <div className="space-y-2">
@@ -631,7 +633,7 @@ export default function Index() {
                     }
                     required
                   >
-                    <SelectTrigger className={!formData.horaPreferida ? "border-red-300" : ""}>
+                    <SelectTrigger className={showValidationErrors && !formData.horaPreferida ? "border-red-300" : ""}>
                       <SelectValue placeholder="Selecciona una hora *" />
                     </SelectTrigger>
                     <SelectContent>
@@ -668,7 +670,7 @@ export default function Index() {
                     placeholder="Describe brevemente el motivo de la consulta veterinaria... *"
                     required
                     className={`w-full min-h-[100px] max-h-[100px] resize-none overflow-y-auto px-3 py-2 border rounded-lg focus:ring-2 focus:ring-vet-primary focus:border-vet-primary transition-all duration-200 ${
-                      !formData.motivoConsulta.trim() ? "border-red-300" : "border-vet-gray-300"
+                      showValidationErrors && !formData.motivoConsulta.trim() ? "border-red-300" : "border-vet-gray-300"
                     }`}
                   />
                   <p className="text-xs text-vet-gray-500 mt-1">
