@@ -316,24 +316,66 @@ export default function HistorialClinicoVeterinario() {
 
     let y = 125;
     
+    // Medical records header
+    doc.setFontSize(14);
+    doc.text("REGISTROS MÉDICOS", 20, y);
+    y += 15;
+
     filteredHistory.forEach((record, index) => {
-      if (y > 270) {
+      if (y > 250) {
         doc.addPage();
         y = 20;
       }
-      
+
       doc.setFontSize(12);
       doc.text(`${index + 1}. ${new Date(record.fecha).toLocaleDateString("es-ES")}`, 20, y);
-      y += 10;
-      doc.text(`Tipo: ${record.tipoConsulta.replace("_", " ")}`, 30, y);
-      y += 10;
+      y += 8;
+
+      doc.setFontSize(10);
+      doc.text(`Veterinario: Dr. ${record.veterinario}`, 30, y);
+      y += 6;
+      doc.text(`Tipo: ${record.tipoConsulta.replace("_", " ").toUpperCase()}`, 30, y);
+      y += 6;
+      doc.text(`Motivo: ${record.motivo}`, 30, y);
+      y += 6;
       doc.text(`Diagnóstico: ${record.diagnostico}`, 30, y);
-      y += 10;
+      y += 6;
+
       if (record.tratamiento) {
         doc.text(`Tratamiento: ${record.tratamiento}`, 30, y);
-        y += 10;
+        y += 6;
       }
-      y += 5;
+
+      // Vital signs
+      if (record.peso || record.temperatura) {
+        doc.text(`Signos vitales:`, 30, y);
+        y += 6;
+        if (record.peso) {
+          doc.text(`  - Peso: ${record.peso} kg`, 35, y);
+          y += 5;
+        }
+        if (record.temperatura) {
+          doc.text(`  - Temperatura: ${record.temperatura}°C`, 35, y);
+          y += 5;
+        }
+      }
+
+      // Medications
+      if (record.medicamentos && record.medicamentos.length > 0) {
+        doc.text(`Medicamentos:`, 30, y);
+        y += 6;
+        record.medicamentos.forEach(med => {
+          doc.text(`  - ${med.nombre}: ${med.dosis}, ${med.frecuencia}, ${med.duracion}`, 35, y);
+          y += 5;
+        });
+      }
+
+      if (record.observaciones) {
+        doc.text(`Observaciones: ${record.observaciones}`, 30, y);
+        y += 6;
+      }
+
+      y += 8; // Space between records
     });
     
     doc.save(`historial_${selectedPet.nombre}_${new Date().toISOString().split('T')[0]}.pdf`);
