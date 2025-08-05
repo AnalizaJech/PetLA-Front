@@ -605,12 +605,23 @@ export default function Index() {
                         : undefined
                     }
                     onDateChange={(date) => {
-                      if (date && date >= new Date()) {
-                        setFormData({
-                          ...formData,
-                          fechaPreferida: date.toISOString().split("T")[0],
-                        });
-                      } else if (!date) {
+                      if (date) {
+                        // Crear fecha de hoy sin horas para comparación
+                        const today = new Date();
+                        today.setHours(0, 0, 0, 0);
+
+                        // Crear fecha seleccionada sin horas para comparación
+                        const selectedDate = new Date(date);
+                        selectedDate.setHours(0, 0, 0, 0);
+
+                        // Permitir fecha de hoy o fechas futuras
+                        if (selectedDate >= today) {
+                          setFormData({
+                            ...formData,
+                            fechaPreferida: date.toISOString().split("T")[0],
+                          });
+                        }
+                      } else {
                         setFormData({
                           ...formData,
                           fechaPreferida: "",
