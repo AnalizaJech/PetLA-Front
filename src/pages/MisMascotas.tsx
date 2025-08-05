@@ -62,7 +62,6 @@ export default function MisMascotas() {
     fechaNacimiento: undefined as Date | undefined,
     peso: "",
     sexo: "",
-    microchip: "",
   });
 
   useEffect(() => {
@@ -110,7 +109,6 @@ export default function MisMascotas() {
       fechaNacimiento: undefined,
       peso: "",
       sexo: "",
-      microchip: "",
     });
     setEditingMascota(null);
     setIsDialogOpen(false);
@@ -129,7 +127,6 @@ export default function MisMascotas() {
       fechaNacimiento: new Date(mascota.fechaNacimiento),
       peso: cleanPeso,
       sexo: mascota.sexo,
-      microchip: mascota.microchip,
     });
     setIsDialogOpen(true);
   };
@@ -307,7 +304,6 @@ export default function MisMascotas() {
                         fechaNacimiento: undefined,
                         peso: "",
                         sexo: "",
-                        microchip: "",
                       });
                     }}
                     className="w-full sm:w-auto bg-vet-primary hover:bg-vet-primary-dark"
@@ -448,21 +444,6 @@ export default function MisMascotas() {
                           </SelectContent>
                         </Select>
                       </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="microchip">Microchip (opcional)</Label>
-                      <Input
-                        id="microchip"
-                        value={newMascota.microchip}
-                        onChange={(e) =>
-                          setNewMascota({
-                            ...newMascota,
-                            microchip: e.target.value,
-                          })
-                        }
-                        placeholder="Número de microchip"
-                      />
                     </div>
 
                     <div className="flex justify-end space-x-3 pt-4">
