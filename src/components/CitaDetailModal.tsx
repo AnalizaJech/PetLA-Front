@@ -25,14 +25,14 @@ import {
 import type { CitaRelationData } from "@/lib/citaUtils";
 
 const estadoColors = {
-  pendiente_pago: "bg-yellow-100 text-yellow-800 border-yellow-200",
-  en_validacion: "bg-gray-100 text-gray-800 border-gray-200",
-  aceptada: "bg-green-100 text-green-800 border-green-200",
-  atendida: "bg-gray-100 text-gray-800 border-gray-200",
-  cancelada: "bg-red-100 text-red-800 border-red-200",
-  expirada: "bg-red-100 text-red-800 border-red-200",
-  rechazada: "bg-red-100 text-red-800 border-red-200",
-  no_asistio: "bg-orange-100 text-orange-800 border-orange-200",
+  pendiente_pago: "bg-yellow-100 text-yellow-800 border-yellow-300",
+  en_validacion: "bg-blue-100 text-blue-800 border-blue-300",
+  aceptada: "bg-green-100 text-green-800 border-green-300",
+  atendida: "bg-emerald-100 text-emerald-800 border-emerald-300",
+  cancelada: "bg-red-100 text-red-800 border-red-300",
+  expirada: "bg-red-100 text-red-800 border-red-300",
+  rechazada: "bg-red-100 text-red-800 border-red-300",
+  no_asistio: "bg-orange-100 text-orange-800 border-orange-300",
 };
 
 const estadoLabels = {
@@ -64,17 +64,17 @@ export default function CitaDetailModal({
   const getUrgencyBadge = (urgencyLevel: "alta" | "media" | "baja") => {
     const configs = {
       alta: {
-        color: "bg-red-100 text-red-800 border-red-200",
+        color: "bg-red-100 text-red-800 border-red-300",
         label: "Urgente",
         icon: AlertCircle,
       },
       media: {
-        color: "bg-yellow-100 text-yellow-800 border-yellow-200",
+        color: "bg-yellow-100 text-yellow-800 border-yellow-300",
         label: "Moderada",
         icon: Clock,
       },
       baja: {
-        color: "bg-gray-100 text-gray-800 border-gray-200",
+        color: "bg-green-100 text-green-800 border-green-300",
         label: "Normal",
         icon: Info,
       },
@@ -339,7 +339,7 @@ export default function CitaDetailModal({
                     Precio del Servicio
                   </Label>
                   <p className="text-vet-gray-900 font-semibold text-lg">
-                    ${selectedCita.cita.precio ? selectedCita.cita.precio.toLocaleString() : '0'} MXN
+                    S/. {selectedCita.cita.precio ? selectedCita.cita.precio.toLocaleString() : '0'}
                   </p>
                 </div>
               </div>
@@ -421,24 +421,6 @@ export default function CitaDetailModal({
               </Button>
             )}
 
-            <Button
-              variant="outline"
-              onClick={() => {
-                if (selectedCita.mascota) {
-                  navigate(
-                    `/historial-clinico-veterinario?mascota=${selectedCita.mascota.id}&nombre=${encodeURIComponent(selectedCita.mascota.nombre)}`,
-                  );
-                } else {
-                  // Fallback para cuando no hay mascota, usar datos de la cita
-                  navigate(
-                    `/historial-clinico-veterinario?nombre=${encodeURIComponent(selectedCita.cita.mascota)}&especie=${encodeURIComponent(selectedCita.cita.especie)}`,
-                  );
-                }
-              }}
-            >
-              <FileText className="w-4 h-4 mr-2" />
-              Ver Historial
-            </Button>
           </div>
         </div>
       </DialogContent>
