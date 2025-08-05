@@ -294,6 +294,103 @@ export default function CitaDetailModal({
             </CardContent>
           </Card>
 
+          {/* Información del servicio */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center space-x-2 text-lg">
+                <Activity className="w-5 h-5 text-vet-primary" />
+                <span>Información del Servicio</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <Label className="text-sm font-medium text-vet-gray-600">
+                    Tipo de Consulta
+                  </Label>
+                  <p className="text-vet-gray-900 font-medium">
+                    {selectedCita.cita.tipoConsulta ?
+                      selectedCita.cita.tipoConsulta.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) :
+                      'Consulta General'
+                    }
+                  </p>
+                </div>
+                <div>
+                  <Label className="text-sm font-medium text-vet-gray-600">
+                    Ubicación
+                  </Label>
+                  <p className="text-vet-gray-900">
+                    {selectedCita.cita.ubicacion || 'Clínica'}
+                  </p>
+                </div>
+                <div>
+                  <Label className="text-sm font-medium text-vet-gray-600">
+                    Precio del Servicio
+                  </Label>
+                  <p className="text-vet-gray-900 font-semibold text-lg">
+                    ${selectedCita.cita.precio ? selectedCita.cita.precio.toLocaleString() : '0'} MXN
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <Label className="text-sm font-medium text-vet-gray-600">
+                  Veterinario Asignado
+                </Label>
+                <p className="text-vet-gray-900 font-medium">
+                  Dr. {selectedCita.cita.veterinario}
+                </p>
+              </div>
+
+              {/* Descripción del servicio según el tipo */}
+              <div>
+                <Label className="text-sm font-medium text-vet-gray-600">
+                  Descripción del Servicio
+                </Label>
+                <div className="mt-1 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                  <p className="text-blue-900 text-sm">
+                    {(() => {
+                      switch (selectedCita.cita.tipoConsulta) {
+                        case 'consulta_general':
+                          return 'Revisión médica completa, evaluación del estado general de salud, revisión de signos vitales y recomendaciones preventivas.';
+                        case 'vacunacion':
+                          return 'Aplicación de vacunas según el esquema de vacunación apropiado para la edad y especie de la mascota.';
+                        case 'emergencia':
+                          return 'Atención médica urgente para casos que requieren intervención inmediata para preservar la salud del animal.';
+                        case 'grooming':
+                          return 'Servicios de higiene y estética que incluyen baño, corte de pelo, limpieza de oídos y corte de uñas.';
+                        case 'cirugia':
+                          return 'Procedimiento quirúrgico especializado realizado en instalaciones equipadas con la tecnología necesaria.';
+                        case 'diagnostico':
+                          return 'Estudios y análisis especializados para determinar el diagnóstico correcto mediante pruebas específicas.';
+                        default:
+                          return 'Servicio veterinario profesional adaptado a las necesidades específicas de su mascota.';
+                      }
+                    })()}
+                  </p>
+                </div>
+              </div>
+
+              {/* Estado del pago */}
+              {selectedCita.cita.comprobanteData && (
+                <div>
+                  <Label className="text-sm font-medium text-vet-gray-600">
+                    Comprobante de Pago
+                  </Label>
+                  <div className="mt-1 flex items-center space-x-2">
+                    <Badge className="bg-green-100 text-green-800">
+                      <CheckCircle className="w-3 h-3 mr-1" />
+                      Pago Verificado
+                    </Badge>
+                    <span className="text-sm text-vet-gray-600">
+                      {selectedCita.cita.comprobanteData.originalName}
+                    </span>
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
           {/* Botones de acción */}
           <div className="flex justify-end space-x-3 pt-4 border-t">
             <Button variant="outline" onClick={onClose}>
