@@ -737,7 +737,7 @@ export default function HistorialClinico() {
     const wsMascota = XLSX.utils.aoa_to_sheet(mascotaData);
     XLSX.utils.book_append_sheet(wb, wsMascota, "Información");
 
-    // Hoja 2: Consultas médicas
+    // Hoja 2: Consultas m��dicas
     if (historialMascota.consultas.length > 0) {
       const consultasData = [
         ["CONSULTAS MÉDICAS"],
@@ -1071,7 +1071,7 @@ export default function HistorialClinico() {
                                             </span>
                                             {servicio.precio && (
                                               <span className="text-sm font-medium text-vet-primary">
-                                                ${servicio.precio}
+                                                S/{servicio.precio}
                                               </span>
                                             )}
                                           </div>
@@ -1194,7 +1194,7 @@ export default function HistorialClinico() {
                             </CardDescription>
                           </div>
                           <Badge className="bg-vet-primary/10 text-vet-primary">
-                            ${servicio.precio}
+                            S/{servicio.precio}
                           </Badge>
                         </div>
                       </CardHeader>
@@ -1279,7 +1279,7 @@ export default function HistorialClinico() {
                             </CardDescription>
                           </div>
                           <Badge className="bg-red-100 text-red-800">
-                            ${servicio.precio}
+                            S/{servicio.precio}
                           </Badge>
                         </div>
                       </CardHeader>
@@ -1364,7 +1364,7 @@ export default function HistorialClinico() {
                             </CardDescription>
                           </div>
                           <Badge className="bg-orange-100 text-orange-800">
-                            ${servicio.precio}
+                            S/{servicio.precio}
                           </Badge>
                         </div>
                       </CardHeader>
@@ -1449,7 +1449,7 @@ export default function HistorialClinico() {
                             </CardDescription>
                           </div>
                           <Badge className="bg-purple-100 text-purple-800">
-                            ${servicio.precio}
+                            S/{servicio.precio}
                           </Badge>
                         </div>
                       </CardHeader>
@@ -1534,7 +1534,7 @@ export default function HistorialClinico() {
                             </CardDescription>
                           </div>
                           <Badge className="bg-gray-100 text-gray-800">
-                            ${servicio.precio}
+                            S/{servicio.precio}
                           </Badge>
                         </div>
                       </CardHeader>
