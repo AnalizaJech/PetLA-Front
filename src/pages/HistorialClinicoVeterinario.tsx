@@ -690,14 +690,19 @@ export default function HistorialClinicoVeterinario() {
                           </div>
                           <div>
                             <h2 className="text-2xl font-bold text-vet-gray-900">
-                              {mascotaSeleccionada.nombre}
+                              {mascotaSeleccionada?.nombre || searchParams.get("nombre")}
+                              {!mascotaSeleccionada && (
+                                <span className="ml-3 text-sm font-medium text-orange-600 bg-orange-100 px-3 py-1 rounded-full">
+                                  No registrada en el sistema
+                                </span>
+                              )}
                             </h2>
                             <div className="flex items-center space-x-4 mt-1">
                               <p className="text-vet-gray-600">
-                                {mascotaSeleccionada.especie} •{" "}
-                                {mascotaSeleccionada.raza}
+                                {mascotaSeleccionada?.especie || searchParams.get("especie") || "Especie no especificada"} •{" "}
+                                {mascotaSeleccionada?.raza || "Raza no especificada"}
                               </p>
-                              {mascotaSeleccionada.peso && (
+                              {mascotaSeleccionada?.peso && (
                                 <div className="flex items-center space-x-1 text-vet-gray-600">
                                   <Weight className="w-4 h-4" />
                                   <span className="text-sm">
