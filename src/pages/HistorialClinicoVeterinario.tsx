@@ -498,7 +498,7 @@ export default function HistorialClinicoVeterinario() {
                       )}
                       {dataValidation.incompleteCitas.length > 0 && (
                         <div className="text-xs text-blue-600 bg-blue-50 p-2 rounded border">
-                          �� {dataValidation.incompleteCitas.length} citas con
+                          🔗 {dataValidation.incompleteCitas.length} citas con
                           información incompleta
                         </div>
                       )}
@@ -678,7 +678,7 @@ export default function HistorialClinicoVeterinario() {
 
             {/* Panel derecho - Historial de la mascota seleccionada */}
             <div className="lg:col-span-3">
-              {selectedMascota && mascotaSeleccionada ? (
+              {(selectedMascota && mascotaSeleccionada) || (searchParams.get("nombre") && historialMascota.length > 0) ? (
                 <div className="space-y-6">
                   {/* Información de la mascota */}
                   <Card>
