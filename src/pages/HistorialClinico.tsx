@@ -265,14 +265,6 @@ export default function HistorialClinico() {
 
     citasRelevantes.forEach((cita) => {
       const tipoConsulta = cita.tipoConsulta || "Consulta";
-      const diagnosticoDefault = getDiagnosticoDefecto(
-        tipoConsulta,
-        cita.estado,
-      );
-      const tratamientoDefault = getTratamientoDefecto(
-        tipoConsulta,
-        cita.estado,
-      );
 
       // Solo incluir datos reales registrados por el veterinario
       const hasRealData = cita.consulta && (
