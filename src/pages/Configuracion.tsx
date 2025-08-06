@@ -53,6 +53,8 @@ import {
   ImageIcon,
   MapPin,
   Calendar,
+  Trash2,
+  AlertTriangle,
 } from "lucide-react";
 
 // Helper function to safely convert date to string format
