@@ -548,7 +548,7 @@ function AdminDashboard({
               </div>
               <div>
                 <p className="text-xs sm:text-sm text-vet-gray-600">Clientes</p>
-                <p className="text-2xl sm:text-3xl font-bold text-green-600">
+                <p className="text-2xl sm:text-3xl font-bold text-vet-secondary">
                   {adminStats.clientes}
                 </p>
               </div>
