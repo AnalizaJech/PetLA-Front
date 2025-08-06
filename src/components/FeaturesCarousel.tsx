@@ -321,15 +321,18 @@ export default function FeaturesCarousel() {
 
                     {isCenter && (
                       <div className="space-y-2 animate-fade-in">
-                        {feature.highlights.map((highlight, i) => (
-                          <div
-                            key={i}
-                            className="flex items-center justify-center space-x-2 text-sm text-vet-gray-700"
-                          >
-                            <CheckCircle className="w-4 h-4 text-vet-primary" />
-                            <span>{highlight}</span>
-                          </div>
-                        ))}
+                        {feature.highlights.map((highlight, i) => {
+                          const HighlightIcon = highlight.icon;
+                          return (
+                            <div
+                              key={i}
+                              className="flex items-center justify-center space-x-2 text-sm text-vet-gray-700"
+                            >
+                              <HighlightIcon className="w-4 h-4 text-vet-primary" />
+                              <span>{highlight.text}</span>
+                            </div>
+                          );
+                        })}
                       </div>
                     )}
                   </div>
