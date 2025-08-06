@@ -372,7 +372,7 @@ export default function DashboardVeterinario() {
                       Únicos atendidos
                     </p>
                   </div>
-                  <div className="w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-vet-secondary rounded-xl flex items-center justify-center">
                     <PawPrint className="w-6 h-6 text-white" />
                   </div>
                 </div>
@@ -753,7 +753,7 @@ Generado automáticamente por PetLA
 
                     <div className="flex items-center justify-between p-3 bg-gradient-to-r from-vet-secondary/5 to-vet-secondary/10 rounded-lg">
                       <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center">
+                        <div className="w-8 h-8 bg-vet-secondary rounded-lg flex items-center justify-center">
                           <PawPrint className="w-4 h-4 text-white" />
                         </div>
                         <span className="text-sm font-medium text-purple-900">
