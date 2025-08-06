@@ -791,6 +791,33 @@ export default function HistorialClinicoVeterinario() {
                   </div>
                 </div>
               </div>
+
+              {/* Botón descargar historial en la misma línea del título */}
+              {currentView === "history" && selectedPet && historialMascota.length > 0 && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button className="bg-vet-primary hover:bg-vet-primary-dark">
+                      <Download className="w-4 h-4 mr-2" />
+                      Descargar Historial
+                      <ChevronDown className="w-4 h-4 ml-2" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem onClick={downloadHistorialPDF}>
+                      <FileText className="w-4 h-4 mr-2" />
+                      PDF
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={downloadHistorialExcel}>
+                      <Download className="w-4 h-4 mr-2" />
+                      Excel
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={downloadHistorialTXT}>
+                      <FileText className="w-4 h-4 mr-2" />
+                      TXT
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
             </div>
           </div>
 
