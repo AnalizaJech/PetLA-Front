@@ -123,9 +123,9 @@ export default function MisCitas() {
         const success = await saveComprobante(currentCitaId, previewFile);
 
         if (success) {
-          console.log("✅ Comprobante subido exitosamente");
+          console.log("[SUCCESS] Comprobante subido exitosamente");
         } else {
-          console.error("❌ Error al subir comprobante");
+          console.error("[ERROR] Error al subir comprobante");
           // Fallback to old method
           updateCita(currentCitaId, {
             estado: "en_validacion",
@@ -134,7 +134,7 @@ export default function MisCitas() {
           });
         }
       } catch (error) {
-        console.error("❌ Error durante la subida:", error);
+        console.error("[ERROR] Error durante la subida:", error);
       } finally {
         setUploadingCitaId(null);
         handleClosePreview();
