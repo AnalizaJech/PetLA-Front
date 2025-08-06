@@ -729,7 +729,7 @@ Generado automáticamente por PetLA
               <Card className="shadow-sm border-0 bg-white/80 backdrop-blur-sm">
                 <CardHeader className="pb-4">
                   <CardTitle className="flex items-center space-x-2 text-xl">
-                    <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                    <div className="w-8 h-8 bg-vet-secondary/10 rounded-lg flex items-center justify-center">
                       <TrendingUp className="w-4 h-4 text-purple-600" />
                     </div>
                     <span>Resumen del Mes</span>
