@@ -857,6 +857,35 @@ export default function HistorialClinicoVeterinario() {
             </Card>
           )}
 
+          {/* Botón de descarga arriba del filtro para history view */}
+          {currentView === "history" && selectedPet && historialMascota.length > 0 && (
+            <div className="flex justify-end mb-4">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button className="bg-vet-primary hover:bg-vet-primary-dark">
+                    <Download className="w-4 h-4 mr-2" />
+                    Descargar Historial
+                    <ChevronDown className="w-4 h-4 ml-2" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem onClick={downloadHistorialPDF}>
+                    <FileText className="w-4 h-4 mr-2" />
+                    PDF
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={downloadHistorialExcel}>
+                    <Download className="w-4 h-4 mr-2" />
+                    Excel
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={downloadHistorialTXT}>
+                    <FileText className="w-4 h-4 mr-2" />
+                    TXT
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          )}
+
           {/* Search and Filters for history view */}
           {currentView === "history" && (
             <Card className="mb-6">
