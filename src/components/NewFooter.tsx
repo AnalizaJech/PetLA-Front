@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import {
-  Heart,
+  Dog,
   Calendar,
   Phone,
   Mail,
@@ -21,7 +21,7 @@ export default function NewFooter() {
           <div className="flex flex-col md:col-span-2 lg:col-span-1">
             <div className="flex items-center space-x-3 mb-4">
               <div className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-vet-primary to-vet-primary-dark rounded-xl shadow-lg">
-                <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                <Dog className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </div>
               <span className="text-lg sm:text-xl font-bold">
                 Pet<span className="text-vet-primary">LA</span>
@@ -36,7 +36,7 @@ export default function NewFooter() {
             {/* Mission Statement */}
             <div className="bg-vet-primary/10 rounded-xl p-3 sm:p-4 mb-4 sm:mb-6">
               <h4 className="text-white font-semibold mb-2 flex items-center text-sm">
-                <Heart className="w-4 h-4 mr-2 text-vet-primary" />
+                <Dog className="w-4 h-4 mr-2 text-vet-primary" />
                 Nuestra Misión
               </h4>
               <p className="text-vet-gray-300 text-xs leading-relaxed">
@@ -332,7 +332,7 @@ export default function NewFooter() {
             </div>
             <div className="flex items-center space-x-2 text-vet-gray-400 text-sm">
               <span>Hecho con</span>
-              <Heart className="w-4 h-4 text-vet-secondary animate-pulse" />
+              <Dog className="w-4 h-4 text-vet-secondary animate-pulse" />
               <span>para el bienestar animal</span>
             </div>
           </div>
