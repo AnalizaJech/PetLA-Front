@@ -177,7 +177,7 @@ export default function MisMascotas() {
         const img = new Image();
 
         img.onload = () => {
-          // Redimensionar a un tamaño m��ximo de 400x400 para optimizar almacenamiento
+          // Redimensionar a un tamaño máximo de 400x400 para optimizar almacenamiento
           const maxSize = 400;
           let { width, height } = img;
 
