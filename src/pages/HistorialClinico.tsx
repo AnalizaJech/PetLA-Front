@@ -1551,6 +1551,73 @@ export default function HistorialClinico() {
                           </div>
                         </div>
 
+                        {/* Resumen completo del servicio realizado */}
+                        <div className="mt-6 p-4 bg-gradient-to-r from-vet-primary/5 to-blue-50 rounded-lg border border-vet-primary/20">
+                          <h5 className="font-medium text-vet-primary mb-3 flex items-center">
+                            <CheckCircle className="w-4 h-4 mr-2" />
+                            Resumen del Servicio Completado
+                          </h5>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                              <div className="space-y-2">
+                                <div><strong>Servicio:</strong> {servicio.tipoConsulta || "Servicio Veterinario"}</div>
+                                <div><strong>Duración:</strong> Aprox. {(() => {
+                                  const servicesMap = {
+                                    'consulta': '30-45 min',
+                                    'vacunacion': '15-20 min',
+                                    'emergencia': '45-90 min',
+                                    'grooming': '60-120 min',
+                                    'cirugia': '90-180 min',
+                                    'diagnostico': '30-60 min'
+                                  };
+                                  const tipo = servicio.tipoConsulta?.toLowerCase() || 'consulta';
+                                  return servicesMap[tipo] || '30-45 min';
+                                })()}</div>
+                                <div><strong>Estado Final:</strong>
+                                  <span className="ml-1 px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
+                                    Servicio Completado Exitosamente
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                            <div>
+                              <div className="space-y-2">
+                                <div><strong>Fecha de Realización:</strong> {new Date(servicio.fecha).toLocaleDateString("es-ES")}</div>
+                                <div><strong>Hora de Atenci��n:</strong> {new Date(servicio.fecha).toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" })}</div>
+                                {servicio.proxima_cita && (
+                                  <div><strong>Próximo Control:</strong> {new Date(servicio.proxima_cita).toLocaleDateString("es-ES")}</div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="mt-3 pt-3 border-t border-vet-primary/10">
+                            <div className="flex items-center justify-between text-xs">
+                              <div className="flex items-center space-x-4">
+                                <div className="flex items-center space-x-1 text-green-600">
+                                  <CheckCircle className="w-3 h-3" />
+                                  <span>Protocolo Completo</span>
+                                </div>
+                                {servicio.medicamentos && servicio.medicamentos.length > 0 && (
+                                  <div className="flex items-center space-x-1 text-blue-600">
+                                    <Pill className="w-3 h-3" />
+                                    <span>{servicio.medicamentos.length} Medicamento{servicio.medicamentos.length > 1 ? 's' : ''}</span>
+                                  </div>
+                                )}
+                                {servicio.examenes && servicio.examenes.length > 0 && (
+                                  <div className="flex items-center space-x-1 text-purple-600">
+                                    <Activity className="w-3 h-3" />
+                                    <span>{servicio.examenes.length} Examen{servicio.examenes.length > 1 ? 'es' : ''}</span>
+                                  </div>
+                                )}
+                              </div>
+                              <div className="text-vet-gray-500">
+                                Registro #{servicio.id}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
                         {servicio.notas && (
                           <div className="mt-4 p-4 bg-vet-primary/5 rounded-lg border border-vet-primary/20">
                             <h4 className="font-semibold text-vet-primary mb-2">
@@ -1634,6 +1701,73 @@ export default function HistorialClinico() {
                             <p className="text-vet-gray-600">
                               {servicio.tratamiento}
                             </p>
+                          </div>
+                        </div>
+
+                        {/* Resumen completo del servicio realizado */}
+                        <div className="mt-6 p-4 bg-gradient-to-r from-vet-primary/5 to-blue-50 rounded-lg border border-vet-primary/20">
+                          <h5 className="font-medium text-vet-primary mb-3 flex items-center">
+                            <CheckCircle className="w-4 h-4 mr-2" />
+                            Resumen del Servicio Completado
+                          </h5>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                              <div className="space-y-2">
+                                <div><strong>Servicio:</strong> {servicio.tipoConsulta || "Servicio Veterinario"}</div>
+                                <div><strong>Duración:</strong> Aprox. {(() => {
+                                  const servicesMap = {
+                                    'consulta': '30-45 min',
+                                    'vacunacion': '15-20 min',
+                                    'emergencia': '45-90 min',
+                                    'grooming': '60-120 min',
+                                    'cirugia': '90-180 min',
+                                    'diagnostico': '30-60 min'
+                                  };
+                                  const tipo = servicio.tipoConsulta?.toLowerCase() || 'consulta';
+                                  return servicesMap[tipo] || '30-45 min';
+                                })()}</div>
+                                <div><strong>Estado Final:</strong>
+                                  <span className="ml-1 px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
+                                    Servicio Completado Exitosamente
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                            <div>
+                              <div className="space-y-2">
+                                <div><strong>Fecha de Realización:</strong> {new Date(servicio.fecha).toLocaleDateString("es-ES")}</div>
+                                <div><strong>Hora de Atención:</strong> {new Date(servicio.fecha).toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" })}</div>
+                                {servicio.proxima_cita && (
+                                  <div><strong>Próximo Control:</strong> {new Date(servicio.proxima_cita).toLocaleDateString("es-ES")}</div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="mt-3 pt-3 border-t border-vet-primary/10">
+                            <div className="flex items-center justify-between text-xs">
+                              <div className="flex items-center space-x-4">
+                                <div className="flex items-center space-x-1 text-green-600">
+                                  <CheckCircle className="w-3 h-3" />
+                                  <span>Protocolo Completo</span>
+                                </div>
+                                {servicio.medicamentos && servicio.medicamentos.length > 0 && (
+                                  <div className="flex items-center space-x-1 text-blue-600">
+                                    <Pill className="w-3 h-3" />
+                                    <span>{servicio.medicamentos.length} Medicamento{servicio.medicamentos.length > 1 ? 's' : ''}</span>
+                                  </div>
+                                )}
+                                {servicio.examenes && servicio.examenes.length > 0 && (
+                                  <div className="flex items-center space-x-1 text-purple-600">
+                                    <Activity className="w-3 h-3" />
+                                    <span>{servicio.examenes.length} Examen{servicio.examenes.length > 1 ? 'es' : ''}</span>
+                                  </div>
+                                )}
+                              </div>
+                              <div className="text-vet-gray-500">
+                                Registro #{servicio.id}
+                              </div>
+                            </div>
                           </div>
                         </div>
 
@@ -1723,6 +1857,73 @@ export default function HistorialClinico() {
                           </div>
                         </div>
 
+                        {/* Resumen completo del servicio realizado */}
+                        <div className="mt-6 p-4 bg-gradient-to-r from-vet-primary/5 to-blue-50 rounded-lg border border-vet-primary/20">
+                          <h5 className="font-medium text-vet-primary mb-3 flex items-center">
+                            <CheckCircle className="w-4 h-4 mr-2" />
+                            Resumen del Servicio Completado
+                          </h5>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                              <div className="space-y-2">
+                                <div><strong>Servicio:</strong> {servicio.tipoConsulta || "Servicio Veterinario"}</div>
+                                <div><strong>Duración:</strong> Aprox. {(() => {
+                                  const servicesMap = {
+                                    'consulta': '30-45 min',
+                                    'vacunacion': '15-20 min',
+                                    'emergencia': '45-90 min',
+                                    'grooming': '60-120 min',
+                                    'cirugia': '90-180 min',
+                                    'diagnostico': '30-60 min'
+                                  };
+                                  const tipo = servicio.tipoConsulta?.toLowerCase() || 'consulta';
+                                  return servicesMap[tipo] || '30-45 min';
+                                })()}</div>
+                                <div><strong>Estado Final:</strong>
+                                  <span className="ml-1 px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
+                                    Servicio Completado Exitosamente
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                            <div>
+                              <div className="space-y-2">
+                                <div><strong>Fecha de Realización:</strong> {new Date(servicio.fecha).toLocaleDateString("es-ES")}</div>
+                                <div><strong>Hora de Atención:</strong> {new Date(servicio.fecha).toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" })}</div>
+                                {servicio.proxima_cita && (
+                                  <div><strong>Próximo Control:</strong> {new Date(servicio.proxima_cita).toLocaleDateString("es-ES")}</div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="mt-3 pt-3 border-t border-vet-primary/10">
+                            <div className="flex items-center justify-between text-xs">
+                              <div className="flex items-center space-x-4">
+                                <div className="flex items-center space-x-1 text-green-600">
+                                  <CheckCircle className="w-3 h-3" />
+                                  <span>Protocolo Completo</span>
+                                </div>
+                                {servicio.medicamentos && servicio.medicamentos.length > 0 && (
+                                  <div className="flex items-center space-x-1 text-blue-600">
+                                    <Pill className="w-3 h-3" />
+                                    <span>{servicio.medicamentos.length} Medicamento{servicio.medicamentos.length > 1 ? 's' : ''}</span>
+                                  </div>
+                                )}
+                                {servicio.examenes && servicio.examenes.length > 0 && (
+                                  <div className="flex items-center space-x-1 text-purple-600">
+                                    <Activity className="w-3 h-3" />
+                                    <span>{servicio.examenes.length} Examen{servicio.examenes.length > 1 ? 'es' : ''}</span>
+                                  </div>
+                                )}
+                              </div>
+                              <div className="text-vet-gray-500">
+                                Registro #{servicio.id}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
                         {servicio.notas && (
                           <div className="mt-4 p-4 bg-vet-primary/5 rounded-lg border border-vet-primary/20">
                             <h4 className="font-semibold text-vet-primary mb-2">
@@ -1809,6 +2010,73 @@ export default function HistorialClinico() {
                           </div>
                         </div>
 
+                        {/* Resumen completo del servicio realizado */}
+                        <div className="mt-6 p-4 bg-gradient-to-r from-vet-primary/5 to-blue-50 rounded-lg border border-vet-primary/20">
+                          <h5 className="font-medium text-vet-primary mb-3 flex items-center">
+                            <CheckCircle className="w-4 h-4 mr-2" />
+                            Resumen del Servicio Completado
+                          </h5>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                              <div className="space-y-2">
+                                <div><strong>Servicio:</strong> {servicio.tipoConsulta || "Servicio Veterinario"}</div>
+                                <div><strong>Duración:</strong> Aprox. {(() => {
+                                  const servicesMap = {
+                                    'consulta': '30-45 min',
+                                    'vacunacion': '15-20 min',
+                                    'emergencia': '45-90 min',
+                                    'grooming': '60-120 min',
+                                    'cirugia': '90-180 min',
+                                    'diagnostico': '30-60 min'
+                                  };
+                                  const tipo = servicio.tipoConsulta?.toLowerCase() || 'consulta';
+                                  return servicesMap[tipo] || '30-45 min';
+                                })()}</div>
+                                <div><strong>Estado Final:</strong>
+                                  <span className="ml-1 px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
+                                    Servicio Completado Exitosamente
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                            <div>
+                              <div className="space-y-2">
+                                <div><strong>Fecha de Realización:</strong> {new Date(servicio.fecha).toLocaleDateString("es-ES")}</div>
+                                <div><strong>Hora de Atención:</strong> {new Date(servicio.fecha).toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" })}</div>
+                                {servicio.proxima_cita && (
+                                  <div><strong>Próximo Control:</strong> {new Date(servicio.proxima_cita).toLocaleDateString("es-ES")}</div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="mt-3 pt-3 border-t border-vet-primary/10">
+                            <div className="flex items-center justify-between text-xs">
+                              <div className="flex items-center space-x-4">
+                                <div className="flex items-center space-x-1 text-green-600">
+                                  <CheckCircle className="w-3 h-3" />
+                                  <span>Protocolo Completo</span>
+                                </div>
+                                {servicio.medicamentos && servicio.medicamentos.length > 0 && (
+                                  <div className="flex items-center space-x-1 text-blue-600">
+                                    <Pill className="w-3 h-3" />
+                                    <span>{servicio.medicamentos.length} Medicamento{servicio.medicamentos.length > 1 ? 's' : ''}</span>
+                                  </div>
+                                )}
+                                {servicio.examenes && servicio.examenes.length > 0 && (
+                                  <div className="flex items-center space-x-1 text-purple-600">
+                                    <Activity className="w-3 h-3" />
+                                    <span>{servicio.examenes.length} Examen{servicio.examenes.length > 1 ? 'es' : ''}</span>
+                                  </div>
+                                )}
+                              </div>
+                              <div className="text-vet-gray-500">
+                                Registro #{servicio.id}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
                         {servicio.notas && (
                           <div className="mt-4 p-4 bg-vet-primary/5 rounded-lg border border-vet-primary/20">
                             <h4 className="font-semibold text-vet-primary mb-2">
@@ -1892,6 +2160,73 @@ export default function HistorialClinico() {
                             <p className="text-vet-gray-600">
                               {servicio.tratamiento}
                             </p>
+                          </div>
+                        </div>
+
+                        {/* Resumen completo del servicio realizado */}
+                        <div className="mt-6 p-4 bg-gradient-to-r from-vet-primary/5 to-blue-50 rounded-lg border border-vet-primary/20">
+                          <h5 className="font-medium text-vet-primary mb-3 flex items-center">
+                            <CheckCircle className="w-4 h-4 mr-2" />
+                            Resumen del Servicio Completado
+                          </h5>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                              <div className="space-y-2">
+                                <div><strong>Servicio:</strong> {servicio.tipoConsulta || "Servicio Veterinario"}</div>
+                                <div><strong>Duración:</strong> Aprox. {(() => {
+                                  const servicesMap = {
+                                    'consulta': '30-45 min',
+                                    'vacunacion': '15-20 min',
+                                    'emergencia': '45-90 min',
+                                    'grooming': '60-120 min',
+                                    'cirugia': '90-180 min',
+                                    'diagnostico': '30-60 min'
+                                  };
+                                  const tipo = servicio.tipoConsulta?.toLowerCase() || 'consulta';
+                                  return servicesMap[tipo] || '30-45 min';
+                                })()}</div>
+                                <div><strong>Estado Final:</strong>
+                                  <span className="ml-1 px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
+                                    Servicio Completado Exitosamente
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                            <div>
+                              <div className="space-y-2">
+                                <div><strong>Fecha de Realización:</strong> {new Date(servicio.fecha).toLocaleDateString("es-ES")}</div>
+                                <div><strong>Hora de Atención:</strong> {new Date(servicio.fecha).toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" })}</div>
+                                {servicio.proxima_cita && (
+                                  <div><strong>Próximo Control:</strong> {new Date(servicio.proxima_cita).toLocaleDateString("es-ES")}</div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="mt-3 pt-3 border-t border-vet-primary/10">
+                            <div className="flex items-center justify-between text-xs">
+                              <div className="flex items-center space-x-4">
+                                <div className="flex items-center space-x-1 text-green-600">
+                                  <CheckCircle className="w-3 h-3" />
+                                  <span>Protocolo Completo</span>
+                                </div>
+                                {servicio.medicamentos && servicio.medicamentos.length > 0 && (
+                                  <div className="flex items-center space-x-1 text-blue-600">
+                                    <Pill className="w-3 h-3" />
+                                    <span>{servicio.medicamentos.length} Medicamento{servicio.medicamentos.length > 1 ? 's' : ''}</span>
+                                  </div>
+                                )}
+                                {servicio.examenes && servicio.examenes.length > 0 && (
+                                  <div className="flex items-center space-x-1 text-purple-600">
+                                    <Activity className="w-3 h-3" />
+                                    <span>{servicio.examenes.length} Examen{servicio.examenes.length > 1 ? 'es' : ''}</span>
+                                  </div>
+                                )}
+                              </div>
+                              <div className="text-vet-gray-500">
+                                Registro #{servicio.id}
+                              </div>
+                            </div>
                           </div>
                         </div>
 
