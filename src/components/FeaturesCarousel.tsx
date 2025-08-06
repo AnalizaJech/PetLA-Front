@@ -209,7 +209,7 @@ export default function FeaturesCarousel() {
         <div className="relative">
           {/* Main Carousel */}
           <div
-            className={`flex items-center justify-center space-x-8 mb-12 cursor-grab ${isDragging ? "cursor-grabbing" : ""}`}
+            className={`flex items-center justify-center space-x-2 sm:space-x-4 lg:space-x-8 mb-12 cursor-grab ${isDragging ? "cursor-grabbing" : ""}`}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
@@ -221,15 +221,16 @@ export default function FeaturesCarousel() {
             {visibleFeatures.map((feature, index) => {
               const Icon = feature.icon;
               const isCenter = index === 1;
+              const isSide = index === 0 || index === 2;
 
               return (
                 <Card
                   key={`${feature.id}-${feature.position}`}
                   className={`transition-all duration-1000 ease-in-out select-none ${
                     isCenter
-                      ? "scale-110 shadow-2xl z-10 bg-white border-vet-primary/20"
-                      : "scale-95 opacity-70 hover:opacity-90"
-                  } ${index === 0 ? "hidden lg:block" : ""} ${index === 2 ? "hidden lg:block" : ""}`}
+                      ? "scale-110 shadow-2xl z-10 bg-white border-vet-primary/20 w-full max-w-sm"
+                      : "scale-95 opacity-70 hover:opacity-90 w-20 sm:w-32 md:w-40 lg:w-full lg:max-w-sm"
+                  } ${isSide ? "hidden sm:block" : ""}`}
                 >
                   <div className="p-8 text-center">
                     <div
