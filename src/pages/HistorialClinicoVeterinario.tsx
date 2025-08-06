@@ -368,7 +368,7 @@ export default function HistorialClinicoVeterinario() {
           yPosition += 8;
           doc.setFont("helvetica", "normal");
 
-          doc.text(`Veterinario: Dr. ${record.veterinario}`, margin + 5, yPosition);
+          doc.text(`Veterinario: ${record.veterinario}`, margin + 5, yPosition);
           yPosition += 5;
           doc.text(`Hora: ${new Date(record.fecha).toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" })}`, margin + 5, yPosition);
           yPosition += 5;
@@ -615,7 +615,7 @@ export default function HistorialClinicoVeterinario() {
         filteredHistory.forEach((record, index) => {
           content += `${index + 1}. ${new Date(record.fecha).toLocaleDateString("es-ES")} - ${record.tipo || "Consulta"}\n`;
           content += `   DETALLES DEL SERVICIO:\n`;
-          content += `   - Veterinario: Dr. ${record.veterinario}\n`;
+          content += `   - Veterinario: ${record.veterinario}\n`;
           content += `   - Hora: ${new Date(record.fecha).toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" })}\n`;
           content += `   - Estado: ${record.estado === "completada" ? "Completada" : record.estado}\n`;
           if (record.motivo) content += `   - Motivo: ${record.motivo}\n`;
@@ -1654,7 +1654,7 @@ export default function HistorialClinicoVeterinario() {
                             <div className="flex items-center justify-between pt-3 border-t border-vet-gray-200">
                               <div className="flex items-center space-x-1 text-xs text-vet-gray-500">
                                 <User className="w-3 h-3" />
-                                <span>Dr. {record.veterinario}</span>
+                                <span>{record.veterinario}</span>
                               </div>
                               {/* Estado del registro */}
                               {record.estado && (
