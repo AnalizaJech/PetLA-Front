@@ -898,7 +898,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       }
 
       if (errors.length > 0) {
-        console.warn("⚠️ Errores durante la reparación:", errors);
+        console.warn("[WARNING] Errores durante la reparación:", errors);
       }
 
       // Mark as completed to avoid running again
