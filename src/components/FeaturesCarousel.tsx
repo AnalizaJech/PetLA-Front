@@ -97,7 +97,7 @@ export default function FeaturesCarousel() {
     }, 4500); // Optimized timing for smooth flow
 
     return () => clearInterval(interval);
-  }, [isDragging]);
+  }, [isDragging, currentIndex]);
 
   const goToSlide = (index: number) => {
     setIsDragging(false); // Stop any dragging state
