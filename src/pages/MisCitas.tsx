@@ -578,7 +578,7 @@ export default function MisCitas() {
                                     <Button
                                       variant="outline"
                                       onClick={() => handleViewReceipt(cita.id)}
-                                      className="border-vet-primary text-vet-primary hover:bg-vet-primary/10 w-full sm:w-auto"
+                                      className="border-vet-primary text-vet-primary hover:bg-vet-primary/10 hover:border-vet-primary-dark transition-all duration-200 w-full sm:w-auto shadow-sm"
                                     >
                                       <Eye className="w-4 h-4 mr-2" />
                                       Ver Comprobante
