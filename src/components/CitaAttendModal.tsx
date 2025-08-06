@@ -229,6 +229,67 @@ export default function CitaAttendModal({
 
   const { cita, mascota, propietario } = selectedCita;
 
+  // Service type configurations
+  const serviceConfigs = {
+    consulta_general: {
+      title: "Consulta General",
+      icon: Stethoscope,
+      color: "vet-primary",
+      description: "Examen médico general y evaluación de salud",
+      requiredVitals: ["peso", "temperatura"],
+      showMedications: true,
+      showExams: true,
+    },
+    vacunacion: {
+      title: "Vacunación",
+      icon: Pill,
+      color: "green-600",
+      description: "Aplicación de vacunas y refuerzos",
+      requiredVitals: ["peso", "temperatura"],
+      showMedications: false,
+      showExams: false,
+    },
+    emergencia: {
+      title: "Emergencia",
+      icon: AlertCircle,
+      color: "red-600",
+      description: "Atención médica de urgencia",
+      requiredVitals: ["peso", "temperatura", "presionArterial", "frecuenciaCardiaca"],
+      showMedications: true,
+      showExams: true,
+    },
+    grooming: {
+      title: "Grooming",
+      icon: Activity,
+      color: "purple-600",
+      description: "Servicios de estética y cuidado personal",
+      requiredVitals: ["peso"],
+      showMedications: false,
+      showExams: false,
+    },
+    cirugia: {
+      title: "Cirugía",
+      icon: Stethoscope,
+      color: "orange-600",
+      description: "Procedimiento quirúrgico",
+      requiredVitals: ["peso", "temperatura", "presionArterial", "frecuenciaCardiaca"],
+      showMedications: true,
+      showExams: true,
+    },
+    diagnostico: {
+      title: "Diagnóstico",
+      icon: Activity,
+      color: "blue-600",
+      description: "Exámenes diagnósticos y análisis",
+      requiredVitals: ["peso", "temperatura"],
+      showMedications: false,
+      showExams: true,
+    },
+  };
+
+  const serviceConfig = serviceConfigs[cita.tipoConsulta] || serviceConfigs.consulta_general;
+  const ServiceIcon = serviceConfig.icon;
+
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
