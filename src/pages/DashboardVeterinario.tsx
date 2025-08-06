@@ -251,7 +251,7 @@ export default function DashboardVeterinario() {
                   </div>
                 </div>
                 <div>
-                  <h1 className="text-3xl font-bold text-gray-900 mb-1">
+                  <h1 className="text-3xl font-bold text-vet-gray-900 mb-1">
                     Panel Veterinario
                   </h1>
                   <p className="text-gray-600 flex items-center">
@@ -285,7 +285,7 @@ export default function DashboardVeterinario() {
                 <div className="flex items-center space-x-4">
                   <div className="flex items-center space-x-2">
                     <CalendarIcon className="w-5 h-5 text-vet-primary" />
-                    <span className="font-medium text-gray-900">
+                    <span className="font-medium text-vet-gray-900">
                       {new Date().toLocaleDateString("es-ES", {
                         weekday: "long",
                         year: "numeric",
@@ -475,7 +475,7 @@ export default function DashboardVeterinario() {
                                 <div className="flex-1">
                                   <div className="flex items-center space-x-2 mb-1">
                                     <PawPrint className="w-4 h-4 text-vet-primary" />
-                                    <span className="font-medium text-gray-900">
+                                    <span className="font-medium text-vet-gray-900">
                                       {cita.mascota}
                                     </span>
                                     {getStatusBadge(cita.estado)}
@@ -508,7 +508,7 @@ export default function DashboardVeterinario() {
                       <div className="w-16 h-16 bg-vet-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
                         <Calendar className="w-8 h-8 text-vet-primary" />
                       </div>
-                      <h3 className="text-lg font-medium text-gray-900 mb-2">
+                      <h3 className="text-lg font-medium text-vet-gray-900 mb-2">
                         Día libre
                       </h3>
                       <p className="text-gray-600 mb-4">
@@ -569,7 +569,7 @@ export default function DashboardVeterinario() {
                             >
                               <div className="flex items-center space-x-3 flex-1">
                                 <div className="text-center min-w-[60px]">
-                                  <p className="text-sm font-medium text-gray-900">
+                                  <p className="text-sm font-medium text-vet-gray-900">
                                     {new Date(cita.fecha).toLocaleDateString(
                                       "es-ES",
                                       {
@@ -592,7 +592,7 @@ export default function DashboardVeterinario() {
                                 <div className="flex-1">
                                   <div className="flex items-center space-x-2 mb-1">
                                     <PawPrint className="w-3 h-3 text-amber-600" />
-                                    <span className="text-sm font-medium text-gray-900">
+                                    <span className="text-sm font-medium text-vet-gray-900">
                                       {cita.mascota}
                                     </span>
                                   </div>
@@ -888,7 +888,7 @@ Generado automáticamente por PetLA
                     <Search className="w-5 h-5 text-vet-primary" />
                   </div>
                   <div>
-                    <DialogTitle className="text-xl font-semibold text-gray-900">
+                    <DialogTitle className="text-xl font-semibold text-vet-gray-900">
                       Buscar Paciente
                     </DialogTitle>
                     <DialogDescription className="text-gray-600">
@@ -912,7 +912,7 @@ Generado automáticamente por PetLA
 
                 {searchTerm.length > 2 && (
                   <div className="space-y-3">
-                    <h4 className="font-medium text-gray-900">
+                    <h4 className="font-medium text-vet-gray-900">
                       Resultados de búsqueda ({foundPatients.length})
                     </h4>
 
@@ -953,7 +953,7 @@ Generado automáticamente por PetLA
                                 <div className="space-y-2">
                                   <div className="flex items-center space-x-2">
                                     <PawPrint className="w-4 h-4 text-vet-primary" />
-                                    <span className="font-medium text-gray-900">
+                                    <span className="font-medium text-vet-gray-900">
                                       {mascota.nombre}
                                     </span>
                                     <span className="text-sm text-gray-600">
@@ -1007,7 +1007,7 @@ Generado automáticamente por PetLA
                     ) : (
                       <div className="text-center py-8">
                         <Search className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                        <h3 className="text-lg font-medium text-gray-900 mb-2">
+                        <h3 className="text-lg font-medium text-vet-gray-900 mb-2">
                           No se encontraron pacientes
                         </h3>
                         <p className="text-gray-600">
@@ -1030,7 +1030,7 @@ Generado automáticamente por PetLA
                 {searchTerm.length === 0 && (
                   <div className="text-center py-8">
                     <PawPrint className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">
+                    <h3 className="text-lg font-medium text-vet-gray-900 mb-2">
                       Buscar Pacientes
                     </h3>
                     <p className="text-gray-600">
