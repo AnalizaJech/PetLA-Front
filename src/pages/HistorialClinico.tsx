@@ -798,16 +798,36 @@ export default function HistorialClinico() {
 
       todasLasConsultas.forEach((consulta) => {
         const medicamentos = (consulta.medicamentos || [])
-          .map((med) => `${med.nombre}: ${med.dosis} (${med.duracion})`)
+          .map((med) => `${med.nombre}: ${med.dosis}${med.frecuencia ? ` - ${med.frecuencia}` : ''}${med.duracion ? ` (${med.duracion})` : ''}`)
+          .join("; ");
+
+        const vacunas = (consulta.vacunas || [])
+          .map((vacuna) => `${vacuna.nombre} (Lote: ${vacuna.lote})`)
+          .join("; ");
+
+        const examenes = (consulta.examenes || [])
+          .map((examen) => `${examen.tipo}: ${examen.resultado}`)
+          .join("; ");
+
+        const servicios = (consulta.servicios || [])
+          .map((servicio) => `${servicio.nombre}${servicio.precio ? ` - S/${servicio.precio}` : ''}`)
           .join("; ");
 
         consultasData.push([
           consulta.fecha.toLocaleDateString("es-ES"),
           consulta.veterinario,
+          consulta.tipoConsulta || "",
           consulta.motivo || "",
           consulta.diagnostico || "",
           consulta.tratamiento || "",
+          consulta.peso || "",
+          consulta.temperatura || "",
+          consulta.presionArterial || "",
+          consulta.frecuenciaCardiaca || "",
           medicamentos || "",
+          vacunas || "",
+          examenes || "",
+          servicios || "",
           consulta.proxima_cita
             ? consulta.proxima_cita.toLocaleDateString("es-ES")
             : "",
