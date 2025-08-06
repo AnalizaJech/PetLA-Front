@@ -91,14 +91,25 @@ export default function FeaturesCarousel() {
 
   // Auto-play functionality - ultra smooth
   useEffect(() => {
-    if (isDragging) return;
+    if (isDragging || isManualNavigation) return;
 
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % features.length);
     }, 4500); // Optimized timing for smooth flow
 
     return () => clearInterval(interval);
-  }, [isDragging, currentIndex]);
+  }, [isDragging, isManualNavigation]);
+
+  // Reset manual navigation after a delay
+  useEffect(() => {
+    if (isManualNavigation) {
+      const timeout = setTimeout(() => {
+        setIsManualNavigation(false);
+      }, 6000); // Resume autoplay after 6 seconds
+
+      return () => clearTimeout(timeout);
+    }
+  }, [isManualNavigation]);
 
   const goToSlide = (index: number) => {
     // Ensure index is valid
