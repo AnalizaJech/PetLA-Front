@@ -857,7 +857,7 @@ export default function Calendario() {
                                       {isToday && (
                                         <Badge
                                           variant="secondary"
-                                          className="bg-vet-primary text-white"
+                                          className="bg-vet-primary text-white hover:!bg-vet-primary hover:!text-white"
                                         >
                                           HOY
                                         </Badge>
