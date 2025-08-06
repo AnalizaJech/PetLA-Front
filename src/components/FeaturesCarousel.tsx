@@ -277,21 +277,17 @@ export default function FeaturesCarousel() {
                       />
                     </div>
 
-                    {(isCenter || window.innerWidth >= 1024) && (
-                      <>
-                        <h3 className={`${
-                          isCenter ? "text-lg sm:text-xl" : "text-sm sm:text-base lg:text-xl"
-                        } font-bold text-vet-gray-900 mb-2 sm:mb-4`}>
-                          {feature.title}
-                        </h3>
+                    <h3 className={`${
+                      isCenter ? "text-lg sm:text-xl block" : "text-sm sm:text-base lg:text-xl hidden lg:block"
+                    } font-bold text-vet-gray-900 mb-2 sm:mb-4`}>
+                      {feature.title}
+                    </h3>
 
-                        <p className={`${
-                          isCenter ? "text-sm sm:text-base" : "text-xs sm:text-sm lg:text-base"
-                        } text-vet-gray-600 leading-relaxed ${isCenter ? "mb-4 sm:mb-6" : "mb-2 sm:mb-4 lg:mb-6"}`}>
-                          {feature.description}
-                        </p>
-                      </>
-                    )}
+                    <p className={`${
+                      isCenter ? "text-sm sm:text-base block" : "text-xs sm:text-sm lg:text-base hidden lg:block"
+                    } text-vet-gray-600 leading-relaxed ${isCenter ? "mb-4 sm:mb-6" : "mb-2 sm:mb-4 lg:mb-6"}`}>
+                      {feature.description}
+                    </p>
 
                     {isCenter && (
                       <div className="space-y-2 animate-fade-in">
