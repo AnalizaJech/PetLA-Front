@@ -534,9 +534,9 @@ export default function HistorialClinico() {
         contenido += `\nConsulta #${index + 1}\n`;
         contenido += `Fecha: ${consulta.fecha.toLocaleDateString("es-ES")}\n`;
         contenido += `Veterinario: ${consulta.veterinario}\n`;
-        contenido += `Motivo: ${consulta.motivo}\n`;
-        contenido += `Diagnóstico: ${consulta.diagnostico}\n`;
-        contenido += `Tratamiento: ${consulta.tratamiento}\n`;
+        if (consulta.motivo) contenido += `Motivo: ${consulta.motivo}\n`;
+        if (consulta.diagnostico) contenido += `Diagnóstico: ${consulta.diagnostico}\n`;
+        if (consulta.tratamiento) contenido += `Tratamiento: ${consulta.tratamiento}\n`;
 
         if (consulta.medicamentos && consulta.medicamentos.length > 0) {
           contenido += `Medicamentos:\n`;
