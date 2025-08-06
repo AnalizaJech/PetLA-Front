@@ -780,7 +780,7 @@ Generado automáticamente por PetLA
                           {[...Array(5)].map((_, i) => (
                             <Star
                               key={i}
-                              className="w-3 h-3 fill-amber-400 text-amber-400"
+                              className="w-3 h-3 fill-vet-warning text-vet-warning"
                             />
                           ))}
                         </div>
