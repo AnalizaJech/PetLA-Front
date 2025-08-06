@@ -912,7 +912,7 @@ export default function Calendario() {
 
                                         {mascota?.raza && (
                                           <div className="flex items-center space-x-2">
-                                            <Info className="w-4 h-4 text-vet-gray-600" />
+                                            <Heart className="w-4 h-4 text-pink-500" />
                                             <span>
                                               <strong>Raza:</strong>{" "}
                                               {mascota.raza}
