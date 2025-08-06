@@ -258,7 +258,35 @@ export default function HistorialClinicoVeterinario() {
     let filtered = historialMascota;
 
     if (filterHistoryType !== "todos") {
-      filtered = filtered.filter((record) => record.tipo === filterHistoryType);
+      filtered = filtered.filter((record) => {
+        const recordType = record.tipo?.toLowerCase() || "";
+        const filterType = filterHistoryType.toLowerCase();
+
+        // Mapear diferentes variantes de nombres de servicios
+        if (filterType === "vacunacion") {
+          return recordType.includes("vacun");
+        }
+        if (filterType === "emergencia") {
+          return recordType.includes("emergencia");
+        }
+        if (filterType === "cirugia") {
+          return recordType.includes("cirug");
+        }
+        if (filterType === "grooming") {
+          return recordType.includes("grooming");
+        }
+        if (filterType === "diagnostico") {
+          return recordType.includes("diagnostic");
+        }
+        if (filterType === "consulta") {
+          return recordType.includes("consulta") || recordType === "consulta general";
+        }
+        if (filterType === "control") {
+          return recordType.includes("control");
+        }
+
+        return recordType === filterType;
+      });
     }
 
     if (searchTerm) {
