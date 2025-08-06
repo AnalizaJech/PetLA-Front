@@ -310,6 +310,21 @@ export default function CitaAttendModal({
         </DialogHeader>
 
         <div className="space-y-6 pt-4">
+          {/* Service Type Information */}
+          <div className={`bg-${serviceConfig.color}/5 border border-${serviceConfig.color}/20 rounded-lg p-4 mb-4`}>
+            <div className="flex items-center space-x-3">
+              <ServiceIcon className={`w-6 h-6 text-${serviceConfig.color}`} />
+              <div>
+                <h4 className={`font-semibold text-${serviceConfig.color} text-lg`}>
+                  {serviceConfig.title}
+                </h4>
+                <p className="text-sm text-vet-gray-600 mt-1">
+                  {serviceConfig.description}
+                </p>
+              </div>
+            </div>
+          </div>
+
           {/* Patient Information */}
           <div className="bg-vet-gray-50 rounded-lg p-4">
             <h4 className="font-semibold text-vet-gray-900 mb-3 flex items-center">
