@@ -701,7 +701,7 @@ export default function Calendario() {
                                             e.stopPropagation();
                                             handleAttendCita(citaData);
                                           }}
-                                          className="bg-vet-primary hover:bg-vet-primary-dark"
+                                          className="bg-vet-primary hover:bg-vet-primary-dark w-full sm:w-auto"
                                         >
                                           <Activity className="w-4 h-4 mr-1" />
                                           Atender
