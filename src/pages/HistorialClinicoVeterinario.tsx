@@ -356,7 +356,7 @@ export default function HistorialClinicoVeterinario() {
       doc.text(`Veterinario: ${record.veterinario}`, 30, y);
       y += 6;
       doc.text(
-        `Tipo: ${record.tipoConsulta.replace("_", " ").toUpperCase()}`,
+        `Tipo: ${record.tipoConsulta.replace("_", " ").toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}`,
         30,
         y,
       );
@@ -1120,7 +1120,7 @@ export default function HistorialClinicoVeterinario() {
                                     record.tipoConsulta,
                                   )}
                                 >
-                                  {record.tipoConsulta.replace("_", " ")}
+                                  {record.tipoConsulta.replace("_", " ").toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
                                 </Badge>
                               </div>
                               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-vet-gray-600 mb-3">
@@ -1248,7 +1248,7 @@ export default function HistorialClinicoVeterinario() {
                       <Badge
                         className={getBadgeVariant(selectedRecord.tipoConsulta)}
                       >
-                        {selectedRecord.tipoConsulta.replace("_", " ")}
+                        {selectedRecord.tipoConsulta.replace("_", " ").toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
                       </Badge>
                     </div>
                     <div>
