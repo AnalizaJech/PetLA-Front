@@ -945,7 +945,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       );
       return true;
     } catch (error) {
-      console.error("❌ Error guardando comprobante:", error);
+      console.error("[ERROR] Error guardando comprobante:", error);
       return false;
     }
   };
@@ -976,7 +976,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
       return null;
     } catch (error) {
-      console.error("❌ Error recuperando comprobante:", error);
+      console.error("[ERROR] Error recuperando comprobante:", error);
       return null;
     }
   };
@@ -992,9 +992,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
         comprobanteData: undefined,
       });
 
-      console.log(`🗑️ Comprobante eliminado para cita ${citaId}`);
+      console.log(`[DELETED] Comprobante eliminado para cita ${citaId}`);
     } catch (error) {
-      console.error("❌ Error eliminando comprobante:", error);
+      console.error("[ERROR] Error eliminando comprobante:", error);
     }
   };
 
@@ -1228,7 +1228,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     const errors: string[] = [];
 
     try {
-      console.log("🔧 Iniciando reparación completa de integridad de datos...");
+      console.log("[REPAIR] Iniciando reparación completa de integridad de datos...");
 
       const clientesDisponibles = usuarios.filter((u) => u.rol === "cliente");
 
@@ -1279,7 +1279,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
           mascotasNombres.add(cita.mascota.toLowerCase());
           createdPets++;
           console.log(
-            `➕ Mascota creada: "${cita.mascota}" → ${clienteAsignado.nombre}`,
+            `[CREATE] Mascota creada: "${cita.mascota}" -> ${clienteAsignado.nombre}`,
           );
         }
       });
@@ -1314,7 +1314,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
           repairedPets++;
           console.log(
-            `🔧 Mascota "${mascota.nombre}" reasignada a ${mejorCliente.nombre}`,
+            `[REASSIGN] Mascota "${mascota.nombre}" reasignada a ${mejorCliente.nombre}`,
           );
 
           return { ...mascota, clienteId: mejorCliente.id };
@@ -1345,7 +1345,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
             if (propietario) {
               repairedCitas++;
               console.log(
-                `✅ Cita "${cita.mascota}" vinculada con ${propietario.nombre}`,
+                `[LINKED] Cita "${cita.mascota}" vinculada con ${propietario.nombre}`,
               );
 
               return {
@@ -1388,7 +1388,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         console.log("[REFRESH] Forzando persistencia de datos reparados...");
       }, 100);
     } catch (error) {
-      console.error("❌ Error durante la reparación de datos:", error);
+      console.error("[ERROR] Error durante la reparación de datos:", error);
       errors.push(
         `Error general: ${error instanceof Error ? error.message : "Error desconocido"}`,
       );
@@ -1422,7 +1422,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
     setMascotas((prev) => [...prev, newMascota]);
     console.log(
-      `✅ Nueva mascota agregada: ${newMascota.nombre} para ${user.nombre}`,
+      `[ADDED] Nueva mascota agregada: ${newMascota.nombre} para ${user.nombre}`,
     );
   };
 
