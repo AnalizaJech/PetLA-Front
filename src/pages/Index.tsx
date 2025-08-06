@@ -27,7 +27,7 @@ import FeaturesCarousel from "@/components/FeaturesCarousel";
 import NewsletterSection from "@/components/NewsletterSection";
 import { useAppContext } from "@/contexts/AppContext";
 import {
-  Heart,
+  Dog,
   Calendar,
   Shield,
   Clock,
@@ -305,7 +305,7 @@ export default function Index() {
                         </div>
                         {/* Floating hearts */}
                         <div className="absolute -top-2 -right-2 w-8 h-8 bg-vet-secondary rounded-full flex items-center justify-center animate-bounce">
-                          <Heart className="w-4 h-4 text-white fill-current" />
+                          <Dog className="w-4 h-4 text-white fill-current" />
                         </div>
                         <div className="absolute -bottom-2 -left-2 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center animate-pulse">
                           <PawPrint className="w-3 h-3 text-white" />
@@ -778,7 +778,7 @@ export default function Index() {
           <div className="text-center mb-20">
             <div className="inline-flex items-center px-8 py-4 bg-vet-secondary/10 rounded-full mb-8 backdrop-blur-sm border border-vet-secondary/20">
               <div className="w-8 h-8 bg-vet-secondary rounded-full flex items-center justify-center mr-4 animate-pulse">
-                <Heart className="w-4 h-4 text-white fill-current" />
+                <Dog className="w-4 h-4 text-white fill-current" />
               </div>
               <span className="text-vet-secondary font-bold text-lg">
                 EMERGENCIAS VETERINARIAS
@@ -934,7 +934,7 @@ export default function Index() {
             </div>
             <div className="group text-center bg-white rounded-3xl p-8 shadow-lg border border-vet-secondary/20 hover:border-vet-secondary/40 hover:shadow-xl transition-all duration-300 hover:scale-105">
               <div className="w-16 h-16 bg-vet-secondary/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-vet-secondary group-hover:scale-110 transition-all duration-300">
-                <Heart className="w-8 h-8 text-vet-secondary group-hover:text-white transition-colors" />
+                <Dog className="w-8 h-8 text-vet-secondary group-hover:text-white transition-colors" />
               </div>
               <div className="text-3xl font-bold text-vet-secondary mb-2">
                 24/7
