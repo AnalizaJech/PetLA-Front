@@ -381,6 +381,11 @@ export default function Configuracion() {
       });
     } catch (error) {
       setErrorMessage("Error al actualizar el perfil. Inténtalo de nuevo.");
+      // Scroll to top to show error message
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
     } finally {
       setIsLoading(false);
     }
