@@ -393,6 +393,19 @@ export default function HistorialClinicoVeterinario() {
     if (!selectedPet) return;
 
     try {
+      // Información de la mascota y propietario
+      const mascotaInfo = [
+        { Campo: "Nombre de la Mascota", Valor: selectedPet.nombre },
+        { Campo: "Especie", Valor: selectedPet.especie || "No especificada" },
+        { Campo: "Raza", Valor: selectedPet.raza || "No especificada" },
+        { Campo: "Sexo", Valor: selectedPet.sexo || "No especificado" },
+        { Campo: "Propietario", Valor: selectedOwner ? `${selectedOwner.nombre} ${selectedOwner.apellidos || ''}` : "No registrado" },
+        { Campo: "Teléfono", Valor: selectedOwner?.telefono || "No registrado" },
+        { Campo: "Email", Valor: selectedOwner?.email || "No registrado" },
+        { Campo: "Veterinario", Valor: user.nombre },
+        { Campo: "Fecha de Generación", Valor: new Date().toLocaleDateString("es-ES") },
+      ];
+
       const data = filteredHistory.map((record, index) => ({
         "#": index + 1,
         Fecha: new Date(record.fecha).toLocaleDateString("es-ES"),
@@ -401,6 +414,9 @@ export default function HistorialClinicoVeterinario() {
         Tratamiento: record.tratamiento || "",
         Observaciones: record.observaciones || "",
         Veterinario: record.veterinario,
+        Peso: record.peso || "",
+        Temperatura: record.temperatura || "",
+        "Freq. Cardíaca": record.frecuenciaCardiaca || "",
       }));
 
       const ws = XLSX.utils.json_to_sheet(data);
