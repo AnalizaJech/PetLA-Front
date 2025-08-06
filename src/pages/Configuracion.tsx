@@ -1829,7 +1829,7 @@ export default function Configuracion() {
 
           {/* Delete Account Confirmation Modal */}
           <Dialog open={showDeleteAccountModal} onOpenChange={setShowDeleteAccountModal}>
-            <DialogContent className="max-w-md w-full mx-4 max-h-[90vh] overflow-hidden flex flex-col">
+            <DialogContent className="max-w-lg w-full mx-4 max-h-[90vh] overflow-hidden flex flex-col">
               <DialogHeader className="flex-shrink-0">
                 <DialogTitle className="flex items-center space-x-2 text-lg text-red-700">
                   <AlertTriangle className="w-5 h-5 text-red-600 flex-shrink-0" />
