@@ -470,28 +470,32 @@ export default function MisCitas() {
                                 • {cita.veterinario}
                               </span>
                             </p>
-                            <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-6 md:space-x-10 text-sm sm:text-base md:text-lg text-vet-gray-500">
-                              <div className="flex items-center space-x-2">
-                                <Calendar className="w-6 h-6 sm:w-5 sm:h-5 md:w-8 md:h-8 lg:w-6 lg:h-6 text-vet-primary" />
-                                <span className="font-medium">
-                                  {cita.fecha.toLocaleDateString("es-ES", {
-                                    weekday: "short",
-                                    month: "short",
-                                    day: "numeric",
-                                  })}
-                                </span>
+                            <div className="space-y-2">
+                              {/* Fecha y Hora en una línea */}
+                              <div className="flex items-center space-x-4 md:space-x-6 text-sm sm:text-base md:text-lg text-vet-gray-500">
+                                <div className="flex items-center space-x-2">
+                                  <Calendar className="w-5 h-5 md:w-6 md:h-6 text-vet-primary" />
+                                  <span className="font-medium">
+                                    {cita.fecha.toLocaleDateString("es-ES", {
+                                      weekday: "short",
+                                      month: "short",
+                                      day: "numeric",
+                                    })}
+                                  </span>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                  <Clock className="w-5 h-5 md:w-6 md:h-6 text-vet-primary" />
+                                  <span className="font-medium">
+                                    {cita.fecha.toLocaleTimeString("es-ES", {
+                                      hour: "2-digit",
+                                      minute: "2-digit",
+                                    })}
+                                  </span>
+                                </div>
                               </div>
-                              <div className="flex items-center space-x-2">
-                                <Clock className="w-6 h-6 sm:w-5 sm:h-5 md:w-8 md:h-8 lg:w-6 lg:h-6 text-vet-primary" />
-                                <span className="font-medium">
-                                  {cita.fecha.toLocaleTimeString("es-ES", {
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                  })}
-                                </span>
-                              </div>
-                              <div className="flex items-center space-x-2">
-                                <MapPin className="w-6 h-6 sm:w-5 sm:h-5 md:w-8 md:h-8 lg:w-6 lg:h-6 text-vet-primary" />
+                              {/* Clínica en línea separada */}
+                              <div className="flex items-center space-x-2 text-sm sm:text-base md:text-lg text-vet-gray-500">
+                                <MapPin className="w-5 h-5 md:w-6 md:h-6 text-vet-primary" />
                                 <span className="font-medium">
                                   {cita.ubicacion}
                                 </span>
