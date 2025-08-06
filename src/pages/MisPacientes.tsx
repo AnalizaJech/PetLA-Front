@@ -592,10 +592,10 @@ export default function MisPacientes() {
                 <Select value={filterOwner} onValueChange={setFilterOwner}>
                   <SelectTrigger>
                     <User className="w-4 h-4 mr-2" />
-                    <SelectValue placeholder="Propietario" />
+                    <SelectValue placeholder="Dueño" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="todos">Todos</SelectItem>
+                    <SelectItem value="todos">Dueño</SelectItem>
                     {misClientes.map((cliente) => (
                       <SelectItem key={cliente.id} value={cliente.id}>
                         {cliente.nombre}
@@ -610,7 +610,7 @@ export default function MisPacientes() {
                     <SelectValue placeholder="Especie" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="todos">Todas</SelectItem>
+                    <SelectItem value="todos">Especie</SelectItem>
                     {especiesUnicas.map((especie) => (
                       <SelectItem key={especie} value={especie}>
                         {especie}
@@ -625,7 +625,7 @@ export default function MisPacientes() {
                     <SelectValue placeholder="Estado" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="todos">Todos</SelectItem>
+                    <SelectItem value="todos">Estado</SelectItem>
                     <SelectItem value="aceptada">Confirmadas</SelectItem>
                     <SelectItem value="atendida">Completadas</SelectItem>
                     <SelectItem value="en_validacion">En validación</SelectItem>
