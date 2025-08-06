@@ -3,6 +3,8 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
 import { useAppContext } from "@/contexts/AppContext";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Card,
   CardContent,
@@ -10,6 +12,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,9 +28,43 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
   FileText,
+  PawPrint,
+  Calendar,
+  Stethoscope,
+  User,
+  Phone,
+  Search,
+  Filter,
+  Eye,
+  Activity,
   Download,
+  X,
+  AlertCircle,
+  CheckCircle,
+  UserCheck,
+  Heart,
+  Weight,
+  Thermometer,
+  Plus,
+  ChevronRight,
+  Info,
+  ArrowLeft,
+  Pill,
+  Syringe,
+  Mail,
+  MapPin,
   ChevronDown,
+  Calendar as CalendarIcon,
+  Clock,
+  Edit,
 } from "lucide-react";
 import jsPDF from "jspdf";
 import * as XLSX from "xlsx";
@@ -31,13 +76,73 @@ export default function HistorialClinicoVeterinario() {
     usuarios,
     mascotas,
     historialClinico,
+    getHistorialByMascota,
+    addHistorialEntry,
   } = useAppContext();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
+  // Navigation states - check URL params for direct navigation
+  const [currentView, setCurrentView] = useState<"owners" | "pets" | "history">(
+    searchParams.get("view") === "history" ? "history" : "owners",
+  );
+  const [selectedOwner, setSelectedOwner] = useState<any>(null);
+  const [selectedPet, setSelectedPet] = useState<any>(null);
+  const [selectedRecord, setSelectedRecord] = useState<any>(null);
+  const [showDetailModal, setShowDetailModal] = useState(false);
+
+  // Filter states
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterType, setFilterType] = useState("todos");
+  const [filterSex, setFilterSex] = useState("todos");
+  const [filterSpecies, setFilterSpecies] = useState("todos");
+  const [filterHistoryType, setFilterHistoryType] = useState("todos");
+
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+
+    // Handle direct navigation from URL parameters
+    const view = searchParams.get("view");
+    const ownerId = searchParams.get("ownerId");
+    const petId = searchParams.get("petId");
+    const petName = searchParams.get("petName");
+
+    if (view === "history") {
+      if (petId) {
+        // Direct navigation to specific pet by ID
+        const pet = mascotas.find((m) => m.id === petId);
+        if (pet) {
+          const owner = usuarios.find((u) => u.id === pet.clienteId);
+          setSelectedPet(pet);
+          setSelectedOwner(owner || null);
+          setCurrentView("history");
+        }
+      } else if (petName) {
+        // Fallback: navigation to pet by name (for unregistered pets)
+        const pet = mascotas.find(
+          (m) => m.nombre.toLowerCase() === petName.toLowerCase(),
+        );
+        if (pet) {
+          const owner = usuarios.find((u) => u.id === pet.clienteId);
+          setSelectedPet(pet);
+          setSelectedOwner(owner || null);
+          setCurrentView("history");
+        } else {
+          // Create a temporary pet object for unregistered pets
+          const tempPet = {
+            id: `temp-${petName}`,
+            nombre: petName,
+            especie: searchParams.get("especie") || "Desconocida",
+            raza: "Por determinar",
+            sexo: "No especificado",
+            clienteId: "unknown",
+          };
+          setSelectedPet(tempPet);
+          setCurrentView("history");
+        }
+      }
+    }
+  }, [searchParams, mascotas, usuarios]);
 
   if (!user || user.rol !== "veterinario") {
     return (
@@ -59,8 +164,86 @@ export default function HistorialClinicoVeterinario() {
     );
   }
 
+  // Get clients with pets that have appointments with this veterinarian
+  const misClientes = useMemo(() => {
+    const citasVeterinario = citas.filter((cita) => cita.veterinario === user.nombre);
+    const clienteIds = new Set(
+      citasVeterinario
+        .map((cita) => {
+          const mascota = mascotas.find(
+            (m) => m.nombre.toLowerCase() === cita.mascota.toLowerCase() || m.id === cita.mascotaId
+          );
+          return mascota?.clienteId;
+        })
+        .filter(Boolean)
+    );
+    
+    return usuarios
+      .filter((usuario) => clienteIds.has(usuario.id) && usuario.rol === "cliente")
+      .sort((a, b) => a.nombre.localeCompare(b.nombre));
+  }, [citas, mascotas, usuarios, user.nombre]);
+
+  // Get pets for selected owner
+  const mascotasDelPropietario = useMemo(() => {
+    if (!selectedOwner) return [];
+    
+    const mascotasPropietario = mascotas.filter((mascota) => mascota.clienteId === selectedOwner.id);
+    
+    // Filter pets that have appointments with this veterinarian
+    const mascotasConCitas = mascotasPropietario.filter((mascota) =>
+      citas.some(
+        (cita) =>
+          cita.veterinario === user.nombre &&
+          (cita.mascota.toLowerCase() === mascota.nombre.toLowerCase() || cita.mascotaId === mascota.id)
+      )
+    );
+
+    return mascotasConCitas.sort((a, b) => a.nombre.localeCompare(b.nombre));
+  }, [selectedOwner, mascotas, citas, user.nombre]);
+
+  // Get medical history for selected pet
+  const historialMascota = useMemo(() => {
+    if (!selectedPet) return [];
+    
+    return historialClinico
+      .filter((record) => {
+        // Match by pet ID or name and veterinarian
+        const matchesPet = 
+          record.mascotaId === selectedPet.id ||
+          (record.mascotaNombre && 
+           record.mascotaNombre.toLowerCase() === selectedPet.nombre.toLowerCase());
+        const matchesVet = record.veterinario === user.nombre;
+        return matchesPet && matchesVet;
+      })
+      .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
+  }, [selectedPet, historialClinico, user.nombre]);
+
+  // Filter medical history
+  const filteredHistory = useMemo(() => {
+    let filtered = historialMascota;
+
+    if (filterHistoryType !== "todos") {
+      filtered = filtered.filter((record) => record.tipo === filterHistoryType);
+    }
+
+    if (searchTerm) {
+      const search = searchTerm.toLowerCase();
+      filtered = filtered.filter(
+        (record) =>
+          record.diagnostico?.toLowerCase().includes(search) ||
+          record.tratamiento?.toLowerCase().includes(search) ||
+          record.observaciones?.toLowerCase().includes(search) ||
+          record.tipo.toLowerCase().includes(search)
+      );
+    }
+
+    return filtered;
+  }, [historialMascota, filterHistoryType, searchTerm]);
+
   // Download functions
   const downloadHistorialPDF = () => {
+    if (!selectedPet) return;
+
     try {
       const doc = new jsPDF();
       const pageWidth = doc.internal.pageSize.getWidth();
@@ -75,17 +258,14 @@ export default function HistorialClinicoVeterinario() {
       yPosition += 15;
       doc.setFontSize(12);
       doc.setFont("helvetica", "normal");
-      doc.text(`Generado el: ${new Date().toLocaleDateString("es-ES")}`, margin, yPosition);
-      doc.text(`Veterinario: ${user.nombre}`, margin, yPosition + 10);
+      doc.text(`Mascota: ${selectedPet.nombre}`, margin, yPosition);
+      doc.text(`Propietario: ${selectedOwner?.nombre || "No registrado"}`, margin, yPosition + 10);
+      doc.text(`Veterinario: ${user.nombre}`, margin, yPosition + 20);
+      doc.text(`Generado el: ${new Date().toLocaleDateString("es-ES")}`, margin, yPosition + 30);
 
-      yPosition += 30;
+      yPosition += 50;
 
-      // Get all medical records for this veterinarian
-      const misHistoriales = historialClinico.filter(
-        record => record.veterinario === user.nombre
-      );
-
-      if (misHistoriales.length === 0) {
+      if (filteredHistory.length === 0) {
         doc.text("No hay registros médicos disponibles.", margin, yPosition);
       } else {
         doc.setFontSize(14);
@@ -93,7 +273,7 @@ export default function HistorialClinicoVeterinario() {
         doc.text("Registros Médicos", margin, yPosition);
         yPosition += 15;
 
-        misHistoriales.forEach((record, index) => {
+        filteredHistory.forEach((record, index) => {
           if (yPosition > 250) {
             doc.addPage();
             yPosition = 30;
@@ -101,26 +281,32 @@ export default function HistorialClinicoVeterinario() {
 
           doc.setFontSize(11);
           doc.setFont("helvetica", "bold");
-          doc.text(`${index + 1}. ${record.mascotaNombre || "Sin nombre"}`, margin, yPosition);
-          yPosition += 8;
+          doc.text(`${index + 1}. ${new Date(record.fecha).toLocaleDateString("es-ES")} - ${record.tipo}`, margin, yPosition);
+          yPosition += 10;
 
           doc.setFont("helvetica", "normal");
-          doc.text(`Fecha: ${new Date(record.fecha).toLocaleDateString("es-ES")}`, margin + 5, yPosition);
-          yPosition += 6;
-          doc.text(`Tipo: ${record.tipo}`, margin + 5, yPosition);
-          yPosition += 6;
           
           if (record.diagnostico) {
-            const diagnosticoLines = doc.splitTextToSize(`Diagnóstico: ${record.diagnostico}`, pageWidth - 2 * margin - 5);
+            const diagnosticoLines = doc.splitTextToSize(`Diagnóstico: ${record.diagnostico}`, pageWidth - 2 * margin);
             diagnosticoLines.forEach((line: string) => {
               doc.text(line, margin + 5, yPosition);
               yPosition += 6;
             });
+            yPosition += 3;
           }
 
           if (record.tratamiento) {
-            const tratamientoLines = doc.splitTextToSize(`Tratamiento: ${record.tratamiento}`, pageWidth - 2 * margin - 5);
+            const tratamientoLines = doc.splitTextToSize(`Tratamiento: ${record.tratamiento}`, pageWidth - 2 * margin);
             tratamientoLines.forEach((line: string) => {
+              doc.text(line, margin + 5, yPosition);
+              yPosition += 6;
+            });
+            yPosition += 3;
+          }
+
+          if (record.observaciones) {
+            const observacionesLines = doc.splitTextToSize(`Observaciones: ${record.observaciones}`, pageWidth - 2 * margin);
+            observacionesLines.forEach((line: string) => {
               doc.text(line, margin + 5, yPosition);
               yPosition += 6;
             });
@@ -130,21 +316,18 @@ export default function HistorialClinicoVeterinario() {
         });
       }
 
-      doc.save(`historial-clinico-${user.nombre}-${new Date().toISOString().split('T')[0]}.pdf`);
+      doc.save(`historial-${selectedPet.nombre}-${new Date().toISOString().split('T')[0]}.pdf`);
     } catch (error) {
       console.error("Error generando PDF:", error);
     }
   };
 
   const downloadHistorialExcel = () => {
-    try {
-      const misHistoriales = historialClinico.filter(
-        record => record.veterinario === user.nombre
-      );
+    if (!selectedPet) return;
 
-      const data = misHistoriales.map((record, index) => ({
+    try {
+      const data = filteredHistory.map((record, index) => ({
         "#": index + 1,
-        "Mascota": record.mascotaNombre || "Sin nombre",
         "Fecha": new Date(record.fecha).toLocaleDateString("es-ES"),
         "Tipo": record.tipo,
         "Diagnóstico": record.diagnostico || "",
@@ -155,12 +338,11 @@ export default function HistorialClinicoVeterinario() {
 
       const ws = XLSX.utils.json_to_sheet(data);
       const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, "Historial Clínico");
+      XLSX.utils.book_append_sheet(wb, ws, `Historial ${selectedPet.nombre}`);
 
       // Auto-size columns
       const colWidths = [
         { wch: 5 },   // #
-        { wch: 20 },  // Mascota
         { wch: 12 },  // Fecha
         { wch: 15 },  // Tipo
         { wch: 30 },  // Diagnóstico
@@ -170,34 +352,32 @@ export default function HistorialClinicoVeterinario() {
       ];
       ws["!cols"] = colWidths;
 
-      XLSX.writeFile(wb, `historial-clinico-${user.nombre}-${new Date().toISOString().split('T')[0]}.xlsx`);
+      XLSX.writeFile(wb, `historial-${selectedPet.nombre}-${new Date().toISOString().split('T')[0]}.xlsx`);
     } catch (error) {
       console.error("Error generando Excel:", error);
     }
   };
 
   const downloadHistorialTXT = () => {
-    try {
-      const misHistoriales = historialClinico.filter(
-        record => record.veterinario === user.nombre
-      );
+    if (!selectedPet) return;
 
+    try {
       let content = `HISTORIAL CLÍNICO VETERINARIO\n`;
       content += `========================================\n\n`;
-      content += `Generado el: ${new Date().toLocaleDateString("es-ES")}\n`;
-      content += `Veterinario: ${user.nombre}\n\n`;
+      content += `Mascota: ${selectedPet.nombre}\n`;
+      content += `Propietario: ${selectedOwner?.nombre || "No registrado"}\n`;
+      content += `Veterinario: ${user.nombre}\n`;
+      content += `Generado el: ${new Date().toLocaleDateString("es-ES")}\n\n`;
 
-      if (misHistoriales.length === 0) {
+      if (filteredHistory.length === 0) {
         content += "No hay registros médicos disponibles.\n";
       } else {
-        content += `Total de registros: ${misHistoriales.length}\n\n`;
+        content += `Total de registros: ${filteredHistory.length}\n\n`;
         content += `REGISTROS MÉDICOS:\n`;
         content += `==================\n\n`;
 
-        misHistoriales.forEach((record, index) => {
-          content += `${index + 1}. ${record.mascotaNombre || "Sin nombre"}\n`;
-          content += `   Fecha: ${new Date(record.fecha).toLocaleDateString("es-ES")}\n`;
-          content += `   Tipo: ${record.tipo}\n`;
+        filteredHistory.forEach((record, index) => {
+          content += `${index + 1}. ${new Date(record.fecha).toLocaleDateString("es-ES")} - ${record.tipo}\n`;
           if (record.diagnostico) {
             content += `   Diagnóstico: ${record.diagnostico}\n`;
           }
@@ -215,7 +395,7 @@ export default function HistorialClinicoVeterinario() {
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = `historial-clinico-${user.nombre}-${new Date().toISOString().split('T')[0]}.txt`;
+      link.download = `historial-${selectedPet.nombre}-${new Date().toISOString().split('T')[0]}.txt`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -225,99 +405,694 @@ export default function HistorialClinicoVeterinario() {
     }
   };
 
-  // Get count of medical records for this veterinarian
-  const misHistoriales = historialClinico.filter(
-    record => record.veterinario === user.nombre
-  );
+  // Navigation functions
+  const handleSelectOwner = (owner: any) => {
+    setSelectedOwner(owner);
+    setCurrentView("pets");
+    setSelectedPet(null);
+  };
+
+  const handleSelectPet = (pet: any) => {
+    setSelectedPet(pet);
+    setCurrentView("history");
+  };
+
+  const handleBackToOwners = () => {
+    setCurrentView("owners");
+    setSelectedOwner(null);
+    setSelectedPet(null);
+  };
+
+  const handleBackToPets = () => {
+    setCurrentView("pets");
+    setSelectedPet(null);
+  };
+
+  const getConsultationIcon = (tipo: string) => {
+    switch (tipo) {
+      case "vacunacion":
+        return <Syringe className="w-4 h-4" />;
+      case "emergencia":
+        return <AlertCircle className="w-4 h-4" />;
+      case "cirugia":
+        return <Activity className="w-4 h-4" />;
+      case "grooming":
+        return <Heart className="w-4 h-4" />;
+      case "control":
+        return <CheckCircle className="w-4 h-4" />;
+      default:
+        return <Stethoscope className="w-4 h-4" />;
+    }
+  };
+
+  const getBadgeVariant = (tipo: string) => {
+    switch (tipo) {
+      case "vacunacion":
+        return "bg-green-100 text-green-800 border-green-200";
+      case "emergencia":
+        return "bg-red-100 text-red-800 border-red-200";
+      case "cirugia":
+        return "bg-purple-100 text-purple-800 border-purple-200";
+      case "grooming":
+        return "bg-pink-100 text-pink-800 border-pink-200";
+      case "control":
+        return "bg-blue-100 text-blue-800 border-blue-200";
+      default:
+        return "bg-gray-100 text-gray-800 border-gray-200";
+    }
+  };
 
   return (
     <Layout user={user}>
       <div className="min-h-screen bg-vet-gray-50 py-6 sm:py-8">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
-          <div className="mb-8">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-vet-primary/10 rounded-xl flex items-center justify-center mx-auto mb-4">
-                <FileText className="w-8 h-8 text-vet-primary" />
-              </div>
-              <h1 className="text-3xl font-bold text-vet-gray-900 mb-2">
-                Historial Clínico
-              </h1>
-              <p className="text-vet-gray-600 mb-6">
-                Descarga tu historial médico completo
-              </p>
-              
-              {/* Statistics */}
-              <div className="inline-flex items-center space-x-2 bg-vet-primary/10 px-4 py-2 rounded-lg mb-8">
-                <FileText className="w-5 h-5 text-vet-primary" />
-                <span className="text-vet-primary font-medium">
-                  {misHistoriales.length} registro{misHistoriales.length !== 1 ? 's' : ''} médico{misHistoriales.length !== 1 ? 's' : ''} disponible{misHistoriales.length !== 1 ? 's' : ''}
-                </span>
-              </div>
-            </div>
-          </div>
+          <div className="mb-6 sm:mb-8">
+            <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+              <div className="flex items-center space-x-3 sm:space-x-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-vet-primary/10 rounded-xl flex items-center justify-center">
+                  <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-vet-primary" />
+                </div>
+                <div>
+                  <h1 className="text-2xl sm:text-3xl font-bold text-vet-gray-900">
+                    Historial Clínico
+                  </h1>
+                  <p className="text-sm sm:text-base text-vet-gray-600">
+                    Gestiona el historial médico completo
+                  </p>
 
-          {/* Download Section */}
-          <div className="flex justify-center">
-            <Card className="w-full max-w-md">
-              <CardHeader className="text-center">
-                <CardTitle className="text-xl">Descargar Historial</CardTitle>
-                <CardDescription>
-                  Selecciona el formato de descarga para tu historial clínico
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="p-6">
-                {misHistoriales.length > 0 ? (
+                  {/* Breadcrumb */}
+                  <div className="flex items-center space-x-2 mt-2 text-sm text-vet-gray-500">
+                    <span
+                      className={`cursor-pointer hover:text-vet-primary ${currentView === "owners" ? "text-vet-primary font-medium" : ""}`}
+                      onClick={handleBackToOwners}
+                    >
+                      Propietarios
+                    </span>
+                    {selectedOwner && (
+                      <>
+                        <ChevronRight className="w-3 h-3" />
+                        <span
+                          className={`cursor-pointer hover:text-vet-primary ${currentView === "pets" ? "text-vet-primary font-medium" : ""}`}
+                          onClick={handleBackToPets}
+                        >
+                          {selectedOwner.nombre}
+                        </span>
+                      </>
+                    )}
+                    {selectedPet && (
+                      <>
+                        <ChevronRight className="w-3 h-3" />
+                        <span className="text-vet-primary font-medium">
+                          {selectedPet.nombre}
+                        </span>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {currentView === "history" &&
+                selectedPet &&
+                historialMascota.length > 0 && (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button className="w-full bg-vet-primary hover:bg-vet-primary-dark h-12 text-base">
-                        <Download className="w-5 h-5 mr-3" />
+                      <Button className="bg-vet-primary hover:bg-vet-primary-dark">
+                        <Download className="w-4 h-4 mr-2" />
                         Descargar Historial
-                        <ChevronDown className="w-4 h-4 ml-3" />
+                        <ChevronDown className="w-4 h-4 ml-2" />
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-56">
-                      <DropdownMenuItem onClick={downloadHistorialPDF} className="p-3">
-                        <FileText className="w-4 h-4 mr-3" />
-                        <div>
-                          <div className="font-medium">Descargar como PDF</div>
-                          <div className="text-xs text-vet-gray-500">Formato de documento</div>
-                        </div>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem onClick={downloadHistorialPDF}>
+                        <FileText className="w-4 h-4 mr-2" />
+                        PDF
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={downloadHistorialExcel} className="p-3">
-                        <Download className="w-4 h-4 mr-3" />
-                        <div>
-                          <div className="font-medium">Descargar como Excel</div>
-                          <div className="text-xs text-vet-gray-500">Hoja de cálculo</div>
-                        </div>
+                      <DropdownMenuItem onClick={downloadHistorialExcel}>
+                        <Download className="w-4 h-4 mr-2" />
+                        Excel
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={downloadHistorialTXT} className="p-3">
-                        <FileText className="w-4 h-4 mr-3" />
-                        <div>
-                          <div className="font-medium">Descargar como TXT</div>
-                          <div className="text-xs text-vet-gray-500">Archivo de texto</div>
-                        </div>
+                      <DropdownMenuItem onClick={downloadHistorialTXT}>
+                        <FileText className="w-4 h-4 mr-2" />
+                        TXT
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
-                ) : (
-                  <div className="text-center py-8">
-                    <FileText className="w-12 h-12 text-vet-gray-400 mx-auto mb-4" />
-                    <p className="text-vet-gray-600 mb-4">
-                      No hay registros médicos disponibles para descargar
-                    </p>
-                    <Button 
-                      variant="outline" 
-                      onClick={() => navigate('/mis-pacientes')}
-                      className="text-vet-primary border-vet-primary hover:bg-vet-primary hover:text-white"
-                    >
-                      Ir a Mis Pacientes
-                    </Button>
-                  </div>
                 )}
+            </div>
+          </div>
+
+          {/* Search and Filters for owners view */}
+          {currentView === "owners" && (
+            <Card className="mb-6">
+              <CardContent className="p-4">
+                <div className="relative">
+                  <Search className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
+                  <Input
+                    placeholder="Buscar propietarios..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
               </CardContent>
             </Card>
-          </div>
+          )}
+
+          {/* Search and Filters for pets view */}
+          {currentView === "pets" && (
+            <Card className="mb-6">
+              <CardContent className="p-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
+                    <Input
+                      placeholder="Buscar mascotas..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-10"
+                    />
+                  </div>
+                  <Select value={filterSpecies} onValueChange={setFilterSpecies}>
+                    <SelectTrigger>
+                      <PawPrint className="w-4 h-4 mr-2" />
+                      <SelectValue placeholder="Especie" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="todos">Todas las especies</SelectItem>
+                      <SelectItem value="perro">Perro</SelectItem>
+                      <SelectItem value="gato">Gato</SelectItem>
+                      <SelectItem value="ave">Ave</SelectItem>
+                      <SelectItem value="roedor">Roedor</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Select value={filterSex} onValueChange={setFilterSex}>
+                    <SelectTrigger>
+                      <User className="w-4 h-4 mr-2" />
+                      <SelectValue placeholder="Sexo" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="todos">Ambos sexos</SelectItem>
+                      <SelectItem value="macho">Macho</SelectItem>
+                      <SelectItem value="hembra">Hembra</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Search and Filters for history view */}
+          {currentView === "history" && (
+            <Card className="mb-6">
+              <CardContent className="p-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
+                    <Input
+                      placeholder="Buscar en historial..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-10"
+                    />
+                  </div>
+                  <Select value={filterHistoryType} onValueChange={setFilterHistoryType}>
+                    <SelectTrigger>
+                      <Stethoscope className="w-4 h-4 mr-2" />
+                      <SelectValue placeholder="Tipo de consulta" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="todos">Todos los tipos</SelectItem>
+                      <SelectItem value="consulta">Consulta general</SelectItem>
+                      <SelectItem value="vacunacion">Vacunación</SelectItem>
+                      <SelectItem value="emergencia">Emergencia</SelectItem>
+                      <SelectItem value="cirugia">Cirugía</SelectItem>
+                      <SelectItem value="control">Control</SelectItem>
+                      <SelectItem value="grooming">Grooming</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Content based on current view */}
+          {currentView === "owners" && (
+            <div>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <User className="w-5 h-5 text-vet-primary" />
+                    <span>Propietarios ({misClientes.length})</span>
+                  </CardTitle>
+                  <CardDescription>
+                    Selecciona un propietario para ver sus mascotas
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {misClientes
+                      .filter((cliente) =>
+                        searchTerm
+                          ? cliente.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                            cliente.email?.toLowerCase().includes(searchTerm.toLowerCase())
+                          : true
+                      )
+                      .map((cliente) => {
+                        const mascotasCount = mascotas.filter(
+                          (m) => m.clienteId === cliente.id
+                        ).length;
+
+                        return (
+                          <Card
+                            key={cliente.id}
+                            className="cursor-pointer hover:shadow-lg transition-all duration-200 hover:border-vet-primary"
+                            onClick={() => handleSelectOwner(cliente)}
+                          >
+                            <CardContent className="p-4">
+                              <div className="flex items-center space-x-3">
+                                <div className="w-12 h-12 bg-vet-primary/10 rounded-full flex items-center justify-center">
+                                  <User className="w-6 h-6 text-vet-primary" />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <h4 className="font-medium text-vet-gray-900 truncate">
+                                    {cliente.nombre}
+                                  </h4>
+                                  <div className="flex items-center space-x-2 mt-1">
+                                    {cliente.telefono && (
+                                      <div className="flex items-center space-x-1 text-xs text-vet-gray-600">
+                                        <Phone className="w-3 h-3" />
+                                        <span>{cliente.telefono}</span>
+                                      </div>
+                                    )}
+                                  </div>
+                                  <div className="flex items-center justify-between mt-2">
+                                    <Badge variant="secondary" className="text-xs">
+                                      <PawPrint className="w-3 h-3 mr-1" />
+                                      {mascotasCount} mascota{mascotasCount !== 1 ? 's' : ''}
+                                    </Badge>
+                                  </div>
+                                </div>
+                                <ChevronRight className="w-5 h-5 text-vet-gray-400" />
+                              </div>
+                            </CardContent>
+                          </Card>
+                        );
+                      })}
+                  </div>
+
+                  {misClientes.length === 0 && (
+                    <div className="text-center py-12">
+                      <User className="w-16 h-16 text-vet-gray-400 mx-auto mb-4" />
+                      <h3 className="text-lg font-medium text-vet-gray-900 mb-2">
+                        No hay propietarios
+                      </h3>
+                      <p className="text-vet-gray-600">
+                        No se encontraron propietarios con mascotas bajo tu atención.
+                      </p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {currentView === "pets" && selectedOwner && (
+            <div>
+              <div className="flex items-center space-x-4 mb-6">
+                <Button variant="outline" onClick={handleBackToOwners} size="sm">
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  Volver
+                </Button>
+                <div>
+                  <h2 className="text-xl font-bold text-vet-gray-900">
+                    Mascotas de {selectedOwner.nombre}
+                  </h2>
+                  <p className="text-vet-gray-600">
+                    {mascotasDelPropietario.length} mascota{mascotasDelPropietario.length !== 1 ? 's' : ''}
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {mascotasDelPropietario
+                  .filter((mascota) => {
+                    const matchesSearch = searchTerm
+                      ? mascota.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        mascota.raza?.toLowerCase().includes(searchTerm.toLowerCase())
+                      : true;
+                    const matchesSpecies = filterSpecies !== "todos" 
+                      ? mascota.especie?.toLowerCase() === filterSpecies 
+                      : true;
+                    const matchesSex = filterSex !== "todos" 
+                      ? mascota.sexo?.toLowerCase() === filterSex 
+                      : true;
+                    return matchesSearch && matchesSpecies && matchesSex;
+                  })
+                  .map((mascota) => {
+                    const registrosCount = historialClinico.filter(
+                      (record) =>
+                        (record.mascotaId === mascota.id ||
+                         (record.mascotaNombre && 
+                          record.mascotaNombre.toLowerCase() === mascota.nombre.toLowerCase())) &&
+                        record.veterinario === user.nombre
+                    ).length;
+
+                    const ultimaVisita = historialClinico
+                      .filter(
+                        (record) =>
+                          (record.mascotaId === mascota.id ||
+                           (record.mascotaNombre && 
+                            record.mascotaNombre.toLowerCase() === mascota.nombre.toLowerCase())) &&
+                          record.veterinario === user.nombre
+                      )
+                      .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())[0];
+
+                    return (
+                      <Card
+                        key={mascota.id}
+                        className="cursor-pointer hover:shadow-lg transition-all duration-200 hover:border-vet-primary"
+                        onClick={() => handleSelectPet(mascota)}
+                      >
+                        <CardContent className="p-6">
+                          <div className="flex items-start justify-between mb-4">
+                            <div className="flex items-center space-x-3">
+                              <div className="w-12 h-12 bg-vet-primary/10 rounded-full flex items-center justify-center">
+                                {mascota.foto ? (
+                                  <img
+                                    src={mascota.foto}
+                                    alt={mascota.nombre}
+                                    className="w-full h-full rounded-full object-cover"
+                                  />
+                                ) : (
+                                  <PawPrint className="w-6 h-6 text-vet-primary" />
+                                )}
+                              </div>
+                              <div>
+                                <h4 className="font-bold text-lg text-vet-gray-900">
+                                  {mascota.nombre}
+                                </h4>
+                                <p className="text-sm text-vet-gray-600">
+                                  {mascota.especie} • {mascota.raza || "Raza no especificada"}
+                                </p>
+                              </div>
+                            </div>
+                            <ChevronRight className="w-5 h-5 text-vet-gray-400" />
+                          </div>
+
+                          <div className="space-y-2 text-sm">
+                            <div className="flex items-center justify-between">
+                              <span className="text-vet-gray-600">Registros médicos:</span>
+                              <Badge variant="secondary">
+                                {registrosCount} registro{registrosCount !== 1 ? 's' : ''}
+                              </Badge>
+                            </div>
+                            
+                            {ultimaVisita && (
+                              <div className="flex items-center justify-between">
+                                <span className="text-vet-gray-600">Última visita:</span>
+                                <Badge variant="outline" className="text-xs">
+                                  {new Date(ultimaVisita.fecha).toLocaleDateString("es-ES")}
+                                </Badge>
+                              </div>
+                            )}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+              </div>
+
+              {mascotasDelPropietario.length === 0 && (
+                <Card>
+                  <CardContent className="p-12 text-center">
+                    <PawPrint className="w-16 h-16 text-vet-gray-400 mx-auto mb-4" />
+                    <h3 className="text-lg font-medium text-vet-gray-900 mb-2">
+                      No hay mascotas
+                    </h3>
+                    <p className="text-vet-gray-600">
+                      Este propietario no tiene mascotas registradas con citas contigo.
+                    </p>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+          )}
+
+          {currentView === "history" && selectedPet && (
+            <div>
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center space-x-4">
+                  <Button
+                    variant="outline"
+                    onClick={handleBackToPets}
+                    size="sm"
+                  >
+                    <ArrowLeft className="w-4 h-4 mr-2" />
+                    Volver
+                  </Button>
+                  <div>
+                    <h2 className="text-xl font-bold text-vet-gray-900">
+                      Historial de {selectedPet.nombre}
+                    </h2>
+                    <p className="text-vet-gray-600">
+                      {selectedOwner ? `Propietario: ${selectedOwner.nombre}` : "Propietario no registrado"} •{" "}
+                      {filteredHistory.length} registro{filteredHistory.length !== 1 ? "s" : ""}
+                    </p>
+                  </div>
+                </div>
+
+                {historialMascota.length > 0 && (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button className="bg-vet-primary hover:bg-vet-primary-dark">
+                        <Download className="w-4 h-4 mr-2" />
+                        Descargar Historial
+                        <ChevronDown className="w-4 h-4 ml-2" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem onClick={downloadHistorialPDF}>
+                        <FileText className="w-4 h-4 mr-2" />
+                        PDF
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={downloadHistorialExcel}>
+                        <Download className="w-4 h-4 mr-2" />
+                        Excel
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={downloadHistorialTXT}>
+                        <FileText className="w-4 h-4 mr-2" />
+                        TXT
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                )}
+              </div>
+
+              {/* Pet info card */}
+              <Card className="mb-6">
+                <CardContent className="p-6">
+                  <div className="flex items-center space-x-4">
+                    <div className="w-16 h-16 bg-vet-primary/10 rounded-xl flex items-center justify-center">
+                      {selectedPet.foto ? (
+                        <img
+                          src={selectedPet.foto}
+                          alt={selectedPet.nombre}
+                          className="w-full h-full rounded-xl object-cover"
+                        />
+                      ) : (
+                        <PawPrint className="w-8 h-8 text-vet-primary" />
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-bold text-vet-gray-900">
+                        {selectedPet.nombre}
+                      </h3>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2 text-sm text-vet-gray-600">
+                        <div>
+                          <strong>Especie:</strong> {selectedPet.especie}
+                        </div>
+                        <div>
+                          <strong>Raza:</strong>{" "}
+                          {selectedPet.raza || "No especificada"}
+                        </div>
+                        <div>
+                          <strong>Sexo:</strong>{" "}
+                          {selectedPet.sexo || "No especificado"}
+                        </div>
+                        <div>
+                          <strong>Registros:</strong> {historialMascota.length}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Medical records */}
+              <div className="space-y-4">
+                {filteredHistory.length === 0 ? (
+                  <Card>
+                    <CardContent className="p-12 text-center">
+                      <FileText className="w-16 h-16 text-vet-gray-400 mx-auto mb-4" />
+                      <h3 className="text-lg font-medium text-vet-gray-900 mb-2">
+                        No hay registros médicos
+                      </h3>
+                      <p className="text-vet-gray-600">
+                        No se encontraron registros médicos para esta mascota.
+                      </p>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  filteredHistory.map((record) => {
+                    const Icon = getConsultationIcon(record.tipo);
+                    
+                    return (
+                      <Card
+                        key={record.id}
+                        className="hover:shadow-md transition-all duration-200"
+                      >
+                        <CardContent className="p-6">
+                          <div className="flex items-start justify-between mb-4">
+                            <div className="flex items-center space-x-3">
+                              <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${getBadgeVariant(record.tipo)}`}>
+                                {Icon}
+                              </div>
+                              <div>
+                                <div className="flex items-center space-x-2">
+                                  <h4 className="font-medium text-vet-gray-900">
+                                    {record.tipo.charAt(0).toUpperCase() + record.tipo.slice(1)}
+                                  </h4>
+                                  <Badge className={getBadgeVariant(record.tipo)}>
+                                    {record.tipo}
+                                  </Badge>
+                                </div>
+                                <div className="flex items-center space-x-4 mt-1 text-sm text-vet-gray-600">
+                                  <div className="flex items-center space-x-1">
+                                    <CalendarIcon className="w-3 h-3" />
+                                    <span>{new Date(record.fecha).toLocaleDateString("es-ES")}</span>
+                                  </div>
+                                  <div className="flex items-center space-x-1">
+                                    <Clock className="w-3 h-3" />
+                                    <span>{new Date(record.fecha).toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" })}</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => {
+                                setSelectedRecord(record);
+                                setShowDetailModal(true);
+                              }}
+                            >
+                              <Eye className="w-4 h-4" />
+                            </Button>
+                          </div>
+
+                          <div className="space-y-3">
+                            {record.diagnostico && (
+                              <div>
+                                <h5 className="font-medium text-vet-gray-900 mb-1">Diagnóstico:</h5>
+                                <p className="text-vet-gray-700">{record.diagnostico}</p>
+                              </div>
+                            )}
+
+                            {record.tratamiento && (
+                              <div>
+                                <h5 className="font-medium text-vet-gray-900 mb-1">Tratamiento:</h5>
+                                <p className="text-vet-gray-700">{record.tratamiento}</p>
+                              </div>
+                            )}
+
+                            {record.observaciones && (
+                              <div>
+                                <h5 className="font-medium text-vet-gray-900 mb-1">Observaciones:</h5>
+                                <p className="text-vet-gray-700">{record.observaciones}</p>
+                              </div>
+                            )}
+
+                            <div className="flex items-center justify-between pt-2 border-t border-vet-gray-200">
+                              <div className="flex items-center space-x-1 text-xs text-vet-gray-500">
+                                <User className="w-3 h-3" />
+                                <span>Dr. {record.veterinario}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    );
+                  })
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Record Detail Modal */}
+          <Dialog open={showDetailModal} onOpenChange={setShowDetailModal}>
+            <DialogContent className="max-w-2xl">
+              <DialogHeader>
+                <DialogTitle className="flex items-center space-x-2">
+                  {selectedRecord && getConsultationIcon(selectedRecord.tipo)}
+                  <span>Detalle del Registro Médico</span>
+                </DialogTitle>
+                <DialogDescription>
+                  {selectedRecord && (
+                    <span>
+                      {new Date(selectedRecord.fecha).toLocaleDateString("es-ES")} - {selectedRecord.tipo}
+                    </span>
+                  )}
+                </DialogDescription>
+              </DialogHeader>
+              
+              {selectedRecord && (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <strong>Fecha:</strong> {new Date(selectedRecord.fecha).toLocaleDateString("es-ES")}
+                    </div>
+                    <div>
+                      <strong>Hora:</strong> {new Date(selectedRecord.fecha).toLocaleTimeString("es-ES")}
+                    </div>
+                    <div>
+                      <strong>Tipo:</strong> {selectedRecord.tipo}
+                    </div>
+                    <div>
+                      <strong>Veterinario:</strong> Dr. {selectedRecord.veterinario}
+                    </div>
+                  </div>
+
+                  {selectedRecord.diagnostico && (
+                    <div>
+                      <h4 className="font-medium text-vet-gray-900 mb-2">Diagnóstico:</h4>
+                      <p className="text-vet-gray-700 bg-vet-gray-50 p-3 rounded-lg">
+                        {selectedRecord.diagnostico}
+                      </p>
+                    </div>
+                  )}
+
+                  {selectedRecord.tratamiento && (
+                    <div>
+                      <h4 className="font-medium text-vet-gray-900 mb-2">Tratamiento:</h4>
+                      <p className="text-vet-gray-700 bg-vet-gray-50 p-3 rounded-lg">
+                        {selectedRecord.tratamiento}
+                      </p>
+                    </div>
+                  )}
+
+                  {selectedRecord.observaciones && (
+                    <div>
+                      <h4 className="font-medium text-vet-gray-900 mb-2">Observaciones:</h4>
+                      <p className="text-vet-gray-700 bg-vet-gray-50 p-3 rounded-lg">
+                        {selectedRecord.observaciones}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
     </Layout>
