@@ -518,164 +518,168 @@ export default function CitaAttendModal({
                 </div>
               </div>
 
-              {/* Medications */}
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <Label className="text-base font-medium flex items-center">
-                    <Pill className="w-4 h-4 mr-2 text-vet-primary" />
-                    Medicamentos Recetados
-                  </Label>
-                  <Button
-                    type="button"
-                    onClick={addMedicamento}
-                    size="sm"
-                    variant="outline"
-                  >
-                    <Plus className="w-4 h-4 mr-1" />
-                    Agregar
-                  </Button>
-                </div>
-                {medicamentos.map((med, index) => (
-                  <div
-                    key={index}
-                    className="border border-vet-gray-200 rounded-lg p-4 mb-3"
-                  >
-                    <div className="flex justify-between items-start mb-3">
-                      <h5 className="font-medium text-vet-gray-900">
-                        Medicamento {index + 1}
-                      </h5>
-                      <Button
-                        type="button"
-                        onClick={() => removeMedicamento(index)}
-                        size="sm"
-                        variant="ghost"
-                      >
-                        <Trash2 className="w-4 h-4 text-red-500" />
-                      </Button>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      <div>
-                        <Label>Nombre del medicamento</Label>
-                        <Input
-                          value={med.nombre}
-                          onChange={(e) =>
-                            updateMedicamento(index, "nombre", e.target.value)
-                          }
-                          placeholder="Ej: Amoxicilina"
-                        />
-                      </div>
-                      <div>
-                        <Label>Dosis</Label>
-                        <Input
-                          value={med.dosis}
-                          onChange={(e) =>
-                            updateMedicamento(index, "dosis", e.target.value)
-                          }
-                          placeholder="Ej: 250mg"
-                        />
-                      </div>
-                      <div>
-                        <Label>Frecuencia</Label>
-                        <Input
-                          value={med.frecuencia}
-                          onChange={(e) =>
-                            updateMedicamento(
-                              index,
-                              "frecuencia",
-                              e.target.value,
-                            )
-                          }
-                          placeholder="Ej: Cada 8 horas"
-                        />
-                      </div>
-                      <div>
-                        <Label>Duración</Label>
-                        <Input
-                          value={med.duracion}
-                          onChange={(e) =>
-                            updateMedicamento(index, "duracion", e.target.value)
-                          }
-                          placeholder="Ej: 7 días"
-                        />
-                      </div>
-                      <div className="md:col-span-2">
-                        <Label>Indicaciones especiales</Label>
-                        <Input
-                          value={med.indicaciones}
-                          onChange={(e) =>
-                            updateMedicamento(
-                              index,
-                              "indicaciones",
-                              e.target.value,
-                            )
-                          }
-                          placeholder="Instrucciones adicionales..."
-                        />
-                      </div>
-                    </div>
+              {/* Medications - conditional based on service type */}
+              {serviceConfig.showMedications && (
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <Label className="text-base font-medium flex items-center">
+                      <Pill className="w-4 h-4 mr-2 text-vet-primary" />
+                      Medicamentos Recetados
+                    </Label>
+                    <Button
+                      type="button"
+                      onClick={addMedicamento}
+                      size="sm"
+                      variant="outline"
+                    >
+                      <Plus className="w-4 h-4 mr-1" />
+                      Agregar
+                    </Button>
                   </div>
-                ))}
-              </div>
+                  {medicamentos.map((med, index) => (
+                    <div
+                      key={index}
+                      className="border border-vet-gray-200 rounded-lg p-4 mb-3"
+                    >
+                      <div className="flex justify-between items-start mb-3">
+                        <h5 className="font-medium text-vet-gray-900">
+                          Medicamento {index + 1}
+                        </h5>
+                        <Button
+                          type="button"
+                          onClick={() => removeMedicamento(index)}
+                          size="sm"
+                          variant="ghost"
+                        >
+                          <Trash2 className="w-4 h-4 text-red-500" />
+                        </Button>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                          <Label>Nombre del medicamento</Label>
+                          <Input
+                            value={med.nombre}
+                            onChange={(e) =>
+                              updateMedicamento(index, "nombre", e.target.value)
+                            }
+                            placeholder="Ej: Amoxicilina"
+                          />
+                        </div>
+                        <div>
+                          <Label>Dosis</Label>
+                          <Input
+                            value={med.dosis}
+                            onChange={(e) =>
+                              updateMedicamento(index, "dosis", e.target.value)
+                            }
+                            placeholder="Ej: 250mg"
+                          />
+                        </div>
+                        <div>
+                          <Label>Frecuencia</Label>
+                          <Input
+                            value={med.frecuencia}
+                            onChange={(e) =>
+                              updateMedicamento(
+                                index,
+                                "frecuencia",
+                                e.target.value,
+                              )
+                            }
+                            placeholder="Ej: Cada 8 horas"
+                          />
+                        </div>
+                        <div>
+                          <Label>Duración</Label>
+                          <Input
+                            value={med.duracion}
+                            onChange={(e) =>
+                              updateMedicamento(index, "duracion", e.target.value)
+                            }
+                            placeholder="Ej: 7 días"
+                          />
+                        </div>
+                        <div className="md:col-span-2">
+                          <Label>Indicaciones especiales</Label>
+                          <Input
+                            value={med.indicaciones}
+                            onChange={(e) =>
+                              updateMedicamento(
+                                index,
+                                "indicaciones",
+                                e.target.value,
+                              )
+                            }
+                            placeholder="Instrucciones adicionales..."
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
 
-              {/* Exams */}
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <Label className="text-base font-medium">
-                    Exámenes Realizados
-                  </Label>
-                  <Button
-                    type="button"
-                    onClick={addExamen}
-                    size="sm"
-                    variant="outline"
-                  >
-                    <Plus className="w-4 h-4 mr-1" />
-                    Agregar
-                  </Button>
-                </div>
-                {examenes.map((exam, index) => (
-                  <div
-                    key={index}
-                    className="border border-vet-gray-200 rounded-lg p-4 mb-3"
-                  >
-                    <div className="flex justify-between items-start mb-3">
-                      <h5 className="font-medium text-vet-gray-900">
-                        Examen {index + 1}
-                      </h5>
-                      <Button
-                        type="button"
-                        onClick={() => removeExamen(index)}
-                        size="sm"
-                        variant="ghost"
-                      >
-                        <Trash2 className="w-4 h-4 text-red-500" />
-                      </Button>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      <div>
-                        <Label>Tipo de examen</Label>
-                        <Input
-                          value={exam.tipo}
-                          onChange={(e) =>
-                            updateExamen(index, "tipo", e.target.value)
-                          }
-                          placeholder="Ej: Radiografía, Análisis de sangre"
-                        />
-                      </div>
-                      <div>
-                        <Label>Resultado</Label>
-                        <Input
-                          value={exam.resultado}
-                          onChange={(e) =>
-                            updateExamen(index, "resultado", e.target.value)
-                          }
-                          placeholder="Resultado del examen..."
-                        />
-                      </div>
-                    </div>
+              {/* Exams - conditional based on service type */}
+              {serviceConfig.showExams && (
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <Label className="text-base font-medium">
+                      Exámenes Realizados
+                    </Label>
+                    <Button
+                      type="button"
+                      onClick={addExamen}
+                      size="sm"
+                      variant="outline"
+                    >
+                      <Plus className="w-4 h-4 mr-1" />
+                      Agregar
+                    </Button>
                   </div>
-                ))}
-              </div>
+                  {examenes.map((exam, index) => (
+                    <div
+                      key={index}
+                      className="border border-vet-gray-200 rounded-lg p-4 mb-3"
+                    >
+                      <div className="flex justify-between items-start mb-3">
+                        <h5 className="font-medium text-vet-gray-900">
+                          Examen {index + 1}
+                        </h5>
+                        <Button
+                          type="button"
+                          onClick={() => removeExamen(index)}
+                          size="sm"
+                          variant="ghost"
+                        >
+                          <Trash2 className="w-4 h-4 text-red-500" />
+                        </Button>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                          <Label>Tipo de examen</Label>
+                          <Input
+                            value={exam.tipo}
+                            onChange={(e) =>
+                              updateExamen(index, "tipo", e.target.value)
+                            }
+                            placeholder="Ej: Radiografía, Análisis de sangre"
+                          />
+                        </div>
+                        <div>
+                          <Label>Resultado</Label>
+                          <Input
+                            value={exam.resultado}
+                            onChange={(e) =>
+                              updateExamen(index, "resultado", e.target.value)
+                            }
+                            placeholder="Resultado del examen..."
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
 
               {/* Observations and Follow-up */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
