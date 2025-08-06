@@ -386,7 +386,7 @@ export default function DashboardVeterinario() {
                     <p className="text-sm text-amber-700 font-medium mb-1">
                       En Proceso
                     </p>
-                    <p className="text-3xl font-bold text-amber-900">
+                    <p className="text-3xl font-bold text-vet-warning">
                       {stats.citasPendientes}
                     </p>
                     <p className="text-xs text-vet-secondary mt-1">
@@ -770,12 +770,12 @@ Generado automáticamente por PetLA
                         <div className="w-8 h-8 bg-vet-warning rounded-lg flex items-center justify-center">
                           <Star className="w-4 h-4 text-white" />
                         </div>
-                        <span className="text-sm font-medium text-amber-900">
+                        <span className="text-sm font-medium text-vet-warning">
                           Satisfacción
                         </span>
                       </div>
                       <div className="flex items-center space-x-1">
-                        <span className="font-bold text-amber-900">4.9</span>
+                        <span className="font-bold text-vet-warning">4.9</span>
                         <div className="flex">
                           {[...Array(5)].map((_, i) => (
                             <Star
