@@ -1123,22 +1123,17 @@ export default function HistorialClinicoVeterinario() {
                       )}
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-lg font-bold text-vet-gray-900">
-                        {selectedPet.nombre}
-                      </h3>
-                      {/* Tipo de servicio más común */}
-                      {historialMascota.length > 0 && (
-                        <div className="mt-1">
-                          <Badge
-                            className={getBadgeVariant(
-                              historialMascota[0].tipo || "consulta",
-                            )}
-                          >
-                            <Stethoscope className="w-3 h-3 mr-1" />
-                            {historialMascota[0].tipo || "Consulta"}
-                          </Badge>
-                        </div>
-                      )}
+                      <div className="flex items-center space-x-2">
+                        <h3 className="text-lg font-bold text-vet-gray-900">
+                          {selectedPet.nombre}
+                        </h3>
+                        {/* Icono del servicio más reciente */}
+                        {historialMascota.length > 0 && (
+                          <div className="flex items-center">
+                            {getServiceIconSVG(historialMascota[0].tipo || "consulta")}
+                          </div>
+                        )}
+                      </div>
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2 text-sm text-vet-gray-600">
                         <div>
                           <strong>Especie:</strong> {selectedPet.especie}
