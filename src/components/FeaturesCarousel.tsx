@@ -232,9 +232,11 @@ export default function FeaturesCarousel() {
                       : "scale-95 opacity-70 hover:opacity-90 w-20 sm:w-32 md:w-40 lg:w-full lg:max-w-sm"
                   } ${isSide ? "hidden sm:block" : ""}`}
                 >
-                  <div className="p-8 text-center">
+                  <div className={`${isCenter ? "p-6 sm:p-8" : "p-2 sm:p-4 lg:p-8"} text-center`}>
                     <div
-                      className={`mx-auto flex items-center justify-center w-16 h-16 rounded-2xl mb-6 transition-all duration-1000 ease-in-out ${
+                      className={`mx-auto flex items-center justify-center ${
+                        isCenter ? "w-12 h-12 sm:w-16 sm:h-16" : "w-8 h-8 sm:w-12 sm:h-12 lg:w-16 lg:h-16"
+                      } rounded-2xl ${isCenter ? "mb-4 sm:mb-6" : "mb-2 sm:mb-4 lg:mb-6"} transition-all duration-1000 ease-in-out ${
                         isCenter
                           ? feature.color === "vet-primary"
                             ? "bg-vet-primary scale-110"
@@ -257,7 +259,9 @@ export default function FeaturesCarousel() {
                       }`}
                     >
                       <Icon
-                        className={`w-8 h-8 transition-all duration-1000 ease-in-out ${
+                        className={`${
+                          isCenter ? "w-6 h-6 sm:w-8 sm:h-8" : "w-4 h-4 sm:w-6 sm:h-6 lg:w-8 lg:h-8"
+                        } transition-all duration-1000 ease-in-out ${
                           isCenter
                             ? "text-white scale-110"
                             : feature.color === "vet-primary"
@@ -273,22 +277,30 @@ export default function FeaturesCarousel() {
                       />
                     </div>
 
-                    <h3 className="text-xl font-bold text-vet-gray-900 mb-4">
-                      {feature.title}
-                    </h3>
+                    {(isCenter || window.innerWidth >= 1024) && (
+                      <>
+                        <h3 className={`${
+                          isCenter ? "text-lg sm:text-xl" : "text-sm sm:text-base lg:text-xl"
+                        } font-bold text-vet-gray-900 mb-2 sm:mb-4`}>
+                          {feature.title}
+                        </h3>
 
-                    <p className="text-vet-gray-600 leading-relaxed mb-6">
-                      {feature.description}
-                    </p>
+                        <p className={`${
+                          isCenter ? "text-sm sm:text-base" : "text-xs sm:text-sm lg:text-base"
+                        } text-vet-gray-600 leading-relaxed ${isCenter ? "mb-4 sm:mb-6" : "mb-2 sm:mb-4 lg:mb-6"}`}>
+                          {feature.description}
+                        </p>
+                      </>
+                    )}
 
                     {isCenter && (
                       <div className="space-y-2 animate-fade-in">
                         {feature.highlights.map((highlight, i) => (
                           <div
                             key={i}
-                            className="flex items-center justify-center space-x-2 text-sm text-vet-gray-700"
+                            className="flex items-center justify-center space-x-2 text-xs sm:text-sm text-vet-gray-700"
                           >
-                            <CheckCircle className="w-4 h-4 text-vet-primary" />
+                            <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-vet-primary" />
                             <span>{highlight}</span>
                           </div>
                         ))}
