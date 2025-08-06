@@ -630,17 +630,13 @@ export default function Calendario() {
                                         </span>
                                       </div>
                                       <div className="flex flex-wrap items-center gap-1 sm:gap-2 ml-auto">
-                                        {cita.estado === "atendida" ? (
-                                          <Badge
-                                            variant="secondary"
-                                            className={estadoColors[cita.estado]}
-                                          >
-                                            <StatusIcon className="w-3 h-3 mr-1" />
-                                            {estadoLabels[cita.estado]}
-                                          </Badge>
-                                        ) : (
-                                          getUrgencyBadge(urgencyLevel)
-                                        )}
+                                        <Badge
+                                          variant="secondary"
+                                          className={estadoColors[cita.estado]}
+                                        >
+                                          <StatusIcon className="w-3 h-3 mr-1" />
+                                          {estadoLabels[cita.estado]}
+                                        </Badge>
                                       </div>
                                     </div>
 
