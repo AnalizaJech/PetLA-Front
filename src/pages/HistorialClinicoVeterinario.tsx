@@ -1134,7 +1134,7 @@ export default function HistorialClinicoVeterinario() {
                                 </div>
                                 <div className="flex items-center space-x-2">
                                   <Stethoscope className="w-4 h-4" />
-                                  <span>Dr. {record.veterinario}</span>
+                                  <span>{record.veterinario}</span>
                                 </div>
                                 <div className="flex items-center space-x-2">
                                   <CheckCircle className="w-4 h-4" />
