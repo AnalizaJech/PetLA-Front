@@ -1126,6 +1126,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
         // This is for backward compatibility with existing client accounts
         if (existingUser.rol === "cliente") {
           setUserState(existingUser);
+          // Refresh data from localStorage to ensure user sees their data
+          setTimeout(() => refreshDataFromStorage(), 100);
           return existingUser;
         } else {
           // Veterinarians and admins must have passwords
