@@ -1935,9 +1935,9 @@ export default function Configuracion() {
                     )}
 
                     {deleteConfirmationText === "ELIMINAR MI CUENTA" && (
-                      <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-                        <p className="text-xs text-green-700 text-center font-medium">
-                          Confirmación correcta. Puedes proceder.
+                      <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                        <p className="text-xs text-red-700 text-center font-medium">
+                          Confirmación correcta. Puedes proceder con la eliminación.
                         </p>
                       </div>
                     )}
