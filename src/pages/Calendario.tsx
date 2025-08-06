@@ -660,16 +660,65 @@ export default function Calendario() {
                                       {/* Información adicional de la mascota */}
                                       {mascota?.raza && (
                                         <div className="flex items-center space-x-2">
-                                          <Heart className="w-3 h-3 text-pink-500" />
+                                          <Heart className="w-4 h-4 text-pink-500" />
                                           <span className="text-xs text-vet-gray-600">
                                             Raza: {mascota.raza}
                                           </span>
                                         </div>
                                       )}
+
+                                      {/* Estado badge */}
+                                      <div className="flex justify-end mt-2">
+                                        <Badge
+                                          variant="secondary"
+                                          className={estadoColors[cita.estado]}
+                                        >
+                                          <StatusIcon className="w-3 h-3 mr-1" />
+                                          {estadoLabels[cita.estado]}
+                                        </Badge>
+                                      </div>
                                     </div>
 
                                     {/* Botones de acción */}
-                                    <div className="flex flex-wrap justify-end mt-3 gap-1 max-w-full">
+                                    <div className="mt-3 space-y-1">
+                                      {/* Primera línea: 2 botones */}
+                                      <div className="flex gap-1">
+                                        <Button
+                                          size="sm"
+                                          variant="outline"
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleViewDetail(citaData);
+                                          }}
+                                          className="text-xs px-2 py-1 flex-1"
+                                        >
+                                          <Eye className="w-3 h-3 mr-1" />
+                                          Detalle
+                                        </Button>
+                                        <Button
+                                          size="sm"
+                                          variant="outline"
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            if (mascota) {
+                                              const propietario = citaData.propietario;
+                                              navigate(
+                                                `/historial-clinico-veterinario?view=history&ownerId=${propietario?.id || "unknown"}&petId=${mascota.id}`,
+                                              );
+                                            } else {
+                                              // Fallback para mascotas no registradas
+                                              navigate(
+                                                `/historial-clinico-veterinario?view=history&petName=${encodeURIComponent(cita.mascota)}&especie=${encodeURIComponent(cita.especie)}`,
+                                              );
+                                            }
+                                          }}
+                                          className="text-xs px-2 py-1 flex-1"
+                                        >
+                                          <FileText className="w-3 h-3 mr-1" />
+                                          Historial
+                                        </Button>
+                                      </div>
+                                      {/* Segunda línea: botón azul */}
                                       {cita.estado === "aceptada" && (
                                         <Button
                                           size="sm"
@@ -677,46 +726,12 @@ export default function Calendario() {
                                             e.stopPropagation();
                                             handleAttendCita(citaData);
                                           }}
-                                          className="bg-vet-primary hover:bg-vet-primary-dark text-xs px-2 py-1 flex-shrink-0"
+                                          className="bg-vet-primary hover:bg-vet-primary-dark text-xs px-2 py-1 w-full"
                                         >
                                           <Activity className="w-3 h-3 mr-1" />
                                           Atender
                                         </Button>
                                       )}
-                                      <Button
-                                        size="sm"
-                                        variant="outline"
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          handleViewDetail(citaData);
-                                        }}
-                                        className="text-xs px-2 py-1 flex-shrink-0"
-                                      >
-                                        <Eye className="w-3 h-3 mr-1" />
-                                        Detalle
-                                      </Button>
-                                      <Button
-                                        size="sm"
-                                        variant="outline"
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          if (mascota) {
-                                            const propietario = citaData.propietario;
-                                            navigate(
-                                              `/historial-clinico-veterinario?view=history&ownerId=${propietario?.id || "unknown"}&petId=${mascota.id}`,
-                                            );
-                                          } else {
-                                            // Fallback para mascotas no registradas
-                                            navigate(
-                                              `/historial-clinico-veterinario?view=history&petName=${encodeURIComponent(cita.mascota)}&especie=${encodeURIComponent(cita.especie)}`,
-                                            );
-                                          }
-                                        }}
-                                        className="text-xs px-2 py-1 flex-shrink-0"
-                                      >
-                                        <FileText className="w-3 h-3 mr-1" />
-                                        Historial
-                                      </Button>
                                     </div>
                                   </CardContent>
                                 </Card>
