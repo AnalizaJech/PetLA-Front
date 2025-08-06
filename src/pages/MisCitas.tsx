@@ -472,7 +472,7 @@ export default function MisCitas() {
                             </p>
                             <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-6 md:space-x-8 text-sm sm:text-base md:text-lg text-vet-gray-500">
                               <div className="flex items-center space-x-2">
-                                <Calendar className="w-6 h-6 sm:w-5 sm:h-5 md:w-16 md:h-16 lg:w-6 lg:h-6 text-vet-primary" />
+                                <Calendar className="w-6 h-6 sm:w-5 sm:h-5 md:w-24 md:h-24 lg:w-6 lg:h-6 text-vet-primary" />
                                 <span className="font-medium">
                                   {cita.fecha.toLocaleDateString("es-ES", {
                                     weekday: "short",
@@ -482,7 +482,7 @@ export default function MisCitas() {
                                 </span>
                               </div>
                               <div className="flex items-center space-x-2">
-                                <Clock className="w-6 h-6 sm:w-5 sm:h-5 md:w-16 md:h-16 lg:w-6 lg:h-6 text-vet-primary" />
+                                <Clock className="w-6 h-6 sm:w-5 sm:h-5 md:w-24 md:h-24 lg:w-6 lg:h-6 text-vet-primary" />
                                 <span className="font-medium">
                                   {cita.fecha.toLocaleTimeString("es-ES", {
                                     hour: "2-digit",
@@ -491,7 +491,7 @@ export default function MisCitas() {
                                 </span>
                               </div>
                               <div className="flex items-center space-x-2">
-                                <MapPin className="w-6 h-6 sm:w-5 sm:h-5 md:w-16 md:h-16 lg:w-6 lg:h-6 text-vet-primary" />
+                                <MapPin className="w-6 h-6 sm:w-5 sm:h-5 md:w-24 md:h-24 lg:w-6 lg:h-6 text-vet-primary" />
                                 <span className="font-medium">
                                   {cita.ubicacion}
                                 </span>
