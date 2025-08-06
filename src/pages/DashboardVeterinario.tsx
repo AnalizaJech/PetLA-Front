@@ -264,7 +264,7 @@ export default function DashboardVeterinario() {
               <div className="flex items-center space-x-3">
                 <Button
                   onClick={() => setSearchPatientDialog(true)}
-                  className="bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 shadow-sm"
+                  className="bg-white text-gray-700 border border-gray-200 hover:bg-vet-gray-50 shadow-sm"
                 >
                   <Search className="w-4 h-4 mr-2" />
                   Buscar Paciente
@@ -565,7 +565,7 @@ export default function DashboardVeterinario() {
                           return (
                             <div
                               key={cita.id}
-                              className="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                              className="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-vet-gray-50 transition-colors"
                             >
                               <div className="flex items-center space-x-3 flex-1">
                                 <div className="text-center min-w-[60px]">
@@ -654,7 +654,7 @@ export default function DashboardVeterinario() {
 
                   <Button
                     variant="outline"
-                    className="w-full justify-start border-gray-200 hover:bg-gray-50"
+                    className="w-full justify-start border-gray-200 hover:bg-vet-gray-50"
                     onClick={handleViewFullSchedule}
                   >
                     <Calendar className="w-4 h-4 mr-3" />
@@ -663,7 +663,7 @@ export default function DashboardVeterinario() {
 
                   <Button
                     variant="outline"
-                    className="w-full justify-start border-gray-200 hover:bg-gray-50"
+                    className="w-full justify-start border-gray-200 hover:bg-vet-gray-50"
                     onClick={handleViewPatientHistory}
                   >
                     <FileText className="w-4 h-4 mr-3" />
@@ -672,7 +672,7 @@ export default function DashboardVeterinario() {
 
                   <Button
                     variant="outline"
-                    className="w-full justify-start border-gray-200 hover:bg-gray-50"
+                    className="w-full justify-start border-gray-200 hover:bg-vet-gray-50"
                     onClick={() => {
                       const currentMonth = new Date().toLocaleDateString(
                         "es-ES",
@@ -834,7 +834,7 @@ Generado automáticamente por PetLA
                         return (
                           <div
                             key={cita.id}
-                            className="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
+                            className="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-vet-gray-50 transition-colors cursor-pointer"
                             onClick={() =>
                               navigate(`/mis-pacientes?cita=${cita.id}`)
                             }
@@ -935,7 +935,7 @@ Generado automáticamente por PetLA
                           return (
                             <div
                               key={mascota.id}
-                              className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors"
+                              className="p-4 border border-gray-200 rounded-lg hover:bg-vet-gray-50 cursor-pointer transition-colors"
                               onClick={() => {
                                 if (ultimaCita) {
                                   navigate(
@@ -961,7 +961,7 @@ Generado automáticamente por PetLA
                                     </span>
                                   </div>
 
-                                  <div className="bg-gray-50 p-2 rounded">
+                                  <div className="bg-vet-gray-50 p-2 rounded">
                                     <div className="flex items-center space-x-2 text-sm">
                                       <UserCheck className="w-3 h-3 text-vet-primary" />
                                       <span className="font-medium">
