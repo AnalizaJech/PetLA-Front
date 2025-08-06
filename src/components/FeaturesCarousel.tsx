@@ -305,7 +305,10 @@ export default function FeaturesCarousel() {
             {features.map((_, index) => (
               <button
                 key={index}
-                onClick={() => goToSlide(index)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  goToSlide(index);
+                }}
                 className={`w-4 h-4 rounded-full transition-all duration-300 touch-manipulation ${
                   index === currentIndex
                     ? "bg-vet-primary scale-125"
