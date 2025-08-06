@@ -880,7 +880,7 @@ export default function MisPacientes() {
                         </div>
 
                         {/* Botones de acción */}
-                        <div className="flex flex-col sm:flex-row lg:flex-col space-y-2 sm:space-y-0 sm:space-x-2 lg:space-x-0 lg:space-y-2 lg:ml-4 lg:flex-shrink-0 lg:min-w-[140px] w-full sm:w-auto lg:w-auto">
+                        <div className="flex flex-col space-y-2 sm:ml-4 sm:flex-shrink-0 sm:min-w-[140px]">
                           <Button
                             variant="outline"
                             size="sm"
