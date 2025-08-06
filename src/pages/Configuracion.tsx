@@ -1859,7 +1859,7 @@ export default function Configuracion() {
                         <span><strong>Se eliminarán todas tus mascotas registradas</strong> y su información</span>
                       </li>
                       <li className="flex items-start space-x-2">
-                        <span className="text-red-600 font-bold mt-0.5">•</span>
+                        <span className="text-red-600 font-bold mt-0.5">��</span>
                         <span><strong>Perderás el historial clínico completo</strong> de todas tus mascotas</span>
                       </li>
                       <li className="flex items-start space-x-2">
@@ -1940,8 +1940,17 @@ export default function Configuracion() {
                       disabled={deleteConfirmationText !== "ELIMINAR MI CUENTA" || isLoading}
                       className="flex-1 bg-red-600 hover:bg-red-700 text-white text-sm h-9 disabled:bg-red-300 disabled:cursor-not-allowed"
                     >
-                      <Trash2 className="w-4 h-4 mr-1" />
-                      Eliminar cuenta
+                      {isLoading ? (
+                        <>
+                          <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-1" />
+                          Eliminando...
+                        </>
+                      ) : (
+                        <>
+                          <Trash2 className="w-4 h-4 mr-1" />
+                          Eliminar cuenta
+                        </>
+                      )}
                     </Button>
                   </div>
 
