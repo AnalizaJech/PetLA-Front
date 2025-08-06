@@ -29,7 +29,7 @@ import {
   ShieldCheck,
   Scissors,
   Microscope,
-  Pets,
+  PawPrint,
 } from "lucide-react";
 
 const features = [
