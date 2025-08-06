@@ -100,8 +100,10 @@ export default function FeaturesCarousel() {
   }, [isDragging, currentIndex]);
 
   const goToSlide = (index: number) => {
+    // Ensure index is valid
+    const validIndex = Math.max(0, Math.min(index, features.length - 1));
     setIsDragging(false); // Stop any dragging state
-    setCurrentIndex(index);
+    setCurrentIndex(validIndex);
   };
 
   // Touch and drag handlers
