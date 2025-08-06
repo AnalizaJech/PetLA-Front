@@ -43,7 +43,7 @@ import {
 
 const estadoColors = {
   pendiente_pago: "bg-yellow-100 text-yellow-800",
-  en_validacion: "bg-gray-100 text-gray-800",
+  en_validacion: "bg-yellow-100 text-yellow-800",
   aceptada: "bg-green-100 text-green-800",
   atendida: "bg-gray-100 text-gray-800",
   cancelada: "bg-red-100 text-red-800",
