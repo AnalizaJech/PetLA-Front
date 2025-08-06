@@ -242,14 +242,11 @@ export default function HistorialClinico() {
 
   // Obtener historial real basado en citas completadas y atendidas
   const getHistorialReal = (nombreMascota) => {
-    // Include all paid and confirmed appointments for clinical history
+    // Only include attended appointments that have been completed by the veterinarian
     const citasRelevantes = citas.filter(
       (cita) =>
         cita.mascota === nombreMascota &&
-        (cita.estado === "atendida" ||
-          cita.estado === "aceptada" ||
-          cita.estado === "en_validacion" ||
-          cita.estado === "pendiente_pago"),
+        cita.estado === "atendida", // Only show attended appointments in clinical history
     );
 
     // Agrupar por los 6 servicios específicos de la veterinaria
