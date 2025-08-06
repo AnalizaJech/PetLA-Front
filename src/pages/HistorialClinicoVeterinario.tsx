@@ -51,7 +51,6 @@ import {
   ArrowLeft,
   Pill,
   Syringe,
-  CheckCircle,
   Mail,
   MapPin,
   ChevronDown,
