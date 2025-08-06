@@ -197,7 +197,7 @@ export default function DashboardVeterinario() {
         );
       case "en_validacion":
         return (
-          <Badge className="bg-vet-secondary/10 text-amber-800 border-amber-200">
+          <Badge className="bg-vet-secondary/10 text-vet-secondary-dark border-amber-200">
             <Clock className="w-3 h-3 mr-1" />
             En Proceso
           </Badge>
@@ -535,7 +535,7 @@ export default function DashboardVeterinario() {
                     </div>
                     <span>Próximas Citas</span>
                     {citasProximas.length > 0 && (
-                      <Badge className="bg-vet-secondary/10 text-amber-800 ml-2">
+                      <Badge className="bg-vet-secondary/10 text-vet-secondary-dark ml-2">
                         {citasProximas.length}
                       </Badge>
                     )}
