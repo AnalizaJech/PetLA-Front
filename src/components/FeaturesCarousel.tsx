@@ -87,6 +87,7 @@ export default function FeaturesCarousel() {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [currentX, setCurrentX] = useState(0);
+  const [isManualNavigation, setIsManualNavigation] = useState(false);
 
   // Auto-play functionality - ultra smooth
   useEffect(() => {
