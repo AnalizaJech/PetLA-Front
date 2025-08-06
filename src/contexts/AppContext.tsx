@@ -284,7 +284,7 @@ interface AppContextType {
   deleteNotificacion: (id: string) => void;
 
   // Authentication helpers
-  login: (email: string, password: string) => Promise<Usuario | null>;
+  login: (identifier: string, password: string) => Promise<Usuario | null>;
   register: (
     userData: Omit<Usuario, "id" | "fechaRegistro"> & { password: string },
   ) => Promise<Usuario | null>;
