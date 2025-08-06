@@ -737,6 +737,63 @@ export default function Configuracion() {
     setPhotoPreviewURL(null);
   };
 
+  const handleDeleteAccount = async () => {
+    if (!user) {
+      setErrorMessage("No hay usuario logueado");
+      return;
+    }
+
+    if (deleteConfirmationText !== "ELIMINAR MI CUENTA") {
+      setErrorMessage("Debes escribir exactamente 'ELIMINAR MI CUENTA' para continuar");
+      return;
+    }
+
+    setIsLoading(true);
+    setSavedMessage("");
+    setErrorMessage("");
+
+    try {
+      // Mostrar mensaje de procesamiento
+      setSavedMessage("Procesando eliminación de cuenta...");
+
+      // Simular delay para que el usuario vea el mensaje
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      const success = await deleteAccount(user.id);
+
+      if (success) {
+        // Mostrar mensaje de éxito
+        setSavedMessage("✅ Tu cuenta ha sido eliminada exitosamente. Serás redirigido al inicio.");
+
+        // Esperar un momento para que el usuario vea el mensaje
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+
+        // Logout automático (esto limpia el localStorage del usuario)
+        logout();
+
+        // Redireccionar al home
+        navigate("/", { replace: true });
+      } else {
+        setErrorMessage("Error al eliminar la cuenta. Por favor, inténtalo de nuevo o contacta soporte.");
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+      }
+    } catch (error) {
+      console.error("Error eliminando cuenta:", error);
+      setErrorMessage("Error inesperado al eliminar la cuenta. Por favor, contacta soporte.");
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    } finally {
+      setIsLoading(false);
+      setShowDeleteAccountModal(false);
+      setDeleteConfirmationText("");
+    }
+  };
+
   return (
     <Layout>
       <div className="min-h-screen bg-vet-gray-50 py-8">
