@@ -789,14 +789,14 @@ export default function HistorialClinico() {
         consultasData.push([
           consulta.fecha.toLocaleDateString("es-ES"),
           consulta.veterinario,
-          consulta.motivo,
-          consulta.diagnostico,
-          consulta.tratamiento,
-          medicamentos || "Ninguno",
+          consulta.motivo || "",
+          consulta.diagnostico || "",
+          consulta.tratamiento || "",
+          medicamentos || "",
           consulta.proxima_cita
             ? consulta.proxima_cita.toLocaleDateString("es-ES")
-            : "No programada",
-          consulta.notas || "Sin notas",
+            : "",
+          consulta.notas || "",
         ]);
       });
 
