@@ -140,8 +140,6 @@ export default function MisPacientes() {
   const [filterEstado, setFilterEstado] = useState("todos");
   const [sortBy, setSortBy] = useState<SortBy>("fecha_desc");
   const [showDataIssues, setShowDataIssues] = useState(false);
-  const [showAutoFix, setShowAutoFix] = useState(false);
-  const [autoFixResults, setAutoFixResults] = useState<any>(null);
 
   // Estados para modales
   const [selectedCita, setSelectedCita] = useState<CitaRelationData | null>(
@@ -850,7 +848,7 @@ export default function MisPacientes() {
                               )}
                             </div>
 
-                            {/* Información de la mascota */}
+                            {/* Informaci��n de la mascota */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                               <div className="space-y-2">
                                 <div className="flex items-center space-x-2">
