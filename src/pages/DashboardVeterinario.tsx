@@ -271,7 +271,7 @@ export default function DashboardVeterinario() {
                 </Button>
                 <Button
                   onClick={handleViewFullSchedule}
-                  className="bg-blue-600 hover:bg-blue-700 shadow-sm"
+                  className="bg-vet-primary hover:bg-vet-primary-dark shadow-sm"
                 >
                   <Calendar className="w-4 h-4 mr-2" />
                   Mi Agenda
@@ -516,7 +516,7 @@ export default function DashboardVeterinario() {
                       </p>
                       <Button
                         onClick={handleViewFullSchedule}
-                        className="bg-blue-600 hover:bg-blue-700"
+                        className="bg-vet-primary hover:bg-vet-primary-dark"
                       >
                         <Calendar className="w-4 h-4 mr-2" />
                         Ver agenda completa
@@ -645,7 +645,7 @@ export default function DashboardVeterinario() {
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <Button
-                    className="w-full bg-blue-600 hover:bg-blue-700 justify-start"
+                    className="w-full bg-vet-primary hover:bg-vet-primary-dark justify-start"
                     onClick={handleRegisterConsultation}
                   >
                     <ClipboardList className="w-4 h-4 mr-3" />
