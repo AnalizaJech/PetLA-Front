@@ -28,6 +28,7 @@ import NewsletterSection from "@/components/NewsletterSection";
 import { useAppContext } from "@/contexts/AppContext";
 import {
   Dog,
+  Heart,
   Calendar,
   Shield,
   Clock,
