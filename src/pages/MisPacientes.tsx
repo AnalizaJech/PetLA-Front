@@ -808,7 +808,7 @@ export default function MisPacientes() {
                     className="hover:shadow-lg transition-all duration-200 border-l-4 border-l-vet-primary"
                   >
                     <CardContent className="p-4 sm:p-6">
-                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between space-y-4 sm:space-y-0">
+                      <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between space-y-4 lg:space-y-0 gap-4">
                         <div className="flex items-start space-x-4 flex-1">
                           <div className="w-12 h-12 bg-vet-primary/10 rounded-full flex items-center justify-center flex-shrink-0 relative">
                             {mascota?.foto ? (
@@ -974,12 +974,12 @@ export default function MisPacientes() {
                         </div>
 
                         {/* Botones de acción */}
-                        <div className="flex flex-col space-y-2 sm:space-y-3 mt-4 sm:mt-0 sm:ml-4 sm:flex-shrink-0 min-w-0 sm:min-w-[140px]">
+                        <div className="flex flex-col sm:flex-row lg:flex-col space-y-2 sm:space-y-0 sm:space-x-2 lg:space-x-0 lg:space-y-2 lg:ml-4 lg:flex-shrink-0 lg:min-w-[140px] w-full sm:w-auto lg:w-auto">
                           <Button
                             variant="outline"
                             size="sm"
                             onClick={() => handleViewDetail(citaData)}
-                            className="h-9 text-xs sm:text-sm w-full"
+                            className="h-9 text-xs sm:text-sm w-full sm:flex-1 lg:w-full"
                           >
                             <Eye className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
                             <span className="truncate">Ver Detalle</span>
@@ -989,7 +989,7 @@ export default function MisPacientes() {
                             <Button
                               size="sm"
                               onClick={() => handleAttendCita(citaData)}
-                              className="bg-vet-primary hover:bg-vet-primary-dark h-9 text-xs sm:text-sm w-full"
+                              className="bg-vet-primary hover:bg-vet-primary-dark h-9 text-xs sm:text-sm w-full sm:flex-1 lg:w-full"
                             >
                               <Activity className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
                               <span className="truncate">Atender</span>
@@ -1011,7 +1011,7 @@ export default function MisPacientes() {
                                 );
                               }
                             }}
-                            className="h-9 text-xs sm:text-sm w-full"
+                            className="h-9 text-xs sm:text-sm w-full sm:flex-1 lg:w-full"
                           >
                             <FileText className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
                             <span className="truncate">Historial</span>
