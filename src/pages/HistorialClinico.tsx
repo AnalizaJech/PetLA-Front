@@ -241,17 +241,20 @@ export default function HistorialClinico() {
     }
   }, [availableMascotas]);
 
-  // Obtener historial real basado en citas que tienen registros del veterinario
+  // Obtener historial real basado en registros médicos del historialClinico
   const getHistorialReal = (nombreMascota) => {
-    // Include appointments that have veterinary records (atendida, aceptada with notes, etc.)
-    const citasRelevantes = citas.filter(
-      (cita) =>
-        cita.mascota === nombreMascota &&
-        (cita.estado === "atendida" ||
-         cita.estado === "aceptada" ||
-         cita.estado === "en_validacion" ||
-         (cita.consulta && Object.keys(cita.consulta).length > 0)), // Include appointments with consultation data
-    );
+    // Buscar mascota para obtener su ID
+    const mascota = mascotas.find(m => m.nombre === nombreMascota);
+
+    // Filtrar registros médicos para esta mascota
+    const registrosMedicos = historialClinico.filter((record) => {
+      // Match by pet ID or name
+      const matchesPet =
+        (mascota && record.mascotaId === mascota.id) ||
+        (record.mascotaNombre && record.mascotaNombre.toLowerCase() === nombreMascota.toLowerCase());
+
+      return matchesPet;
+    });
 
     // Agrupar por los 6 servicios específicos de la veterinaria
     const servicios = {
@@ -263,33 +266,29 @@ export default function HistorialClinico() {
       diagnostico: [],
     };
 
-    citasRelevantes.forEach((cita) => {
-      const tipoConsulta = cita.tipoConsulta || "Consulta";
-
-      // Solo incluir datos reales registrados por el veterinario
-      const hasRealData = cita.consulta && (
-        cita.consulta.diagnostico ||
-        cita.consulta.tratamiento ||
-        cita.consulta.notas ||
-        (cita.consulta.medicamentos && cita.consulta.medicamentos.length > 0)
-      );
-
-      // Skip appointments without real veterinary consultation data
-      if (!hasRealData) return;
+    registrosMedicos.forEach((record) => {
+      const tipoConsulta = record.tipoConsulta || record.tipo || "Consulta";
 
       const baseRecord = {
-        id: cita.id,
-        fecha: new Date(cita.fecha),
-        veterinario: cita.veterinario,
-        motivo: cita.motivo || "Sin motivo especificado",
+        id: record.id || `${record.mascotaId}-${record.fecha}`,
+        fecha: new Date(record.fecha),
+        veterinario: record.veterinario,
+        motivo: record.motivo || "Sin motivo especificado",
         tipoConsulta: tipoConsulta,
-        estado: cita.estado,
-        diagnostico: cita.consulta?.diagnostico || null,
-        tratamiento: cita.consulta?.tratamiento || null,
-        medicamentos: cita.consulta?.medicamentos || [],
-        proxima_cita: cita.consulta?.proximaCita ? new Date(cita.consulta.proximaCita) : null,
-        notas: cita.consulta?.notas || null,
-        precio: cita.precio,
+        estado: record.estado || "completada",
+        diagnostico: record.diagnostico,
+        tratamiento: record.tratamiento,
+        medicamentos: record.medicamentos || [],
+        proxima_cita: record.proximaVisita ? new Date(record.proximaVisita) : null,
+        notas: record.observaciones,
+        precio: 0, // No available in medical records
+        // Campos adicionales del historial médico
+        peso: record.peso,
+        temperatura: record.temperatura,
+        presionArterial: record.presionArterial,
+        frecuenciaCardiaca: record.frecuenciaCardiaca,
+        examenes: record.examenes || [],
+        servicios: record.servicios || [],
       };
 
       // Normalizar texto para búsqueda (manejo de UTF-8 y caracteres especiales)
@@ -304,10 +303,7 @@ export default function HistorialClinico() {
       };
 
       const tipoNormalizado = normalizeText(tipoConsulta);
-      const motivoNormalizado = normalizeText(cita.motivo || "");
-
-      // Clasificar según el servicio específico (verificar tanto tipo como motivo)
-      const textoCompleto = `${tipoNormalizado} ${motivoNormalizado}`;
+      const motivoNormalizado = normalizeText(record.motivo || "");
 
       // 1. VACUNACIÓN
       if (
