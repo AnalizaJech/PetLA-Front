@@ -254,7 +254,7 @@ export default function DashboardVeterinario() {
                   <h1 className="text-3xl font-bold text-vet-gray-900 mb-1">
                     Panel Veterinario
                   </h1>
-                  <p className="text-gray-600 flex items-center">
+                  <p className="text-vet-gray-600 flex items-center">
                     <span>Bienvenido, {user.nombre}</span>
                     <Award className="w-4 h-4 ml-2 text-amber-500" />
                   </p>
@@ -296,7 +296,7 @@ export default function DashboardVeterinario() {
                   </div>
                   <div className="flex items-center space-x-2">
                     <Timer className="w-5 h-5 text-green-600" />
-                    <span className="text-gray-600">
+                    <span className="text-vet-gray-600">
                       {new Date().toLocaleTimeString("es-ES", {
                         hour: "2-digit",
                         minute: "2-digit",
@@ -480,7 +480,7 @@ export default function DashboardVeterinario() {
                                     </span>
                                     {getStatusBadge(cita.estado)}
                                   </div>
-                                  <div className="flex items-center space-x-2 text-sm text-gray-600">
+                                  <div className="flex items-center space-x-2 text-sm text-vet-gray-600">
                                     <UserCheck className="w-3 h-3" />
                                     <span>
                                       {propietario?.nombre || "Sin asignar"}
@@ -511,7 +511,7 @@ export default function DashboardVeterinario() {
                       <h3 className="text-lg font-medium text-vet-gray-900 mb-2">
                         Día libre
                       </h3>
-                      <p className="text-gray-600 mb-4">
+                      <p className="text-vet-gray-600 mb-4">
                         No tienes citas programadas para hoy
                       </p>
                       <Button
@@ -578,7 +578,7 @@ export default function DashboardVeterinario() {
                                       },
                                     )}
                                   </p>
-                                  <p className="text-xs text-gray-600">
+                                  <p className="text-xs text-vet-gray-600">
                                     {new Date(cita.fecha).toLocaleTimeString(
                                       "es-ES",
                                       {
@@ -596,7 +596,7 @@ export default function DashboardVeterinario() {
                                       {cita.mascota}
                                     </span>
                                   </div>
-                                  <p className="text-xs text-gray-600">
+                                  <p className="text-xs text-vet-gray-600">
                                     {propietario?.nombre || "Sin asignar"} •{" "}
                                     {cita.tipoConsulta}
                                   </p>
@@ -622,7 +622,7 @@ export default function DashboardVeterinario() {
                   ) : (
                     <div className="text-center py-8">
                       <Clock className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                      <p className="text-gray-600">
+                      <p className="text-vet-gray-600">
                         No hay citas próximas programadas
                       </p>
                     </div>
@@ -848,7 +848,7 @@ Generado automáticamente por PetLA
                               </div>
                               <div className="flex items-center space-x-2 mb-1">
                                 <UserCheck className="w-3 h-3 text-gray-500" />
-                                <span className="text-xs text-gray-600">
+                                <span className="text-xs text-vet-gray-600">
                                   {propietario?.nombre || "Sin asignar"}
                                 </span>
                               </div>
@@ -866,7 +866,7 @@ Generado automáticamente por PetLA
                   ) : (
                     <div className="text-center py-6">
                       <Heart className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-vet-gray-600">
                         No hay consultas recientes
                       </p>
                     </div>
@@ -891,7 +891,7 @@ Generado automáticamente por PetLA
                     <DialogTitle className="text-xl font-semibold text-vet-gray-900">
                       Buscar Paciente
                     </DialogTitle>
-                    <DialogDescription className="text-gray-600">
+                    <DialogDescription className="text-vet-gray-600">
                       Encuentra pacientes por nombre, especie, raza o
                       propietario
                     </DialogDescription>
@@ -956,7 +956,7 @@ Generado automáticamente por PetLA
                                     <span className="font-medium text-vet-gray-900">
                                       {mascota.nombre}
                                     </span>
-                                    <span className="text-sm text-gray-600">
+                                    <span className="text-sm text-vet-gray-600">
                                       ({mascota.especie})
                                     </span>
                                   </div>
@@ -969,7 +969,7 @@ Generado automáticamente por PetLA
                                       </span>
                                     </div>
                                     {propietario?.telefono && (
-                                      <div className="flex items-center space-x-2 text-xs text-gray-600 mt-1">
+                                      <div className="flex items-center space-x-2 text-xs text-vet-gray-600 mt-1">
                                         <Phone className="w-3 h-3" />
                                         <span>{propietario.telefono}</span>
                                       </div>
@@ -1010,7 +1010,7 @@ Generado automáticamente por PetLA
                         <h3 className="text-lg font-medium text-vet-gray-900 mb-2">
                           No se encontraron pacientes
                         </h3>
-                        <p className="text-gray-600">
+                        <p className="text-vet-gray-600">
                           Intenta con otros términos de búsqueda
                         </p>
                       </div>
@@ -1021,7 +1021,7 @@ Generado automáticamente por PetLA
                 {searchTerm.length <= 2 && searchTerm.length > 0 && (
                   <div className="text-center py-8">
                     <Search className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                    <p className="text-gray-600">
+                    <p className="text-vet-gray-600">
                       Escribe al menos 3 caracteres para buscar
                     </p>
                   </div>
@@ -1033,7 +1033,7 @@ Generado automáticamente por PetLA
                     <h3 className="text-lg font-medium text-vet-gray-900 mb-2">
                       Buscar Pacientes
                     </h3>
-                    <p className="text-gray-600">
+                    <p className="text-vet-gray-600">
                       Comienza a escribir para buscar entre tus pacientes
                     </p>
                   </div>
