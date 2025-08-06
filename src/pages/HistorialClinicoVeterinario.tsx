@@ -1149,7 +1149,7 @@ export default function HistorialClinicoVeterinario() {
 
           {currentView === "history" && selectedPet && (
             <div>
-              {/* Botón de descarga arriba */}
+              {/* Botón de descarga arriba del filtro */}
               {historialMascota.length > 0 && (
                 <div className="flex justify-end mb-4">
                   <DropdownMenu>
@@ -1177,12 +1177,6 @@ export default function HistorialClinicoVeterinario() {
                   </DropdownMenu>
                 </div>
               )}
-
-              <div className="mb-6">
-                <h2 className="text-xl font-bold text-vet-gray-900">
-                  {selectedPet.nombre}
-                </h2>
-              </div>
 
               {/* Pet info card */}
               <Card className="mb-6">
