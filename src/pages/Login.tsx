@@ -490,6 +490,51 @@ export default function Login() {
                   </div>
                 </div>
 
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="register-tipoDocumento">Tipo de documento</Label>
+                    <Select
+                      value={registerData.tipoDocumento}
+                      onValueChange={(value) =>
+                        setRegisterData({
+                          ...registerData,
+                          tipoDocumento: value as "dni" | "pasaporte" | "carnet_extranjeria" | "cedula",
+                        })
+                      }
+                    >
+                      <SelectTrigger className="h-10 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10">
+                        <SelectValue placeholder="Seleccionar tipo" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="dni">DNI</SelectItem>
+                        <SelectItem value="pasaporte">Pasaporte</SelectItem>
+                        <SelectItem value="carnet_extranjeria">Carnet de Extranjería</SelectItem>
+                        <SelectItem value="cedula">Cédula</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="register-documento">Número de documento</Label>
+                    <div className="relative">
+                      <CreditCard className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-vet-gray-400" />
+                      <Input
+                        id="register-documento"
+                        type="text"
+                        placeholder="Número de documento"
+                        className="pl-10 h-10 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
+                        value={registerData.documento}
+                        onChange={(e) =>
+                          setRegisterData({
+                            ...registerData,
+                            documento: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="register-password">Contraseña</Label>
                   <div className="relative">
