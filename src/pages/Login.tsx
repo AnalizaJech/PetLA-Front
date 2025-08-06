@@ -119,6 +119,8 @@ export default function Login() {
           ? new Date(registerData.fechaNacimiento)
           : undefined,
         genero: registerData.genero,
+        documento: registerData.documento,
+        tipoDocumento: registerData.tipoDocumento,
         rol: "cliente" as const,
         password: registerData.password,
       };
