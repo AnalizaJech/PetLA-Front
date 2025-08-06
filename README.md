@@ -88,25 +88,25 @@ const techStack = {
   framework: "React 18.3.1",
   language: "TypeScript 5.5.3",
   buildTool: "Vite 6.2.2",
-  
+
   // Routing & State
   routing: "React Router 6.26.2",
   stateManagement: "Context API + localStorage",
-  
+
   // UI & Styling
   styling: "TailwindCSS 3.4.11",
   components: "Radix UI Primitives",
   icons: "Lucide React 0.462.0",
   animations: "Framer Motion 12.6.2",
-  
+
   // Forms & Validation
   forms: "React Hook Form 7.53.0",
   validation: "Zod 3.23.8",
-  
+
   // Development
   testing: "Vitest 3.1.4",
   typeChecking: "TypeScript",
-  linting: "ESLint + Prettier"
+  linting: "ESLint + Prettier",
 };
 ```
 
@@ -160,6 +160,7 @@ graph TD
 ### 🟦 Cliente (Propietario de Mascotas)
 
 **Funcionalidades principales:**
+
 - ✅ Registro de mascotas con fotos
 - ✅ Agendamiento de citas médicas
 - ✅ Subida de comprobantes de pago
@@ -168,6 +169,7 @@ graph TD
 - ✅ Recepción de notificaciones
 
 **Rutas disponibles:**
+
 - `/dashboard` - Resumen personal
 - `/mascotas` - Gestión de mascotas
 - `/mis-citas` - Gestión de citas
@@ -177,6 +179,7 @@ graph TD
 ### 🟩 Veterinario
 
 **Funcionalidades principales:**
+
 - ✅ Agenda médica personalizada
 - ✅ Gestión de pacientes asignados
 - ✅ Registro de consultas médicas
@@ -185,6 +188,7 @@ graph TD
 - ✅ Estadísticas de práctica
 
 **Rutas disponibles:**
+
 - `/dashboard` - Dashboard veterinario
 - `/calendario` - Agenda médica
 - `/mis-pacientes` - Lista de pacientes
@@ -193,6 +197,7 @@ graph TD
 ### 🟥 Administrador
 
 **Funcionalidades principales:**
+
 - ✅ Gestión completa de usuarios
 - ✅ Validación de comprobantes de pago
 - ✅ Procesamiento de pre-citas
@@ -201,6 +206,7 @@ graph TD
 - ✅ Estadísticas y reportes
 
 **Rutas disponibles:**
+
 - `/dashboard` - Dashboard administrativo
 - `/pre-citas` - Gestión de solicitudes
 - `/gestion-citas` - Gestión de citas
@@ -229,6 +235,7 @@ graph TD
 ```
 
 **Pasos detallados:**
+
 1. **Registro**: Formulario con datos personales + verificación email
 2. **Mascotas**: Registro con nombre, especie, raza, fecha nacimiento, foto
 3. **Cita**: Selección de mascota, servicio, fecha/hora, confirmación
@@ -253,6 +260,7 @@ graph TD
 ```
 
 **Información registrada:**
+
 - **Signos vitales**: Peso, temperatura, frecuencia cardíaca, presión
 - **Examen físico**: Observaciones y hallazgos
 - **Diagnóstico**: Principal y secundarios
@@ -272,6 +280,7 @@ graph TD
 ```
 
 **Responsabilidades clave:**
+
 - **Pre-citas**: Aprobar/rechazar solicitudes del landing
 - **Pagos**: Validar comprobantes y confirmar citas
 - **Usuarios**: Crear, editar y gestionar cuentas
@@ -428,12 +437,12 @@ POST   /api/reportes/custom         // Reportes personalizados
 
 ```typescript
 // Configuración
-GET    /api/config/servicios        // Lista de servicios veterinarios
-PUT    /api/config/servicios        // Actualizar servicios (admin)
-GET    /api/config/horarios         // Horarios de atención
-PUT    /api/config/horarios         // Actualizar horarios (admin)
-GET    /api/config/parametros       // Parámetros del sistema
-PUT    /api/config/parametros       // Actualizar parámetros (admin)
+GET / api / config / servicios; // Lista de servicios veterinarios
+PUT / api / config / servicios; // Actualizar servicios (admin)
+GET / api / config / horarios; // Horarios de atención
+PUT / api / config / horarios; // Actualizar horarios (admin)
+GET / api / config / parametros; // Parámetros del sistema
+PUT / api / config / parametros; // Actualizar parámetros (admin)
 ```
 
 ### 📎 Gestión de Archivos
@@ -460,47 +469,47 @@ GET    /api/upload/:fileId          // Descargar archivo
 
 ```typescript
 interface User {
-  id: string;                    // UUID único
-  nombre: string;               // Nombre completo
-  apellidos?: string;           // Apellidos (opcional)
-  username?: string;            // Nombre de usuario único
-  email: string;                // Email único
-  telefono?: string;            // Teléfono de contacto
-  direccion?: string;           // Dirección física
-  fechaNacimiento?: Date;       // Fecha de nacimiento
-  genero?: 'M' | 'F' | 'Otro';  // Género
-  rol: UserRole;                // Rol del usuario
-  emailVerificado: boolean;     // Estado de verificación
-  foto?: string;                // URL de foto de perfil
-  fechaCreacion: Date;          // Timestamp de creación
-  fechaActualizacion: Date;     // Timestamp de última actualización
-  activo: boolean;              // Estado activo/inactivo
+  id: string; // UUID único
+  nombre: string; // Nombre completo
+  apellidos?: string; // Apellidos (opcional)
+  username?: string; // Nombre de usuario único
+  email: string; // Email único
+  telefono?: string; // Teléfono de contacto
+  direccion?: string; // Dirección física
+  fechaNacimiento?: Date; // Fecha de nacimiento
+  genero?: "M" | "F" | "Otro"; // Género
+  rol: UserRole; // Rol del usuario
+  emailVerificado: boolean; // Estado de verificación
+  foto?: string; // URL de foto de perfil
+  fechaCreacion: Date; // Timestamp de creación
+  fechaActualizacion: Date; // Timestamp de última actualización
+  activo: boolean; // Estado activo/inactivo
 }
 
-type UserRole = 'cliente' | 'veterinario' | 'admin';
+type UserRole = "cliente" | "veterinario" | "admin";
 ```
 
 ### 🐕 Mascota
 
 ```typescript
 interface Mascota {
-  id: string;                   // UUID único
-  nombre: string;               // Nombre de la mascota
-  especie: string;              // Perro, Gato, etc.
-  raza: string;                 // Raza específica
-  sexo?: 'Macho' | 'Hembra';    // Sexo de la mascota
-  fechaNacimiento: Date;        // Fecha de nacimiento
-  peso?: number;                // Peso en kg
-  microchip?: string;           // Número de microchip
-  estado: string;               // Estado general de salud
-  clienteId: string;            // FK: ID del propietario
-  veterinarioId?: string;       // FK: Veterinario asignado
-  foto?: string;                // URL de foto
-  proximaCita?: Date;           // Próxima cita programada
-  ultimaVacuna?: Date;          // Fecha de última vacuna
-  observaciones?: string;       // Observaciones generales
-  fechaCreacion: Date;          // Timestamp de creación
-  fechaActualizacion: Date;     // Timestamp de actualización
+  id: string; // UUID único
+  nombre: string; // Nombre de la mascota
+  especie: string; // Perro, Gato, etc.
+  raza: string; // Raza específica
+  sexo?: "Macho" | "Hembra"; // Sexo de la mascota
+  fechaNacimiento: Date; // Fecha de nacimiento
+  peso?: number; // Peso en kg
+  microchip?: string; // Número de microchip
+  estado: string; // Estado general de salud
+  clienteId: string; // FK: ID del propietario
+  veterinarioId?: string; // FK: Veterinario asignado
+  foto?: string; // URL de foto
+  proximaCita?: Date; // Próxima cita programada
+  ultimaVacuna?: Date; // Fecha de última vacuna
+  observaciones?: string; // Observaciones generales
+  fechaCreacion: Date; // Timestamp de creación
+  fechaActualizacion: Date; // Timestamp de actualización
 }
 ```
 
@@ -508,96 +517,96 @@ interface Mascota {
 
 ```typescript
 interface Cita {
-  id: string;                   // UUID único
-  mascotaId: string;            // FK: ID de la mascota
-  clienteId: string;            // FK: ID del cliente
-  veterinarioId?: string;       // FK: ID del veterinario asignado
-  fecha: Date;                  // Fecha y hora de la cita
-  estado: EstadoCita;           // Estado actual
-  tipoConsulta: TipoConsulta;   // Tipo de consulta
-  motivo: string;               // Motivo de la consulta
-  ubicacion: string;            // Ubicación de la consulta
-  precio: number;               // Precio del servicio
-  comprobantePago?: string;     // URL del comprobante
-  notas?: string;               // Notas adicionales
-  notasAdmin?: string;          // Notas del administrador
-  fechaCreacion: Date;          // Timestamp de creación
-  fechaActualizacion: Date;     // Timestamp de actualización
+  id: string; // UUID único
+  mascotaId: string; // FK: ID de la mascota
+  clienteId: string; // FK: ID del cliente
+  veterinarioId?: string; // FK: ID del veterinario asignado
+  fecha: Date; // Fecha y hora de la cita
+  estado: EstadoCita; // Estado actual
+  tipoConsulta: TipoConsulta; // Tipo de consulta
+  motivo: string; // Motivo de la consulta
+  ubicacion: string; // Ubicación de la consulta
+  precio: number; // Precio del servicio
+  comprobantePago?: string; // URL del comprobante
+  notas?: string; // Notas adicionales
+  notasAdmin?: string; // Notas del administrador
+  fechaCreacion: Date; // Timestamp de creación
+  fechaActualizacion: Date; // Timestamp de actualización
 }
 
-type EstadoCita = 
-  | 'pendiente_pago'           // Esperando comprobante de pago
-  | 'en_validacion'            // Comprobante subido, pendiente validación
-  | 'aceptada'                 // Pago validado, cita confirmada
-  | 'atendida'                 // Consulta completada
-  | 'cancelada'                // Cancelada por el cliente
-  | 'rechazada'                // Pago rechazado
-  | 'no_asistio'               // Cliente no asistió
-  | 'expirada';                // Tiempo límite excedido
+type EstadoCita =
+  | "pendiente_pago" // Esperando comprobante de pago
+  | "en_validacion" // Comprobante subido, pendiente validación
+  | "aceptada" // Pago validado, cita confirmada
+  | "atendida" // Consulta completada
+  | "cancelada" // Cancelada por el cliente
+  | "rechazada" // Pago rechazado
+  | "no_asistio" // Cliente no asistió
+  | "expirada"; // Tiempo límite excedido
 
-type TipoConsulta = 
-  | 'consulta_general'         // Consulta médica general (S/. 80)
-  | 'vacunacion'               // Vacunación (S/. 65)
-  | 'emergencia'               // Atención de emergencia (S/. 150)
-  | 'grooming'                 // Baño y peluquería (S/. 45)
-  | 'cirugia'                  // Procedimiento quirúrgico (S/. 250)
-  | 'diagnostico';             // Diagnóstico especializado (S/. 120)
+type TipoConsulta =
+  | "consulta_general" // Consulta médica general (S/. 80)
+  | "vacunacion" // Vacunación (S/. 65)
+  | "emergencia" // Atención de emergencia (S/. 150)
+  | "grooming" // Baño y peluquería (S/. 45)
+  | "cirugia" // Procedimiento quirúrgico (S/. 250)
+  | "diagnostico"; // Diagnóstico especializado (S/. 120)
 ```
 
 ### 🩺 Historial Clínico
 
 ```typescript
 interface HistorialClinico {
-  id: string;                   // UUID único
-  citaId: string;               // FK: ID de la cita
-  mascotaId: string;            // FK: ID de la mascota
-  veterinarioId: string;        // FK: ID del veterinario
-  fecha: Date;                  // Fecha de la consulta
-  
+  id: string; // UUID único
+  citaId: string; // FK: ID de la cita
+  mascotaId: string; // FK: ID de la mascota
+  veterinarioId: string; // FK: ID del veterinario
+  fecha: Date; // Fecha de la consulta
+
   // Signos Vitales
-  peso?: number;                // Peso en kg
-  temperatura?: number;         // Temperatura en °C
-  frecuenciaCardiaca?: number;  // Pulsaciones por minuto
-  presionArterial?: string;     // Presión arterial
-  
+  peso?: number; // Peso en kg
+  temperatura?: number; // Temperatura en °C
+  frecuenciaCardiaca?: number; // Pulsaciones por minuto
+  presionArterial?: string; // Presión arterial
+
   // Consulta Médica
-  motivoConsulta: string;       // Motivo de la consulta
-  sintomasObservados?: string;  // Síntomas observados
-  examenFisico?: string;        // Hallazgos del examen físico
-  
+  motivoConsulta: string; // Motivo de la consulta
+  sintomasObservados?: string; // Síntomas observados
+  examenFisico?: string; // Hallazgos del examen físico
+
   // Diagnóstico y Tratamiento
-  diagnostico: string;          // Diagnóstico principal
+  diagnostico: string; // Diagnóstico principal
   diagnosticosSecundarios?: string[]; // Diagnósticos secundarios
-  tratamiento: string;          // Plan de tratamiento
+  tratamiento: string; // Plan de tratamiento
   medicamentos?: Medicamento[]; // Medicamentos recetados
-  procedimientos?: string[];    // Procedimientos realizados
-  
+  procedimientos?: string[]; // Procedimientos realizados
+
   // Seguimiento
-  proximaCita?: Date;           // Fecha de próxima cita
-  instrucciones?: string;       // Instrucciones para el propietario
-  observaciones?: string;       // Observaciones adicionales
-  
+  proximaCita?: Date; // Fecha de próxima cita
+  instrucciones?: string; // Instrucciones para el propietario
+  observaciones?: string; // Observaciones adicionales
+
   // Archivos adjuntos
-  archivos?: ArchivoMedico[];   // Radiografías, exámenes, etc.
-  
-  fechaCreacion: Date;          // Timestamp de creación
-  fechaActualizacion: Date;     // Timestamp de actualización
+  archivos?: ArchivoMedico[]; // Radiografías, exámenes, etc.
+
+  fechaCreacion: Date; // Timestamp de creación
+  fechaActualizacion: Date; // Timestamp de actualización
 }
 
 interface Medicamento {
-  nombre: string;               // Nombre del medicamento
-  dosis: string;                // Dosis prescrita
-  frecuencia: string;           // Frecuencia de administración
-  duracion: string;             // Duración del tratamiento
-  instrucciones?: string;       // Instrucciones especiales
+  nombre: string; // Nombre del medicamento
+  dosis: string; // Dosis prescrita
+  frecuencia: string; // Frecuencia de administración
+  duracion: string; // Duración del tratamiento
+  instrucciones?: string; // Instrucciones especiales
 }
 
 interface ArchivoMedico {
-  id: string;                   // UUID único
-  nombre: string;               // Nombre del archivo
-  tipo: string;                 // Tipo de archivo (radiografia, examen, etc.)
-  url: string;                  // URL del archivo
-  fechaSubida: Date;            // Fecha de subida
+  id: string; // UUID único
+  nombre: string; // Nombre del archivo
+  tipo: string; // Tipo de archivo (radiografia, examen, etc.)
+  url: string; // URL del archivo
+  fechaSubida: Date; // Fecha de subida
 }
 ```
 
@@ -605,87 +614,92 @@ interface ArchivoMedico {
 
 ```typescript
 interface Notificacion {
-  id: string;                   // UUID único
-  usuarioId: string;            // FK: ID del usuario destinatario
-  tipo: TipoNotificacion;       // Tipo de notificación
-  titulo: string;               // Título de la notificación
-  mensaje: string;              // Contenido del mensaje
-  leida: boolean;               // Estado de lectura
-  prioridad: 'alta' | 'media' | 'baja'; // Prioridad
-  relacionadoTipo?: string;     // Tipo de entidad relacionada
-  relacionadoId?: string;       // ID de entidad relacionada
-  fechaCreacion: Date;          // Timestamp de creación
-  fechaExpiracion?: Date;       // Fecha de expiración (opcional)
+  id: string; // UUID único
+  usuarioId: string; // FK: ID del usuario destinatario
+  tipo: TipoNotificacion; // Tipo de notificación
+  titulo: string; // Título de la notificación
+  mensaje: string; // Contenido del mensaje
+  leida: boolean; // Estado de lectura
+  prioridad: "alta" | "media" | "baja"; // Prioridad
+  relacionadoTipo?: string; // Tipo de entidad relacionada
+  relacionadoId?: string; // ID de entidad relacionada
+  fechaCreacion: Date; // Timestamp de creación
+  fechaExpiracion?: Date; // Fecha de expiración (opcional)
 }
 
-type TipoNotificacion = 
-  | 'bienvenida_cliente'        // Nuevo usuario registrado
-  | 'cita_creada'               // Nueva cita creada
-  | 'cita_aceptada'             // Cita confirmada
-  | 'cita_rechazada'            // Cita rechazada
-  | 'cita_recordatorio'         // Recordatorio de cita
-  | 'pago_validado'             // Pago confirmado
-  | 'consulta_registrada'       // Consulta médica registrada
-  | 'sistema'                   // Notificación del sistema
-  | 'newsletter';               // Newsletter enviado
+type TipoNotificacion =
+  | "bienvenida_cliente" // Nuevo usuario registrado
+  | "cita_creada" // Nueva cita creada
+  | "cita_aceptada" // Cita confirmada
+  | "cita_rechazada" // Cita rechazada
+  | "cita_recordatorio" // Recordatorio de cita
+  | "pago_validado" // Pago confirmado
+  | "consulta_registrada" // Consulta médica registrada
+  | "sistema" // Notificación del sistema
+  | "newsletter"; // Newsletter enviado
 ```
 
 ### 📝 Pre-Cita
 
 ```typescript
 interface PreCita {
-  id: string;                   // UUID único
-  nombreCliente: string;        // Nombre del solicitante
-  telefono: string;             // Teléfono de contacto
-  email: string;                // Email de contacto
-  nombreMascota: string;        // Nombre de la mascota
-  tipoMascota: string;          // Tipo de mascota
-  motivoConsulta: string;       // Motivo de la consulta
-  fechaSolicitada: Date;        // Fecha preferida
-  estado: EstadoPreCita;        // Estado de la solicitud
-  observaciones?: string;       // Observaciones adicionales
-  notasAdmin?: string;          // Notas del administrador
-  fechaCreacion: Date;          // Timestamp de creación
-  fechaProcessado?: Date;       // Fecha de procesamiento
+  id: string; // UUID único
+  nombreCliente: string; // Nombre del solicitante
+  telefono: string; // Teléfono de contacto
+  email: string; // Email de contacto
+  nombreMascota: string; // Nombre de la mascota
+  tipoMascota: string; // Tipo de mascota
+  motivoConsulta: string; // Motivo de la consulta
+  fechaSolicitada: Date; // Fecha preferida
+  estado: EstadoPreCita; // Estado de la solicitud
+  observaciones?: string; // Observaciones adicionales
+  notasAdmin?: string; // Notas del administrador
+  fechaCreacion: Date; // Timestamp de creación
+  fechaProcessado?: Date; // Fecha de procesamiento
 }
 
-type EstadoPreCita = 'pendiente' | 'aceptada' | 'rechazada';
+type EstadoPreCita = "pendiente" | "aceptada" | "rechazada";
 ```
 
 ### 📧 Newsletter
 
 ```typescript
 interface SuscriptorNewsletter {
-  id: string;                   // UUID único
-  email: string;                // Email del suscriptor
-  fechaSuscripcion: Date;       // Fecha de suscripción
-  activo: boolean;              // Estado activo/inactivo
-  origen: string;               // Origen de la suscripción
+  id: string; // UUID único
+  email: string; // Email del suscriptor
+  fechaSuscripcion: Date; // Fecha de suscripción
+  activo: boolean; // Estado activo/inactivo
+  origen: string; // Origen de la suscripción
   fechaUltimaComunicacion?: Date; // Última comunicación
 }
 
 interface NewsletterEmail {
-  id: string;                   // UUID único
-  asunto: string;               // Asunto del email
-  contenido: string;            // Contenido HTML del email
-  destinatarios: string[];      // Lista de emails destinatarios
-  estado: EstadoNewsletter;     // Estado del envío
-  fechaEnvio?: Date;            // Fecha de envío
-  fechaProgramada?: Date;       // Fecha programada (si aplica)
-  plantilla?: string;           // Plantilla utilizada
+  id: string; // UUID único
+  asunto: string; // Asunto del email
+  contenido: string; // Contenido HTML del email
+  destinatarios: string[]; // Lista de emails destinatarios
+  estado: EstadoNewsletter; // Estado del envío
+  fechaEnvio?: Date; // Fecha de envío
+  fechaProgramada?: Date; // Fecha programada (si aplica)
+  plantilla?: string; // Plantilla utilizada
   estadisticas?: EstadisticasEmail; // Estadísticas de envío
-  fechaCreacion: Date;          // Timestamp de creación
+  fechaCreacion: Date; // Timestamp de creación
 }
 
-type EstadoNewsletter = 'borrador' | 'programado' | 'enviando' | 'enviado' | 'error';
+type EstadoNewsletter =
+  | "borrador"
+  | "programado"
+  | "enviando"
+  | "enviado"
+  | "error";
 
 interface EstadisticasEmail {
-  totalEnviados: number;        // Total de emails enviados
-  entregados: number;           // Emails entregados
-  abiertos: number;             // Emails abiertos
-  clicks: number;               // Clicks realizados
-  rechazados: number;           // Emails rechazados
-  desuscripciones: number;      // Desuscripciones generadas
+  totalEnviados: number; // Total de emails enviados
+  entregados: number; // Emails entregados
+  abiertos: number; // Emails abiertos
+  clicks: number; // Clicks realizados
+  rechazados: number; // Emails rechazados
+  desuscripciones: number; // Desuscripciones generadas
 }
 ```
 
@@ -767,17 +781,18 @@ El proyecto implementa testing a múltiples niveles:
 
 ```typescript
 // src/lib/utils.spec.ts
-import { describe, it, expect } from 'vitest';
-import { cn } from './utils';
+import { describe, it, expect } from "vitest";
+import { cn } from "./utils";
 
-describe('cn utility function', () => {
-  it('combines class names correctly', () => {
-    expect(cn('btn', 'btn-primary')).toBe('btn btn-primary');
+describe("cn utility function", () => {
+  it("combines class names correctly", () => {
+    expect(cn("btn", "btn-primary")).toBe("btn btn-primary");
   });
 
-  it('handles conditional classes', () => {
-    expect(cn('btn', { 'btn-primary': true, 'btn-secondary': false }))
-      .toBe('btn btn-primary');
+  it("handles conditional classes", () => {
+    expect(cn("btn", { "btn-primary": true, "btn-secondary": false })).toBe(
+      "btn btn-primary",
+    );
   });
 });
 ```
@@ -830,21 +845,21 @@ xl: 1280px    /* Desktops */
 interface AuthStrategy {
   // JWT con refresh tokens
   accessToken: {
-    expiry: '15 minutes',
-    storage: 'memory' // No localStorage por seguridad
-  },
-  
+    expiry: "15 minutes";
+    storage: "memory"; // No localStorage por seguridad
+  };
+
   refreshToken: {
-    expiry: '7 days',
-    storage: 'httpOnly cookie',
-    rotation: true // Rotar en cada uso
-  },
-  
+    expiry: "7 days";
+    storage: "httpOnly cookie";
+    rotation: true; // Rotar en cada uso
+  };
+
   // Protección CSRF
   csrfToken: {
-    validation: 'per-request',
-    header: 'X-CSRF-Token'
-  }
+    validation: "per-request";
+    header: "X-CSRF-Token";
+  };
 }
 ```
 
@@ -865,7 +880,7 @@ const CSP = {
   scriptSrc: ["'self'"],
   imgSrc: ["'self'", "data:", "blob:", "*.amazonaws.com"],
   connectSrc: ["'self'", process.env.VITE_API_URL],
-  fontSrc: ["'self'", "fonts.googleapis.com", "fonts.gstatic.com"]
+  fontSrc: ["'self'", "fonts.googleapis.com", "fonts.gstatic.com"],
 };
 ```
 
@@ -883,12 +898,14 @@ const CSP = {
 ### ☁️ Opciones de Hosting Recomendadas
 
 1. **Vercel** (Recomendado)
+
    - Deploy automático desde Git
    - Optimizaciones automáticas
    - CDN global incluido
    - Serverless functions para APIs simples
 
 2. **Netlify**
+
    - Build automático
    - Form handling nativo
    - Split testing A/B
@@ -907,14 +924,12 @@ const CSP = {
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "framework": "vite",
-  "routes": [
-    { "src": "/api/(.*)", "dest": "/api/$1" },
-    { "src": "/(.*)", "dest": "/index.html" }
-  ],
-  "env": {
-    "VITE_API_URL": "@api-url",
-    "VITE_APP_NAME": "PetLA"
-  }
+  "routes":
+    [
+      { "src": "/api/(.*)", "dest": "/api/$1" },
+      { "src": "/(.*)", "dest": "/index.html" },
+    ],
+  "env": { "VITE_API_URL": "@api-url", "VITE_APP_NAME": "PetLA" },
 }
 ```
 
@@ -934,14 +949,14 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: '18'
-          cache: 'npm'
-      
+          node-version: "18"
+          cache: "npm"
+
       - run: npm ci
       - run: npm run typecheck
       - run: npm run test
       - run: npm run build
-      
+
       - uses: vercel/action@v1
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
@@ -980,7 +995,7 @@ stateDiagram-v2
     rechazada --> pendiente_pago : Cliente corrige
     pendiente_pago --> cancelada : Cliente cancela
     pendiente_pago --> expirada : Timeout
-    
+
     atendida --> [*]
     no_asistio --> [*]
     cancelada --> [*]
@@ -995,20 +1010,20 @@ graph TD
     B --> C[Navigation]
     B --> D[Main Content]
     B --> E[Footer]
-    
+
     D --> F[Dashboard]
     D --> G[Citas]
     D --> H[Mascotas]
     D --> I[Historial]
-    
+
     F --> J[Stats Cards]
     F --> K[Charts]
     F --> L[Quick Actions]
-    
+
     G --> M[Cita List]
     G --> N[Cita Form]
     G --> O[Cita Modal]
-    
+
     M --> P[Cita Item]
     P --> Q[Status Badge]
     P --> R[Actions Menu]
