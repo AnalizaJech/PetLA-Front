@@ -300,14 +300,14 @@ export default function FeaturesCarousel() {
           </div>
 
           {/* Dots Indicator */}
-          <div className="flex items-center justify-center space-x-2 sm:space-x-3 mt-8">
+          <div className="flex items-center justify-center space-x-2">
             {features.map((_, index) => (
               <button
                 key={index}
                 onClick={() => goToSlide(index)}
-                className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full transition-all duration-300 ${
+                className={`w-3 h-3 rounded-full transition-all duration-300 ${
                   index === currentIndex
-                    ? "bg-vet-primary scale-125 shadow-md"
+                    ? "bg-vet-primary scale-125"
                     : "bg-vet-gray-300 hover:bg-vet-primary/50"
                 }`}
               />
