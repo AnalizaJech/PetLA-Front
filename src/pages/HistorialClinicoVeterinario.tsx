@@ -733,15 +733,29 @@ export default function HistorialClinicoVeterinario() {
                         record.veterinario === user.nombre
                     ).length;
 
-                    const ultimaVisita = historialClinico
+                    const ultimaVisitaRecord = historialClinico
                       .filter(
                         (record) =>
                           (record.mascotaId === mascota.id ||
-                           (record.mascotaNombre && 
+                           (record.mascotaNombre &&
                             record.mascotaNombre.toLowerCase() === mascota.nombre.toLowerCase())) &&
                           record.veterinario === user.nombre
                       )
                       .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())[0];
+
+                    // Mejorar tipo de servicio para ultimaVisita
+                    const ultimaVisita = ultimaVisitaRecord ? {
+                      ...ultimaVisitaRecord,
+                      tipo: (() => {
+                        const correspondingCita = citas.find(cita =>
+                          cita.id === ultimaVisitaRecord.citaId ||
+                          (cita.veterinario === user.nombre &&
+                           cita.mascota.toLowerCase() === mascota.nombre.toLowerCase() &&
+                           Math.abs(new Date(cita.fecha).getTime() - new Date(ultimaVisitaRecord.fecha).getTime()) < 24 * 60 * 60 * 1000)
+                        );
+                        return correspondingCita?.tipoConsulta || ultimaVisitaRecord.tipo || ultimaVisitaRecord.tipoConsulta || "Consulta";
+                      })()
+                    } : null;
 
                     return (
                       <Card
