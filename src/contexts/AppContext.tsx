@@ -1017,6 +1017,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
     identifier: string,
     password: string,
   ): Promise<Usuario | null> => {
+    // Login supports three types of identifiers:
+    // 1. Email address (case-insensitive)
+    // 2. Username (case-insensitive)
+    // 3. Phone number (exact match)
+
     // Normalize identifier (trim spaces and lowercase for email/username)
     const normalizedIdentifier = identifier.trim();
 
