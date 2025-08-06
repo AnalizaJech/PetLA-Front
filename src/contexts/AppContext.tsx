@@ -621,7 +621,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
       // Si está cerca del límite (>80%), limpiar datos innecesarios
       if (total > maxSize * 0.8) {
-        console.warn("🚨 localStorage cerca del límite, optimizando...");
+        console.warn("��� localStorage cerca del límite, optimizando...");
 
         // Limpiar datos temporales o innecesarios
         const keysToClean = [
@@ -1112,7 +1112,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
       setCitas((prev) => prev.filter((c) => c.clienteId !== userId));
 
-      // 3. Eliminar historial clínico de las mascotas del usuario
+      // 3. Eliminar historial cl��nico de las mascotas del usuario
       const mascotaIds = mascotasDelUsuario.map((m) => m.id);
       const historialEliminado = historialClinico.filter((h) =>
         mascotaIds.includes(h.mascotaId)
@@ -1125,7 +1125,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
       // 4. Eliminar notificaciones del usuario
       const notificacionesDelUsuario = notificaciones.filter((n) => n.usuarioId === userId);
-      console.log(`��� Eliminando ${notificacionesDelUsuario.length} notificaciones del usuario`);
+      console.log(`🔔 Eliminando ${notificacionesDelUsuario.length} notificaciones del usuario`);
 
       setNotificaciones((prev) => prev.filter((n) => n.usuarioId !== userId));
 
@@ -1380,7 +1380,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       );
 
       if (errors.length > 0) {
-        console.warn("⚠️ Errores durante la reparación:", errors);
+        console.warn("⚠��� Errores durante la reparación:", errors);
       }
 
       // Force a refresh of localStorage to persist changes
@@ -1958,6 +1958,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     deleteNotificacion,
     login,
     register,
+    deleteAccount,
     getMascotaWithOwner,
     getCitaWithRelations,
     validateDataRelationships,
