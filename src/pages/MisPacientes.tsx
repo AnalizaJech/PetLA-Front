@@ -819,10 +819,10 @@ export default function MisPacientes() {
                                       "No especificado"}
                                   </span>
                                   {!mascota && (
-                                    <Badge className="bg-orange-100 text-orange-800 border-orange-200 text-xs">
-                                      No registrada
-                                    </Badge>
-                                  )}
+                                  <Badge className="bg-blue-100 text-blue-800 border-blue-200 text-xs">
+                                    Pendiente registro
+                                  </Badge>
+                                )}
                                 </div>
                                 {/* Always show breed information if available, even for unregistered pets */}
                                 <div className="flex items-center space-x-2">
