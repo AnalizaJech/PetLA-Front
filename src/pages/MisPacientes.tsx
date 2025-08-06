@@ -595,14 +595,12 @@ export default function MisPacientes() {
                       <div className="mt-2 text-sm space-y-1">
                         {autoFixResults.newMascotas.length > 0 && (
                           <div>
-                            ✅ {autoFixResults.newMascotas.length} mascotas
-                            creadas
+                            {autoFixResults.newMascotas.length} mascotas creadas
                           </div>
                         )}
                         {autoFixResults.errors.length > 0 && (
                           <div>
-                            ⚠️ {autoFixResults.errors.length} errores
-                            encontrados
+                            {autoFixResults.errors.length} errores encontrados
                           </div>
                         )}
                       </div>
@@ -868,7 +866,7 @@ export default function MisPacientes() {
                                   }`}
                                 >
                                   Propietario:{" "}
-                                  {propietario?.nombre || "⚠️ Sin asignar"}
+                                  {propietario?.nombre || "Sin asignar"}
                                 </span>
                                 {!propietario && (
                                   <Badge className="bg-red-100 text-red-800 border-red-200">

@@ -86,6 +86,13 @@ interface Usuario {
   password?: string;
   fechaRegistro?: Date;
   foto?: string | null;
+  // Campos de documento
+  documento?: string;
+  tipoDocumento?: "dni" | "pasaporte" | "carnet_extranjeria" | "cedula";
+  // Campos específicos para veterinarios
+  especialidad?: string;
+  experiencia?: string;
+  colegiatura?: string;
 }
 
 interface HistorialClinico {
@@ -277,10 +284,11 @@ interface AppContextType {
   deleteNotificacion: (id: string) => void;
 
   // Authentication helpers
-  login: (email: string, password: string) => Promise<Usuario | null>;
+  login: (identifier: string, password: string) => Promise<Usuario | null>;
   register: (
     userData: Omit<Usuario, "id" | "fechaRegistro"> & { password: string },
   ) => Promise<Usuario | null>;
+  deleteAccount: (userId: string) => Promise<boolean>;
 
   // Data relationship helpers
   getMascotaWithOwner: (mascotaId: string) => {
@@ -607,7 +615,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       // Log del uso para debugging (solo en desarrollo)
       if (process.env.NODE_ENV === "development") {
         console.log(
-          `📊 LocalStorage: ${currentUsage}% usado (${(total / 1024).toFixed(1)}KB)`,
+          `[STORAGE] LocalStorage: ${currentUsage}% usado (${(total / 1024).toFixed(1)}KB)`,
         );
       }
 
@@ -636,11 +644,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
         });
 
         console.log(
-          `✅ Liberado ${(cleanedSpace / 1024).toFixed(1)}KB de espacio`,
+          `[CLEANED] Liberado ${(cleanedSpace / 1024).toFixed(1)}KB de espacio`,
         );
       }
     } catch (error) {
-      console.error("❌ Error optimizando localStorage:", error);
+      console.error("[ERROR] Error optimizando localStorage:", error);
     }
   };
 
@@ -743,7 +751,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
     );
 
     if (!hasRunAutoRepair && citas.length > 0 && usuarios.length > 0) {
-      console.log("🔧 Ejecutando reparación automática avanzada de datos...");
+      console.log(
+        "[REPAIR] Ejecutando reparación automática avanzada de datos...",
+      );
 
       let repairedCitas = 0;
       let createdMascotas = 0;
@@ -792,7 +802,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
             mascotasNombres.add(cita.mascota.toLowerCase());
             createdMascotas++;
             console.log(
-              `➕ Mascota creada: "${cita.mascota}" asignada a ${clienteAsignado.nombre}`,
+              `[CREATE] Mascota creada: "${cita.mascota}" asignada a ${clienteAsignado.nombre}`,
             );
           } else {
             errors.push(
@@ -825,7 +835,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
             if (propietario) {
               repairedCitas++;
               console.log(
-                `✅ Cita reparada: "${cita.mascota}" → ${propietario.nombre}`,
+                `[REPAIR] Cita reparada: "${cita.mascota}" -> ${propietario.nombre}`,
               );
 
               return {
@@ -865,7 +875,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
             const clienteAsignado = clientesDisponibles[0];
             repairedMascotas++;
             console.log(
-              `🔧 Mascota "${mascota.nombre}" asignada a ${clienteAsignado.nombre}`,
+              `[ASSIGN] Mascota "${mascota.nombre}" asignada a ${clienteAsignado.nombre}`,
             );
 
             return {
@@ -885,12 +895,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
       const totalRepairs = repairedCitas + createdMascotas + repairedMascotas;
       if (totalRepairs > 0) {
         console.log(
-          `🎉 Reparación completada: ${repairedCitas} citas, ${createdMascotas} mascotas creadas, ${repairedMascotas} mascotas reparadas`,
+          `[COMPLETE] Reparación completada: ${repairedCitas} citas, ${createdMascotas} mascotas creadas, ${repairedMascotas} mascotas reparadas`,
         );
       }
 
       if (errors.length > 0) {
-        console.warn("⚠️ Errores durante la reparación:", errors);
+        console.warn("[WARNING] Errores durante la reparación:", errors);
       }
 
       // Mark as completed to avoid running again
@@ -933,11 +943,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
       });
 
       console.log(
-        `✅ Comprobante guardado: ${(comprobanteData.size / 1024).toFixed(1)}KB`,
+        `[SAVED] Comprobante guardado: ${(comprobanteData.size / 1024).toFixed(1)}KB`,
       );
       return true;
     } catch (error) {
-      console.error("❌ Error guardando comprobante:", error);
+      console.error("[ERROR] Error guardando comprobante:", error);
       return false;
     }
   };
@@ -968,7 +978,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
       return null;
     } catch (error) {
-      console.error("❌ Error recuperando comprobante:", error);
+      console.error("[ERROR] Error recuperando comprobante:", error);
       return null;
     }
   };
@@ -984,9 +994,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
         comprobanteData: undefined,
       });
 
-      console.log(`🗑️ Comprobante eliminado para cita ${citaId}`);
+      console.log(`[DELETED] Comprobante eliminado para cita ${citaId}`);
     } catch (error) {
-      console.error("❌ Error eliminando comprobante:", error);
+      console.error("[ERROR] Error eliminando comprobante:", error);
     }
   };
 
@@ -1006,11 +1016,39 @@ export function AppProvider({ children }: { children: ReactNode }) {
   };
 
   const login = async (
-    email: string,
+    identifier: string,
     password: string,
   ): Promise<Usuario | null> => {
-    // Find user by email
-    const existingUser = usuarios.find((u) => u.email === email);
+    // Login supports three types of identifiers:
+    // 1. Email address (case-insensitive)
+    // 2. Username (case-insensitive)
+    // 3. Phone number (exact match)
+
+    // Normalize identifier (trim spaces and lowercase for email/username)
+    const normalizedIdentifier = identifier.trim();
+
+    // Find user by email, username, or phone
+    const existingUser = usuarios.find((u) => {
+      // Compare email (case-insensitive)
+      if (
+        u.email &&
+        u.email.toLowerCase() === normalizedIdentifier.toLowerCase()
+      ) {
+        return true;
+      }
+      // Compare username (case-insensitive)
+      if (
+        u.username &&
+        u.username.toLowerCase() === normalizedIdentifier.toLowerCase()
+      ) {
+        return true;
+      }
+      // Compare phone (exact match, trimmed)
+      if (u.telefono && u.telefono.trim() === normalizedIdentifier) {
+        return true;
+      }
+      return false;
+    });
 
     if (existingUser) {
       // Check if user has a password set
@@ -1047,14 +1085,23 @@ export function AppProvider({ children }: { children: ReactNode }) {
       return null; // User already exists
     }
 
-    // Create new user
+    // Create new user with ALL the provided fields
     const newUser: Usuario = {
       id: Date.now().toString(),
       nombre: userData.nombre,
+      apellidos: userData.apellidos, // Ahora se guarda
+      username: userData.username, // Ahora se guarda
       email: userData.email,
       rol: userData.rol,
       telefono: userData.telefono,
+      direccion: userData.direccion, // Ahora se guarda
+      fechaNacimiento: userData.fechaNacimiento, // Ahora se guarda
+      genero: userData.genero, // Ahora se guarda
+      documento: userData.documento, // Ahora se guarda
+      tipoDocumento: userData.tipoDocumento, // Ahora se guarda
+      password: userData.password, // También guardar la contraseña
       fechaRegistro: new Date(),
+      foto: userData.foto || null, // Incluir foto si existe
     };
 
     setUsuarios((prev) => [...prev, newUser]);
@@ -1072,6 +1119,111 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
 
     return newUser;
+  };
+
+  const deleteAccount = async (userId: string): Promise<boolean> => {
+    try {
+      // Verificar que el usuario existe y es cliente
+      const userToDelete = usuarios.find((u) => u.id === userId);
+      if (!userToDelete || userToDelete.rol !== "cliente") {
+        console.error("Usuario no encontrado o no es cliente");
+        return false;
+      }
+
+      console.log(
+        `[DELETE] Iniciando eliminación de cuenta para usuario: ${userToDelete.nombre}`,
+      );
+
+      // 1. Eliminar todas las mascotas del usuario
+      const mascotasDelUsuario = mascotas.filter((m) => m.clienteId === userId);
+      console.log(
+        `[PETS] Eliminando ${mascotasDelUsuario.length} mascotas del usuario`,
+      );
+
+      setMascotas((prev) => prev.filter((m) => m.clienteId !== userId));
+
+      // 2. Cancelar/eliminar todas las citas del usuario
+      const citasDelUsuario = citas.filter((c) => c.clienteId === userId);
+      console.log(
+        `[APPOINTMENTS] Cancelando ${citasDelUsuario.length} citas del usuario`,
+      );
+
+      setCitas((prev) => prev.filter((c) => c.clienteId !== userId));
+
+      // 3. Eliminar historial clínico de las mascotas del usuario
+      const mascotaIds = mascotasDelUsuario.map((m) => m.id);
+      const historialEliminado = historialClinico.filter((h) =>
+        mascotaIds.includes(h.mascotaId),
+      );
+      console.log(
+        `[MEDICAL] Eliminando ${historialEliminado.length} entradas de historial clínico`,
+      );
+
+      setHistorialClinico((prev) =>
+        prev.filter((h) => !mascotaIds.includes(h.mascotaId)),
+      );
+
+      // 4. Eliminar notificaciones del usuario
+      const notificacionesDelUsuario = notificaciones.filter(
+        (n) => n.usuarioId === userId,
+      );
+      console.log(
+        `[NOTIFICATIONS] Eliminando ${notificacionesDelUsuario.length} notificaciones del usuario`,
+      );
+
+      setNotificaciones((prev) => prev.filter((n) => n.usuarioId !== userId));
+
+      // 5. Eliminar comprobantes de pago del usuario
+      citasDelUsuario.forEach((cita) => {
+        if (cita.comprobanteData || cita.comprobantePago) {
+          const storageKey = `comprobante_${cita.id}`;
+          localStorage.removeItem(storageKey);
+        }
+      });
+      console.log(`[RECEIPTS] Comprobantes de pago eliminados`);
+
+      // 6. Limpiar datos específicos del usuario en localStorage
+      const keysToRemove = [
+        `petla_user_bio`,
+        `petla_user_direccion`,
+        `petla_user_documento`,
+        `petla_user_tipo_documento`,
+        `petla_notifications`,
+        `petla_theme`,
+        `petla_security_2fa`,
+        `petla_security_login_alerts`,
+        `petla_security_session_timeout`,
+      ];
+
+      keysToRemove.forEach((key) => {
+        localStorage.removeItem(key);
+      });
+      console.log(`[CONFIG] Datos de configuración personal eliminados`);
+
+      // 7. Finalmente, eliminar el usuario del sistema
+      setUsuarios((prev) => prev.filter((u) => u.id !== userId));
+
+      console.log(
+        `[SUCCESS] Cuenta eliminada exitosamente para ${userToDelete.nombre}`,
+      );
+      console.log(`[SUMMARY] Resumen de eliminación:`);
+      console.log(
+        `   - Usuario: ${userToDelete.nombre} (${userToDelete.email})`,
+      );
+      console.log(`   - Mascotas eliminadas: ${mascotasDelUsuario.length}`);
+      console.log(`   - Citas canceladas: ${citasDelUsuario.length}`);
+      console.log(
+        `   - Historial clínico eliminado: ${historialEliminado.length} entradas`,
+      );
+      console.log(
+        `   - Notificaciones eliminadas: ${notificacionesDelUsuario.length}`,
+      );
+
+      return true;
+    } catch (error) {
+      console.error("[ERROR] Error eliminando cuenta:", error);
+      return false;
+    }
   };
 
   // User management functions (admin only)
@@ -1128,7 +1280,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
     const errors: string[] = [];
 
     try {
-      console.log("🔧 Iniciando reparación completa de integridad de datos...");
+      console.log(
+        "[REPAIR] Iniciando reparación completa de integridad de datos...",
+      );
 
       const clientesDisponibles = usuarios.filter((u) => u.rol === "cliente");
 
@@ -1179,7 +1333,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
           mascotasNombres.add(cita.mascota.toLowerCase());
           createdPets++;
           console.log(
-            `➕ Mascota creada: "${cita.mascota}" → ${clienteAsignado.nombre}`,
+            `[CREATE] Mascota creada: "${cita.mascota}" -> ${clienteAsignado.nombre}`,
           );
         }
       });
@@ -1214,7 +1368,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
           repairedPets++;
           console.log(
-            `🔧 Mascota "${mascota.nombre}" reasignada a ${mejorCliente.nombre}`,
+            `[REASSIGN] Mascota "${mascota.nombre}" reasignada a ${mejorCliente.nombre}`,
           );
 
           return { ...mascota, clienteId: mejorCliente.id };
@@ -1245,7 +1399,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
             if (propietario) {
               repairedCitas++;
               console.log(
-                `✅ Cita "${cita.mascota}" vinculada con ${propietario.nombre}`,
+                `[LINKED] Cita "${cita.mascota}" vinculada con ${propietario.nombre}`,
               );
 
               return {
@@ -1276,19 +1430,19 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
       const totalRepairs = repairedPets + createdPets + repairedCitas;
       console.log(
-        `🎉 Reparación completada: ${repairedPets} mascotas reparadas, ${createdPets} mascotas creadas, ${repairedCitas} citas reparadas`,
+        `[COMPLETE] Reparación completada: ${repairedPets} mascotas reparadas, ${createdPets} mascotas creadas, ${repairedCitas} citas reparadas`,
       );
 
       if (errors.length > 0) {
-        console.warn("⚠️ Errores durante la reparación:", errors);
+        console.warn("[WARNING] Errores durante la reparación:", errors);
       }
 
       // Force a refresh of localStorage to persist changes
       setTimeout(() => {
-        console.log("🔄 Forzando persistencia de datos reparados...");
+        console.log("[REFRESH] Forzando persistencia de datos reparados...");
       }, 100);
     } catch (error) {
-      console.error("❌ Error durante la reparación de datos:", error);
+      console.error("[ERROR] Error durante la reparación de datos:", error);
       errors.push(
         `Error general: ${error instanceof Error ? error.message : "Error desconocido"}`,
       );
@@ -1322,7 +1476,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
     setMascotas((prev) => [...prev, newMascota]);
     console.log(
-      `✅ Nueva mascota agregada: ${newMascota.nombre} para ${user.nombre}`,
+      `[ADDED] Nueva mascota agregada: ${newMascota.nombre} para ${user.nombre}`,
     );
   };
 
@@ -1384,7 +1538,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
     setCitas((prev) => [...prev, newCita]);
     console.log(
-      `✅ Nueva cita creada: ${newCita.mascota} - ${newCita.veterinario}`,
+      `[CREATED] Nueva cita creada: ${newCita.mascota} - ${newCita.veterinario}`,
     );
 
     // Update mascota's proximaCita if it's a future appointment
@@ -1858,6 +2012,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     deleteNotificacion,
     login,
     register,
+    deleteAccount,
     getMascotaWithOwner,
     getCitaWithRelations,
     validateDataRelationships,

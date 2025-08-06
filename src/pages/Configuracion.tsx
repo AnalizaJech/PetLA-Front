@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
 import { useAppContext } from "@/contexts/AppContext";
 import { Button } from "@/components/ui/button";
@@ -53,6 +54,7 @@ import {
   ImageIcon,
   MapPin,
   Calendar,
+  Trash2,
 } from "lucide-react";
 
 // Helper function to safely convert date to string format
@@ -90,7 +92,9 @@ const formatDateForInput = (date: any): string => {
 };
 
 export default function Configuracion() {
-  const { user, setUser, updateUsuario } = useAppContext();
+  const { user, setUser, updateUsuario, deleteAccount, logout } =
+    useAppContext();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [savedMessage, setSavedMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -192,6 +196,8 @@ export default function Configuracion() {
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoPreviewURL, setPhotoPreviewURL] = useState<string | null>(null);
   const [showPhotoModal, setShowPhotoModal] = useState(false);
+  const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false);
+  const [deleteConfirmationText, setDeleteConfirmationText] = useState("");
 
   // Notifications settings
   const [notificationSettings, setNotificationSettings] = useState(
@@ -256,14 +262,88 @@ export default function Configuracion() {
     }
   }, [user]);
 
-  // Clear messages after delay
+  // Limpiar mensaje de error cuando el usuario corrija los campos requeridos
   useEffect(() => {
-    if (savedMessage || errorMessage) {
+    if (errorMessage) {
+      const validationErrors = [
+        { error: "El nombre es obligatorio", field: "nombre" },
+        { error: "Los apellidos son obligatorios", field: "apellidos" },
+        { error: "El nombre de usuario es obligatorio", field: "username" },
+        { error: "Por favor ingresa un email válido", field: "email" },
+        { error: "El teléfono es obligatorio", field: "telefono" },
+        {
+          error: "La especialidad es obligatoria para veterinarios",
+          field: "especialidad",
+        },
+        {
+          error: "El número de colegiatura es obligatorio para veterinarios",
+          field: "colegiatura",
+        },
+      ];
+
+      const currentError = validationErrors.find((ve) =>
+        errorMessage.includes(ve.error),
+      );
+
+      if (currentError) {
+        const fieldValue =
+          profileData[currentError.field as keyof typeof profileData];
+
+        // Si el campo está ahora completo, limpiar el error
+        if (currentError.field === "email") {
+          // Validación especial para email
+          if (
+            fieldValue &&
+            typeof fieldValue === "string" &&
+            /\S+@\S+\.\S+/.test(fieldValue)
+          ) {
+            setErrorMessage("");
+          }
+        } else if (
+          fieldValue &&
+          typeof fieldValue === "string" &&
+          fieldValue.trim()
+        ) {
+          setErrorMessage("");
+        }
+      }
+    }
+  }, [profileData, errorMessage]);
+
+  // Clear messages after delay - pero mantener errores de validación hasta que se resuelvan
+  useEffect(() => {
+    if (savedMessage) {
+      // Los mensajes de éxito se limpian automáticamente
       const timer = setTimeout(() => {
         setSavedMessage("");
-        setErrorMessage("");
       }, 4000);
       return () => clearTimeout(timer);
+    }
+
+    if (errorMessage) {
+      // Los errores de validación persisten hasta que se corrijan
+      const validationErrors = [
+        "El nombre es obligatorio",
+        "Los apellidos son obligatorios",
+        "El nombre de usuario es obligatorio",
+        "Por favor ingresa un email válido",
+        "El teléfono es obligatorio",
+        "La especialidad es obligatoria para veterinarios",
+        "El número de colegiatura es obligatorio para veterinarios",
+      ];
+
+      const isValidationError = validationErrors.some((error) =>
+        errorMessage.includes(error),
+      );
+
+      if (!isValidationError) {
+        // Solo los errores que no son de validación se limpian automáticamente
+        const timer = setTimeout(() => {
+          setErrorMessage("");
+        }, 6000); // Más tiempo para errores de sistema
+        return () => clearTimeout(timer);
+      }
+      // Los errores de validación NO se limpian automáticamente
     }
   }, [savedMessage, errorMessage]);
 
@@ -272,49 +352,52 @@ export default function Configuracion() {
     setSavedMessage("");
     setErrorMessage("");
 
-    // Enhanced validation for all required fields
-    if (!profileData.nombre.trim()) {
-      setErrorMessage("El nombre es obligatorio");
+    // Enhanced validation for all required fields with scroll to top
+    const showErrorAndScroll = (message: string) => {
+      setErrorMessage(message);
       setIsLoading(false);
+      // Scroll to top to show error message
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    };
+
+    if (!profileData.nombre.trim()) {
+      showErrorAndScroll("El nombre es obligatorio");
       return;
     }
 
     if (!profileData.apellidos.trim()) {
-      setErrorMessage("Los apellidos son obligatorios");
-      setIsLoading(false);
+      showErrorAndScroll("Los apellidos son obligatorios");
       return;
     }
 
     if (!profileData.username.trim()) {
-      setErrorMessage("El nombre de usuario es obligatorio");
-      setIsLoading(false);
+      showErrorAndScroll("El nombre de usuario es obligatorio");
       return;
     }
 
     if (!profileData.email.trim() || !/\S+@\S+\.\S+/.test(profileData.email)) {
-      setErrorMessage("Por favor ingresa un email válido");
-      setIsLoading(false);
+      showErrorAndScroll("Por favor ingresa un email válido");
       return;
     }
 
     if (!profileData.telefono.trim()) {
-      setErrorMessage("El teléfono es obligatorio");
-      setIsLoading(false);
+      showErrorAndScroll("El teléfono es obligatorio");
       return;
     }
 
     // Additional validation for veterinarians
     if (user?.rol === "veterinario") {
       if (!profileData.especialidad.trim()) {
-        setErrorMessage("La especialidad es obligatoria para veterinarios");
-        setIsLoading(false);
+        showErrorAndScroll("La especialidad es obligatoria para veterinarios");
         return;
       }
       if (!profileData.colegiatura.trim()) {
-        setErrorMessage(
+        showErrorAndScroll(
           "El número de colegiatura es obligatorio para veterinarios",
         );
-        setIsLoading(false);
         return;
       }
     }
@@ -378,6 +461,11 @@ export default function Configuracion() {
       });
     } catch (error) {
       setErrorMessage("Error al actualizar el perfil. Inténtalo de nuevo.");
+      // Scroll to top to show error message
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -403,6 +491,11 @@ export default function Configuracion() {
       });
     } catch (error) {
       setErrorMessage("Error al guardar las notificaciones");
+      // Scroll to top to show error message
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -413,27 +506,36 @@ export default function Configuracion() {
     setSavedMessage("");
     setErrorMessage("");
 
-    // Validation for password change
+    // Validation for password change with scroll to top helper
+    const showSecurityErrorAndScroll = (message: string) => {
+      setErrorMessage(message);
+      setIsLoading(false);
+      // Scroll to top to show error message
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    };
+
     if (
       securityData.newPassword ||
       securityData.confirmPassword ||
       securityData.currentPassword
     ) {
       if (!securityData.currentPassword) {
-        setErrorMessage("Debes ingresar tu contraseña actual");
-        setIsLoading(false);
+        showSecurityErrorAndScroll("Debes ingresar tu contraseña actual");
         return;
       }
 
       if (securityData.newPassword.length < 8) {
-        setErrorMessage("La nueva contraseña debe tener al menos 8 caracteres");
-        setIsLoading(false);
+        showSecurityErrorAndScroll(
+          "La nueva contraseña debe tener al menos 8 caracteres",
+        );
         return;
       }
 
       if (securityData.newPassword !== securityData.confirmPassword) {
-        setErrorMessage("Las contraseñas nuevas no coinciden");
-        setIsLoading(false);
+        showSecurityErrorAndScroll("Las contraseñas nuevas no coinciden");
         return;
       }
     }
@@ -468,6 +570,11 @@ export default function Configuracion() {
       }));
     } catch (error) {
       setErrorMessage("Error al actualizar la seguridad");
+      // Scroll to top to show error message
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -649,6 +756,71 @@ export default function Configuracion() {
     setShowPhotoModal(false);
     setPhotoFile(null);
     setPhotoPreviewURL(null);
+  };
+
+  const handleDeleteAccount = async () => {
+    if (!user) {
+      setErrorMessage("No hay usuario logueado");
+      return;
+    }
+
+    if (deleteConfirmationText !== "ELIMINAR MI CUENTA") {
+      setErrorMessage(
+        "Debes escribir exactamente 'ELIMINAR MI CUENTA' para continuar",
+      );
+      return;
+    }
+
+    setIsLoading(true);
+    setSavedMessage("");
+    setErrorMessage("");
+
+    try {
+      // Mostrar mensaje de procesamiento
+      setSavedMessage("Procesando eliminación de cuenta...");
+
+      // Simular delay para que el usuario vea el mensaje
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      const success = await deleteAccount(user.id);
+
+      if (success) {
+        // Mostrar mensaje de éxito
+        setSavedMessage(
+          "Tu cuenta ha sido eliminada exitosamente. Serás redirigido al inicio.",
+        );
+
+        // Esperar un momento para que el usuario vea el mensaje
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+
+        // Logout automático (esto limpia el localStorage del usuario)
+        logout();
+
+        // Redireccionar al home
+        navigate("/", { replace: true });
+      } else {
+        setErrorMessage(
+          "Error al eliminar la cuenta. Por favor, inténtalo de nuevo o contacta soporte.",
+        );
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+      }
+    } catch (error) {
+      console.error("Error eliminando cuenta:", error);
+      setErrorMessage(
+        "Error inesperado al eliminar la cuenta. Por favor, contacta soporte.",
+      );
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    } finally {
+      setIsLoading(false);
+      setShowDeleteAccountModal(false);
+      setDeleteConfirmationText("");
+    }
   };
 
   return (
@@ -1504,6 +1676,43 @@ export default function Configuracion() {
                     </div>
                   </div>
 
+                  {/* Delete Account Section - Solo para clientes */}
+                  {user?.rol === "cliente" && (
+                    <div className="space-y-4 border-t border-vet-gray-200 pt-6">
+                      <div className="flex items-center space-x-2 mb-4">
+                        <Trash2 className="w-5 h-5 text-red-600" />
+                        <h3 className="text-lg font-semibold text-vet-gray-900">
+                          Zona de Peligro
+                        </h3>
+                      </div>
+
+                      <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+                        <div className="flex items-start space-x-3">
+                          <AlertTriangle className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" />
+                          <div className="min-w-0">
+                            <h4 className="font-medium text-red-900 mb-2">
+                              Eliminar mi cuenta permanentemente
+                            </h4>
+                            <p className="text-sm text-red-700 mb-3 leading-relaxed">
+                              Esta acción eliminará permanentemente tu cuenta y
+                              todos los datos asociados. No podrás recuperar tu
+                              información, historial de citas o datos de tus
+                              mascotas.
+                            </p>
+                            <Button
+                              variant="outline"
+                              onClick={() => setShowDeleteAccountModal(true)}
+                              className="bg-white border-red-300 text-red-700 hover:bg-red-50 hover:border-red-400 hover:text-red-800 transition-colors"
+                            >
+                              <Trash2 className="w-4 h-4 mr-2" />
+                              Eliminar mi cuenta
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   <div className="flex justify-end">
                     <Button
                       onClick={handleSaveSecurity}
@@ -1644,6 +1853,223 @@ export default function Configuracion() {
                         {profileData.foto ? "Cambiar" : "Seleccionar"}
                       </>
                     )}
+                  </Button>
+                </div>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+
+          {/* Delete Account Confirmation Modal */}
+          <Dialog
+            open={showDeleteAccountModal}
+            onOpenChange={setShowDeleteAccountModal}
+          >
+            <DialogContent
+              className="max-w-lg w-full mx-4 max-h-[90vh] overflow-hidden flex flex-col rounded-3xl"
+              hideCloseButton
+            >
+              <DialogHeader className="flex-shrink-0 text-center space-y-4">
+                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto">
+                  <AlertTriangle className="w-8 h-8 text-red-600" />
+                </div>
+                <div className="text-center">
+                  <DialogTitle className="text-xl font-bold text-red-700">
+                    Eliminar cuenta permanentemente
+                  </DialogTitle>
+                  <DialogDescription className="text-vet-gray-600 mt-2 max-w-md mx-auto">
+                    Esta es una acción irreversible que eliminará todos tus
+                    datos.
+                  </DialogDescription>
+                </div>
+              </DialogHeader>
+
+              <div className="flex-1 overflow-y-auto scrollbar-hide">
+                <div className="space-y-6 py-4 px-1">
+                  {/* Advertencias principales */}
+                  <div className="bg-red-50 border border-red-200 rounded-2xl p-5">
+                    <h4 className="font-semibold text-red-900 mb-3 flex items-center">
+                      <AlertTriangle className="w-4 h-4 mr-2" />
+                      ¿Qué pasará si elimino mi cuenta?
+                    </h4>
+                    <ul className="space-y-2 text-sm text-red-800">
+                      <li className="flex items-start space-x-2">
+                        <span className="text-red-600 font-bold mt-0.5">•</span>
+                        <span>
+                          <strong>Perderás todos tus datos personales</strong>{" "}
+                          (nombre, contacto, documentos)
+                        </span>
+                      </li>
+                      <li className="flex items-start space-x-2">
+                        <span className="text-red-600 font-bold mt-0.5">•</span>
+                        <span>
+                          <strong>
+                            Se eliminarán todas tus mascotas registradas
+                          </strong>{" "}
+                          y su información
+                        </span>
+                      </li>
+                      <li className="flex items-start space-x-2">
+                        <span className="text-red-600 font-bold mt-0.5">•</span>
+                        <span>
+                          <strong>
+                            Perderás el historial clínico completo
+                          </strong>{" "}
+                          de todas tus mascotas
+                        </span>
+                      </li>
+                      <li className="flex items-start space-x-2">
+                        <span className="text-red-600 font-bold mt-0.5">•</span>
+                        <span>
+                          <strong>
+                            Se cancelarán todas las citas pendientes
+                          </strong>{" "}
+                          automáticamente
+                        </span>
+                      </li>
+                      <li className="flex items-start space-x-2">
+                        <span className="text-red-600 font-bold mt-0.5">•</span>
+                        <span>
+                          <strong>No podrás recuperar fotos</strong> de tus
+                          mascotas guardadas
+                        </span>
+                      </li>
+                      <li className="flex items-start space-x-2">
+                        <span className="text-red-600 font-bold mt-0.5">•</span>
+                        <span>
+                          <strong>Perderás acceso a notificaciones</strong> y
+                          recordatorios de vacunas
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Información adicional */}
+                  <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5">
+                    <h4 className="font-semibold text-amber-900 mb-2 flex items-center">
+                      <Info className="w-4 h-4 mr-2" />
+                      Información importante
+                    </h4>
+                    <div className="text-sm text-amber-800 space-y-1">
+                      <p>
+                        • Esta acción es <strong>irreversible</strong>
+                      </p>
+                      <p>
+                        • Tendrás que crear una nueva cuenta para volver a usar
+                        nuestros servicios
+                      </p>
+                      <p>
+                        • Los veterinarios perderán acceso al historial de tus
+                        mascotas
+                      </p>
+                      <p>
+                        • Si tienes citas programadas, se notificará a la
+                        clínica automáticamente
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Alternativas */}
+                  <div className="bg-blue-50 border border-blue-200 rounded-2xl p-5">
+                    <h4 className="font-semibold text-blue-900 mb-2 flex items-center">
+                      <Info className="w-4 h-4 mr-2" />
+                      ¿Consideraste estas alternativas?
+                    </h4>
+                    <div className="text-sm text-blue-800 space-y-1">
+                      <p>
+                        • <strong>Actualizar tus datos</strong> en lugar de
+                        eliminar la cuenta
+                      </p>
+                      <p>
+                        • <strong>Cambiar tu contraseña</strong> si hay
+                        problemas de seguridad
+                      </p>
+                      <p>
+                        • <strong>Contactar soporte</strong> si tienes problemas
+                        con el servicio
+                      </p>
+                      <p>
+                        • <strong>Desactivar notificaciones</strong> sin
+                        eliminar tu cuenta
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Confirmación de texto mejorada */}
+                  <div className="space-y-4">
+                    <div className="text-center space-y-3">
+                      <p className="text-sm text-vet-gray-700 font-medium">
+                        Para confirmar, escribe exactamente:
+                      </p>
+                      <div className="inline-block bg-vet-gray-100 px-6 py-3 rounded-xl border shadow-sm">
+                        <code className="text-red-600 font-bold">
+                          ELIMINAR MI CUENTA
+                        </code>
+                      </div>
+                    </div>
+
+                    <Input
+                      value={deleteConfirmationText}
+                      onChange={(e) =>
+                        setDeleteConfirmationText(e.target.value)
+                      }
+                      placeholder="Escribe la frase exacta aquí..."
+                      className="text-center border-2 border-vet-gray-300 focus:border-red-500 focus:ring-red-500/20 h-12 text-base rounded-xl"
+                    />
+
+                    {deleteConfirmationText.length > 0 &&
+                      deleteConfirmationText !== "ELIMINAR MI CUENTA" && (
+                        <div className="bg-red-50 border border-red-200 rounded-xl p-4 shadow-sm">
+                          <p className="text-sm text-red-600 text-center font-medium">
+                            La frase no coincide. Debe ser exactamente "ELIMINAR
+                            MI CUENTA"
+                          </p>
+                        </div>
+                      )}
+
+                    {deleteConfirmationText === "ELIMINAR MI CUENTA" && (
+                      <div className="bg-red-50 border border-red-200 rounded-xl p-4 shadow-sm">
+                        <p className="text-sm text-red-700 text-center font-medium">
+                          Confirmación correcta. Puedes proceder con la
+                          eliminación.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <DialogFooter className="flex-shrink-0 pt-6">
+                <div className="flex flex-col w-full gap-4">
+                  <Button
+                    onClick={handleDeleteAccount}
+                    disabled={
+                      deleteConfirmationText !== "ELIMINAR MI CUENTA" ||
+                      isLoading
+                    }
+                    className="w-full bg-red-600 hover:bg-red-700 text-white h-12 text-base font-semibold disabled:bg-vet-gray-300 disabled:cursor-not-allowed transition-all rounded-xl shadow-lg"
+                  >
+                    {isLoading ? (
+                      <>
+                        <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent mr-2" />
+                        Eliminando cuenta...
+                      </>
+                    ) : (
+                      <>
+                        <Trash2 className="w-5 h-5 mr-2" />
+                        Eliminar mi cuenta permanentemente
+                      </>
+                    )}
+                  </Button>
+
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setShowDeleteAccountModal(false);
+                      setDeleteConfirmationText("");
+                    }}
+                    className="w-full h-10 text-vet-gray-700 border-vet-gray-300 hover:bg-vet-gray-50 rounded-xl"
+                  >
+                    Cancelar y mantener mi cuenta
                   </Button>
                 </div>
               </DialogFooter>

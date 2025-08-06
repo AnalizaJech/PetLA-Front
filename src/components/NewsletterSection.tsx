@@ -142,7 +142,7 @@ export default function NewsletterSection() {
               <CheckCircle className="w-10 h-10 text-green-600" />
             </div>
             <h3 className="text-3xl font-bold text-vet-gray-900 mb-4">
-              ¡Bienvenido a la familia PetLA! 🎉
+              ¡Bienvenido a la familia PetLA!
             </h3>
             <p className="text-lg text-vet-gray-600 mb-8">
               {successMessage ||

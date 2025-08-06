@@ -558,10 +558,10 @@ export default function GestionNewsletter() {
                               📰 Clásica - Estilo tradicional con serif
                             </SelectItem>
                             <SelectItem value="veterinaria">
-                              🏥 Veterinaria - Temática de mascotas y salud
+                              Veterinaria - Temática de mascotas y salud
                             </SelectItem>
                             <SelectItem value="minimalista">
-                              ✨ Minimalista - Limpio y simple
+                              Minimalista - Limpio y simple
                             </SelectItem>
                           </SelectContent>
                         </Select>
@@ -759,8 +759,6 @@ export default function GestionNewsletter() {
                                   className={styles.title}
                                   style={{ color: emailForm.colorTema }}
                                 >
-                                  {emailForm.plantilla === "veterinaria" &&
-                                    "🏥 "}
                                   {emailForm.asunto || "Título del Newsletter"}
                                   {emailForm.plantilla === "veterinaria" &&
                                     " 🐾"}
@@ -861,8 +859,7 @@ export default function GestionNewsletter() {
                               <div className={styles.footer}>
                                 {emailForm.plantilla === "veterinaria" && (
                                   <p>
-                                    🏥 PetLA - Cuidando a tus mascotas con amor
-                                    🐾
+                                    PetLA - Cuidando a tus mascotas con amor
                                   </p>
                                 )}
                                 {emailForm.plantilla === "moderna" && (
@@ -1188,8 +1185,6 @@ export default function GestionNewsletter() {
                                 selectedNewsletterToView.colorTema || "#0ea5e9",
                             }}
                           >
-                            {selectedNewsletterToView.plantilla ===
-                              "veterinaria" && "🏥 "}
                             {selectedNewsletterToView.asunto}
                             {selectedNewsletterToView.plantilla ===
                               "veterinaria" && " 🐾"}
@@ -1281,9 +1276,7 @@ export default function GestionNewsletter() {
                         <div className={styles.footer}>
                           {selectedNewsletterToView.plantilla ===
                             "veterinaria" && (
-                            <p>
-                              🏥 PetLA - Cuidando a tus mascotas con amor 🐾
-                            </p>
+                            <p>PetLA - Cuidando a tus mascotas con amor</p>
                           )}
                           {selectedNewsletterToView.plantilla === "moderna" && (
                             <p>✨ Newsletter enviado con PetLA ✨</p>

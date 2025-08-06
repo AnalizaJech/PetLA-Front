@@ -648,7 +648,7 @@ export function autoFixCitaData(
         mascota = nuevaMascota;
 
         console.log(
-          `✅ Mascota creada automáticamente: ${nuevaMascota.nombre} asignada a ${clienteAsignado.nombre}`,
+          `[AUTO-CREATE] Mascota creada automáticamente: ${nuevaMascota.nombre} asignada a ${clienteAsignado.nombre}`,
         );
       } else {
         errors.push(
@@ -673,7 +673,7 @@ export function autoFixCitaData(
               clienteId: clienteAsignado.id,
             };
             console.log(
-              `✅ Propietario asignado a ${mascota.nombre}: ${clienteAsignado.nombre}`,
+              `[ASSIGNED] Propietario asignado a ${mascota.nombre}: ${clienteAsignado.nombre}`,
             );
           }
         } else {

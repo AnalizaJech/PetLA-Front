@@ -269,7 +269,7 @@ export default function NewsletterInfo() {
 
                     <div>
                       <h4 className="font-semibold text-vet-gray-900 mb-2">
-                        📅 Recordatorio: Vacuna antirrábica
+                        Recordatorio: Vacuna antirrábica
                       </h4>
                       <p className="text-sm text-vet-gray-600">
                         Es momento de renovar la vacuna antirrábica de Luna

@@ -154,13 +154,13 @@ export const optimizeStorageSpace = (): void => {
     const usagePercent = (totalSize / maxSize) * 100;
 
     console.log(
-      `📊 LocalStorage: ${usagePercent.toFixed(1)}% usado (${(totalSize / 1024).toFixed(1)}KB)`,
+      `[STORAGE] LocalStorage: ${usagePercent.toFixed(1)}% usado (${(totalSize / 1024).toFixed(1)}KB)`,
     );
 
     // Si supera el 80%, limpiar comprobantes antiguos
     if (totalSize > maxSize * 0.8) {
       console.warn(
-        "🚨 LocalStorage cerca del límite, limpiando comprobantes antiguos...",
+        "[WARNING] LocalStorage cerca del límite, limpiando comprobantes antiguos...",
       );
 
       // Limpiar comprobantes más antiguos primero
@@ -186,10 +186,12 @@ export const optimizeStorageSpace = (): void => {
         localStorage.removeItem(key);
       }
 
-      console.log(`✅ Liberado ${(freedSpace / 1024).toFixed(1)}KB de espacio`);
+      console.log(
+        `[FREED] Liberado ${(freedSpace / 1024).toFixed(1)}KB de espacio`,
+      );
     }
   } catch (error) {
-    console.error("❌ Error optimizando localStorage:", error);
+    console.error("[ERROR] Error optimizando localStorage:", error);
   }
 };
 

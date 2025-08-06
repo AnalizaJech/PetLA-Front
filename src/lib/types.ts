@@ -160,6 +160,8 @@ export interface RegistroClienteFormData {
   direccion?: string;
   fechaNacimiento?: string;
   genero?: string;
+  documento?: string;
+  tipoDocumento?: "dni" | "pasaporte" | "carnet_extranjeria" | "cedula";
   password: string;
   confirmPassword: string;
 }
