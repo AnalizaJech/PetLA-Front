@@ -719,12 +719,12 @@ export default function Veterinarios() {
                           <TableCell>
                             <div className="space-y-1">
                               <div className="flex items-center space-x-2 text-sm text-vet-gray-600">
-                                <Mail className="w-3 h-3" />
+                                <Mail className="w-3 h-3 text-blue-500" />
                                 <span>{veterinario.email}</span>
                               </div>
                               {veterinario.telefono && (
                                 <div className="flex items-center space-x-2 text-sm text-vet-gray-600">
-                                  <Phone className="w-3 h-3" />
+                                  <Phone className="w-3 h-3 text-green-500" />
                                   <span>{veterinario.telefono}</span>
                                 </div>
                               )}
@@ -733,7 +733,7 @@ export default function Veterinarios() {
                           <TableCell>
                             <div className="space-y-1">
                               <div className="flex items-center space-x-2 text-sm">
-                                <Calendar className="w-3 h-3 text-vet-gray-400" />
+                                <Calendar className="w-3 h-3 text-blue-500" />
                                 <span className="font-medium">
                                   {stats.totalCitas} citas totales
                                 </span>
@@ -760,7 +760,7 @@ export default function Veterinarios() {
                           </TableCell>
                           <TableCell>
                             <div className="flex items-center space-x-2 text-sm text-vet-gray-600">
-                              <Calendar className="w-3 h-3" />
+                              <Calendar className="w-3 h-3 text-purple-500" />
                               <span>
                                 {veterinario.fechaRegistro?.toLocaleDateString(
                                   "es-ES",
