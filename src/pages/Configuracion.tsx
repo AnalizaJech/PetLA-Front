@@ -1588,6 +1588,41 @@ export default function Configuracion() {
                     </div>
                   </div>
 
+                  {/* Delete Account Section - Solo para clientes */}
+                  {user?.rol === "cliente" && (
+                    <div className="space-y-4 border-t border-vet-gray-200 pt-6">
+                      <div className="flex items-center space-x-2 mb-4">
+                        <Trash2 className="w-5 h-5 text-red-600" />
+                        <h3 className="text-lg font-semibold text-vet-gray-900">
+                          Zona de Peligro
+                        </h3>
+                      </div>
+
+                      <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+                        <div className="flex items-start space-x-3">
+                          <AlertTriangle className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" />
+                          <div className="min-w-0">
+                            <h4 className="font-medium text-red-900 mb-2">
+                              Eliminar mi cuenta permanentemente
+                            </h4>
+                            <p className="text-sm text-red-700 mb-3 leading-relaxed">
+                              Esta acción eliminará permanentemente tu cuenta y todos los datos asociados.
+                              No podrás recuperar tu información, historial de citas o datos de tus mascotas.
+                            </p>
+                            <Button
+                              variant="outline"
+                              onClick={() => setShowDeleteAccountModal(true)}
+                              className="bg-white border-red-300 text-red-700 hover:bg-red-50 hover:border-red-400 hover:text-red-800 transition-colors"
+                            >
+                              <Trash2 className="w-4 h-4 mr-2" />
+                              Eliminar mi cuenta
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   <div className="flex justify-end">
                     <Button
                       onClick={handleSaveSecurity}
