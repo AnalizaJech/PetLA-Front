@@ -435,11 +435,11 @@ export default function MisCitas() {
                               <img
                                 src={mascota.foto}
                                 alt={cita.mascota}
-                                className="w-20 h-20 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-full object-cover border-2 border-vet-primary/20"
+                                className="w-24 h-24 md:w-36 md:h-36 lg:w-40 lg:h-40 rounded-full object-cover border-2 border-vet-primary/20"
                               />
                             ) : (
-                              <div className="w-20 h-20 md:w-28 md:h-28 lg:w-32 lg:h-32 bg-vet-primary/10 rounded-full flex items-center justify-center">
-                                <PawPrint className="w-10 h-10 md:w-14 md:h-14 lg:w-16 lg:h-16 text-vet-primary" />
+                              <div className="w-24 h-24 md:w-36 md:h-36 lg:w-40 lg:h-40 bg-vet-primary/10 rounded-full flex items-center justify-center">
+                                <PawPrint className="w-12 h-12 md:w-18 md:h-18 lg:w-20 lg:h-20 text-vet-primary" />
                               </div>
                             );
                           })()}
@@ -472,7 +472,7 @@ export default function MisCitas() {
                             </p>
                             <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-6 md:space-x-8 text-sm sm:text-base md:text-lg text-vet-gray-500">
                               <div className="flex items-center space-x-2">
-                                <Calendar className="w-6 h-6 sm:w-5 sm:h-5 md:w-7 md:h-7 lg:w-6 lg:h-6 text-vet-primary" />
+                                <Calendar className="w-7 h-7 sm:w-6 sm:h-6 md:w-9 md:h-9 lg:w-8 lg:h-8 text-vet-primary" />
                                 <span className="font-medium">
                                   {cita.fecha.toLocaleDateString("es-ES", {
                                     weekday: "short",
@@ -482,7 +482,7 @@ export default function MisCitas() {
                                 </span>
                               </div>
                               <div className="flex items-center space-x-2">
-                                <Clock className="w-6 h-6 sm:w-5 sm:h-5 md:w-7 md:h-7 lg:w-6 lg:h-6 text-vet-primary" />
+                                <Clock className="w-7 h-7 sm:w-6 sm:h-6 md:w-9 md:h-9 lg:w-8 lg:h-8 text-vet-primary" />
                                 <span className="font-medium">
                                   {cita.fecha.toLocaleTimeString("es-ES", {
                                     hour: "2-digit",
@@ -491,7 +491,7 @@ export default function MisCitas() {
                                 </span>
                               </div>
                               <div className="flex items-center space-x-2">
-                                <MapPin className="w-6 h-6 sm:w-5 sm:h-5 md:w-7 md:h-7 lg:w-6 lg:h-6 text-vet-primary" />
+                                <MapPin className="w-7 h-7 sm:w-6 sm:h-6 md:w-9 md:h-9 lg:w-8 lg:h-8 text-vet-primary" />
                                 <span className="font-medium">
                                   {cita.ubicacion}
                                 </span>
@@ -580,7 +580,7 @@ export default function MisCitas() {
                                       onClick={() => handleViewReceipt(cita.id)}
                                       className="border-vet-primary text-vet-primary hover:bg-vet-primary/10 hover:border-vet-primary-dark transition-all duration-200 w-full sm:w-auto shadow-sm"
                                     >
-                                      <Eye className="w-4 h-4 mr-2" />
+                                      <Eye className="w-5 h-5 md:w-6 md:h-6 mr-2" />
                                       Ver Comprobante
                                     </Button>
                                   )}
@@ -604,7 +604,7 @@ export default function MisCitas() {
                                       }}
                                       className="border-blue-300 text-blue-700 hover:bg-blue-50 hover:border-blue-400 transition-all duration-200 w-full sm:w-auto shadow-sm"
                                     >
-                                      <Phone className="w-4 h-4 mr-2" />
+                                      <Phone className="w-5 h-5 md:w-6 md:h-6 mr-2" />
                                       Llamar
                                     </Button>
                                     <Button
@@ -614,7 +614,7 @@ export default function MisCitas() {
                                       }}
                                       className="border-green-400 text-green-700 hover:bg-green-50 hover:border-green-500 bg-green-25 transition-all duration-200 w-full sm:w-auto shadow-sm"
                                     >
-                                      <MessageCircle className="w-4 h-4 mr-2" />
+                                      <MessageCircle className="w-5 h-5 md:w-6 md:h-6 mr-2" />
                                       WhatsApp
                                     </Button>
                                   </>
