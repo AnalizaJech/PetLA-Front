@@ -961,7 +961,7 @@ export default function HistorialClinicoVeterinario() {
                               <div>
                                 <div className="flex items-center space-x-2">
                                   <h4 className="font-medium text-vet-gray-900">
-                                    {record.tipo.charAt(0).toUpperCase() + record.tipo.slice(1)}
+                                    {record.tipo ? (record.tipo.charAt(0).toUpperCase() + record.tipo.slice(1)) : "Consulta"}
                                   </h4>
                                   <Badge className={getBadgeVariant(record.tipo)}>
                                     {record.tipo}
