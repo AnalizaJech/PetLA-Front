@@ -1484,7 +1484,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
     setCitas((prev) => [...prev, newCita]);
     console.log(
-      `✅ Nueva cita creada: ${newCita.mascota} - ${newCita.veterinario}`,
+      `[CREATED] Nueva cita creada: ${newCita.mascota} - ${newCita.veterinario}`,
     );
 
     // Update mascota's proximaCita if it's a future appointment
