@@ -2076,6 +2076,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     getCitaWithRelations,
     validateDataRelationships,
     getStats,
+    refreshDataFromStorage,
   };
 
   return (
