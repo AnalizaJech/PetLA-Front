@@ -1053,6 +1053,60 @@ export default function HistorialClinico() {
                               {consulta.tratamiento}
                             </p>
 
+                            {/* Signos vitales */}
+                            {(consulta.peso || consulta.temperatura || consulta.presionArterial || consulta.frecuenciaCardiaca) && (
+                              <div className="mb-4">
+                                <h4 className="font-semibold text-vet-gray-900 mb-2">
+                                  Signos Vitales
+                                </h4>
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                                  {consulta.peso && (
+                                    <div className="bg-vet-gray-50 rounded-lg p-2">
+                                      <span className="font-medium">Peso:</span> {consulta.peso} kg
+                                    </div>
+                                  )}
+                                  {consulta.temperatura && (
+                                    <div className="bg-vet-gray-50 rounded-lg p-2">
+                                      <span className="font-medium">Temperatura:</span> {consulta.temperatura}°C
+                                    </div>
+                                  )}
+                                  {consulta.presionArterial && (
+                                    <div className="bg-vet-gray-50 rounded-lg p-2">
+                                      <span className="font-medium">P.A.:</span> {consulta.presionArterial}
+                                    </div>
+                                  )}
+                                  {consulta.frecuenciaCardiaca && (
+                                    <div className="bg-vet-gray-50 rounded-lg p-2">
+                                      <span className="font-medium">F.C.:</span> {consulta.frecuenciaCardiaca} bpm
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Exámenes realizados */}
+                            {consulta.examenes && consulta.examenes.length > 0 && (
+                              <div className="mb-4">
+                                <h4 className="font-semibold text-vet-gray-900 mb-2">
+                                  Exámenes Realizados
+                                </h4>
+                                <div className="space-y-2">
+                                  {consulta.examenes.map((examen, index) => (
+                                    <div key={index} className="bg-vet-gray-50 rounded-lg p-3">
+                                      <div className="flex items-center justify-between mb-1">
+                                        <span className="font-medium text-vet-gray-900">
+                                          {examen.tipo}
+                                        </span>
+                                      </div>
+                                      <p className="text-sm text-vet-gray-600">
+                                        Resultado: {examen.resultado}
+                                      </p>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
                             {consulta.servicios &&
                               consulta.servicios.length > 0 && (
                                 <div>
