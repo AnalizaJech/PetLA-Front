@@ -50,7 +50,7 @@ const estadoColors = {
   cancelada: "bg-red-100 text-red-800",
   expirada: "bg-red-100 text-red-800",
   rechazada: "bg-red-100 text-red-800",
-  no_asistio: "bg-orange-100 text-orange-800",
+  no_asistio: "bg-gray-100 text-gray-800",
 };
 
 const estadoLabels = {
