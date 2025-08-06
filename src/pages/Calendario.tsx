@@ -312,18 +312,18 @@ export default function Calendario() {
                 </div>
               </div>
 
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
+              <div className="flex flex-col lg:flex-row items-stretch lg:items-center space-y-2 lg:space-y-0 lg:space-x-2">
                 <div className="relative">
                   <Search className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
                   <Input
                     placeholder="Buscar paciente o motivo..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 w-full sm:w-64"
+                    className="pl-10 w-full lg:w-64"
                   />
                 </div>
                 <Select value={filterStatus} onValueChange={setFilterStatus}>
-                  <SelectTrigger className="w-full sm:w-auto">
+                  <SelectTrigger className="w-full lg:w-auto">
                     <Filter className="w-4 h-4 mr-2" />
                     <SelectValue />
                   </SelectTrigger>
