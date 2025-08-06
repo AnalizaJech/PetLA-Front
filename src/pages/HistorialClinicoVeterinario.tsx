@@ -579,57 +579,33 @@ export default function HistorialClinicoVeterinario() {
   const getServiceIconSVG = (tipo: string) => {
     const normalizedType = tipo?.toLowerCase();
 
-    // Vacunación
+    // Vacunación (Syringe)
     if (normalizedType?.includes("vacun")) {
-      return (
-        <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
-        </svg>
-      );
+      return <Syringe className="w-5 h-5 text-green-600" />;
     }
 
-    // Emergencia
+    // Emergencia (AlertCircle)
     if (normalizedType?.includes("emergencia")) {
-      return (
-        <svg className="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-        </svg>
-      );
+      return <AlertCircle className="w-5 h-5 text-red-600" />;
     }
 
-    // Cirugía
+    // Cirugía (Activity)
     if (normalizedType?.includes("cirug")) {
-      return (
-        <svg className="w-5 h-5 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-        </svg>
-      );
+      return <Activity className="w-5 h-5 text-orange-600" />;
     }
 
-    // Grooming
+    // Grooming (Heart)
     if (normalizedType?.includes("grooming")) {
-      return (
-        <svg className="w-5 h-5 text-pink-600" fill="currentColor" viewBox="0 0 20 20">
-          <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
-        </svg>
-      );
+      return <Heart className="w-5 h-5 text-pink-600" />;
     }
 
-    // Diagnóstico
+    // Diagnóstico (Search)
     if (normalizedType?.includes("diagnostic")) {
-      return (
-        <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      );
+      return <Search className="w-5 h-5 text-blue-600" />;
     }
 
-    // Consulta general (default)
-    return (
-      <svg className="w-5 h-5 text-vet-primary" fill="currentColor" viewBox="0 0 20 20">
-        <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
-      </svg>
-    );
+    // Consulta general (Stethoscope - default)
+    return <Stethoscope className="w-5 h-5 text-vet-primary" />;
   };
 
   const getBadgeVariant = (tipo: string) => {
