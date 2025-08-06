@@ -39,7 +39,11 @@ const features = [
     title: "Citas Inteligentes",
     description:
       "Sistema automatizado que agenda tu cita en menos de 2 minutos con confirmación instantánea.",
-    highlights: ["Disponible 24/7", "Recordatorios automáticos", "Sin esperas"],
+    highlights: [
+      { text: "Disponible 24/7", icon: Clock3 },
+      { text: "Recordatorios automáticos", icon: Bell },
+      { text: "Sin esperas", icon: Timer },
+    ],
     color: "vet-primary",
     bgColor: "vet-primary/10",
   },
@@ -49,7 +53,11 @@ const features = [
     title: "Historial Digital Completo",
     description:
       "Acceso inmediato a todo el historial médico de tu mascota desde cualquier dispositivo.",
-    highlights: ["Acceso 24/7", "Información completa", "Siempre actualizado"],
+    highlights: [
+      { text: "Acceso 24/7", icon: Globe },
+      { text: "Información completa", icon: Database },
+      { text: "Siempre actualizado", icon: RefreshCw },
+    ],
     color: "vet-secondary",
     bgColor: "vet-secondary/10",
   },
@@ -60,9 +68,9 @@ const features = [
     description:
       "Consultas puntuales de 30 minutos con emergencias atendidas las 24 horas del día.",
     highlights: [
-      "30 min consultas",
-      "Emergencias 24h",
-      "Seguimiento post-consulta",
+      { text: "30 min consultas", icon: Clock },
+      { text: "Emergencias 24h", icon: AlertTriangle },
+      { text: "Seguimiento post-consulta", icon: UserPlus },
     ],
     color: "green-600",
     bgColor: "green-100",
@@ -74,9 +82,9 @@ const features = [
     description:
       "Equipo especializado con más de 10 años de experiencia en diferentes áreas médicas.",
     highlights: [
-      "10+ años experiencia",
-      "Especializaciones",
-      "Certificaciones",
+      { text: "10+ años experiencia", icon: TrendingUp },
+      { text: "Especializaciones", icon: GraduationCap },
+      { text: "Certificaciones", icon: ShieldCheck },
     ],
     color: "blue-600",
     bgColor: "blue-100",
@@ -88,9 +96,9 @@ const features = [
     description:
       "Desde medicina preventiva hasta cirugías especializadas para todas las especies.",
     highlights: [
-      "Medicina preventiva",
-      "Cirugías avanzadas",
-      "Todas las especies",
+      { text: "Medicina preventiva", icon: Shield },
+      { text: "Cirugías avanzadas", icon: Scissors },
+      { text: "Todas las especies", icon: Pets },
     ],
     color: "purple-600",
     bgColor: "purple-100",
