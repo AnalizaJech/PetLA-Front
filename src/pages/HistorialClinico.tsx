@@ -195,7 +195,7 @@ const formatDateSafe = (date, options = {}) => {
 };
 
 export default function HistorialClinico() {
-  const { user, mascotas, usuarios, citas } = useAppContext();
+  const { user, mascotas, usuarios, citas, historialClinico } = useAppContext();
   const [selectedMascota, setSelectedMascota] = useState("");
   const [selectedTab, setSelectedTab] = useState("consulta_general");
 
