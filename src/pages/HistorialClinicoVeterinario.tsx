@@ -1238,7 +1238,7 @@ export default function HistorialClinicoVeterinario() {
                         Veterinario
                       </Label>
                       <p className="text-vet-gray-900">
-                        Dr. {selectedRecord.veterinario}
+                        {selectedRecord.veterinario}
                       </p>
                     </div>
                     <div>
