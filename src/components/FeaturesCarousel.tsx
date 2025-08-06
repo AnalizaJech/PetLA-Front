@@ -98,7 +98,7 @@ const features = [
     highlights: [
       { text: "Medicina preventiva", icon: Shield },
       { text: "Cirugías avanzadas", icon: Scissors },
-      { text: "Todas las especies", icon: Pets },
+      { text: "Todas las especies", icon: PawPrint },
     ],
     color: "purple-600",
     bgColor: "purple-100",
