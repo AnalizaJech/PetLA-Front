@@ -1950,7 +1950,7 @@ export default function Configuracion() {
                   <Button
                     onClick={handleDeleteAccount}
                     disabled={deleteConfirmationText !== "ELIMINAR MI CUENTA" || isLoading}
-                    className="w-full bg-red-600 hover:bg-red-700 text-white h-12 text-base font-semibold disabled:bg-vet-gray-300 disabled:cursor-not-allowed transition-all"
+                    className="w-full bg-red-600 hover:bg-red-700 text-white h-12 text-base font-semibold disabled:bg-vet-gray-300 disabled:cursor-not-allowed transition-all rounded-xl shadow-lg"
                   >
                     {isLoading ? (
                       <>
@@ -1971,7 +1971,7 @@ export default function Configuracion() {
                       setShowDeleteAccountModal(false);
                       setDeleteConfirmationText("");
                     }}
-                    className="w-full h-10 text-vet-gray-700 border-vet-gray-300 hover:bg-vet-gray-50"
+                    className="w-full h-10 text-vet-gray-700 border-vet-gray-300 hover:bg-vet-gray-50 rounded-xl"
                   >
                     Cancelar y mantener mi cuenta
                   </Button>
