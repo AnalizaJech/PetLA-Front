@@ -315,7 +315,7 @@ export default function HistorialClinicoVeterinario() {
         yPosition + 80,
       );
 
-      yPosition += 50;
+      yPosition += 100;
 
       if (filteredHistory.length === 0) {
         doc.text("No hay registros médicos disponibles.", margin, yPosition);
