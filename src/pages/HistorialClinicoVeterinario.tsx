@@ -1033,27 +1033,10 @@ export default function HistorialClinicoVeterinario() {
           {currentView === "history" && selectedPet && (
             <div>
               <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center space-x-4">
-                  <Button
-                    variant="outline"
-                    onClick={handleBackToPets}
-                    size="sm"
-                  >
-                    <ArrowLeft className="w-4 h-4 mr-2" />
-                    Volver
-                  </Button>
-                  <div>
-                    <h2 className="text-xl font-bold text-vet-gray-900">
-                      Historial de {selectedPet.nombre}
-                    </h2>
-                    <p className="text-vet-gray-600">
-                      {selectedOwner
-                        ? `Propietario: ${selectedOwner.nombre}`
-                        : "Propietario no registrado"}{" "}
-                      • {filteredHistory.length} registro
-                      {filteredHistory.length !== 1 ? "s" : ""}
-                    </p>
-                  </div>
+                <div>
+                  <h2 className="text-xl font-bold text-vet-gray-900">
+                    {selectedPet.nombre}
+                  </h2>
                 </div>
 
                 {historialMascota.length > 0 && (
