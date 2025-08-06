@@ -1768,6 +1768,136 @@ export default function Configuracion() {
               </DialogFooter>
             </DialogContent>
           </Dialog>
+
+          {/* Delete Account Confirmation Modal */}
+          <Dialog open={showDeleteAccountModal} onOpenChange={setShowDeleteAccountModal}>
+            <DialogContent className="max-w-md w-full mx-4 max-h-[90vh] overflow-hidden flex flex-col">
+              <DialogHeader className="flex-shrink-0">
+                <DialogTitle className="flex items-center space-x-2 text-lg text-red-700">
+                  <AlertTriangle className="w-5 h-5 text-red-600 flex-shrink-0" />
+                  <span className="truncate">Eliminar cuenta permanentemente</span>
+                </DialogTitle>
+                <DialogDescription className="text-sm text-vet-gray-600">
+                  Esta acción no se puede deshacer. Lee cuidadosamente antes de continuar.
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="flex-1 overflow-y-auto">
+                <div className="space-y-4 py-2">
+                  {/* Advertencias principales */}
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                    <h4 className="font-semibold text-red-900 mb-3 flex items-center">
+                      <AlertTriangle className="w-4 h-4 mr-2" />
+                      ¿Qué pasará si elimino mi cuenta?
+                    </h4>
+                    <ul className="space-y-2 text-sm text-red-800">
+                      <li className="flex items-start space-x-2">
+                        <span className="text-red-600 font-bold mt-0.5">•</span>
+                        <span><strong>Perderás todos tus datos personales</strong> (nombre, contacto, documentos)</span>
+                      </li>
+                      <li className="flex items-start space-x-2">
+                        <span className="text-red-600 font-bold mt-0.5">•</span>
+                        <span><strong>Se eliminarán todas tus mascotas registradas</strong> y su información</span>
+                      </li>
+                      <li className="flex items-start space-x-2">
+                        <span className="text-red-600 font-bold mt-0.5">•</span>
+                        <span><strong>Perderás el historial clínico completo</strong> de todas tus mascotas</span>
+                      </li>
+                      <li className="flex items-start space-x-2">
+                        <span className="text-red-600 font-bold mt-0.5">•</span>
+                        <span><strong>Se cancelarán todas las citas pendientes</strong> automáticamente</span>
+                      </li>
+                      <li className="flex items-start space-x-2">
+                        <span className="text-red-600 font-bold mt-0.5">•</span>
+                        <span><strong>No podrás recuperar fotos</strong> de tus mascotas guardadas</span>
+                      </li>
+                      <li className="flex items-start space-x-2">
+                        <span className="text-red-600 font-bold mt-0.5">•</span>
+                        <span><strong>Perderás acceso a notificaciones</strong> y recordatorios de vacunas</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Información adicional */}
+                  <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                    <h4 className="font-semibold text-amber-900 mb-2 flex items-center">
+                      <Info className="w-4 h-4 mr-2" />
+                      Información importante
+                    </h4>
+                    <div className="text-sm text-amber-800 space-y-1">
+                      <p>• Esta acción es <strong>irreversible</strong></p>
+                      <p>• Tendrás que crear una nueva cuenta para volver a usar nuestros servicios</p>
+                      <p>• Los veterinarios perderán acceso al historial de tus mascotas</p>
+                      <p>• Si tienes citas programadas, se notificará a la clínica automáticamente</p>
+                    </div>
+                  </div>
+
+                  {/* Alternativas */}
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <h4 className="font-semibold text-blue-900 mb-2 flex items-center">
+                      <Info className="w-4 h-4 mr-2" />
+                      ¿Consideraste estas alternativas?
+                    </h4>
+                    <div className="text-sm text-blue-800 space-y-1">
+                      <p>• <strong>Actualizar tus datos</strong> en lugar de eliminar la cuenta</p>
+                      <p>• <strong>Cambiar tu contraseña</strong> si hay problemas de seguridad</p>
+                      <p>• <strong>Contactar soporte</strong> si tienes problemas con el servicio</p>
+                      <p>• <strong>Desactivar notificaciones</strong> sin eliminar tu cuenta</p>
+                    </div>
+                  </div>
+
+                  {/* Confirmación de texto */}
+                  <div className="space-y-3">
+                    <div className="p-3 bg-vet-gray-50 border border-vet-gray-200 rounded">
+                      <p className="text-sm text-vet-gray-700 mb-2">
+                        Para confirmar, escribe <strong className="text-red-600">"ELIMINAR MI CUENTA"</strong> en el campo de abajo:
+                      </p>
+                      <Input
+                        value={deleteConfirmationText}
+                        onChange={(e) => setDeleteConfirmationText(e.target.value)}
+                        placeholder="Escribe: ELIMINAR MI CUENTA"
+                        className="border-vet-gray-300 focus:border-red-500 focus:ring-red-500/20"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <DialogFooter className="flex-shrink-0 pt-4">
+                <div className="flex flex-col w-full gap-3">
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setShowDeleteAccountModal(false);
+                        setDeleteConfirmationText("");
+                      }}
+                      className="flex-1 text-sm h-9"
+                    >
+                      Cancelar
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        // TODO: Implementar función de eliminación
+                        console.log("Eliminar cuenta");
+                      }}
+                      disabled={deleteConfirmationText !== "ELIMINAR MI CUENTA"}
+                      className="flex-1 bg-red-600 hover:bg-red-700 text-white text-sm h-9 disabled:bg-red-300 disabled:cursor-not-allowed"
+                    >
+                      <Trash2 className="w-4 h-4 mr-1" />
+                      Eliminar cuenta
+                    </Button>
+                  </div>
+
+                  {deleteConfirmationText !== "ELIMINAR MI CUENTA" && deleteConfirmationText.length > 0 && (
+                    <p className="text-xs text-red-600 text-center">
+                      Debes escribir exactamente "ELIMINAR MI CUENTA" para continuar
+                    </p>
+                  )}
+                </div>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
     </Layout>
