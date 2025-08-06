@@ -78,7 +78,7 @@ const estadoColors = {
   pendiente_pago: "bg-yellow-100 text-yellow-800 border-yellow-200",
   en_validacion: "bg-yellow-100 text-yellow-800 border-yellow-200",
   aceptada: "bg-green-100 text-green-800 border-green-200",
-  atendida: "bg-gray-100 text-gray-800 border-gray-200",
+  atendida: "bg-purple-100 text-purple-800 border-purple-200",
   cancelada: "bg-red-100 text-red-800 border-red-200",
   expirada: "bg-red-100 text-red-800 border-red-200",
   rechazada: "bg-red-100 text-red-800 border-red-200",
@@ -105,6 +105,17 @@ const estadoIcons = {
   expirada: AlertCircle,
   rechazada: X,
   no_asistio: UserX,
+};
+
+const estadoIconsColors = {
+  pendiente_pago: "text-yellow-600",
+  en_validacion: "text-yellow-600",
+  aceptada: "text-green-600",
+  atendida: "text-purple-600",
+  cancelada: "text-red-600",
+  expirada: "text-red-600",
+  rechazada: "text-red-600",
+  no_asistio: "text-orange-600",
 };
 
 export default function MisPacientes() {
@@ -725,7 +736,7 @@ export default function MisPacientes() {
                                 variant="secondary"
                                 className={estadoColors[cita.estado]}
                               >
-                                <StatusIcon className="w-3 h-3 mr-1" />
+                                <StatusIcon className={`w-3 h-3 mr-1 ${estadoIconsColors[cita.estado]}`} />
                                 {estadoLabels[cita.estado]}
                               </Badge>
                               {getUrgencyBadge(urgencyLevel)}
