@@ -737,7 +737,7 @@ Generado automáticamente por PetLA
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between p-3 bg-gradient-to-r from-blue-50 to-blue-100/50 rounded-lg">
+                    <div className="flex items-center justify-between p-3 bg-gradient-to-r from-vet-primary/5 to-vet-primary/10 rounded-lg">
                       <div className="flex items-center space-x-3">
                         <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
                           <CheckCircle className="w-4 h-4 text-white" />
