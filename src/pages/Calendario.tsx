@@ -844,30 +844,6 @@ export default function Calendario() {
                                       )}
                                     </div>
 
-                                    {/* Información del propietario destacada */}
-                                    <div className="bg-vet-gray-50 p-3 rounded-lg mb-3">
-                                      <div className="flex items-center space-x-2 mb-2">
-                                        <UserCheck className="w-4 h-4 text-vet-primary" />
-                                        <span className="font-medium text-vet-gray-900">
-                                          Propietario:{" "}
-                                          {propietario?.nombre || "Sin asignar"}
-                                        </span>
-                                      </div>
-                                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-vet-gray-600">
-                                        {propietario?.telefono && (
-                                          <div className="flex items-center space-x-2">
-                                            <Phone className="w-3 h-3" />
-                                            <span>{propietario.telefono}</span>
-                                          </div>
-                                        )}
-                                        {propietario?.email && (
-                                          <div className="flex items-center space-x-2">
-                                            <Mail className="w-3 h-3" />
-                                            <span>{propietario.email}</span>
-                                          </div>
-                                        )}
-                                      </div>
-                                    </div>
 
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                                       <div className="space-y-2">
