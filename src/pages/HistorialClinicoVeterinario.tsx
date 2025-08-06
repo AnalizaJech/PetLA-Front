@@ -201,22 +201,36 @@ export default function HistorialClinicoVeterinario() {
     return mascotasConCitas.sort((a, b) => a.nombre.localeCompare(b.nombre));
   }, [selectedOwner, mascotas, citas, user.nombre]);
 
-  // Get medical history for selected pet
+  // Get medical history for selected pet with service type from appointments
   const historialMascota = useMemo(() => {
     if (!selectedPet) return [];
-    
+
     return historialClinico
       .filter((record) => {
         // Match by pet ID or name and veterinarian
-        const matchesPet = 
+        const matchesPet =
           record.mascotaId === selectedPet.id ||
-          (record.mascotaNombre && 
+          (record.mascotaNombre &&
            record.mascotaNombre.toLowerCase() === selectedPet.nombre.toLowerCase());
         const matchesVet = record.veterinario === user.nombre;
         return matchesPet && matchesVet;
       })
+      .map((record) => {
+        // Try to find the corresponding appointment to get the real service type
+        const correspondingCita = citas.find(cita =>
+          cita.id === record.citaId ||
+          (cita.veterinario === user.nombre &&
+           cita.mascota.toLowerCase() === selectedPet.nombre.toLowerCase() &&
+           Math.abs(new Date(cita.fecha).getTime() - new Date(record.fecha).getTime()) < 24 * 60 * 60 * 1000) // Within 24 hours
+        );
+
+        return {
+          ...record,
+          tipo: correspondingCita?.tipoConsulta || record.tipo || "Consulta General"
+        };
+      })
       .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
-  }, [selectedPet, historialClinico, user.nombre]);
+  }, [selectedPet, historialClinico, user.nombre, citas]);
 
   // Filter medical history
   const filteredHistory = useMemo(() => {
