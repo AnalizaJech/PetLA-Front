@@ -540,11 +540,11 @@ function AdminDashboard({
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-green-500">
+        <Card className="border-l-4 border-l-vet-secondary">
           <CardContent className="p-4 sm:p-6">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                <Heart className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-vet-secondary/10 rounded-xl flex items-center justify-center">
+                <Heart className="w-5 h-5 sm:w-6 sm:h-6 text-vet-secondary" />
               </div>
               <div>
                 <p className="text-xs sm:text-sm text-vet-gray-600">Clientes</p>
