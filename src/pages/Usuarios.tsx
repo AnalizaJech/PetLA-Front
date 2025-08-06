@@ -748,12 +748,12 @@ export default function Usuarios() {
                           <div className="space-y-1">
                             {cliente.telefono && (
                               <div className="flex items-center space-x-2 text-sm text-vet-gray-600">
-                                <Phone className="w-3 h-3" />
+                                <Phone className="w-3 h-3 text-green-500" />
                                 <span>{cliente.telefono}</span>
                               </div>
                             )}
                             <div className="flex items-center space-x-2 text-sm text-vet-gray-600">
-                              <Mail className="w-3 h-3" />
+                              <Mail className="w-3 h-3 text-blue-500" />
                               <span>{cliente.email}</span>
                             </div>
                           </div>
@@ -765,7 +765,7 @@ export default function Usuarios() {
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center space-x-2 text-sm text-vet-gray-600">
-                            <Calendar className="w-3 h-3" />
+                            <Calendar className="w-3 h-3 text-purple-500" />
                             <span>
                               {cliente.fechaRegistro?.toLocaleDateString(
                                 "es-ES",
