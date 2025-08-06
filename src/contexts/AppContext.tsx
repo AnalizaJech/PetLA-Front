@@ -1067,6 +1067,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       direccion: userData.direccion, // Ahora se guarda
       fechaNacimiento: userData.fechaNacimiento, // Ahora se guarda
       genero: userData.genero, // Ahora se guarda
+      documento: userData.documento, // Ahora se guarda
+      tipoDocumento: userData.tipoDocumento, // Ahora se guarda
       password: userData.password, // También guardar la contraseña
       fechaRegistro: new Date(),
       foto: userData.foto || null, // Incluir foto si existe
