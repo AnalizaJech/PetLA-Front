@@ -823,24 +823,12 @@ export default function Calendario() {
                                       <h4 className="font-bold text-lg text-vet-gray-900">
                                         {cita.mascota}
                                       </h4>
-                                      {cita.estado === "atendida" ? (
-                                        <Badge
-                                          className={estadoColors[cita.estado]}
-                                        >
-                                          <StatusIcon className="w-3 h-3 mr-1" />
-                                          {estadoLabels[cita.estado]}
-                                        </Badge>
-                                      ) : (
-                                        <>
-                                          <Badge
-                                            className={estadoColors[cita.estado]}
-                                          >
-                                            <StatusIcon className="w-3 h-3 mr-1" />
-                                            {estadoLabels[cita.estado]}
-                                          </Badge>
-                                          {getUrgencyBadge(urgencyLevel)}
-                                        </>
-                                      )}
+                                      <Badge
+                                        className={estadoColors[cita.estado]}
+                                      >
+                                        <StatusIcon className="w-3 h-3 mr-1" />
+                                        {estadoLabels[cita.estado]}
+                                      </Badge>
                                       {isToday && (
                                         <Badge
                                           variant="secondary"
