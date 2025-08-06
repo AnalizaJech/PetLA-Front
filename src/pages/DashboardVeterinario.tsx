@@ -368,7 +368,7 @@ export default function DashboardVeterinario() {
                     <p className="text-3xl font-bold text-vet-secondary-dark">
                       {stats.pacientesUnicos}
                     </p>
-                    <p className="text-xs text-purple-600 mt-1">
+                    <p className="text-xs text-vet-secondary mt-1">
                       Únicos atendidos
                     </p>
                   </div>
@@ -730,7 +730,7 @@ Generado automáticamente por PetLA
                 <CardHeader className="pb-4">
                   <CardTitle className="flex items-center space-x-2 text-xl">
                     <div className="w-8 h-8 bg-vet-secondary/10 rounded-lg flex items-center justify-center">
-                      <TrendingUp className="w-4 h-4 text-purple-600" />
+                      <TrendingUp className="w-4 h-4 text-vet-secondary" />
                     </div>
                     <span>Resumen del Mes</span>
                   </CardTitle>
