@@ -319,9 +319,9 @@ export default function Dashboard() {
                       </div>
 
                       {!service.activo && (
-                        <Alert className="border-orange-200 bg-orange-50">
-                          <AlertTriangle className="w-4 h-4 text-orange-600" />
-                          <AlertDescription className="text-orange-800">
+                        <Alert className="border-yellow-200 bg-yellow-50">
+                          <AlertTriangle className="w-4 h-4 text-yellow-600" />
+                          <AlertDescription className="text-yellow-800">
                             Este servicio está desactivado y no aparecerá en las
                             opciones de citas
                           </AlertDescription>
@@ -487,7 +487,7 @@ function AdminDashboard({
             ? `Hace ${hoursAgo} horas`
             : `Hace ${Math.floor(hoursAgo / 24)} días`,
         icon: "AlertCircle",
-        color: "orange",
+        color: "yellow",
         timestamp: timestamp,
       });
     });
@@ -540,15 +540,15 @@ function AdminDashboard({
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-green-500">
+        <Card className="border-l-4 border-l-vet-secondary">
           <CardContent className="p-4 sm:p-6">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                <Heart className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-vet-secondary/10 rounded-xl flex items-center justify-center">
+                <Heart className="w-5 h-5 sm:w-6 sm:h-6 text-vet-secondary" />
               </div>
               <div>
                 <p className="text-xs sm:text-sm text-vet-gray-600">Clientes</p>
-                <p className="text-2xl sm:text-3xl font-bold text-green-600">
+                <p className="text-2xl sm:text-3xl font-bold text-vet-secondary">
                   {adminStats.clientes}
                 </p>
               </div>
@@ -592,17 +592,17 @@ function AdminDashboard({
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-orange-500">
+        <Card className="border-l-4 border-l-vet-primary">
           <CardContent className="p-4 sm:p-6">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-orange-100 rounded-xl flex items-center justify-center">
-                <Calendar className="w-5 h-5 sm:w-6 sm:h-6 text-orange-600" />
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-vet-primary/10 rounded-xl flex items-center justify-center">
+                <Calendar className="w-5 h-5 sm:w-6 sm:h-6 text-vet-primary" />
               </div>
               <div>
                 <p className="text-xs sm:text-sm text-vet-gray-600">
                   Citas Totales
                 </p>
-                <p className="text-2xl sm:text-3xl font-bold text-orange-600">
+                <p className="text-2xl sm:text-3xl font-bold text-vet-primary">
                   {adminStats.totalCitas}
                 </p>
               </div>
@@ -610,17 +610,17 @@ function AdminDashboard({
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-purple-500">
+        <Card className="border-l-4 border-l-blue-500">
           <CardContent className="p-4 sm:p-6">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-purple-100 rounded-xl flex items-center justify-center">
-                <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-purple-600" />
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
               </div>
               <div>
                 <p className="text-xs sm:text-sm text-vet-gray-600">
                   Suscriptores
                 </p>
-                <p className="text-2xl sm:text-3xl font-bold text-purple-600">
+                <p className="text-2xl sm:text-3xl font-bold text-blue-600">
                   {adminStats.suscriptoresNewsletter}
                 </p>
               </div>
@@ -733,11 +733,11 @@ function AdminDashboard({
                             ? "bg-green-100"
                             : activity.color === "blue"
                               ? "bg-blue-100"
-                              : activity.color === "orange"
-                                ? "bg-orange-100"
+                              : activity.color === "yellow"
+                                ? "bg-yellow-100"
                                 : activity.color === "purple"
                                   ? "bg-purple-100"
-                                  : "bg-indigo-100"
+                                  : "bg-blue-100"
                         }`}
                       >
                         {activity.icon === "CheckCircle" && (
@@ -745,7 +745,7 @@ function AdminDashboard({
                             className={`w-4 h-4 ${
                               activity.color === "green"
                                 ? "text-green-600"
-                                : "text-indigo-600"
+                                : "text-vet-primary"
                             }`}
                           />
                         )}
@@ -754,16 +754,16 @@ function AdminDashboard({
                             className={`w-4 h-4 ${
                               activity.color === "blue"
                                 ? "text-blue-600"
-                                : "text-indigo-600"
+                                : "text-vet-primary"
                             }`}
                           />
                         )}
                         {activity.icon === "AlertCircle" && (
                           <AlertCircle
                             className={`w-4 h-4 ${
-                              activity.color === "orange"
-                                ? "text-orange-600"
-                                : "text-indigo-600"
+                              activity.color === "yellow"
+                                ? "text-yellow-600"
+                                : "text-blue-600"
                             }`}
                           />
                         )}
@@ -772,7 +772,7 @@ function AdminDashboard({
                             className={`w-4 h-4 ${
                               activity.color === "purple"
                                 ? "text-purple-600"
-                                : "text-indigo-600"
+                                : "text-vet-primary"
                             }`}
                           />
                         )}
@@ -906,15 +906,15 @@ function ClientDashboard({ stats }: { stats: any }) {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-orange-500">
+        <Card className="border-l-4 border-l-yellow-500">
           <CardContent className="p-6">
             <div className="flex items-center space-x-2">
-              <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
-                <Clock className="w-6 h-6 text-orange-600" />
+              <div className="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center">
+                <Clock className="w-6 h-6 text-yellow-600" />
               </div>
               <div>
                 <p className="text-sm text-vet-gray-600">Citas Pendientes</p>
-                <p className="text-3xl font-bold text-orange-600">
+                <p className="text-3xl font-bold text-yellow-600">
                   {stats.citasPendientes}
                 </p>
               </div>
@@ -1058,7 +1058,7 @@ function ClientDashboard({ stats }: { stats: any }) {
                       healthStats.revisionesPendientes === 0
                         ? "text-green-600"
                         : healthStats.revisionesPendientes <= 2
-                          ? "text-orange-600"
+                          ? "text-yellow-600"
                           : "text-red-600"
                     }`}
                   >

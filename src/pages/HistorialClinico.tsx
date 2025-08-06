@@ -259,7 +259,7 @@ export default function HistorialClinico() {
     };
 
     citasRelevantes.forEach((cita) => {
-      const tipoConsulta = cita.tipoConsulta || "Consulta General";
+      const tipoConsulta = cita.tipoConsulta || "Consulta";
       const diagnosticoDefault = getDiagnosticoDefecto(
         tipoConsulta,
         cita.estado,

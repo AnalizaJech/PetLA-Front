@@ -54,6 +54,7 @@ import {
   Info,
   Activity,
   Heart,
+  Stethoscope,
 } from "lucide-react";
 import {
   enhanceMultipleCitas,
@@ -69,13 +70,23 @@ import {
 const estadoColors = {
   pendiente_pago: "bg-yellow-100 text-yellow-800 border-yellow-300",
   en_validacion: "bg-blue-100 text-blue-800 border-blue-300",
-  aceptada: "bg-green-100 text-green-800 border-green-300 hover:bg-green-100",
+  aceptada: "bg-green-100 text-green-800 border-green-300",
   atendida: "bg-purple-100 text-purple-800 border-purple-300",
   cancelada: "bg-red-100 text-red-800 border-red-300",
   expirada: "bg-red-100 text-red-800 border-red-300",
   rechazada: "bg-red-100 text-red-800 border-red-300",
-  no_asistio:
-    "bg-orange-100 text-orange-800 border-orange-300 hover:bg-orange-100",
+  no_asistio: "bg-gray-100 text-gray-800 border-gray-300",
+};
+
+const estadoIconsColors = {
+  pendiente_pago: "text-yellow-600",
+  en_validacion: "text-blue-600",
+  aceptada: "text-green-600",
+  atendida: "text-purple-600",
+  cancelada: "text-red-600",
+  expirada: "text-red-600",
+  rechazada: "text-red-600",
+  no_asistio: "text-gray-600",
 };
 
 const estadoLabels = {
@@ -635,7 +646,9 @@ export default function Calendario() {
                                           variant="secondary"
                                           className={estadoColors[cita.estado]}
                                         >
-                                          <StatusIcon className="w-3 h-3 mr-1" />
+                                          <StatusIcon
+                                            className={`w-3 h-3 mr-1 ${estadoIconsColors[cita.estado]}`}
+                                          />
                                           {estadoLabels[cita.estado]}
                                         </Badge>
                                       </div>
@@ -654,6 +667,16 @@ export default function Calendario() {
                                           </span>
                                         )}
                                       </div>
+
+                                      {/* Tipo de servicio */}
+                                      {cita.tipoConsulta && (
+                                        <div className="flex items-center space-x-2">
+                                          <Stethoscope className="w-4 h-4 text-vet-primary" />
+                                          <Badge className="bg-vet-primary/10 text-vet-primary border-vet-primary/20">
+                                            {cita.tipoConsulta}
+                                          </Badge>
+                                        </div>
+                                      )}
 
                                       {/* Motivo de la consulta */}
                                       <div className="flex items-start space-x-2">
@@ -826,7 +849,9 @@ export default function Calendario() {
                                       <Badge
                                         className={estadoColors[cita.estado]}
                                       >
-                                        <StatusIcon className="w-3 h-3 mr-1" />
+                                        <StatusIcon
+                                          className={`w-3 h-3 mr-1 ${estadoIconsColors[cita.estado]}`}
+                                        />
                                         {estadoLabels[cita.estado]}
                                       </Badge>
                                       {isToday && (
@@ -868,6 +893,16 @@ export default function Calendario() {
                                       </div>
 
                                       <div className="space-y-2">
+                                        {/* Tipo de servicio */}
+                                        {cita.tipoConsulta && (
+                                          <div className="flex items-center space-x-2">
+                                            <Stethoscope className="w-4 h-4 text-vet-primary" />
+                                            <Badge className="bg-vet-primary/10 text-vet-primary border-vet-primary/20">
+                                              {cita.tipoConsulta}
+                                            </Badge>
+                                          </div>
+                                        )}
+
                                         <div className="flex items-center space-x-2">
                                           <PawPrint className="w-4 h-4 text-vet-gray-600" />
                                           <span>

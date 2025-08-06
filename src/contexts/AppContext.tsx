@@ -457,7 +457,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
           const citaWithDate = {
             ...cita,
             fecha: new Date(cita.fecha),
-            tipoConsulta: cita.tipoConsulta || "Consulta General",
+            tipoConsulta: cita.tipoConsulta || "Consulta",
             // Ensure new fields are present for backward compatibility
             mascotaId: cita.mascotaId || undefined,
             clienteId: cita.clienteId || undefined,
@@ -1049,7 +1049,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         const formattedCitas = parsedCitas.map((cita: any) => ({
           ...cita,
           fecha: new Date(cita.fecha),
-          tipoConsulta: cita.tipoConsulta || "Consulta General",
+          tipoConsulta: cita.tipoConsulta || "Consulta",
           mascotaId: cita.mascotaId || undefined,
           clienteId: cita.clienteId || undefined,
           clienteNombre: cita.clienteNombre || undefined,
