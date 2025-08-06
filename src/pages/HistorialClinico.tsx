@@ -377,30 +377,7 @@ export default function HistorialClinico() {
     return servicios;
   };
 
-  // Función auxiliar para calcular próxima vacuna
-  const getProximaVacuna = (fechaActual) => {
-    const fecha = new Date(fechaActual);
-    fecha.setFullYear(fecha.getFullYear() + 1); // Vacunas anuales por defecto
-    return fecha;
-  };
-
-  // Función auxiliar para calcular próxima consulta según tipo
-  const getProximaConsulta = (tipoConsulta, fechaActual) => {
-    const fecha = new Date(fechaActual);
-
-    if (
-      tipoConsulta.toLowerCase().includes("control") ||
-      tipoConsulta.toLowerCase().includes("seguimiento")
-    ) {
-      fecha.setMonth(fecha.getMonth() + 3); // 3 meses para controles
-    } else if (tipoConsulta.toLowerCase().includes("dental")) {
-      fecha.setMonth(fecha.getMonth() + 6); // 6 meses para dental
-    } else {
-      fecha.setFullYear(fecha.getFullYear() + 1); // 1 año para consultas generales
-    }
-
-    return fecha;
-  };
+  // Funciones auxiliares eliminadas - solo mostrar datos reales del veterinario
 
   // Funciones auxiliares eliminadas - solo mostrar datos reales del veterinario
 
