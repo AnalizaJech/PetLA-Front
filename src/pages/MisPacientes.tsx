@@ -11,7 +11,6 @@ import {
   getCitasStats,
   validateCitaData,
   getUrgencyLevel,
-  autoFixCitaData,
   type CitaFilter,
   type SortBy,
   type CitaRelationData,
