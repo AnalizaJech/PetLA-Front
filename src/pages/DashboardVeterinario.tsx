@@ -246,7 +246,7 @@ export default function DashboardVeterinario() {
                   <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
                     <Stethoscope className="w-8 h-8 text-white" />
                   </div>
-                  <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                  <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-vet-success rounded-full flex items-center justify-center">
                     <div className="w-2 h-2 bg-white rounded-full"></div>
                   </div>
                 </div>
@@ -351,7 +351,7 @@ export default function DashboardVeterinario() {
                       este mes
                     </div>
                   </div>
-                  <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-vet-success rounded-xl flex items-center justify-center">
                     <CheckCircle className="w-6 h-6 text-white" />
                   </div>
                 </div>
@@ -789,7 +789,7 @@ Generado automáticamente por PetLA
 
                     <div className="flex items-center justify-between p-3 bg-gradient-to-r from-vet-success/5 to-vet-success/10 rounded-lg">
                       <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
+                        <div className="w-8 h-8 bg-vet-success rounded-lg flex items-center justify-center">
                           <TrendingUp className="w-4 h-4 text-white" />
                         </div>
                         <span className="text-sm font-medium text-green-900">
