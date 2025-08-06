@@ -1089,6 +1089,91 @@ export function AppProvider({ children }: { children: ReactNode }) {
     return newUser;
   };
 
+  const deleteAccount = async (userId: string): Promise<boolean> => {
+    try {
+      // Verificar que el usuario existe y es cliente
+      const userToDelete = usuarios.find((u) => u.id === userId);
+      if (!userToDelete || userToDelete.rol !== "cliente") {
+        console.error("Usuario no encontrado o no es cliente");
+        return false;
+      }
+
+      console.log(`🗑️ Iniciando eliminación de cuenta para usuario: ${userToDelete.nombre}`);
+
+      // 1. Eliminar todas las mascotas del usuario
+      const mascotasDelUsuario = mascotas.filter((m) => m.clienteId === userId);
+      console.log(`📋 Eliminando ${mascotasDelUsuario.length} mascotas del usuario`);
+
+      setMascotas((prev) => prev.filter((m) => m.clienteId !== userId));
+
+      // 2. Cancelar/eliminar todas las citas del usuario
+      const citasDelUsuario = citas.filter((c) => c.clienteId === userId);
+      console.log(`📅 Cancelando ${citasDelUsuario.length} citas del usuario`);
+
+      setCitas((prev) => prev.filter((c) => c.clienteId !== userId));
+
+      // 3. Eliminar historial clínico de las mascotas del usuario
+      const mascotaIds = mascotasDelUsuario.map((m) => m.id);
+      const historialEliminado = historialClinico.filter((h) =>
+        mascotaIds.includes(h.mascotaId)
+      );
+      console.log(`🏥 Eliminando ${historialEliminado.length} entradas de historial clínico`);
+
+      setHistorialClinico((prev) =>
+        prev.filter((h) => !mascotaIds.includes(h.mascotaId))
+      );
+
+      // 4. Eliminar notificaciones del usuario
+      const notificacionesDelUsuario = notificaciones.filter((n) => n.usuarioId === userId);
+      console.log(`��� Eliminando ${notificacionesDelUsuario.length} notificaciones del usuario`);
+
+      setNotificaciones((prev) => prev.filter((n) => n.usuarioId !== userId));
+
+      // 5. Eliminar comprobantes de pago del usuario
+      citasDelUsuario.forEach((cita) => {
+        if (cita.comprobanteData || cita.comprobantePago) {
+          const storageKey = `comprobante_${cita.id}`;
+          localStorage.removeItem(storageKey);
+        }
+      });
+      console.log(`💳 Comprobantes de pago eliminados`);
+
+      // 6. Limpiar datos específicos del usuario en localStorage
+      const keysToRemove = [
+        `petla_user_bio`,
+        `petla_user_direccion`,
+        `petla_user_documento`,
+        `petla_user_tipo_documento`,
+        `petla_notifications`,
+        `petla_theme`,
+        `petla_security_2fa`,
+        `petla_security_login_alerts`,
+        `petla_security_session_timeout`,
+      ];
+
+      keysToRemove.forEach((key) => {
+        localStorage.removeItem(key);
+      });
+      console.log(`🧹 Datos de configuración personal eliminados`);
+
+      // 7. Finalmente, eliminar el usuario del sistema
+      setUsuarios((prev) => prev.filter((u) => u.id !== userId));
+
+      console.log(`✅ Cuenta eliminada exitosamente para ${userToDelete.nombre}`);
+      console.log(`📊 Resumen de eliminación:`);
+      console.log(`   - Usuario: ${userToDelete.nombre} (${userToDelete.email})`);
+      console.log(`   - Mascotas eliminadas: ${mascotasDelUsuario.length}`);
+      console.log(`   - Citas canceladas: ${citasDelUsuario.length}`);
+      console.log(`   - Historial clínico eliminado: ${historialEliminado.length} entradas`);
+      console.log(`   - Notificaciones eliminadas: ${notificacionesDelUsuario.length}`);
+
+      return true;
+    } catch (error) {
+      console.error("❌ Error eliminando cuenta:", error);
+      return false;
+    }
+  };
+
   // User management functions (admin only)
   const addUsuario = (usuarioData: Omit<Usuario, "id" | "fechaRegistro">) => {
     const newUsuario: Usuario = {
