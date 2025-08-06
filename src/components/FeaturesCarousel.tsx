@@ -207,24 +207,9 @@ export default function FeaturesCarousel() {
 
         {/* Carousel Container */}
         <div className="relative">
-          {/* Navigation Arrows - Mobile */}
-          <button
-            onClick={() => setCurrentIndex((prev) => (prev - 1 + features.length) % features.length)}
-            className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white shadow-lg rounded-full flex items-center justify-center lg:hidden hover:bg-vet-gray-50 transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5 text-vet-gray-600" />
-          </button>
-
-          <button
-            onClick={() => setCurrentIndex((prev) => (prev + 1) % features.length)}
-            className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white shadow-lg rounded-full flex items-center justify-center lg:hidden hover:bg-vet-gray-50 transition-colors"
-          >
-            <ArrowRight className="w-5 h-5 text-vet-gray-600" />
-          </button>
-
           {/* Main Carousel */}
           <div
-            className={`flex items-center justify-center space-x-2 sm:space-x-4 lg:space-x-8 mb-12 cursor-grab ${isDragging ? "cursor-grabbing" : ""}`}
+            className={`flex items-center justify-center space-x-4 md:space-x-8 mb-12 cursor-grab ${isDragging ? "cursor-grabbing" : ""}`}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
@@ -236,16 +221,15 @@ export default function FeaturesCarousel() {
             {visibleFeatures.map((feature, index) => {
               const Icon = feature.icon;
               const isCenter = index === 1;
-              const isSide = index === 0 || index === 2;
 
               return (
                 <Card
                   key={`${feature.id}-${feature.position}`}
                   className={`transition-all duration-1000 ease-in-out select-none ${
                     isCenter
-                      ? "scale-110 shadow-2xl z-10 bg-white border-vet-primary/20 w-full max-w-sm"
-                      : "scale-95 opacity-70 hover:opacity-90 w-20 sm:w-32 md:w-40 lg:w-full lg:max-w-sm"
-                  } ${isSide ? "hidden sm:block" : ""}`}
+                      ? "scale-110 shadow-2xl z-10 bg-white border-vet-primary/20"
+                      : "scale-95 opacity-70 hover:opacity-90"
+                  } ${index === 0 ? "hidden md:block" : ""} ${index === 2 ? "hidden md:block" : ""}`}
                 >
                   <div className={`${isCenter ? "p-6 sm:p-8" : "p-2 sm:p-4 lg:p-8"} text-center`}>
                     <div
