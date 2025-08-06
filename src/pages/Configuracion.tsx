@@ -1914,7 +1914,7 @@ export default function Configuracion() {
                       <p className="text-sm text-vet-gray-700 font-medium">
                         Para confirmar, escribe exactamente:
                       </p>
-                      <div className="inline-block bg-vet-gray-100 px-4 py-2 rounded-lg border">
+                      <div className="inline-block bg-vet-gray-100 px-6 py-3 rounded-xl border shadow-sm">
                         <code className="text-red-600 font-bold">ELIMINAR MI CUENTA</code>
                       </div>
                     </div>
@@ -1923,20 +1923,20 @@ export default function Configuracion() {
                       value={deleteConfirmationText}
                       onChange={(e) => setDeleteConfirmationText(e.target.value)}
                       placeholder="Escribe la frase exacta aquí..."
-                      className="text-center border-2 border-vet-gray-300 focus:border-red-500 focus:ring-red-500/20 h-12 text-base"
+                      className="text-center border-2 border-vet-gray-300 focus:border-red-500 focus:ring-red-500/20 h-12 text-base rounded-xl"
                     />
 
                     {deleteConfirmationText.length > 0 && deleteConfirmationText !== "ELIMINAR MI CUENTA" && (
-                      <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-                        <p className="text-xs text-red-600 text-center font-medium">
+                      <div className="bg-red-50 border border-red-200 rounded-xl p-4 shadow-sm">
+                        <p className="text-sm text-red-600 text-center font-medium">
                           La frase no coincide. Debe ser exactamente "ELIMINAR MI CUENTA"
                         </p>
                       </div>
                     )}
 
                     {deleteConfirmationText === "ELIMINAR MI CUENTA" && (
-                      <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-                        <p className="text-xs text-red-700 text-center font-medium">
+                      <div className="bg-red-50 border border-red-200 rounded-xl p-4 shadow-sm">
+                        <p className="text-sm text-red-700 text-center font-medium">
                           Confirmación correcta. Puedes proceder con la eliminación.
                         </p>
                       </div>
