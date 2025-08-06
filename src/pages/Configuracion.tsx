@@ -1866,7 +1866,7 @@ export default function Configuracion() {
                         <span><strong>Perderás el historial clínico completo</strong> de todas tus mascotas</span>
                       </li>
                       <li className="flex items-start space-x-2">
-                        <span className="text-red-600 font-bold mt-0.5">��</span>
+                        <span className="text-red-600 font-bold mt-0.5">•</span>
                         <span><strong>Se cancelarán todas las citas pendientes</strong> automáticamente</span>
                       </li>
                       <li className="flex items-start space-x-2">
@@ -1888,14 +1888,14 @@ export default function Configuracion() {
                     </h4>
                     <div className="text-sm text-amber-800 space-y-1">
                       <p>• Esta acción es <strong>irreversible</strong></p>
-                      <p>��� Tendrás que crear una nueva cuenta para volver a usar nuestros servicios</p>
+                      <p>• Tendrás que crear una nueva cuenta para volver a usar nuestros servicios</p>
                       <p>• Los veterinarios perderán acceso al historial de tus mascotas</p>
                       <p>• Si tienes citas programadas, se notificará a la clínica automáticamente</p>
                     </div>
                   </div>
 
                   {/* Alternativas */}
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <div className="bg-blue-50 border border-blue-200 rounded-2xl p-5">
                     <h4 className="font-semibold text-blue-900 mb-2 flex items-center">
                       <Info className="w-4 h-4 mr-2" />
                       ¿Consideraste estas alternativas?
