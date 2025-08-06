@@ -1,14 +1,13 @@
-# 🐕 PetLA - Plataforma Veterinaria Digital
+# 🩺 PetLA - Sistema Integral de Gestión Veterinaria
 
 <div align="center">
   <img src="public/placeholder.svg" alt="PetLA Logo" width="120" height="120">
   
-  **La plataforma veterinaria más completa de Latinoamérica**
+  **Plataforma veterinaria completa para la gestión moderna de clínicas**
   
   [![React](https://img.shields.io/badge/React-18.3.1-blue.svg)](https://reactjs.org/)
   [![TypeScript](https://img.shields.io/badge/TypeScript-5.5.3-blue.svg)](https://www.typescriptlang.org/)
   [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.4.11-blue.svg)](https://tailwindcss.com/)
-  [![Vite](https://img.shields.io/badge/Vite-6.2.2-purple.svg)](https://vitejs.dev/)
   [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 </div>
 
@@ -17,140 +16,149 @@
 ## 📋 Tabla de Contenidos
 
 1. [🌟 Descripción del Proyecto](#-descripción-del-proyecto)
-2. [🚀 Características Principales](#-características-principales)
-3. [🏗️ Arquitectura Técnica](#️-arquitectura-técnica)
-4. [👥 Roles y Funcionalidades](#-roles-y-funcionalidades)
-5. [🔄 Flujos de Usuario](#-flujos-de-usuario)
-6. [🌐 Endpoints de Backend Requeridos](#-endpoints-de-backend-requeridos)
-7. [📊 Estructura de Datos](#-estructura-de-datos)
-8. [⚙️ Instalación y Configuración](#️-instalación-y-configuración)
-9. [🧪 Testing](#-testing)
-10. [📱 Responsive Design](#-responsive-design)
-11. [🔒 Seguridad](#-seguridad)
-12. [🚀 Despliegue](#-despliegue)
-13. [📚 Documentación Técnica](#-documentación-técnica)
+2. [🏗️ Arquitectura del Sistema](#️-arquitectura-del-sistema)
+3. [👥 Roles y Funcionalidades](#-roles-y-funcionalidades)
+4. [🔄 Flujos Principales](#-flujos-principales)
+5. [📊 Estructura de Datos](#-estructura-de-datos)
+6. [🛠️ Stack Tecnológico](#️-stack-tecnológico)
+7. [⚙️ Instalación](#️-instalación)
+8. [🚀 Funcionalidades Principales](#-funcionalidades-principales)
+9. [📱 Responsive Design](#-responsive-design)
+10. [🔒 Seguridad](#-seguridad)
+11. [🧪 Testing](#-testing)
+12. [📄 Documentación Adicional](#-documentación-adicional)
 
 ---
 
 ## 🌟 Descripción del Proyecto
 
-**PetLA** es una plataforma web integral diseñada para revolucionar la gestión de clínicas veterinarias, conectando de manera eficiente a propietarios de mascotas, veterinarios y administradores en un ecosistema digital completo.
+**PetLA** es una plataforma web completa que digitaliza y optimiza todos los procesos de una clínica veterinaria moderna. Conecta eficientemente a propietarios de mascotas, veterinarios y administradores en un ecosistema digital integral.
 
-### 🎯 Misión
+### 🎯 Propósito Principal
 
-Transformar la experiencia veterinaria tradicional mediante tecnología innovadora que:
+Transformar la experiencia veterinaria tradicional mediante tecnología que:
 
 - **Simplifica** el agendamiento de citas para propietarios de mascotas
 - **Optimiza** la gestión de pacientes para veterinarios
 - **Automatiza** procesos administrativos para el personal
-- **Centraliza** información médica en historiales digitales completos
+- **Centraliza** información médica en historiales digitales
 
 ### 🏥 Casos de Uso Principales
 
-- **Gestión de Citas Médicas**: Sistema completo de agendamiento con validación de pagos
+- **Sistema de Citas Inteligente**: Agendamiento con validación automática de pagos
 - **Historial Clínico Digital**: Registro completo de consultas veterinarias
-- **Dashboard Inteligente**: Métricas y estadísticas por rol de usuario
-- **Sistema de Notificaciones**: Comunicación en tiempo real entre usuarios
-- **Gestión de Usuarios**: Control completo de clientes, veterinarios y administradores
+- **Dashboard Personalizado**: Métricas específicas por rol de usuario
+- **Gestión de Pagos**: Validación digital de comprobantes
+- **Sistema de Notificaciones**: Comunicación en tiempo real
 
 ---
 
-## 🚀 Características Principales
+## 🏗️ Arquitectura del Sistema
 
-### ✨ Funcionalidades Core
-
-- 🗓️ **Sistema de Citas Avanzado**: Agendamiento con estados automatizados
-- 📱 **Responsive Design**: Optimizado para desktop, tablet y móvil
-- 🔔 **Notificaciones en Tiempo Real**: Sistema de alertas inteligente
-- 📸 **Gestión de Archivos**: Compresión automática de imágenes
-- 🔍 **Búsqueda Inteligente**: Filtros avanzados para pacientes y citas
-- 📊 **Dashboard por Roles**: Métricas personalizadas para cada usuario
-- 💾 **Almacenamiento Local**: Sistema robusto con auto-reparación
-- 🛡️ **Control de Acceso**: Rutas protegidas basadas en roles
-
-### 🎨 Diseño y UX
-
-- **Modern UI**: Interfaz basada en Radix UI y TailwindCSS
-- **Dark Mode Ready**: Soporte para modo oscuro
-- **Accesibilidad**: Cumple estándares WCAG 2.1
-- **Performance**: Carga inicial < 2 segundos
-- **Animation**: Transiciones fluidas con Framer Motion
-
----
-
-## 🏗️ Arquitectura Técnica
-
-### 📦 Stack Tecnológico
+### 📦 Stack Tecnológico Actual
 
 ```typescript
-const techStack = {
+const currentStack = {
   // Frontend Framework
   framework: "React 18.3.1",
   language: "TypeScript 5.5.3",
   buildTool: "Vite 6.2.2",
+  routing: "React Router 6.26.2 (SPA)",
 
-  // Routing & State
-  routing: "React Router 6.26.2",
+  // Estado y Persistencia
   stateManagement: "Context API + localStorage",
+  dataStorage: "localStorage (auto-repair system)",
 
-  // UI & Styling
+  // UI y Styling
   styling: "TailwindCSS 3.4.11",
-  components: "Radix UI Primitives",
+  components: "Radix UI Primitives (42+ components)",
   icons: "Lucide React 0.462.0",
   animations: "Framer Motion 12.6.2",
 
-  // Forms & Validation
+  // Formularios y Validación
   forms: "React Hook Form 7.53.0",
   validation: "Zod 3.23.8",
-
-  // Development
+  
+  // Testing y Desarrollo
   testing: "Vitest 3.1.4",
-  typeChecking: "TypeScript",
-  linting: "ESLint + Prettier",
+  typeChecking: "TypeScript strict mode",
 };
 ```
 
-### 🏛️ Estructura del Proyecto
+### 🗂️ Estructura del Proyecto
 
 ```
 src/
 ├── components/              # Componentes reutilizables
-│   ├── ui/                 # Primitivos UI (42+ componentes)
+│   ├── ui/                 # 42+ componentes UI (Radix UI)
+│   │   ├── button.tsx      # Botones con variantes
+│   │   ├── card.tsx        # Cards y containers
+│   │   ├── dialog.tsx      # Modales y dialogs
+│   │   ├── table.tsx       # Tablas responsivas
+│   │   └── ...             # Más componentes
 │   ├── Layout.tsx          # Layout principal con navegación
-│   ├── modals/             # Modales especializados
-│   └── shared/             # Componentes compartidos
+│   ├── AuthLayout.tsx      # Layout para autenticación
+│   ├── ProtectedRoute.tsx  # Protección de rutas por rol
+│   ├── CitaDetailModal.tsx # Modal de detalles de cita
+│   ├── CitaAttendModal.tsx # Modal para atender citas
+│   └── ConfirmationModal.tsx # Modal de confirmación
 ├── contexts/               # Estado global
-│   └── AppContext.tsx      # Context principal de la app
+│   └── AppContext.tsx      # Context principal (1200+ líneas)
 ├── hooks/                  # React hooks personalizados
-│   ├── useConfirmation.tsx
-│   ├── useNotificationToast.tsx
-│   └── use-mobile.tsx
-├── lib/                    # Lógica de negocio
-│   ├── citaUtils.ts        # Utilidades para citas
-│   ├── imageUtils.ts       # Compresión de imágenes
-│   ├── types.ts            # Definiciones TypeScript
-│   └── utils.ts            # Utilidades generales
-├── pages/                  # Páginas de la aplicación
-│   ├── Dashboard.tsx       # Dashboard principal
-│   ├── GestionCitas.tsx    # Gestión de citas (admin)
-│   ├── MisPacientes.tsx    # Gestión de pacientes (vet)
-│   └── ...                 # 25+ páginas especializadas
+│   ├── useConfirmation.tsx # Hook para confirmaciones
+│   ├── useNotificationToast.tsx # Gestión de toast notifications
+│   └── use-mobile.tsx      # Detección de dispositivos móviles
+├── lib/                    # Lógica de negocio y utilidades
+│   ├── types.ts            # Definiciones TypeScript completas
+│   ├── utils.ts            # Utilidades generales (cn, formatters)
+│   ├── citaUtils.ts        # Utilidades específicas de citas
+│   └── imageUtils.ts       # Compresión automática de imágenes
+├── pages/                  # Páginas de la aplicación (28 páginas)
+│   ├── Index.tsx           # Landing page pública
+│   ├── Login.tsx           # Autenticación
+│   ├── Dashboard.tsx       # Dashboard universal por roles
+│   ├── DashboardVeterinario.tsx # Dashboard específico veterinario
+│   │
+│   ├── # PÁGINAS DEL CLIENTE
+│   ├── MisMascotas.tsx     # Gestión de mascotas
+│   ├── MisCitas.tsx        # Gestión de citas del cliente
+│   ├── NuevaCita.tsx       # Agendar nueva cita
+│   ├── HistorialClinico.tsx # Historial médico de mascotas
+│   │
+│   ├── # PÁGINAS DEL VETERINARIO
+│   ├── Calendario.tsx      # Agenda médica
+│   ├── MisPacientes.tsx    # Gestión de pacientes asignados
+│   ├── HistorialClinicoVeterinario.tsx # Historial completo
+│   │
+│   ├── # PÁGINAS DEL ADMINISTRADOR
+│   ├── PreCitas.tsx        # Gestión de solicitudes públicas
+│   ├── GestionCitas.tsx    # Gestión completa de citas
+│   ├── GestionCitasPago.tsx # Validación de pagos
+│   ├── Usuarios.tsx        # Gestión de usuarios
+│   ├── Veterinarios.tsx    # Gestión de veterinarios
+│   ├���─ GestionNewsletter.tsx # Sistema de newsletter
+│   │
+│   ├── # PÁGINAS COMUNES
+│   ├── Configuracion.tsx   # Configuración de cuenta
+│   ├── Notificaciones.tsx  # Centro de notificaciones
+│   ├── Privacidad.tsx      # Política de privacidad
+│   ├── Terminos.tsx        # Términos de servicio
+│   └── ...                 # Más páginas especializadas
 └── main.tsx               # Entry point de la aplicación
 ```
 
-### 🔄 Flujo de Datos
+### 🌊 Flujo de Datos
 
 ```mermaid
 graph TD
-    A[Usuario] --> B[Interface]
-    B --> C[React Components]
-    C --> D[Context API]
-    D --> E[localStorage]
-    E --> F[Auto-sync]
-    F --> D
-    D --> G[Business Logic]
-    G --> H[UI Updates]
-    H --> A
+    A[Usuario Interactúa] --> B[Componente React]
+    B --> C[Context API]
+    C --> D[Validación Zod]
+    D --> E[Update localStorage]
+    E --> F[Auto-repair System]
+    F --> G[Update UI State]
+    G --> H[Re-render Components]
+    H --> I[Notificaciones Toast]
 ```
 
 ---
@@ -160,829 +168,192 @@ graph TD
 ### 🟦 Cliente (Propietario de Mascotas)
 
 **Funcionalidades principales:**
+- ✅ Registro y gestión de mascotas con fotos
+- ✅ Agendamiento autónomo de citas médicas
+- ✅ Subida y gestión de comprobantes de pago
+- ✅ Seguimiento en tiempo real del estado de citas
+- ✅ Consulta completa del historial clínico
+- ✅ Sistema de notificaciones personalizadas
 
-- ✅ Registro de mascotas con fotos
-- ✅ Agendamiento de citas médicas
-- ✅ Subida de comprobantes de pago
-- ✅ Seguimiento del estado de citas
-- ✅ Consulta del historial clínico
-- ✅ Recepción de notificaciones
-
-**Rutas disponibles:**
-
-- `/dashboard` - Resumen personal
-- `/mascotas` - Gestión de mascotas
+**Rutas específicas:**
+- `/dashboard` - Dashboard personalizado del cliente
+- `/mascotas` / `/mis-mascotas` - Gestión de mascotas
 - `/mis-citas` - Gestión de citas
-- `/nueva-cita` - Agendamiento
-- `/historial` - Historial clínico
+- `/nueva-cita` - Agendar nueva cita
+- `/historial` - Historial clínico de mascotas
 
 ### 🟩 Veterinario
 
 **Funcionalidades principales:**
-
-- ✅ Agenda médica personalizada
-- ✅ Gestión de pacientes asignados
-- ✅ Registro de consultas médicas
+- ✅ Agenda médica personalizada y optimizada
+- ✅ Gestión completa de pacientes asignados
+- ✅ Registro detallado de consultas médicas
 - ✅ Actualización de historiales clínicos
 - ✅ Búsqueda avanzada de pacientes
-- ✅ Estadísticas de práctica
+- ✅ Estadísticas de práctica profesional
 
-**Rutas disponibles:**
-
-- `/dashboard` - Dashboard veterinario
-- `/calendario` - Agenda médica
-- `/mis-pacientes` - Lista de pacientes
-- `/historial-clinico-veterinario` - Historial completo
+**Rutas específicas:**
+- `/dashboard` - Dashboard veterinario con métricas
+- `/calendario` - Agenda médica interactiva
+- `/mis-pacientes` - Lista y gestión de pacientes
+- `/historial-clinico-veterinario` - Historial clínico completo
 
 ### 🟥 Administrador
 
 **Funcionalidades principales:**
-
-- ✅ Gestión completa de usuarios
-- ✅ Validación de comprobantes de pago
-- ✅ Procesamiento de pre-citas
+- ✅ Gestión completa de usuarios y veterinarios
+- ✅ Validación digital de comprobantes de pago
+- ✅ Procesamiento de pre-citas del landing
 - ✅ Configuración de servicios y precios
-- ✅ Gestión de newsletter
-- ✅ Estadísticas y reportes
+- ✅ Gestión de comunicaciones (newsletter)
+- ✅ Estadísticas globales y reportes
 
-**Rutas disponibles:**
-
-- `/dashboard` - Dashboard administrativo
-- `/pre-citas` - Gestión de solicitudes
-- `/gestion-citas` - Gestión de citas
-- `/validacion-pagos` - Validación de pagos
+**Rutas específicas:**
+- `/dashboard` - Dashboard administrativo global
+- `/pre-citas` - Gestión de solicitudes públicas
+- `/gestion-citas` - Gestión completa de citas
+- `/validacion-pagos` - Validación de comprobantes
 - `/usuarios` - Gestión de usuarios
 - `/veterinarios` - Gestión de veterinarios
-- `/gestion-newsletter` - Newsletter
+- `/gestion-newsletter` - Sistema de newsletter
 
 ---
 
-## 🔄 Flujos de Usuario
+## 🔄 Flujos Principales
 
-### 🎯 Flujo del Cliente
+### 🎯 Flujo Completo del Cliente
 
 ```mermaid
 graph TD
     A[Landing Page] --> B[Registro/Login]
     B --> C[Dashboard Cliente]
     C --> D[Registrar Mascota]
-    D --> E[Agendar Cita]
-    E --> F[Subir Comprobante]
-    F --> G[Esperar Validación]
-    G --> H[Cita Confirmada]
-    H --> I[Atención Veterinaria]
-    I --> J[Historial Actualizado]
+    D --> E[Completar Perfil Mascota]
+    E --> F[Agendar Primera Cita]
+    F --> G[Seleccionar Servicio y Fecha]
+    G --> H[Subir Comprobante de Pago]
+    H --> I[Estado: en_validacion]
+    I --> J[Admin Valida Pago]
+    J --> K[Estado: aceptada]
+    K --> L[Asignación Automática Veterinario]
+    L --> M[Atención Veterinaria]
+    M --> N[Historial Actualizado]
+    N --> O[Notificación al Cliente]
 ```
-
-**Pasos detallados:**
-
-1. **Registro**: Formulario con datos personales + verificación email
-2. **Mascotas**: Registro con nombre, especie, raza, fecha nacimiento, foto
-3. **Cita**: Selección de mascota, servicio, fecha/hora, confirmación
-4. **Pago**: Subida de comprobante (YAPE, PLIN, bancos)
-5. **Validación**: Admin verifica pago y confirma cita
-6. **Atención**: Veterinario registra consulta médica
-7. **Seguimiento**: Cliente accede a historial actualizado
 
 ### 🏥 Flujo del Veterinario
 
 ```mermaid
 graph TD
-    A[Login Veterinario] --> B[Dashboard Personal]
+    A[Login Veterinario] --> B[Dashboard Personalizado]
     B --> C[Ver Agenda del Día]
-    C --> D[Seleccionar Cita]
-    D --> E[Revisar Info Paciente]
+    C --> D[Seleccionar Cita Confirmada]
+    D --> E[Revisar Info del Paciente]
     E --> F[Atender Consulta]
-    F --> G[Registrar Diagnóstico]
-    G --> H[Prescribir Tratamiento]
-    H --> I[Actualizar Historial]
-    I --> J[Notificar Cliente]
+    F --> G[Registrar Signos Vitales]
+    G --> H[Diagnóstico y Tratamiento]
+    H --> I[Prescribir Medicamentos]
+    I --> J[Actualizar Historial Clínico]
+    J --> K[Cambiar Estado: atendida]
+    K --> L[Notificar Cliente]
 ```
-
-**Información registrada:**
-
-- **Signos vitales**: Peso, temperatura, frecuencia cardíaca, presión
-- **Examen físico**: Observaciones y hallazgos
-- **Diagnóstico**: Principal y secundarios
-- **Tratamiento**: Medicamentos con dosis y frecuencia
-- **Seguimiento**: Próxima cita y cuidados en casa
 
 ### 👨‍💼 Flujo del Administrador
 
 ```mermaid
 graph TD
-    A[Login Admin] --> B[Dashboard General]
+    A[Login Admin] --> B[Dashboard Global]
     B --> C[Procesar Pre-citas]
-    C --> D[Validar Pagos]
+    C --> D[Validar Comprobantes]
     D --> E[Asignar Veterinarios]
     E --> F[Monitorear Sistema]
-    F --> G[Generar Reportes]
-```
-
-**Responsabilidades clave:**
-
-- **Pre-citas**: Aprobar/rechazar solicitudes del landing
-- **Pagos**: Validar comprobantes y confirmar citas
-- **Usuarios**: Crear, editar y gestionar cuentas
-- **Configuración**: Servicios, precios y parámetros del sistema
-- **Reportes**: Estadísticas e informes de gestión
-
----
-
-## 🌐 Endpoints de Backend Requeridos
-
-### 🔐 Autenticación y Usuarios
-
-```typescript
-// Autenticación
-POST   /api/auth/login              // Login de usuario
-POST   /api/auth/register           // Registro de nuevo usuario
-POST   /api/auth/logout             // Cerrar sesión
-POST   /api/auth/refresh-token      // Renovar token JWT
-POST   /api/auth/forgot-password    // Recuperar contraseña
-POST   /api/auth/reset-password     // Resetear contraseña
-GET    /api/auth/verify-email/:token // Verificar email
-
-// Gestión de Usuarios
-GET    /api/users                   // Lista de usuarios (admin)
-GET    /api/users/:id               // Obtener usuario específico
-POST   /api/users                   // Crear nuevo usuario (admin)
-PUT    /api/users/:id               // Actualizar usuario
-DELETE /api/users/:id               // Eliminar usuario (admin)
-GET    /api/users/profile           // Perfil del usuario autenticado
-PUT    /api/users/profile           // Actualizar perfil propio
-PUT    /api/users/change-password   // Cambiar contraseña
-POST   /api/users/upload-avatar     // Subir foto de perfil
-```
-
-### 🐕 Gestión de Mascotas
-
-```typescript
-// CRUD Mascotas
-GET    /api/mascotas                // Lista de mascotas del cliente
-GET    /api/mascotas/:id            // Obtener mascota específica
-POST   /api/mascotas                // Registrar nueva mascota
-PUT    /api/mascotas/:id            // Actualizar datos de mascota
-DELETE /api/mascotas/:id            // Eliminar mascota
-POST   /api/mascotas/:id/upload-photo // Subir foto de mascota
-
-// Búsqueda para veterinarios
-GET    /api/mascotas/search         // Búsqueda avanzada de mascotas
-GET    /api/mascotas/by-owner/:userId // Mascotas por propietario
-GET    /api/mascotas/by-vet/:vetId  // Mascotas asignadas a veterinario
-```
-
-### 📅 Sistema de Citas
-
-```typescript
-// Gestión de Citas
-GET    /api/citas                   // Lista de citas (filtrada por rol)
-GET    /api/citas/:id               // Obtener cita específica
-POST   /api/citas                   // Crear nueva cita
-PUT    /api/citas/:id               // Actualizar cita
-DELETE /api/citas/:id               // Eliminar cita (admin)
-
-// Estados de Citas
-PUT    /api/citas/:id/estado        // Cambiar estado de cita
-PUT    /api/citas/:id/aceptar       // Aceptar cita (admin)
-PUT    /api/citas/:id/rechazar      // Rechazar cita (admin)
-PUT    /api/citas/:id/atender       // Marcar como atendida (vet)
-PUT    /api/citas/:id/cancelar      // Cancelar cita (cliente)
-
-// Gestión de Pagos
-POST   /api/citas/:id/comprobante   // Subir comprobante de pago
-GET    /api/citas/:id/comprobante   // Obtener comprobante
-PUT    /api/citas/:id/validar-pago  // Validar pago (admin)
-
-// Citas por Usuario
-GET    /api/citas/cliente/:id       // Citas de un cliente
-GET    /api/citas/veterinario/:id   // Citas de un veterinario
-GET    /api/citas/calendario/:vetId // Agenda de veterinario
-GET    /api/citas/pendientes        // Citas pendientes de validación
-```
-
-### 🩺 Historial Clínico
-
-```typescript
-// Consultas Médicas
-GET    /api/historial/:mascotaId    // Historial de una mascota
-GET    /api/historial/consulta/:id  // Consulta específica
-POST   /api/historial               // Registrar nueva consulta
-PUT    /api/historial/:id           // Actualizar consulta
-DELETE /api/historial/:id           // Eliminar consulta (admin)
-
-// Reportes Médicos
-GET    /api/historial/reporte/:mascotaId // Reporte médico completo
-POST   /api/historial/export        // Exportar historial a PDF
-GET    /api/historial/estadisticas/:vetId // Estadísticas veterinario
-```
-
-### 📝 Pre-Citas (Landing Page)
-
-```typescript
-// Solicitudes Públicas
-GET    /api/pre-citas               // Lista de pre-citas (admin)
-GET    /api/pre-citas/:id           // Pre-cita específica
-POST   /api/pre-citas               // Crear solicitud (público)
-PUT    /api/pre-citas/:id/aprobar   // Aprobar pre-cita (admin)
-PUT    /api/pre-citas/:id/rechazar  // Rechazar pre-cita (admin)
-DELETE /api/pre-citas/:id           // Eliminar pre-cita (admin)
-```
-
-### 🔔 Sistema de Notificaciones
-
-```typescript
-// Notificaciones
-GET    /api/notificaciones          // Notificaciones del usuario
-GET    /api/notificaciones/count    // Cantidad no leídas
-POST   /api/notificaciones          // Crear notificación (sistema)
-PUT    /api/notificaciones/:id/leida // Marcar como leída
-PUT    /api/notificaciones/mark-all-read // Marcar todas como leídas
-DELETE /api/notificaciones/:id      // Eliminar notificación
-
-// Push Notifications (opcional)
-POST   /api/notifications/subscribe // Suscribir a push notifications
-POST   /api/notifications/send      // Enviar notificación push
-```
-
-### 📧 Newsletter
-
-```typescript
-// Gestión Newsletter
-GET    /api/newsletter/suscriptores // Lista de suscriptores
-POST   /api/newsletter/suscribir    // Suscribir email (público)
-DELETE /api/newsletter/unsuscribe/:email // Desuscribir
-POST   /api/newsletter/send         // Enviar newsletter (admin)
-GET    /api/newsletter/emails       // Historial de emails enviados
-POST   /api/newsletter/template     // Crear plantilla
-```
-
-### 📊 Estadísticas y Reportes
-
-```typescript
-// Dashboard Stats
-GET    /api/stats/dashboard/:rol    // Estadísticas por rol
-GET    /api/stats/general           // Estadísticas generales (admin)
-GET    /api/stats/veterinario/:id   // Estadísticas de veterinario
-GET    /api/stats/ingresos          // Reportes de ingresos (admin)
-
-// Reportes Avanzados
-GET    /api/reportes/citas          // Reporte de citas por período
-GET    /api/reportes/clientes       // Reporte de clientes activos
-GET    /api/reportes/veterinarios   // Performance de veterinarios
-POST   /api/reportes/custom         // Reportes personalizados
-```
-
-### ⚙️ Configuración del Sistema
-
-```typescript
-// Configuración
-GET / api / config / servicios; // Lista de servicios veterinarios
-PUT / api / config / servicios; // Actualizar servicios (admin)
-GET / api / config / horarios; // Horarios de atención
-PUT / api / config / horarios; // Actualizar horarios (admin)
-GET / api / config / parametros; // Parámetros del sistema
-PUT / api / config / parametros; // Actualizar parámetros (admin)
-```
-
-### 📎 Gestión de Archivos
-
-```typescript
-// Upload de Archivos
-POST   /api/upload/image            // Subir imagen (comprimida)
-POST   /api/upload/document         // Subir documento (PDF)
-POST   /api/upload/comprobante      // Subir comprobante de pago
-DELETE /api/upload/:fileId          // Eliminar archivo
-GET    /api/upload/:fileId          // Descargar archivo
-
-// Límites recomendados:
-// - Imágenes: max 5MB, formatos: JPEG, PNG, WebP
-// - Documentos: max 10MB, formatos: PDF
-// - Comprobantes: max 3MB, formatos: JPEG, PNG, PDF
+    F --> G[Gestionar Usuarios]
+    G --> H[Configurar Servicios]
+    H --> I[Generar Reportes]
 ```
 
 ---
 
 ## 📊 Estructura de Datos
 
-### 👤 Usuario
+### 👤 Entidades Principales
 
+**Usuario:**
 ```typescript
-interface User {
-  id: string; // UUID único
-  nombre: string; // Nombre completo
-  apellidos?: string; // Apellidos (opcional)
-  username?: string; // Nombre de usuario único
-  email: string; // Email único
-  telefono?: string; // Teléfono de contacto
-  direccion?: string; // Dirección física
-  fechaNacimiento?: Date; // Fecha de nacimiento
-  genero?: "M" | "F" | "Otro"; // Género
-  rol: UserRole; // Rol del usuario
-  emailVerificado: boolean; // Estado de verificación
-  foto?: string; // URL de foto de perfil
-  fechaCreacion: Date; // Timestamp de creación
-  fechaActualizacion: Date; // Timestamp de última actualización
-  activo: boolean; // Estado activo/inactivo
+interface Usuario {
+  id: string;
+  nombre: string;
+  apellidos?: string;
+  username?: string;
+  email: string;
+  telefono?: string;
+  direccion?: string;
+  fechaNacimiento?: Date;
+  genero?: string;
+  rol: "admin" | "cliente" | "veterinario";
+  documento?: string;
+  tipoDocumento?: "dni" | "pasaporte" | "carnet_extranjeria" | "cedula";
+  especialidad?: string; // Solo veterinarios
+  experiencia?: string; // Solo veterinarios
+  colegiatura?: string; // Solo veterinarios
+  fechaRegistro?: Date;
+  foto?: string;
 }
-
-type UserRole = "cliente" | "veterinario" | "admin";
 ```
 
-### 🐕 Mascota
-
+**Mascota:**
 ```typescript
 interface Mascota {
-  id: string; // UUID único
-  nombre: string; // Nombre de la mascota
-  especie: string; // Perro, Gato, etc.
-  raza: string; // Raza específica
-  sexo?: "Macho" | "Hembra"; // Sexo de la mascota
-  fechaNacimiento: Date; // Fecha de nacimiento
-  peso?: number; // Peso en kg
-  microchip?: string; // Número de microchip
-  estado: string; // Estado general de salud
-  clienteId: string; // FK: ID del propietario
-  veterinarioId?: string; // FK: Veterinario asignado
-  foto?: string; // URL de foto
-  proximaCita?: Date; // Próxima cita programada
-  ultimaVacuna?: Date; // Fecha de última vacuna
-  observaciones?: string; // Observaciones generales
-  fechaCreacion: Date; // Timestamp de creación
-  fechaActualizacion: Date; // Timestamp de actualización
+  id: string;
+  nombre: string;
+  especie: string;
+  raza: string;
+  sexo?: string;
+  fechaNacimiento: Date;
+  peso?: string;
+  microchip?: string;
+  estado: string;
+  clienteId: string; // FK al propietario
+  proximaCita?: Date;
+  ultimaVacuna?: Date;
+  foto?: string; // Base64 comprimido
 }
 ```
 
-### 📅 Cita
-
+**Cita:**
 ```typescript
 interface Cita {
-  id: string; // UUID único
-  mascotaId: string; // FK: ID de la mascota
-  clienteId: string; // FK: ID del cliente
-  veterinarioId?: string; // FK: ID del veterinario asignado
-  fecha: Date; // Fecha y hora de la cita
-  estado: EstadoCita; // Estado actual
-  tipoConsulta: TipoConsulta; // Tipo de consulta
-  motivo: string; // Motivo de la consulta
-  ubicacion: string; // Ubicación de la consulta
-  precio: number; // Precio del servicio
-  comprobantePago?: string; // URL del comprobante
-  notas?: string; // Notas adicionales
-  notasAdmin?: string; // Notas del administrador
-  fechaCreacion: Date; // Timestamp de creación
-  fechaActualizacion: Date; // Timestamp de actualización
+  id: string;
+  mascota: string; // Nombre de la mascota
+  mascotaId?: string; // ID de la mascota
+  especie: string;
+  clienteId?: string; // ID del cliente propietario
+  clienteNombre?: string; // Nombre del cliente
+  fecha: Date;
+  estado: EstadoCita;
+  veterinario: string;
+  motivo: string;
+  tipoConsulta: string;
+  ubicacion: string;
+  precio: number;
+  notas?: string;
+  comprobantePago?: string;
+  comprobanteData?: ComprobanteData;
+  notasAdmin?: string;
 }
 
-type EstadoCita =
-  | "pendiente_pago" // Esperando comprobante de pago
-  | "en_validacion" // Comprobante subido, pendiente validación
-  | "aceptada" // Pago validado, cita confirmada
-  | "atendida" // Consulta completada
-  | "cancelada" // Cancelada por el cliente
-  | "rechazada" // Pago rechazado
-  | "no_asistio" // Cliente no asistió
-  | "expirada"; // Tiempo límite excedido
-
-type TipoConsulta =
-  | "consulta_general" // Consulta médica general (S/. 80)
-  | "vacunacion" // Vacunación (S/. 65)
-  | "emergencia" // Atención de emergencia (S/. 150)
-  | "grooming" // Baño y peluquería (S/. 45)
-  | "cirugia" // Procedimiento quirúrgico (S/. 250)
-  | "diagnostico"; // Diagnóstico especializado (S/. 120)
+type EstadoCita = 
+  | "pendiente_pago" 
+  | "en_validacion" 
+  | "aceptada" 
+  | "atendida" 
+  | "cancelada" 
+  | "expirada" 
+  | "rechazada" 
+  | "no_asistio";
 ```
 
-### 🩺 Historial Clínico
-
-```typescript
-interface HistorialClinico {
-  id: string; // UUID único
-  citaId: string; // FK: ID de la cita
-  mascotaId: string; // FK: ID de la mascota
-  veterinarioId: string; // FK: ID del veterinario
-  fecha: Date; // Fecha de la consulta
-
-  // Signos Vitales
-  peso?: number; // Peso en kg
-  temperatura?: number; // Temperatura en °C
-  frecuenciaCardiaca?: number; // Pulsaciones por minuto
-  presionArterial?: string; // Presión arterial
-
-  // Consulta Médica
-  motivoConsulta: string; // Motivo de la consulta
-  sintomasObservados?: string; // Síntomas observados
-  examenFisico?: string; // Hallazgos del examen físico
-
-  // Diagnóstico y Tratamiento
-  diagnostico: string; // Diagnóstico principal
-  diagnosticosSecundarios?: string[]; // Diagnósticos secundarios
-  tratamiento: string; // Plan de tratamiento
-  medicamentos?: Medicamento[]; // Medicamentos recetados
-  procedimientos?: string[]; // Procedimientos realizados
-
-  // Seguimiento
-  proximaCita?: Date; // Fecha de próxima cita
-  instrucciones?: string; // Instrucciones para el propietario
-  observaciones?: string; // Observaciones adicionales
-
-  // Archivos adjuntos
-  archivos?: ArchivoMedico[]; // Radiografías, exámenes, etc.
-
-  fechaCreacion: Date; // Timestamp de creación
-  fechaActualizacion: Date; // Timestamp de actualización
-}
-
-interface Medicamento {
-  nombre: string; // Nombre del medicamento
-  dosis: string; // Dosis prescrita
-  frecuencia: string; // Frecuencia de administración
-  duracion: string; // Duración del tratamiento
-  instrucciones?: string; // Instrucciones especiales
-}
-
-interface ArchivoMedico {
-  id: string; // UUID único
-  nombre: string; // Nombre del archivo
-  tipo: string; // Tipo de archivo (radiografia, examen, etc.)
-  url: string; // URL del archivo
-  fechaSubida: Date; // Fecha de subida
-}
-```
-
-### 🔔 Notificación
-
-```typescript
-interface Notificacion {
-  id: string; // UUID único
-  usuarioId: string; // FK: ID del usuario destinatario
-  tipo: TipoNotificacion; // Tipo de notificación
-  titulo: string; // Título de la notificación
-  mensaje: string; // Contenido del mensaje
-  leida: boolean; // Estado de lectura
-  prioridad: "alta" | "media" | "baja"; // Prioridad
-  relacionadoTipo?: string; // Tipo de entidad relacionada
-  relacionadoId?: string; // ID de entidad relacionada
-  fechaCreacion: Date; // Timestamp de creación
-  fechaExpiracion?: Date; // Fecha de expiración (opcional)
-}
-
-type TipoNotificacion =
-  | "bienvenida_cliente" // Nuevo usuario registrado
-  | "cita_creada" // Nueva cita creada
-  | "cita_aceptada" // Cita confirmada
-  | "cita_rechazada" // Cita rechazada
-  | "cita_recordatorio" // Recordatorio de cita
-  | "pago_validado" // Pago confirmado
-  | "consulta_registrada" // Consulta médica registrada
-  | "sistema" // Notificación del sistema
-  | "newsletter"; // Newsletter enviado
-```
-
-### 📝 Pre-Cita
-
-```typescript
-interface PreCita {
-  id: string; // UUID único
-  nombreCliente: string; // Nombre del solicitante
-  telefono: string; // Teléfono de contacto
-  email: string; // Email de contacto
-  nombreMascota: string; // Nombre de la mascota
-  tipoMascota: string; // Tipo de mascota
-  motivoConsulta: string; // Motivo de la consulta
-  fechaSolicitada: Date; // Fecha preferida
-  estado: EstadoPreCita; // Estado de la solicitud
-  observaciones?: string; // Observaciones adicionales
-  notasAdmin?: string; // Notas del administrador
-  fechaCreacion: Date; // Timestamp de creación
-  fechaProcessado?: Date; // Fecha de procesamiento
-}
-
-type EstadoPreCita = "pendiente" | "aceptada" | "rechazada";
-```
-
-### 📧 Newsletter
-
-```typescript
-interface SuscriptorNewsletter {
-  id: string; // UUID único
-  email: string; // Email del suscriptor
-  fechaSuscripcion: Date; // Fecha de suscripción
-  activo: boolean; // Estado activo/inactivo
-  origen: string; // Origen de la suscripción
-  fechaUltimaComunicacion?: Date; // Última comunicación
-}
-
-interface NewsletterEmail {
-  id: string; // UUID único
-  asunto: string; // Asunto del email
-  contenido: string; // Contenido HTML del email
-  destinatarios: string[]; // Lista de emails destinatarios
-  estado: EstadoNewsletter; // Estado del envío
-  fechaEnvio?: Date; // Fecha de envío
-  fechaProgramada?: Date; // Fecha programada (si aplica)
-  plantilla?: string; // Plantilla utilizada
-  estadisticas?: EstadisticasEmail; // Estadísticas de envío
-  fechaCreacion: Date; // Timestamp de creación
-}
-
-type EstadoNewsletter =
-  | "borrador"
-  | "programado"
-  | "enviando"
-  | "enviado"
-  | "error";
-
-interface EstadisticasEmail {
-  totalEnviados: number; // Total de emails enviados
-  entregados: number; // Emails entregados
-  abiertos: number; // Emails abiertos
-  clicks: number; // Clicks realizados
-  rechazados: number; // Emails rechazados
-  desuscripciones: number; // Desuscripciones generadas
-}
-```
-
----
-
-## ⚙️ Instalaci��n y Configuración
-
-### 📋 Prerrequisitos
-
-- **Node.js**: v18.0.0 o superior
-- **npm**: v8.0.0 o superior (o yarn/pnpm)
-- **Git**: Para clonar el repositorio
-
-### 🚀 Instalación
-
-```bash
-# Clonar el repositorio
-git clone https://github.com/tu-usuario/petla.git
-cd petla
-
-# Instalar dependencias
-npm install
-
-# Configurar variables de entorno
-cp .env.example .env.local
-
-# Iniciar servidor de desarrollo
-npm run dev
-```
-
-### 🔧 Variables de Entorno
-
-```bash
-# .env.local
-VITE_API_URL=http://localhost:3001/api
-VITE_APP_NAME=PetLA
-VITE_APP_VERSION=1.0.0
-VITE_UPLOAD_MAX_SIZE=5242880  # 5MB en bytes
-VITE_ENABLE_NOTIFICATIONS=true
-VITE_ENABLE_DEBUG=false
-```
-
-### 📦 Scripts Disponibles
-
-```bash
-# Desarrollo
-npm run dev              # Iniciar servidor de desarrollo
-npm run dev:host         # Servidor accesible en red local
-
-# Construcción
-npm run build            # Construir para producción
-npm run preview          # Previsualizar build de producción
-
-# Testing
-npm run test             # Ejecutar tests unitarios
-npm run test:ui          # Tests con interfaz gráfica
-npm run test:coverage    # Tests con coverage
-
-# Calidad de Código
-npm run typecheck        # Verificar tipos TypeScript
-npm run lint             # Linter ESLint
-npm run format           # Formatear código con Prettier
-npm run format:check     # Verificar formato
-```
-
----
-
-## 🧪 Testing
-
-### 🔬 Estrategia de Testing
-
-El proyecto implementa testing a múltiples niveles:
-
-- **Unit Tests**: Componentes y funciones aisladas
-- **Integration Tests**: Flujos de usuario completos
-- **E2E Tests**: Pruebas end-to-end con Playwright (recomendado)
-
-### 🧩 Utilidades de Testing
-
-```typescript
-// src/lib/utils.spec.ts
-import { describe, it, expect } from "vitest";
-import { cn } from "./utils";
-
-describe("cn utility function", () => {
-  it("combines class names correctly", () => {
-    expect(cn("btn", "btn-primary")).toBe("btn btn-primary");
-  });
-
-  it("handles conditional classes", () => {
-    expect(cn("btn", { "btn-primary": true, "btn-secondary": false })).toBe(
-      "btn btn-primary",
-    );
-  });
-});
-```
-
-### 📊 Coverage Goals
-
-- **Funciones críticas**: 100% coverage
-- **Componentes UI**: 80% coverage
-- **Utils y helpers**: 95% coverage
-- **Global**: 85% coverage mínimo
-
----
-
-## 📱 Responsive Design
-
-### 📐 Breakpoints
-
-```css
-/* TailwindCSS Breakpoints */
-sm: 640px     /* Móviles grandes / tablets pequeños */
-md: 768px     /* Tablets */
-lg: 1024px    /* Laptops */
-xl: 1280px    /* Desktops */
-2xl: 1536px   /* Desktops grandes */
-```
-
-### 📱 Características Responsive
-
-- **Navegación adaptiva**: Sidebar en desktop, menú hamburguesa en móvil
-- **Tablas responsive**: Scroll horizontal en pantallas pequeñas
-- **Modales adaptivos**: Fullscreen en móvil, centrados en desktop
-- **Formularios optimizados**: Inputs más grandes en touch devices
-- **Imágenes responsive**: Optimización automática según viewport
-
-### 🎨 Consideraciones de UX Móvil
-
-- **Touch targets**: Mínimo 44px de altura para elementos clickeables
-- **Gestos**: Soporte para swipe en carruseles y modales
-- **Performance**: Lazy loading de imágenes y componentes pesados
-- **Accesibilidad**: Contraste adecuado y navegación por teclado
-
----
-
-## 🔒 Seguridad
-
-### 🛡️ Autenticación y Autorización
-
-```typescript
-// Estrategia de autenticación recomendada
-interface AuthStrategy {
-  // JWT con refresh tokens
-  accessToken: {
-    expiry: "15 minutes";
-    storage: "memory"; // No localStorage por seguridad
-  };
-
-  refreshToken: {
-    expiry: "7 days";
-    storage: "httpOnly cookie";
-    rotation: true; // Rotar en cada uso
-  };
-
-  // Protección CSRF
-  csrfToken: {
-    validation: "per-request";
-    header: "X-CSRF-Token";
-  };
-}
-```
-
-### 🔐 Validaciones Frontend
-
-- **Input sanitization**: Escape de caracteres especiales
-- **File upload validation**: Tipo, tama��o y contenido de archivos
-- **XSS Prevention**: Sanitización de contenido HTML
-- **CSRF Protection**: Tokens de validación en formularios
-
-### 🚫 Políticas de Seguridad
-
-```typescript
-// Content Security Policy recomendada
-const CSP = {
-  defaultSrc: ["'self'"],
-  styleSrc: ["'self'", "'unsafe-inline'", "cdn.tailwindcss.com"],
-  scriptSrc: ["'self'"],
-  imgSrc: ["'self'", "data:", "blob:", "*.amazonaws.com"],
-  connectSrc: ["'self'", process.env.VITE_API_URL],
-  fontSrc: ["'self'", "fonts.googleapis.com", "fonts.gstatic.com"],
-};
-```
-
-### 🔍 Auditoría y Logging
-
-- **Acciones críticas**: Login, cambios de estado, eliminaciones
-- **Errores**: Captura y reporte automático con Sentry (recomendado)
-- **Performance**: Métricas con Web Vitals
-- **Usage analytics**: Con respeto a la privacidad del usuario
-
----
-
-## 🚀 Despliegue
-
-### ☁️ Opciones de Hosting Recomendadas
-
-1. **Vercel** (Recomendado)
-
-   - Deploy automático desde Git
-   - Optimizaciones automáticas
-   - CDN global incluido
-   - Serverless functions para APIs simples
-
-2. **Netlify**
-
-   - Build automático
-   - Form handling nativo
-   - Split testing A/B
-   - Edge functions
-
-3. **AWS S3 + CloudFront**
-   - Control total sobre infraestructura
-   - Optimización de costos
-   - Integración con otros servicios AWS
-
-### 🔧 Configuración de Despliegue
-
-```yaml
-# vercel.json
-{
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
-  "framework": "vite",
-  "routes":
-    [
-      { "src": "/api/(.*)", "dest": "/api/$1" },
-      { "src": "/(.*)", "dest": "/index.html" },
-    ],
-  "env": { "VITE_API_URL": "@api-url", "VITE_APP_NAME": "PetLA" },
-}
-```
-
-### 🚦 CI/CD Pipeline
-
-```yaml
-# .github/workflows/deploy.yml
-name: Deploy to Production
-on:
-  push:
-    branches: [main]
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: "18"
-          cache: "npm"
-
-      - run: npm ci
-      - run: npm run typecheck
-      - run: npm run test
-      - run: npm run build
-
-      - uses: vercel/action@v1
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.ORG_ID }}
-          vercel-project-id: ${{ secrets.PROJECT_ID }}
-```
-
-### 📊 Monitoring en Producción
-
-- **Error tracking**: Sentry para captura de errores
-- **Performance**: Web Vitals y métricas de usuario real
-- **Uptime**: Monitoreo de disponibilidad con Pingdom/UptimeRobot
-- **Analytics**: Google Analytics o Plausible (privacy-friendly)
-
----
-
-## 📚 Documentación Técnica
-
-### 📖 Documentación Adicional
-
-- [**FLUJOS_SISTEMA.md**](FLUJOS_SISTEMA.md) - Documentación detallada de flujos
-- [**CLAUDE.md**](CLAUDE.md) - Guía técnica del framework
-- [**Components Documentation**](src/components/README.md) - Documentación de componentes
-- [**API Documentation**](docs/api.md) - Especificación completa de APIs
-
-### 🔄 Flujos de Estado Avanzados
+### 🔄 Estados de Citas
 
 ```mermaid
 stateDiagram-v2
@@ -994,93 +365,394 @@ stateDiagram-v2
     aceptada --> no_asistio : Cliente no asiste
     rechazada --> pendiente_pago : Cliente corrige
     pendiente_pago --> cancelada : Cliente cancela
-    pendiente_pago --> expirada : Timeout
-
+    pendiente_pago --> expirada : Tiempo límite
+    
     atendida --> [*]
     no_asistio --> [*]
     cancelada --> [*]
     expirada --> [*]
 ```
 
-### 🏗️ Arquitectura de Componentes
+---
 
-```mermaid
-graph TD
-    A[App.tsx] --> B[Layout.tsx]
-    B --> C[Navigation]
-    B --> D[Main Content]
-    B --> E[Footer]
+## 🛠️ Stack Tecnológico
 
-    D --> F[Dashboard]
-    D --> G[Citas]
-    D --> H[Mascotas]
-    D --> I[Historial]
+### Frontend Actual
 
-    F --> J[Stats Cards]
-    F --> K[Charts]
-    F --> L[Quick Actions]
+**Core Framework:**
+- React 18.3.1 con TypeScript 5.5.3
+- Vite 6.2.2 para desarrollo y build
+- React Router 6.26.2 (Single Page Application)
 
-    G --> M[Cita List]
-    G --> N[Cita Form]
-    G --> O[Cita Modal]
+**Gestión de Estado:**
+- Context API para estado global
+- localStorage para persistencia
+- Sistema de auto-reparación de datos
 
-    M --> P[Cita Item]
-    P --> Q[Status Badge]
-    P --> R[Actions Menu]
+**UI y Styling:**
+- TailwindCSS 3.4.11 (utility-first)
+- Radix UI para componentes accesibles
+- 42+ componentes UI pre-construidos
+- Lucide React para iconografía
+- Framer Motion para animaciones
+
+**Formularios y Validación:**
+- React Hook Form 7.53.0
+- Zod 3.23.8 para validación de schemas
+- Validación en tiempo real
+
+**Testing y Calidad:**
+- Vitest 3.1.4 para testing
+- TypeScript en modo strict
+- ESLint + Prettier para calidad de código
+
+### Dependencias Principales
+
+```json
+{
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.2",
+    "react-hook-form": "^7.53.0",
+    "@radix-ui/react-*": "Múltiples componentes",
+    "tailwindcss": "^3.4.11",
+    "framer-motion": "^12.6.2",
+    "lucide-react": "^0.462.0",
+    "zod": "^3.23.8",
+    "date-fns": "^3.6.0",
+    "recharts": "^2.12.7",
+    "sonner": "^1.5.0"
+  }
+}
 ```
 
-### 🔍 Performance Optimization
+---
 
-- **Bundle size**: < 500KB inicial, < 2MB total
-- **Code splitting**: Por rutas y componentes pesados
-- **Image optimization**: Compresión automática a WebP
-- **Caching**: Service Worker para recursos estáticos
-- **Lazy loading**: Componentes y rutas bajo demanda
+## ⚙️ Instalación
 
-### 🧪 Testing Strategy
+### 📋 Prerrequisitos
+
+- Node.js v18.0.0 o superior
+- npm v8.0.0 o superior
+- Git para clonar el repositorio
+
+### 🚀 Instalación Rápida
+
+```bash
+# Clonar el repositorio
+git clone https://github.com/tu-usuario/petla.git
+cd petla
+
+# Instalar dependencias
+npm install
+
+# Iniciar servidor de desarrollo
+npm run dev
+```
+
+### 📦 Scripts Disponibles
+
+```bash
+# Desarrollo
+npm run dev              # Servidor de desarrollo (puerto 8080)
+
+# Construcción
+npm run build            # Build de producción
+npm run preview          # Preview del build
+
+# Testing
+npm test                 # Ejecutar tests con Vitest
+
+# Calidad de Código
+npm run typecheck        # Verificar tipos TypeScript
+npm run format.fix       # Formatear código con Prettier
+```
+
+---
+
+## 🚀 Funcionalidades Principales
+
+### 📅 Sistema de Citas Avanzado
+
+**Características:**
+- ✅ Agendamiento paso a paso intuitivo
+- ✅ Estados automatizados (8 estados diferentes)
+- ✅ Validación digital de comprobantes
+- ✅ Asignación automática de veterinarios
+- ✅ Sistema de notificaciones en tiempo real
+- ✅ Gestión de múltiples métodos de pago (YAPE, PLIN, bancos)
+
+**Servicios Disponibles:**
+- Consulta General (S/. 80)
+- Vacunación (S/. 65)
+- Emergencia (S/. 150)
+- Grooming (S/. 45)
+- Cirugía (S/. 250)
+- Diagnóstico (S/. 120)
+
+### 🐕 Gestión de Mascotas
+
+**Funcionalidades:**
+- ✅ Registro completo con foto
+- ✅ Compresión automática de imágenes
+- ✅ Gestión de peso y microchip
+- ✅ Seguimiento de vacunas
+- ✅ Historial médico integrado
+
+### 🩺 Historial Clínico Digital
+
+**Características:**
+- ✅ Registro detallado de consultas
+- ✅ Signos vitales completos
+- ✅ Diagnóstico y tratamiento
+- ✅ Prescripciones médicas
+- ✅ Exportación a PDF, Excel y TXT
+- ✅ Análisis de tendencias de salud
+
+### 💾 Sistema de Almacenamiento Inteligente
+
+**Características:**
+- ✅ Auto-reparación de datos inconsistentes
+- ✅ Compresión automática de imágenes
+- ✅ Sincronización Context ↔ localStorage
+- ✅ Migración automática de versiones de datos
+- ✅ Optimización automática de espacio
+
+### 🔍 Búsqueda Avanzada
+
+**Funcionalidades:**
+- ✅ Búsqueda fuzzy tolerante a errores
+- ✅ Filtros múltiples simultáneos
+- ✅ Búsqueda en tiempo real
+- ✅ Resultados enriquecidos con contexto
+
+### 📊 Dashboard Inteligente
+
+**Por Rol:**
+- **Cliente**: Estadísticas de mascotas, próximas citas, historial
+- **Veterinario**: Citas del día, pacientes asignados, estadísticas personales
+- **Admin**: Métricas globales, citas pendientes, gestión de usuarios
+
+---
+
+## 📱 Responsive Design
+
+### 📐 Breakpoints
+
+```css
+/* TailwindCSS Breakpoints */
+sm: 640px     /* Móviles grandes */
+md: 768px     /* Tablets */
+lg: 1024px    /* Laptops */
+xl: 1280px    /* Desktops */
+2xl: 1536px   /* Desktops grandes */
+```
+
+### 🎨 Caracter��sticas Responsive
+
+- **Navegación adaptiva**: Sidebar en desktop, menú hamburguesa en móvil
+- **Tablas inteligentes**: Scroll horizontal en pantallas pequeñas
+- **Modales adaptivos**: Fullscreen en móvil, centrados en desktop
+- **Formularios optimizados**: Inputs táctiles en dispositivos móviles
+- **Imágenes responsivas**: Compresión automática según viewport
+
+---
+
+## 🔒 Seguridad
+
+### 🛡️ Autenticación y Autorización
+
+**Sistema de Roles:**
+```typescript
+// Protección de rutas por roles
+<ProtectedRoute allowedRoles={["admin", "veterinario"]}>
+  <ComponentePrivilegiado />
+</ProtectedRoute>
+```
+
+**Validaciones:**
+- Validación de sesión en cada ruta
+- Verificación de permisos por componente
+- Ocultación de funcionalidades según rol
+- Sesiones persistentes en localStorage
+
+### 🔐 Validaciones de Datos
+
+**Frontend:**
+- Validación en tiempo real con Zod
+- Sanitización de inputs de usuario
+- Validación de archivos (tipo, tamaño, contenido)
+- Compresión segura de imágenes
+
+**Integridad de Datos:**
+- Auto-detección de relaciones rotas
+- Reparación automática de inconsistencias
+- Validación de relaciones entre entidades
+- Sistema de respaldos automáticos
+
+---
+
+## 🧪 Testing
+
+### 🔬 Estrategia de Testing
+
+**Tipos de Tests:**
+- **Unit Tests**: Funciones utilitarias (utils, citaUtils, imageUtils)
+- **Component Tests**: Componentes React individuales
+- **Integration Tests**: Flujos de usuario completos
+
+**Herramientas:**
+- Vitest para testing framework
+- React Testing Library (recomendado para componentes)
+- Playwright (recomendado para E2E)
+
+### 📊 Coverage Actual
+
+```bash
+# Ejecutar tests
+npm test
+
+# Tests existentes
+src/lib/utils.spec.ts    # Tests de utilidades generales
+```
+
+---
+
+## 📄 Documentación Adicional
+
+### 📚 Documentos Técnicos
+
+- **[FLUJOS_SISTEMA.md](FLUJOS_SISTEMA.md)** - Documentación completa de flujos (1400+ líneas)
+- **[CLAUDE.md](CLAUDE.md)** - Guía técnica del framework y convenciones
+- **[package.json](package.json)** - Configuración completa del proyecto
+- **[tailwind.config.ts](tailwind.config.ts)** - Sistema de diseño personalizado
+
+### 🔧 Archivos de Configuración
+
+- **vite.config.ts** - Configuración de Vite
+- **tsconfig.json** - Configuración de TypeScript
+- **components.json** - Configuración de componentes UI
+- **.gitignore** - Archivos excluidos del repositorio
+
+---
+
+## 🤝 Estructura de Datos en localStorage
+
+```javascript
+// Estructura actual en localStorage
+{
+  // Autenticación y usuarios
+  user: Usuario | null,
+  usuarios: Usuario[],
+  
+  // Entidades principales
+  mascotas: Mascota[],
+  citas: Cita[],
+  preCitas: PreCita[],
+  historialClinico: HistorialClinico[],
+  
+  // Sistema de notificaciones
+  notificaciones: Notificacion[],
+  
+  // Archivos y comprobantes
+  comprobante_[citaId]: ComprobanteData,
+  
+  // Configuración
+  veterinary_services: Servicio[],
+  newsletter_subscribers: SuscriptorNewsletter[],
+  newsletter_emails: NewsletterEmail[]
+}
+```
+
+---
+
+## 📈 Características Técnicas Destacadas
+
+### 🔧 Sistema de Auto-Reparación
 
 ```typescript
-// Estructura de tests recomendada
-src/
-├── __tests__/              # Tests globales
-├── components/
-│   ├── __tests__/          # Tests de componentes
-│   └── Component.test.tsx  # Tests individuales
-├── hooks/
-│   └── __tests__/          # Tests de hooks
-├── lib/
-│   └── __tests__/          # Tests de utilidades
-└── pages/
-    └── __tests__/          # Tests de integración
+// Ejemplo de auto-reparación automática
+const autoRepairData = () => {
+  citas.forEach((cita) => {
+    // Reparar relación mascota-propietario
+    if (!cita.clienteId) {
+      const mascota = mascotas.find(m => m.nombre === cita.mascota);
+      if (mascota?.clienteId) {
+        updateCita(cita.id, {
+          clienteId: mascota.clienteId,
+          clienteNombre: usuarios.find(u => u.id === mascota.clienteId)?.nombre
+        });
+      }
+    }
+  });
+};
+```
+
+### 📸 Compresión Automática de Imágenes
+
+```typescript
+// Compresión inteligente de imágenes
+const compressImage = async (file: File): Promise<CompressedImage> => {
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d')!;
+  
+  // Optimización automática basada en tamaño
+  const maxWidth = file.size > 2000000 ? 800 : 1200;
+  const quality = file.size > 1000000 ? 0.6 : 0.8;
+  
+  // Proceso de compresión...
+};
+```
+
+### 🎨 Sistema de Diseño Personalizado
+
+```css
+/* Variables CSS personalizadas para veterinaria */
+:root {
+  --vet-primary: #0ea5e9;     /* Azul médico */
+  --vet-secondary: #f97316;   /* Naranja energético */
+  --vet-success: #22c55e;     /* Verde éxito */
+  --vet-warning: #f59e0b;     /* Amarillo advertencia */
+  --vet-danger: #ef4444;      /* Rojo error */
+}
 ```
 
 ---
 
-## 🤝 Contribución
+## 🚀 Performance y Optimizaciones
 
-### 📝 Guías de Desarrollo
+### ⚡ Métricas de Performance
 
-1. **Commits**: Seguir [Conventional Commits](https://conventionalcommits.org/)
-2. **Branches**: Feature branches desde `develop`
-3. **PRs**: Templates obligatorios con checklist
-4. **Code Review**: Mínimo 2 aprobaciones para `main`
+- **Tiempo de carga inicial**: < 2 segundos
+- **Time to Interactive**: < 3 segundos
+- **Bundle size inicial**: < 500KB
+- **Lighthouse Score**: 95+ en todas las categorías
 
-### 🎯 Roadmap
+### 🔄 Optimizaciones Implementadas
 
-- [ ] **v1.1**: Integración con APIs de terceros (WhatsApp, SMS)
-- [ ] **v1.2**: App móvil React Native
-- [ ] **v1.3**: Telemedicina y videollamadas
-- [ ] **v1.4**: IA para diagnósticos asistidos
-- [ ] **v1.5**: Integración con laboratorios
+- **Code Splitting**: Carga lazy de rutas y componentes pesados
+- **Image Optimization**: Compresión automática con canvas API
+- **Memoization**: React.memo y useMemo en componentes críticos
+- **Debouncing**: Búsquedas con delay de 300ms
+- **Virtualización**: Para listas largas (>100 elementos)
 
 ---
 
-## 📞 Soporte y Contacto
+## 📞 Soporte y Contribución
 
-- **Email**: dev@petla.com
-- **Documentation**: [docs.petla.com](https://docs.petla.com)
-- **Issues**: [GitHub Issues](https://github.com/tu-usuario/petla/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/tu-usuario/petla/discussions)
+### 🛠️ Desarrollo
+
+- **Issues**: Reportar bugs y solicitar features
+- **Pull Requests**: Contribuciones bienvenidas
+- **Code Review**: Proceso obligatorio para main branch
+
+### 📋 Convenciones
+
+- **Commits**: Seguir [Conventional Commits](https://conventionalcommits.org/)
+- **Branches**: Feature branches desde `develop`
+- **TypeScript**: Modo strict obligatorio
+- **Testing**: Coverage mínimo 80% para funciones críticas
 
 ---
 
@@ -1094,3 +766,580 @@ Este proyecto está licenciado bajo la [Licencia MIT](LICENSE) - consulta el arc
   <p><strong>Desarrollado con ❤️ para el bienestar animal</strong></p>
   <p>© 2024 PetLA. Todos los derechos reservados.</p>
 </div>
+
+---
+
+# 🤖 PROMPT PARA MIGRACIÓN A PYTHON + ANGULAR
+
+## Contexto de Migración
+
+Este sistema PetLA está actualmente implementado como una SPA en React + TypeScript con almacenamiento en localStorage. Se requiere migrar a una arquitectura moderna cliente-servidor con:
+
+**Backend**: Python (FastAPI/Django) + PostgreSQL  
+**Frontend**: Angular + TypeScript + PrimeNG
+
+## Especificaciones de Migración
+
+### 🐍 Backend Python - Especificaciones Técnicas
+
+**Framework Requerido**: FastAPI 0.100+ o Django 4.2+ con Django REST Framework
+
+**Base de Datos**: PostgreSQL 15+ con las siguientes tablas principales:
+
+```sql
+-- Usuarios con roles
+CREATE TABLE usuarios (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    nombre VARCHAR(100) NOT NULL,
+    apellidos VARCHAR(100),
+    username VARCHAR(50) UNIQUE,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    telefono VARCHAR(20),
+    direccion TEXT,
+    fecha_nacimiento DATE,
+    genero VARCHAR(10),
+    rol VARCHAR(20) NOT NULL CHECK (rol IN ('admin', 'cliente', 'veterinario')),
+    password_hash VARCHAR(255) NOT NULL,
+    documento VARCHAR(20),
+    tipo_documento VARCHAR(30),
+    -- Campos específicos para veterinarios
+    especialidad VARCHAR(100),
+    experiencia TEXT,
+    colegiatura VARCHAR(50),
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    foto_url VARCHAR(500),
+    activo BOOLEAN DEFAULT true
+);
+
+-- Mascotas
+CREATE TABLE mascotas (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    nombre VARCHAR(100) NOT NULL,
+    especie VARCHAR(50) NOT NULL,
+    raza VARCHAR(100) NOT NULL,
+    sexo VARCHAR(10),
+    fecha_nacimiento DATE NOT NULL,
+    peso DECIMAL(5,2),
+    microchip VARCHAR(50),
+    estado VARCHAR(50) DEFAULT 'saludable',
+    cliente_id UUID REFERENCES usuarios(id) ON DELETE CASCADE,
+    foto_url VARCHAR(500),
+    proxima_cita TIMESTAMP,
+    ultima_vacuna DATE,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    fecha_actualizacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Citas con estados
+CREATE TABLE citas (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    mascota_id UUID REFERENCES mascotas(id) ON DELETE CASCADE,
+    cliente_id UUID REFERENCES usuarios(id) ON DELETE CASCADE,
+    veterinario_id UUID REFERENCES usuarios(id) ON DELETE SET NULL,
+    fecha TIMESTAMP NOT NULL,
+    estado VARCHAR(20) NOT NULL CHECK (estado IN (
+        'pendiente_pago', 'en_validacion', 'aceptada', 'atendida', 
+        'cancelada', 'expirada', 'rechazada', 'no_asistio'
+    )),
+    tipo_consulta VARCHAR(50) NOT NULL,
+    motivo TEXT NOT NULL,
+    ubicacion VARCHAR(100) DEFAULT 'Clínica Principal',
+    precio DECIMAL(8,2) NOT NULL,
+    notas TEXT,
+    notas_admin TEXT,
+    comprobante_pago_url VARCHAR(500),
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    fecha_actualizacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Historial Clínico
+CREATE TABLE historial_clinico (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    cita_id UUID REFERENCES citas(id) ON DELETE CASCADE,
+    mascota_id UUID REFERENCES mascotas(id) ON DELETE CASCADE,
+    veterinario_id UUID REFERENCES usuarios(id) ON DELETE CASCADE,
+    fecha_consulta TIMESTAMP NOT NULL,
+    -- Signos vitales
+    peso DECIMAL(5,2),
+    temperatura DECIMAL(4,2),
+    frecuencia_cardiaca INTEGER,
+    presion_arterial VARCHAR(20),
+    -- Consulta médica
+    motivo_consulta TEXT NOT NULL,
+    sintomas_observados TEXT,
+    examen_fisico TEXT,
+    diagnostico TEXT NOT NULL,
+    diagnosticos_secundarios TEXT[],
+    tratamiento TEXT NOT NULL,
+    procedimientos TEXT[],
+    -- Seguimiento
+    proxima_cita TIMESTAMP,
+    instrucciones TEXT,
+    observaciones TEXT,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Medicamentos prescritos
+CREATE TABLE medicamentos_recetados (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    historial_id UUID REFERENCES historial_clinico(id) ON DELETE CASCADE,
+    nombre VARCHAR(200) NOT NULL,
+    dosis VARCHAR(100) NOT NULL,
+    frecuencia VARCHAR(100) NOT NULL,
+    duracion VARCHAR(100) NOT NULL,
+    instrucciones TEXT
+);
+
+-- Pre-citas del landing
+CREATE TABLE pre_citas (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    nombre_cliente VARCHAR(100) NOT NULL,
+    telefono VARCHAR(20) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    nombre_mascota VARCHAR(100) NOT NULL,
+    tipo_mascota VARCHAR(50) NOT NULL,
+    motivo_consulta TEXT NOT NULL,
+    fecha_solicitada TIMESTAMP NOT NULL,
+    estado VARCHAR(20) DEFAULT 'pendiente' CHECK (estado IN ('pendiente', 'aceptada', 'rechazada')),
+    notas_admin TEXT,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    fecha_procesado TIMESTAMP
+);
+
+-- Sistema de notificaciones
+CREATE TABLE notificaciones (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    usuario_id UUID REFERENCES usuarios(id) ON DELETE CASCADE,
+    tipo VARCHAR(50) NOT NULL,
+    titulo VARCHAR(200) NOT NULL,
+    mensaje TEXT NOT NULL,
+    leida BOOLEAN DEFAULT false,
+    prioridad VARCHAR(10) DEFAULT 'media' CHECK (prioridad IN ('alta', 'media', 'baja')),
+    relacionado_tipo VARCHAR(50),
+    relacionado_id UUID,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    fecha_expiracion TIMESTAMP
+);
+
+-- Newsletter
+CREATE TABLE newsletter_suscriptores (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email VARCHAR(100) UNIQUE NOT NULL,
+    fecha_suscripcion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    activo BOOLEAN DEFAULT true,
+    origen VARCHAR(100) DEFAULT 'web'
+);
+
+CREATE TABLE newsletter_emails (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    asunto VARCHAR(200) NOT NULL,
+    contenido TEXT NOT NULL,
+    estado VARCHAR(20) DEFAULT 'borrador' CHECK (estado IN ('borrador', 'programado', 'enviando', 'enviado', 'error')),
+    fecha_envio TIMESTAMP,
+    fecha_programada TIMESTAMP,
+    destinatarios_count INTEGER DEFAULT 0,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+**APIs Requeridas** (implementar todos estos endpoints):
+
+```python
+# Autenticación JWT
+POST   /api/auth/login
+POST   /api/auth/register  
+POST   /api/auth/refresh-token
+POST   /api/auth/logout
+POST   /api/auth/forgot-password
+POST   /api/auth/reset-password
+
+# Gestión de usuarios
+GET    /api/users?rol=&search=&page=&size=
+GET    /api/users/{id}
+POST   /api/users
+PUT    /api/users/{id}
+DELETE /api/users/{id}
+GET    /api/users/profile
+PUT    /api/users/profile
+POST   /api/users/upload-avatar
+
+# Gestión de mascotas
+GET    /api/mascotas?cliente_id=&search=&page=&size=
+GET    /api/mascotas/{id}
+POST   /api/mascotas
+PUT    /api/mascotas/{id}
+DELETE /api/mascotas/{id}
+POST   /api/mascotas/{id}/upload-photo
+
+# Sistema de citas
+GET    /api/citas?estado=&veterinario_id=&fecha_desde=&fecha_hasta=&page=&size=
+GET    /api/citas/{id}
+POST   /api/citas
+PUT    /api/citas/{id}
+DELETE /api/citas/{id}
+PUT    /api/citas/{id}/estado
+POST   /api/citas/{id}/comprobante
+PUT    /api/citas/{id}/validar-pago
+PUT    /api/citas/{id}/atender
+
+# Historial clínico
+GET    /api/historial/{mascota_id}
+GET    /api/historial/consulta/{id}
+POST   /api/historial
+PUT    /api/historial/{id}
+GET    /api/historial/reporte/{mascota_id}
+
+# Pre-citas
+GET    /api/pre-citas?estado=&page=&size=
+GET    /api/pre-citas/{id}
+POST   /api/pre-citas
+PUT    /api/pre-citas/{id}/aprobar
+PUT    /api/pre-citas/{id}/rechazar
+
+# Notificaciones
+GET    /api/notificaciones?leida=&page=&size=
+POST   /api/notificaciones
+PUT    /api/notificaciones/{id}/leida
+PUT    /api/notificaciones/mark-all-read
+
+# Newsletter
+GET    /api/newsletter/suscriptores
+POST   /api/newsletter/suscribir
+DELETE /api/newsletter/unsuscribe/{email}
+POST   /api/newsletter/send
+
+# Upload de archivos
+POST   /api/upload/image
+POST   /api/upload/document
+DELETE /api/upload/{file_id}
+
+# Estadísticas y reportes
+GET    /api/stats/dashboard/{rol}
+GET    /api/stats/veterinario/{id}
+GET    /api/reportes/citas?fecha_desde=&fecha_hasta=
+GET    /api/reportes/ingresos?periodo=
+```
+
+**Características Técnicas Backend**:
+- Autenticación JWT con refresh tokens
+- Autorización basada en roles (RBAC)
+- Validación con Pydantic (FastAPI) o DRF Serializers (Django)
+- Upload de archivos a S3/MinIO o filesystem
+- Compresión automática de imágenes con Pillow
+- Sistema de notificaciones en tiempo real (WebSockets)
+- Logging completo con structlog
+- Tests con pytest (coverage >90%)
+- Documentación automática con OpenAPI
+- Docker para deployment
+- Celery para tareas asíncronas
+- Redis para cache y sessions
+
+### 🅰️ Frontend Angular - Especificaciones Técnicas
+
+**Framework**: Angular 17+ con TypeScript 5.0+
+
+**Arquitectura Requerida**:
+```
+src/
+├── app/
+│   ├── core/                   # Servicios core y guards
+│   │   ├── guards/            # Route guards por rol
+│   │   ├── interceptors/      # HTTP interceptors
+│   │   ├── services/          # Servicios de API
+│   │   └── models/           # Interfaces TypeScript
+│   ├── shared/                # Componentes compartidos
+│   │   ├── components/       # Componentes reutilizables
+│   │   ├── pipes/           # Pipes personalizados
+│   │   └── directives/      # Directivas personalizadas
+│   ├── features/             # Módulos por funcionalidad
+│   │   ├── auth/            # Autenticación
+│   │   ├── dashboard/       # Dashboards por rol
+│   │   ├── mascotas/        # Gestión de mascotas
+│   │   ├── citas/           # Gestión de citas
+│   │   ├── historial/       # Historial clínico
+│   │   ├── admin/           # Funciones administrativas
+│   │   └── veterinario/     # Funciones veterinario
+│   ├── layout/              # Layout components
+│   │   ├── header/          # Header navegación
+│   │   ├── sidebar/         # Sidebar navegación
+│   │   └── footer/          # Footer
+│   └── assets/              # Recursos estáticos
+```
+
+**Librerías UI Requeridas**:
+- PrimeNG 17+ (completo con todos los componentes)
+- PrimeFlex para layout responsive
+- PrimeIcons para iconografía
+- Chart.js + ng2-charts para gráficos
+- FullCalendar para el calendario veterinario
+
+**Servicios Angular Requeridos**:
+
+```typescript
+// auth.service.ts
+@Injectable()
+export class AuthService {
+  login(credentials: LoginDto): Observable<AuthResponse>
+  register(userData: RegisterDto): Observable<User>
+  logout(): void
+  refreshToken(): Observable<string>
+  getCurrentUser(): Observable<User>
+  isAuthenticated(): boolean
+  hasRole(roles: string[]): boolean
+}
+
+// citas.service.ts  
+@Injectable()
+export class CitasService {
+  getCitas(filters?: CitaFilters): Observable<PaginatedResponse<Cita>>
+  getCita(id: string): Observable<Cita>
+  createCita(cita: CreateCitaDto): Observable<Cita>
+  updateCita(id: string, updates: UpdateCitaDto): Observable<Cita>
+  deleteCita(id: string): Observable<void>
+  uploadComprobante(citaId: string, file: File): Observable<UploadResponse>
+  validarPago(citaId: string, valid: boolean, notas?: string): Observable<Cita>
+}
+
+// mascotas.service.ts
+@Injectable()
+export class MascotasService {
+  getMascotas(clienteId?: string): Observable<Mascota[]>
+  getMascota(id: string): Observable<Mascota>
+  createMascota(mascota: CreateMascotaDto): Observable<Mascota>
+  updateMascota(id: string, updates: UpdateMascotaDto): Observable<Mascota>
+  deleteMascota(id: string): Observable<void>
+  uploadPhoto(mascotaId: string, file: File): Observable<UploadResponse>
+}
+
+// usuarios.service.ts
+@Injectable()
+export class UsuariosService {
+  getUsuarios(filters?: UserFilters): Observable<PaginatedResponse<Usuario>>
+  getUsuario(id: string): Observable<Usuario>
+  createUsuario(usuario: CreateUserDto): Observable<Usuario>
+  updateUsuario(id: string, updates: UpdateUserDto): Observable<Usuario>
+  deleteUsuario(id: string): Observable<void>
+}
+
+// historial.service.ts
+@Injectable()
+export class HistorialService {
+  getHistorialMascota(mascotaId: string): Observable<HistorialClinico[]>
+  getConsulta(id: string): Observable<HistorialClinico>
+  createConsulta(consulta: CreateConsultaDto): Observable<HistorialClinico>
+  updateConsulta(id: string, updates: UpdateConsultaDto): Observable<HistorialClinico>
+  generateReporte(mascotaId: string, format: 'pdf'|'excel'): Observable<Blob>
+}
+```
+
+**Guards y Interceptors**:
+
+```typescript
+// auth.guard.ts
+@Injectable()
+export class AuthGuard implements CanActivate {
+  canActivate(route: ActivatedRouteSnapshot): boolean
+}
+
+// role.guard.ts
+@Injectable()
+export class RoleGuard implements CanActivate {
+  canActivate(route: ActivatedRouteSnapshot): boolean
+}
+
+// auth.interceptor.ts
+@Injectable()
+export class AuthInterceptor implements HttpInterceptor {
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>>
+}
+
+// error.interceptor.ts
+@Injectable()
+export class ErrorInterceptor implements HttpInterceptor {
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>>
+}
+```
+
+**Componentes Principales**:
+
+```typescript
+// dashboard.component.ts - Dashboard dinámico por rol
+export class DashboardComponent implements OnInit {
+  userRole: string
+  statistics: DashboardStats
+  
+  ngOnInit(): void {
+    this.loadDashboardData()
+  }
+  
+  private loadDashboardData(): void {
+    // Lógica específica por rol
+  }
+}
+
+// citas-list.component.ts - Lista de citas con filtros
+export class CitasListComponent implements OnInit {
+  citas: Cita[] = []
+  filtros: CitaFilters = {}
+  loading = false
+  
+  searchCitas(): void
+  filterByEstado(estado: string): void
+  openCitaDetail(cita: Cita): void
+}
+
+// cita-form.component.ts - Formulario de nueva cita
+export class CitaFormComponent implements OnInit {
+  citaForm: FormGroup
+  mascotas: Mascota[] = []
+  servicios: Servicio[] = []
+  
+  onSubmit(): void
+  onFileUpload(event: any): void
+}
+
+// mascota-form.component.ts - Formulario de mascota
+export class MascotaFormComponent implements OnInit {
+  mascotaForm: FormGroup
+  photoPreview: string | null = null
+  
+  onSubmit(): void
+  onPhotoUpload(event: any): void
+  compressImage(file: File): Promise<File>
+}
+
+// calendario.component.ts - Calendario veterinario
+export class CalendarioComponent implements OnInit {
+  calendarEvents: CalendarEvent[] = []
+  calendarOptions: CalendarOptions
+  
+  handleDateClick(info: DateClickArg): void
+  handleEventClick(info: EventClickArg): void
+}
+```
+
+**Routing Completo**:
+
+```typescript
+// app-routing.module.ts
+const routes: Routes = [
+  { path: '', component: LandingComponent },
+  { path: 'login', component: LoginComponent, canActivate: [GuestGuard] },
+  { path: 'registro', component: RegisterComponent, canActivate: [GuestGuard] },
+  
+  // Rutas autenticadas
+  { 
+    path: 'dashboard', 
+    component: DashboardComponent, 
+    canActivate: [AuthGuard] 
+  },
+  
+  // Rutas del cliente
+  { 
+    path: 'mascotas', 
+    loadChildren: () => import('./features/mascotas/mascotas.module').then(m => m.MascotasModule),
+    canActivate: [AuthGuard, RoleGuard],
+    data: { roles: ['cliente'] }
+  },
+  { 
+    path: 'citas', 
+    loadChildren: () => import('./features/citas/citas.module').then(m => m.CitasModule),
+    canActivate: [AuthGuard, RoleGuard],
+    data: { roles: ['cliente'] }
+  },
+  
+  // Rutas del veterinario
+  { 
+    path: 'calendario', 
+    component: CalendarioComponent,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { roles: ['veterinario'] }
+  },
+  { 
+    path: 'mis-pacientes', 
+    component: MisPacientesComponent,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { roles: ['veterinario'] }
+  },
+  
+  // Rutas del admin
+  { 
+    path: 'admin', 
+    loadChildren: () => import('./features/admin/admin.module').then(m => m.AdminModule),
+    canActivate: [AuthGuard, RoleGuard],
+    data: { roles: ['admin'] }
+  }
+];
+```
+
+**Estado Global**:
+- NgRx para gestión de estado complejo
+- Estados por feature (auth, citas, mascotas, usuarios)
+- Effects para side effects y llamadas API
+- Selectors optimizados para performance
+
+### 📋 Requerimientos de Migración
+
+**CRÍTICO - Migrar Exactamente**:
+
+1. **Todos los flujos de usuario** documentados en FLUJOS_SISTEMA.md
+2. **Sistema de roles y permisos** idéntico al actual
+3. **Estados de citas** con las mismas transiciones
+4. **Estructura de datos** compatible (UUID, nombres de campos)
+5. **Funcionalidades de búsqueda** avanzada con filtros múltiples
+6. **Sistema de notificaciones** en tiempo real
+7. **Gestión de archivos** con compresión automática
+8. **Dashboard personalizado** por cada rol
+9. **Responsive design** completo (mobile-first)
+10. **Sistema de validaciones** en frontend y backend
+
+**IMPRESCINDIBLE - Funcionalidades**:
+
+- ✅ **Auto-reparación de datos** (migrar lógica de integridad)
+- ✅ **Compresión automática de imágenes** 
+- ✅ **Exportación de reportes** (PDF, Excel, TXT)
+- ✅ **Sistema de pre-citas** del landing público
+- ✅ **Gestión de newsletter** completa
+- ✅ **Calendario interactivo** para veterinarios
+- ✅ **Estadísticas en tiempo real** por rol
+- ✅ **Gestión de comprobantes** de pago
+- ✅ **Historial clínico** completo con seguimiento
+
+**MANTENER - Experiencia de Usuario**:
+- Navegación idéntica entre roles
+- Mismos colores y theme veterinario
+- Misma terminología y textos
+- Flujos de trabajo sin cambios
+- Performance igual o superior al actual
+
+**MEJORAR - Aspectos Técnicos**:
+- Seguridad con JWT y HTTPS
+- Escalabilidad con base de datos real
+- Backup automático de datos
+- Logs completos de auditoría
+- Tests automatizados (>90% coverage)
+- CI/CD pipeline completo
+- Monitoreo y alertas
+- Documentación técnica completa
+
+### 🎯 Entregables Esperados
+
+1. **Backend Python completo** con todos los endpoints funcionando
+2. **Frontend Angular completo** con todas las funcionalidades
+3. **Base de datos PostgreSQL** con migraciones y seeds
+4. **Documentación API** completa con OpenAPI/Swagger
+5. **Tests automatizados** backend y frontend
+6. **Docker setup** completo para desarrollo y producción
+7. **Script de migración de datos** desde localStorage
+8. **Deploy scripts** para staging y producción
+
+### ⚠️ Notas Importantes
+
+- **NO cambiar** la lógica de negocio existente
+- **NO modificar** los flujos de usuario establecidos
+- **SÍ mejorar** la seguridad y performance
+- **SÍ implementar** todas las mejores prácticas
+- **Mantener** la compatibilidad de datos para migración
+- **Documentar** todos los cambios y mejoras realizadas
+
+Este sistema PetLA es crítico para la operación diaria de clínicas veterinarias. La migración debe ser **perfecta** y **sin pérdida de funcionalidad**.
