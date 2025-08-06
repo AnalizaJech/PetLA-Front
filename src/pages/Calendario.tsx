@@ -672,7 +672,7 @@ export default function Calendario() {
                                       {cita.tipoConsulta && (
                                         <div className="flex items-center space-x-2">
                                           <Stethoscope className="w-4 h-4 text-vet-primary" />
-                                          <Badge className="bg-vet-primary/10 text-vet-primary border-vet-primary/20">
+                                          <Badge className="bg-vet-primary/10 text-vet-primary border-vet-primary/20 hover:!bg-vet-primary/10 hover:!text-vet-primary">
                                             {cita.tipoConsulta}
                                           </Badge>
                                         </div>
