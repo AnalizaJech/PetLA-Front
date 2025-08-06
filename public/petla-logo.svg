@@ -1,0 +1,7 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background rounded square -->
+  <rect width="32" height="32" rx="6" fill="#0ea5e9"/>
+  
+  <!-- Dog icon (from Lucide) -->
+  <path d="M10 5.172C10 3.782 11.423 2.679 12.75 3.087l2.48.762a2 2 0 0 1 1.51 1.945v.726c0 .627-.302 1.217-.812 1.577L14.412 8.5a1 1 0 0 0-.588.91V12a4 4 0 0 0 4 4h2a4 4 0 0 0 4-4V9.5a.5.5 0 0 1 .276-.447l.895-.447A1 1 0 0 1 26 9.618V14a8 8 0 0 1-8 8c-2.828 0-5.344-1.171-7.172-3.05L10 18.293a1 1 0 0 1-.293-.707V5.172ZM16 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" fill="white" transform="translate(4, 6) scale(0.75)"/>
+</svg>

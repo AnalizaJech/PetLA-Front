@@ -15,6 +15,21 @@ import {
   Zap,
   Award,
   HeartHandshake,
+  Clock3,
+  Bell,
+  Timer,
+  Globe,
+  Database,
+  RefreshCw,
+  BookOpen,
+  AlertTriangle,
+  UserPlus,
+  TrendingUp,
+  GraduationCap,
+  ShieldCheck,
+  Scissors,
+  Microscope,
+  PawPrint,
 } from "lucide-react";
 
 const features = [
@@ -24,7 +39,11 @@ const features = [
     title: "Citas Inteligentes",
     description:
       "Sistema automatizado que agenda tu cita en menos de 2 minutos con confirmación instantánea.",
-    highlights: ["Disponible 24/7", "Recordatorios automáticos", "Sin esperas"],
+    highlights: [
+      { text: "Disponible 24/7", icon: Clock3 },
+      { text: "Recordatorios automáticos", icon: Bell },
+      { text: "Sin esperas", icon: Timer },
+    ],
     color: "vet-primary",
     bgColor: "vet-primary/10",
   },
@@ -34,7 +53,11 @@ const features = [
     title: "Historial Digital Completo",
     description:
       "Acceso inmediato a todo el historial médico de tu mascota desde cualquier dispositivo.",
-    highlights: ["Acceso 24/7", "Información completa", "Siempre actualizado"],
+    highlights: [
+      { text: "Acceso 24/7", icon: Globe },
+      { text: "Información completa", icon: Database },
+      { text: "Siempre actualizado", icon: RefreshCw },
+    ],
     color: "vet-secondary",
     bgColor: "vet-secondary/10",
   },
@@ -45,9 +68,9 @@ const features = [
     description:
       "Consultas puntuales de 30 minutos con emergencias atendidas las 24 horas del día.",
     highlights: [
-      "30 min consultas",
-      "Emergencias 24h",
-      "Seguimiento post-consulta",
+      { text: "30 min consultas", icon: Clock },
+      { text: "Emergencias 24h", icon: AlertTriangle },
+      { text: "Seguimiento post-consulta", icon: UserPlus },
     ],
     color: "green-600",
     bgColor: "green-100",
@@ -59,9 +82,9 @@ const features = [
     description:
       "Equipo especializado con más de 10 años de experiencia en diferentes áreas médicas.",
     highlights: [
-      "10+ años experiencia",
-      "Especializaciones",
-      "Certificaciones",
+      { text: "10+ años experiencia", icon: TrendingUp },
+      { text: "Especializaciones", icon: GraduationCap },
+      { text: "Certificaciones", icon: ShieldCheck },
     ],
     color: "blue-600",
     bgColor: "blue-100",
@@ -73,9 +96,9 @@ const features = [
     description:
       "Desde medicina preventiva hasta cirugías especializadas para todas las especies.",
     highlights: [
-      "Medicina preventiva",
-      "Cirugías avanzadas",
-      "Todas las especies",
+      { text: "Medicina preventiva", icon: Shield },
+      { text: "Cirugías avanzadas", icon: Scissors },
+      { text: "Todas las especies", icon: PawPrint },
     ],
     color: "purple-600",
     bgColor: "purple-100",
@@ -87,20 +110,36 @@ export default function FeaturesCarousel() {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [currentX, setCurrentX] = useState(0);
+  const [isManualNavigation, setIsManualNavigation] = useState(false);
 
   // Auto-play functionality - ultra smooth
   useEffect(() => {
-    if (isDragging) return;
+    if (isDragging || isManualNavigation) return;
 
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % features.length);
     }, 4500); // Optimized timing for smooth flow
 
     return () => clearInterval(interval);
-  }, [isDragging]);
+  }, [isDragging, isManualNavigation]);
+
+  // Reset manual navigation after a delay
+  useEffect(() => {
+    if (isManualNavigation) {
+      const timeout = setTimeout(() => {
+        setIsManualNavigation(false);
+      }, 6000); // Resume autoplay after 6 seconds
+
+      return () => clearTimeout(timeout);
+    }
+  }, [isManualNavigation]);
 
   const goToSlide = (index: number) => {
-    setCurrentIndex(index);
+    // Ensure index is valid
+    const validIndex = Math.max(0, Math.min(index, features.length - 1));
+    setIsDragging(false); // Stop any dragging state
+    setIsManualNavigation(true); // Pause autoplay temporarily
+    setCurrentIndex(validIndex);
   };
 
   // Touch and drag handlers
@@ -181,9 +220,9 @@ export default function FeaturesCarousel() {
   return (
     <section
       id="caracteristicas"
-      className="py-24 bg-vet-gray-50 relative overflow-hidden"
+      className="pt-24 pb-32 bg-vet-gray-50 relative overflow-hidden"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 overflow-hidden">
         {/* Header */}
         <div className="text-center mb-16">
           <div className="inline-flex items-center px-4 py-2 bg-vet-primary/10 rounded-full mb-6">
@@ -206,10 +245,10 @@ export default function FeaturesCarousel() {
         </div>
 
         {/* Carousel Container */}
-        <div className="relative">
+        <div className="relative px-4 sm:px-6 md:px-0">
           {/* Main Carousel */}
           <div
-            className={`flex items-center justify-center space-x-4 md:space-x-8 mb-12 cursor-grab ${isDragging ? "cursor-grabbing" : ""}`}
+            className={`flex items-center justify-center gap-4 md:gap-8 mb-12 cursor-grab ${isDragging ? "cursor-grabbing" : ""}`}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
@@ -225,13 +264,13 @@ export default function FeaturesCarousel() {
               return (
                 <Card
                   key={`${feature.id}-${feature.position}`}
-                  className={`transition-all duration-1000 ease-in-out select-none ${
+                  className={`transition-all duration-1000 ease-in-out select-none w-full max-w-sm mx-auto ${
                     isCenter
                       ? "scale-110 shadow-2xl z-10 bg-white border-vet-primary/20"
                       : "scale-95 opacity-70 hover:opacity-90"
                   } ${index === 0 ? "hidden md:block" : ""} ${index === 2 ? "hidden md:block" : ""}`}
                 >
-                  <div className="p-8 text-center">
+                  <div className="p-6 sm:p-8 text-center">
                     <div
                       className={`mx-auto flex items-center justify-center w-16 h-16 rounded-2xl mb-6 transition-all duration-1000 ease-in-out ${
                         isCenter
@@ -282,15 +321,18 @@ export default function FeaturesCarousel() {
 
                     {isCenter && (
                       <div className="space-y-2 animate-fade-in">
-                        {feature.highlights.map((highlight, i) => (
-                          <div
-                            key={i}
-                            className="flex items-center justify-center space-x-2 text-sm text-vet-gray-700"
-                          >
-                            <CheckCircle className="w-4 h-4 text-vet-primary" />
-                            <span>{highlight}</span>
-                          </div>
-                        ))}
+                        {feature.highlights.map((highlight, i) => {
+                          const HighlightIcon = highlight.icon;
+                          return (
+                            <div
+                              key={i}
+                              className="flex items-center justify-center space-x-2 text-sm text-vet-gray-700"
+                            >
+                              <HighlightIcon className="w-4 h-4 text-vet-primary" />
+                              <span>{highlight.text}</span>
+                            </div>
+                          );
+                        })}
                       </div>
                     )}
                   </div>
@@ -299,17 +341,31 @@ export default function FeaturesCarousel() {
             })}
           </div>
 
-          {/* Dots Indicator */}
-          <div className="flex items-center justify-center space-x-2">
+          {/* Dots Indicator - Outside touch area */}
+          <div className="flex items-center justify-center space-x-3 mb-8 relative z-20">
             {features.map((_, index) => (
               <button
                 key={index}
-                onClick={() => goToSlide(index)}
-                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                onPointerDown={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  goToSlide(index);
+                }}
+                onTouchEnd={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  goToSlide(index);
+                }}
+                className={`w-4 h-4 rounded-full transition-all duration-300 touch-manipulation ${
                   index === currentIndex
                     ? "bg-vet-primary scale-125"
                     : "bg-vet-gray-300 hover:bg-vet-primary/50"
                 }`}
+                style={{ WebkitTapHighlightColor: "transparent" }}
               />
             ))}
           </div>
