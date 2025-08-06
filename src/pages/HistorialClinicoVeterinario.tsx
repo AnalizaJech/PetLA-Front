@@ -488,6 +488,16 @@ export default function HistorialClinicoVeterinario() {
 
         filteredHistory.forEach((record, index) => {
           content += `${index + 1}. ${new Date(record.fecha).toLocaleDateString("es-ES")} - ${record.tipo || "Consulta"}\n`;
+
+          // Signos vitales si están disponibles
+          if (record.peso || record.temperatura || record.frecuenciaCardiaca) {
+            content += `   SIGNOS VITALES:\n`;
+            if (record.peso) content += `   - Peso: ${record.peso} kg\n`;
+            if (record.temperatura) content += `   - Temperatura: ${record.temperatura}°C\n`;
+            if (record.frecuenciaCardiaca) content += `   - Frecuencia Cardíaca: ${record.frecuenciaCardiaca} bpm\n`;
+            content += `\n`;
+          }
+
           if (record.diagnostico) {
             content += `   Diagnóstico: ${record.diagnostico}\n`;
           }
@@ -497,6 +507,17 @@ export default function HistorialClinicoVeterinario() {
           if (record.observaciones) {
             content += `   Observaciones: ${record.observaciones}\n`;
           }
+
+          // Medicamentos si están disponibles
+          if (record.medicamentos && record.medicamentos.length > 0) {
+            content += `   MEDICAMENTOS:\n`;
+            record.medicamentos.forEach((med, medIndex) => {
+              content += `   ${medIndex + 1}. ${med.nombre} - ${med.dosis} - ${med.frecuencia}\n`;
+              if (med.duracion) content += `      Duración: ${med.duracion}\n`;
+            });
+            content += `\n`;
+          }
+
           content += `\n`;
         });
       }
