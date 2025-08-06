@@ -315,13 +315,23 @@ export default function FeaturesCarousel() {
             })}
           </div>
 
-          {/* Dots Indicator */}
-          <div className="flex items-center justify-center space-x-3 mb-8">
+          {/* Dots Indicator - Outside touch area */}
+          <div className="flex items-center justify-center space-x-3 mb-8 relative z-20">
             {features.map((_, index) => (
               <button
                 key={index}
+                onPointerDown={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                }}
                 onClick={(e) => {
                   e.stopPropagation();
+                  e.preventDefault();
+                  goToSlide(index);
+                }}
+                onTouchEnd={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
                   goToSlide(index);
                 }}
                 className={`w-4 h-4 rounded-full transition-all duration-300 touch-manipulation ${
