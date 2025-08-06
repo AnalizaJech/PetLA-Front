@@ -183,7 +183,7 @@ export default function DashboardVeterinario() {
     switch (estado) {
       case "aceptada":
         return (
-          <Badge className="bg-blue-100 text-blue-800 border-blue-200">
+          <Badge className="bg-vet-primary/10 text-blue-800 border-blue-200">
             <CheckCircle className="w-3 h-3 mr-1" />
             Confirmada
           </Badge>
@@ -305,7 +305,7 @@ export default function DashboardVeterinario() {
                   </div>
                 </div>
                 {citasHoy.length > 0 && (
-                  <Badge className="bg-blue-100 text-blue-800 px-3 py-1">
+                  <Badge className="bg-vet-primary/10 text-blue-800 px-3 py-1">
                     {citasHoy.length} citas hoy
                   </Badge>
                 )}
@@ -505,7 +505,7 @@ export default function DashboardVeterinario() {
                     </div>
                   ) : (
                     <div className="text-center py-12">
-                      <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <div className="w-16 h-16 bg-vet-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
                         <Calendar className="w-8 h-8 text-vet-primary" />
                       </div>
                       <h3 className="text-lg font-medium text-gray-900 mb-2">
@@ -811,7 +811,7 @@ Generado automáticamente por PetLA
               <Card className="shadow-sm border-0 bg-white/80 backdrop-blur-sm">
                 <CardHeader className="pb-4">
                   <CardTitle className="flex items-center space-x-2 text-xl">
-                    <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <div className="w-8 h-8 bg-vet-primary/10 rounded-lg flex items-center justify-center">
                       <Heart className="w-4 h-4 text-vet-primary" />
                     </div>
                     <span>Pacientes Recientes</span>
@@ -884,7 +884,7 @@ Generado automáticamente por PetLA
             <DialogContent className="sm:max-w-2xl max-h-[80vh] overflow-y-auto scrollbar-hide">
               <DialogHeader>
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <div className="w-10 h-10 bg-vet-primary/10 rounded-lg flex items-center justify-center">
                     <Search className="w-5 h-5 text-vet-primary" />
                   </div>
                   <div>
