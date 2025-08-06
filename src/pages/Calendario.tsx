@@ -74,7 +74,7 @@ const estadoColors = {
   cancelada: "bg-red-100 text-red-800 border-red-300",
   expirada: "bg-red-100 text-red-800 border-red-300",
   rechazada: "bg-red-100 text-red-800 border-red-300",
-  no_asistio: "bg-orange-100 text-orange-800 border-orange-300",
+  no_asistio: "bg-orange-100 text-orange-800 border-orange-300 hover:bg-orange-100",
 };
 
 const estadoLabels = {
@@ -630,7 +630,17 @@ export default function Calendario() {
                                         </span>
                                       </div>
                                       <div className="flex flex-wrap items-center gap-1 sm:gap-2 ml-auto">
-                                        {getUrgencyBadge(urgencyLevel)}
+                                        {cita.estado === "atendida" ? (
+                                          <Badge
+                                            variant="secondary"
+                                            className={estadoColors[cita.estado]}
+                                          >
+                                            <StatusIcon className="w-3 h-3 mr-1" />
+                                            {estadoLabels[cita.estado]}
+                                          </Badge>
+                                        ) : (
+                                          getUrgencyBadge(urgencyLevel)
+                                        )}
                                       </div>
                                     </div>
 
@@ -667,16 +677,18 @@ export default function Calendario() {
                                         </div>
                                       )}
 
-                                      {/* Estado badge */}
-                                      <div className="flex justify-end mt-2">
-                                        <Badge
-                                          variant="secondary"
-                                          className={estadoColors[cita.estado]}
-                                        >
-                                          <StatusIcon className="w-3 h-3 mr-1" />
-                                          {estadoLabels[cita.estado]}
-                                        </Badge>
-                                      </div>
+                                      {/* Estado badge - solo mostrar si NO es atendida */}
+                                      {cita.estado !== "atendida" && (
+                                        <div className="flex justify-end mt-2">
+                                          <Badge
+                                            variant="secondary"
+                                            className={estadoColors[cita.estado]}
+                                          >
+                                            <StatusIcon className="w-3 h-3 mr-1" />
+                                            {estadoLabels[cita.estado]}
+                                          </Badge>
+                                        </div>
+                                      )}
                                     </div>
 
                                     {/* Botones de acción */}
