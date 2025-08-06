@@ -1397,6 +1397,74 @@ export default function HistorialClinico() {
                           </div>
                         </div>
 
+                        {/* Resumen completo del servicio realizado */}
+                        <div className="mt-6 p-4 bg-gradient-to-r from-vet-primary/5 to-blue-50 rounded-lg border border-vet-primary/20">
+                          <h5 className="font-medium text-vet-primary mb-3 flex items-center">
+                            <CheckCircle className="w-4 h-4 mr-2" />
+                            Resumen del Servicio Completado
+                          </h5>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                              <div className="space-y-2">
+                                <div><strong>Servicio:</strong> {consulta.tipoConsulta || "Consulta"}</div>
+                                <div><strong>Duración:</strong> Aprox. {(() => {
+                                  const servicesMap = {
+                                    'consulta': '30-45 min',
+                                    'vacunacion': '15-20 min',
+                                    'emergencia': '45-90 min',
+                                    'grooming': '60-120 min',
+                                    'cirugia': '90-180 min',
+                                    'diagnostico': '30-60 min'
+                                  };
+                                  const tipo = consulta.tipoConsulta?.toLowerCase() || 'consulta';
+                                  return servicesMap[tipo] || '30-45 min';
+                                })()}</div>
+                                <div><strong>Estado Final:</strong>
+                                  <span className="ml-1 px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
+                                    Servicio Completado Exitosamente
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                            <div>
+                              <div className="space-y-2">
+                                <div><strong>Fecha de Realización:</strong> {new Date(consulta.fecha).toLocaleDateString("es-ES")}</div>
+                                <div><strong>Hora de Atención:</strong> {new Date(consulta.fecha).toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" })}</div>
+                                {consulta.proxima_cita && (
+                                  <div><strong>Próximo Control:</strong> {new Date(consulta.proxima_cita).toLocaleDateString("es-ES")}</div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Indicadores de calidad del servicio */}
+                          <div className="mt-3 pt-3 border-t border-vet-primary/10">
+                            <div className="flex items-center justify-between text-xs">
+                              <div className="flex items-center space-x-4">
+                                <div className="flex items-center space-x-1 text-green-600">
+                                  <CheckCircle className="w-3 h-3" />
+                                  <span>Protocolo Completo</span>
+                                </div>
+                                {consulta.medicamentos && consulta.medicamentos.length > 0 && (
+                                  <div className="flex items-center space-x-1 text-blue-600">
+                                    <Pill className="w-3 h-3" />
+                                    <span>{consulta.medicamentos.length} Medicamento{consulta.medicamentos.length > 1 ? 's' : ''} Recetado{consulta.medicamentos.length > 1 ? 's' : ''}</span>
+                                  </div>
+                                )}
+                                {consulta.examenes && consulta.examenes.length > 0 && (
+                                  <div className="flex items-center space-x-1 text-purple-600">
+                                    <Activity className="w-3 h-3" />
+                                    <span>{consulta.examenes.length} Examen{consulta.examenes.length > 1 ? 'es' : ''} Realizado{consulta.examenes.length > 1 ? 's' : ''}</span>
+                                  </div>
+                                )}
+                              </div>
+                              <div className="text-vet-gray-500">
+                                Registro #{consulta.id}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
                         {consulta.notas && (
                           <div className="mt-4 p-4 bg-vet-primary/5 rounded-lg border border-vet-primary/20">
                             <h4 className="font-semibold text-vet-primary mb-2">
