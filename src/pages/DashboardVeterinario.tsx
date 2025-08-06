@@ -906,7 +906,7 @@ Generado automáticamente por PetLA
                     placeholder="Buscar por nombre del paciente, propietario, especie..."
                     value={searchTerm}
                     onChange={(e) => handleSearchPatients(e.target.value)}
-                    className="pl-10 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                    className="pl-10 border-vet-gray-300 focus:border-vet-primary focus:ring-vet-primary"
                   />
                 </div>
 
