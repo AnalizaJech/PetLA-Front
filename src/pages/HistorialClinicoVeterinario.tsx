@@ -61,8 +61,10 @@ import {
   Syringe,
   Mail,
   MapPin,
+  ChevronDown,
 } from "lucide-react";
 import jsPDF from "jspdf";
+import * as XLSX from "xlsx";
 
 export default function HistorialClinicoVeterinario() {
   const {
