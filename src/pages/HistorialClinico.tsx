@@ -435,10 +435,65 @@ export default function HistorialClinico() {
         if (consulta.diagnostico) contenido += `Diagnóstico: ${consulta.diagnostico}\n`;
         if (consulta.tratamiento) contenido += `Tratamiento: ${consulta.tratamiento}\n`;
 
+        // Signos vitales
+        if (consulta.peso || consulta.temperatura || consulta.presionArterial || consulta.frecuenciaCardiaca) {
+          contenido += `Signos Vitales:\n`;
+          if (consulta.peso) contenido += `  - Peso: ${consulta.peso} kg\n`;
+          if (consulta.temperatura) contenido += `  - Temperatura: ${consulta.temperatura}°C\n`;
+          if (consulta.presionArterial) contenido += `  - Presión Arterial: ${consulta.presionArterial}\n`;
+          if (consulta.frecuenciaCardiaca) contenido += `  - Frecuencia Cardíaca: ${consulta.frecuenciaCardiaca} bpm\n`;
+        }
+
+        // Medicamentos detallados
         if (consulta.medicamentos && consulta.medicamentos.length > 0) {
-          contenido += `Medicamentos:\n`;
-          consulta.medicamentos.forEach((med) => {
-            contenido += `  - ${med.nombre}: ${med.dosis} (${med.duracion})\n`;
+          contenido += `Medicamentos Recetados:\n`;
+          consulta.medicamentos.forEach((med, medIndex) => {
+            contenido += `  ${medIndex + 1}. ${med.nombre}\n`;
+            contenido += `     Dosis: ${med.dosis}\n`;
+            if (med.frecuencia) contenido += `     Frecuencia: ${med.frecuencia}\n`;
+            if (med.duracion) contenido += `     Duración: ${med.duracion}\n`;
+            if (med.indicaciones) contenido += `     Indicaciones: ${med.indicaciones}\n`;
+          });
+        }
+
+        // Vacunas aplicadas
+        if (consulta.vacunas && consulta.vacunas.length > 0) {
+          contenido += `Vacunas Aplicadas:\n`;
+          consulta.vacunas.forEach((vacuna, vacIndex) => {
+            contenido += `  ${vacIndex + 1}. ${vacuna.nombre}\n`;
+            contenido += `     Lote: ${vacuna.lote}\n`;
+            contenido += `     Próxima Dosis: ${new Date(vacuna.proximaFecha).toLocaleDateString("es-ES")}\n`;
+          });
+        }
+
+        // Exámenes realizados
+        if (consulta.examenes && consulta.examenes.length > 0) {
+          contenido += `Exámenes Realizados:\n`;
+          consulta.examenes.forEach((examen, exIndex) => {
+            contenido += `  ${exIndex + 1}. ${examen.tipo}\n`;
+            contenido += `     Resultado: ${examen.resultado}\n`;
+            if (examen.archivo) contenido += `     Archivo: ${examen.archivo}\n`;
+          });
+        }
+
+        // Servicios adicionales
+        if (consulta.servicios && consulta.servicios.length > 0) {
+          contenido += `Servicios Realizados:\n`;
+          consulta.servicios.forEach((servicio, servIndex) => {
+            contenido += `  ${servIndex + 1}. ${servicio.nombre}\n`;
+            if (servicio.descripcion) contenido += `     Descripción: ${servicio.descripcion}\n`;
+            if (servicio.precio) contenido += `     Precio: S/${servicio.precio}\n`;
+            if (servicio.duracion) contenido += `     Duración: ${servicio.duracion}\n`;
+            if (servicio.notas) contenido += `     Notas: ${servicio.notas}\n`;
+          });
+        }
+
+        // Archivos adjuntos
+        if (consulta.archivosAdjuntos && consulta.archivosAdjuntos.length > 0) {
+          contenido += `Archivos Adjuntos:\n`;
+          consulta.archivosAdjuntos.forEach((archivo, archIndex) => {
+            contenido += `  ${archIndex + 1}. ${archivo.nombre} (${archivo.tipo})\n`;
+            if (archivo.url) contenido += `     URL: ${archivo.url}\n`;
           });
         }
 
@@ -447,7 +502,7 @@ export default function HistorialClinico() {
         }
 
         if (consulta.notas) {
-          contenido += `Notas: ${consulta.notas}\n`;
+          contenido += `Observaciones del Veterinario: ${consulta.notas}\n`;
         }
         contenido += `\n${"·".repeat(40)}\n`;
       });
