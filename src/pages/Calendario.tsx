@@ -74,7 +74,7 @@ const estadoColors = {
   cancelada: "bg-red-100 text-red-800 border-red-300",
   expirada: "bg-red-100 text-red-800 border-red-300",
   rechazada: "bg-red-100 text-red-800 border-red-300",
-  no_asistio: "bg-orange-100 text-orange-800 border-orange-300",
+  no_asistio: "bg-gray-100 text-gray-800 border-gray-300",
 };
 
 const estadoIconsColors = {
@@ -85,7 +85,7 @@ const estadoIconsColors = {
   cancelada: "text-red-600",
   expirada: "text-red-600",
   rechazada: "text-red-600",
-  no_asistio: "text-orange-600",
+  no_asistio: "text-gray-600",
 };
 
 const estadoLabels = {
