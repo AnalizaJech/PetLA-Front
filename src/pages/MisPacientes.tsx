@@ -974,25 +974,25 @@ export default function MisPacientes() {
                         </div>
 
                         {/* Botones de acción */}
-                        <div className="flex flex-col space-y-2 sm:ml-4 sm:flex-shrink-0">
+                        <div className="flex flex-col space-y-2 sm:space-y-3 mt-4 sm:mt-0 sm:ml-4 sm:flex-shrink-0 min-w-0 sm:min-w-[140px]">
                           <Button
                             variant="outline"
                             size="sm"
                             onClick={() => handleViewDetail(citaData)}
-                            className="h-9"
+                            className="h-9 text-xs sm:text-sm w-full"
                           >
-                            <Eye className="w-4 h-4 mr-2" />
-                            Ver Detalle
+                            <Eye className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                            <span className="truncate">Ver Detalle</span>
                           </Button>
 
                           {cita.estado === "aceptada" && (
                             <Button
                               size="sm"
                               onClick={() => handleAttendCita(citaData)}
-                              className="bg-vet-primary hover:bg-vet-primary-dark h-9"
+                              className="bg-vet-primary hover:bg-vet-primary-dark h-9 text-xs sm:text-sm w-full"
                             >
-                              <Activity className="w-4 h-4 mr-2" />
-                              Atender
+                              <Activity className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                              <span className="truncate">Atender</span>
                             </Button>
                           )}
 
@@ -1011,10 +1011,10 @@ export default function MisPacientes() {
                                 );
                               }
                             }}
-                            className="h-9"
+                            className="h-9 text-xs sm:text-sm w-full"
                           >
-                            <FileText className="w-4 h-4 mr-2" />
-                            Historial
+                            <FileText className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                            <span className="truncate">Historial</span>
                           </Button>
                         </div>
                       </div>
