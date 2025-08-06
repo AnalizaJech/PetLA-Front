@@ -1830,14 +1830,18 @@ export default function Configuracion() {
           {/* Delete Account Confirmation Modal */}
           <Dialog open={showDeleteAccountModal} onOpenChange={setShowDeleteAccountModal}>
             <DialogContent className="max-w-lg w-full mx-4 max-h-[90vh] overflow-hidden flex flex-col">
-              <DialogHeader className="flex-shrink-0">
-                <DialogTitle className="flex items-center space-x-2 text-lg text-red-700">
-                  <AlertTriangle className="w-5 h-5 text-red-600 flex-shrink-0" />
-                  <span className="truncate">Eliminar cuenta permanentemente</span>
-                </DialogTitle>
-                <DialogDescription className="text-sm text-vet-gray-600">
-                  Esta acción no se puede deshacer. Lee cuidadosamente antes de continuar.
-                </DialogDescription>
+              <DialogHeader className="flex-shrink-0 text-center space-y-4">
+                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto">
+                  <AlertTriangle className="w-8 h-8 text-red-600" />
+                </div>
+                <div>
+                  <DialogTitle className="text-xl font-bold text-red-700">
+                    Eliminar cuenta permanentemente
+                  </DialogTitle>
+                  <DialogDescription className="text-vet-gray-600 mt-2">
+                    Esta es una acción irreversible que eliminará todos tus datos.
+                  </DialogDescription>
+                </div>
               </DialogHeader>
 
               <div className="flex-1 overflow-y-auto">
