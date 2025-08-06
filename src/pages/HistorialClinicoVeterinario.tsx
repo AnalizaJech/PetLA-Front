@@ -519,9 +519,12 @@ export default function HistorialClinicoVeterinario() {
         { Campo: "Especie", Valor: selectedPet.especie || "No especificada" },
         { Campo: "Raza", Valor: selectedPet.raza || "No especificada" },
         { Campo: "Sexo", Valor: selectedPet.sexo || "No especificado" },
+        { Campo: "Fecha Nacimiento", Valor: selectedPet.fechaNacimiento ? new Date(selectedPet.fechaNacimiento).toLocaleDateString("es-ES") : "No registrada" },
+        { Campo: "Microchip", Valor: selectedPet.microchip || "No registrado" },
         { Campo: "Propietario", Valor: selectedOwner ? `${selectedOwner.nombre} ${selectedOwner.apellidos || ''}` : "No registrado" },
         { Campo: "Teléfono", Valor: selectedOwner?.telefono || "No registrado" },
         { Campo: "Email", Valor: selectedOwner?.email || "No registrado" },
+        { Campo: "Dirección", Valor: selectedOwner?.direccion || "No registrada" },
         { Campo: "Veterinario", Valor: user.nombre },
         { Campo: "Fecha de Generación", Valor: new Date().toLocaleDateString("es-ES") },
       ];
