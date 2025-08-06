@@ -1743,6 +1743,93 @@ export default function Configuracion() {
                 </CardContent>
               </Card>
             </TabsContent>
+
+            {/* Data Tab */}
+            <TabsContent value="data" className="space-y-6">
+              <Card>
+                <CardHeader className="p-4 sm:p-6">
+                  <CardTitle className="flex items-center space-x-2 text-lg sm:text-xl">
+                    <Database className="w-4 h-4 sm:w-5 sm:h-5 text-vet-primary" />
+                    <span>Gestión de Datos</span>
+                  </CardTitle>
+                  <CardDescription className="text-sm">
+                    Herramientas para gestionar y recuperar tus datos almacenados
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6 p-4 sm:p-6">
+                  {/* Data Recovery Section */}
+                  <div className="space-y-4">
+                    <div>
+                      <h4 className="font-medium text-gray-900 mb-2">
+                        Recuperar Datos
+                      </h4>
+                      <p className="text-sm text-gray-600 mb-4">
+                        Si tus mascotas o citas han desaparecido, usa esta función para recargarlos desde el almacenamiento local.
+                      </p>
+                      <Button
+                        onClick={() => {
+                          setIsLoading(true);
+                          const success = refreshDataFromStorage();
+                          setTimeout(() => {
+                            setIsLoading(false);
+                            if (success) {
+                              setSavedMessage("Datos recargados exitosamente desde el almacenamiento");
+                              setErrorMessage("");
+                            } else {
+                              setErrorMessage("Error al recargar los datos");
+                              setSavedMessage("");
+                            }
+                          }, 1000);
+                        }}
+                        disabled={isLoading}
+                        className="bg-blue-600 hover:bg-blue-700"
+                      >
+                        {isLoading ? (
+                          <>
+                            <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2" />
+                            Recargando datos...
+                          </>
+                        ) : (
+                          <>
+                            <Database className="mr-2 w-4 h-4" />
+                            Recargar Datos
+                          </>
+                        )}
+                      </Button>
+                    </div>
+
+                    {/* Data Status */}
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <h5 className="font-medium text-gray-900 mb-2">Estado de los Datos</h5>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+                        <div>
+                          <span className="text-gray-600">Mascotas:</span>
+                          <span className="ml-2 font-medium">{mascotas.filter(m => m.clienteId === user?.id).length}</span>
+                        </div>
+                        <div>
+                          <span className="text-gray-600">Citas:</span>
+                          <span className="ml-2 font-medium">{citas.filter(c => c.clienteId === user?.id).length}</span>
+                        </div>
+                        <div>
+                          <span className="text-gray-600">Usuario:</span>
+                          <span className="ml-2 font-medium">{user ? 'Conectado' : 'Desconectado'}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Data Information */}
+                    <Alert>
+                      <Info className="w-4 h-4" />
+                      <AlertDescription>
+                        Los datos se almacenan localmente en tu navegador. Si has perdido información,
+                        es posible que se haya limpiado el almacenamiento del navegador. La función de
+                        recarga intentará recuperar los datos disponibles.
+                      </AlertDescription>
+                    </Alert>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
           </Tabs>
 
           {/* Photo Management Modal */}
