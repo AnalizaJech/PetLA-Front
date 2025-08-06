@@ -614,6 +614,12 @@ export default function HistorialClinicoVeterinario() {
 
         filteredHistory.forEach((record, index) => {
           content += `${index + 1}. ${new Date(record.fecha).toLocaleDateString("es-ES")} - ${record.tipo || "Consulta"}\n`;
+          content += `   DETALLES DEL SERVICIO:\n`;
+          content += `   - Veterinario: Dr. ${record.veterinario}\n`;
+          content += `   - Hora: ${new Date(record.fecha).toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" })}\n`;
+          content += `   - Estado: ${record.estado === "completada" ? "Completada" : record.estado}\n`;
+          if (record.motivo) content += `   - Motivo: ${record.motivo}\n`;
+          content += `\n`;
 
           // Signos vitales si están disponibles
           if (record.peso || record.temperatura || record.frecuenciaCardiaca) {
