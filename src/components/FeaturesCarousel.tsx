@@ -15,6 +15,21 @@ import {
   Zap,
   Award,
   HeartHandshake,
+  Clock3,
+  Bell,
+  Timer,
+  Globe,
+  Database,
+  RefreshCw,
+  BookOpen,
+  AlertTriangle,
+  UserPlus,
+  TrendingUp,
+  GraduationCap,
+  ShieldCheck,
+  Scissors,
+  Microscope,
+  Pets,
 } from "lucide-react";
 
 const features = [
