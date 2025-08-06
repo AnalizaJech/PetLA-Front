@@ -231,7 +231,7 @@ export default function FeaturesCarousel() {
                       : "scale-95 opacity-70 hover:opacity-90"
                   } ${index === 0 ? "hidden md:block" : ""} ${index === 2 ? "hidden md:block" : ""}`}
                 >
-                  <div className="p-8 text-center">
+                  <div className="p-6 sm:p-8 text-center">
                     <div
                       className={`mx-auto flex items-center justify-center w-16 h-16 rounded-2xl mb-6 transition-all duration-1000 ease-in-out ${
                         isCenter
