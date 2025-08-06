@@ -190,7 +190,7 @@ export default function DashboardVeterinario() {
         );
       case "atendida":
         return (
-          <Badge className="bg-green-100 text-green-800 border-green-200">
+          <Badge className="bg-vet-success/10 text-vet-success border-green-200">
             <CheckCircle className="w-3 h-3 mr-1" />
             Atendida
           </Badge>
@@ -992,7 +992,7 @@ Generado automáticamente por PetLA
                                 </div>
                                 <div className="flex flex-col items-end space-y-2">
                                   {citasPaciente.length > 0 && (
-                                    <Badge className="bg-green-100 text-green-800">
+                                    <Badge className="bg-vet-success/10 text-vet-success">
                                       {citasPaciente.length} cita
                                       {citasPaciente.length !== 1 ? "s" : ""}
                                     </Badge>
