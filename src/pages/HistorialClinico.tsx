@@ -274,6 +274,17 @@ export default function HistorialClinico() {
         cita.estado,
       );
 
+      // Solo incluir datos reales registrados por el veterinario
+      const hasRealData = cita.consulta && (
+        cita.consulta.diagnostico ||
+        cita.consulta.tratamiento ||
+        cita.consulta.notas ||
+        (cita.consulta.medicamentos && cita.consulta.medicamentos.length > 0)
+      );
+
+      // Skip appointments without real veterinary consultation data
+      if (!hasRealData) return;
+
       const baseRecord = {
         id: cita.id,
         fecha: new Date(cita.fecha),
@@ -281,14 +292,11 @@ export default function HistorialClinico() {
         motivo: cita.motivo || "Sin motivo especificado",
         tipoConsulta: tipoConsulta,
         estado: cita.estado,
-        diagnostico: cita.consulta?.diagnostico || diagnosticoDefault,
-        tratamiento: cita.consulta?.tratamiento || tratamientoDefault,
+        diagnostico: cita.consulta?.diagnostico || null,
+        tratamiento: cita.consulta?.tratamiento || null,
         medicamentos: cita.consulta?.medicamentos || [],
-        proxima_cita: cita.consulta?.proximaCita
-          ? new Date(cita.consulta.proximaCita)
-          : getProximaConsulta(tipoConsulta, cita.fecha),
-        notas:
-          cita.consulta?.notas || getNotasDefecto(tipoConsulta, cita.estado),
+        proxima_cita: cita.consulta?.proximaCita ? new Date(cita.consulta.proximaCita) : null,
+        notas: cita.consulta?.notas || null,
         precio: cita.precio,
       };
 
@@ -1098,7 +1106,7 @@ export default function HistorialClinico() {
                       <p className="text-vet-gray-600 mb-6">
                         {selectedMascota} no tiene consultas generales en su
                         historial. Los servicios de consulta general aparecerán
-                        aquí.
+                        aqu��.
                       </p>
                       <Button
                         onClick={() => (window.location.href = "/mis-citas")}
