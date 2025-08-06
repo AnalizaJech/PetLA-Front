@@ -870,7 +870,7 @@ export default function MisPacientes() {
                               onClick={() => handleAttendCita(citaData)}
                               className="bg-vet-primary hover:bg-vet-primary-dark h-9 w-full"
                             >
-                              <Activity className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                              <Activity className="w-4 h-4 mr-2" />
                               <span className="truncate">Atender</span>
                             </Button>
                           )}
