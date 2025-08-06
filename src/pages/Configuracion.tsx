@@ -93,7 +93,8 @@ const formatDateForInput = (date: any): string => {
 };
 
 export default function Configuracion() {
-  const { user, setUser, updateUsuario } = useAppContext();
+  const { user, setUser, updateUsuario, deleteAccount, logout } = useAppContext();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [savedMessage, setSavedMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
