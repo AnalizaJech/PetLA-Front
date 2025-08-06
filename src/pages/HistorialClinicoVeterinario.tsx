@@ -233,7 +233,7 @@ export default function HistorialClinicoVeterinario() {
           record.diagnostico?.toLowerCase().includes(search) ||
           record.tratamiento?.toLowerCase().includes(search) ||
           record.observaciones?.toLowerCase().includes(search) ||
-          record.tipo.toLowerCase().includes(search)
+          record.tipo?.toLowerCase().includes(search)
       );
     }
 
@@ -281,7 +281,7 @@ export default function HistorialClinicoVeterinario() {
 
           doc.setFontSize(11);
           doc.setFont("helvetica", "bold");
-          doc.text(`${index + 1}. ${new Date(record.fecha).toLocaleDateString("es-ES")} - ${record.tipo}`, margin, yPosition);
+          doc.text(`${index + 1}. ${new Date(record.fecha).toLocaleDateString("es-ES")} - ${record.tipo || "Consulta"}`, margin, yPosition);
           yPosition += 10;
 
           doc.setFont("helvetica", "normal");
@@ -329,7 +329,7 @@ export default function HistorialClinicoVeterinario() {
       const data = filteredHistory.map((record, index) => ({
         "#": index + 1,
         "Fecha": new Date(record.fecha).toLocaleDateString("es-ES"),
-        "Tipo": record.tipo,
+        "Tipo": record.tipo || "Consulta",
         "Diagnóstico": record.diagnostico || "",
         "Tratamiento": record.tratamiento || "",
         "Observaciones": record.observaciones || "",
@@ -377,7 +377,7 @@ export default function HistorialClinicoVeterinario() {
         content += `==================\n\n`;
 
         filteredHistory.forEach((record, index) => {
-          content += `${index + 1}. ${new Date(record.fecha).toLocaleDateString("es-ES")} - ${record.tipo}\n`;
+          content += `${index + 1}. ${new Date(record.fecha).toLocaleDateString("es-ES")} - ${record.tipo || "Consulta"}\n`;
           if (record.diagnostico) {
             content += `   Diagnóstico: ${record.diagnostico}\n`;
           }
@@ -945,7 +945,7 @@ export default function HistorialClinicoVeterinario() {
                   </Card>
                 ) : (
                   filteredHistory.map((record) => {
-                    const Icon = getConsultationIcon(record.tipo);
+                    const Icon = getConsultationIcon(record.tipo || "consulta");
                     
                     return (
                       <Card
@@ -955,7 +955,7 @@ export default function HistorialClinicoVeterinario() {
                         <CardContent className="p-6">
                           <div className="flex items-start justify-between mb-4">
                             <div className="flex items-center space-x-3">
-                              <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${getBadgeVariant(record.tipo)}`}>
+                              <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${getBadgeVariant(record.tipo || "consulta")}`}>
                                 {Icon}
                               </div>
                               <div>
@@ -963,8 +963,8 @@ export default function HistorialClinicoVeterinario() {
                                   <h4 className="font-medium text-vet-gray-900">
                                     {record.tipo ? (record.tipo.charAt(0).toUpperCase() + record.tipo.slice(1)) : "Consulta"}
                                   </h4>
-                                  <Badge className={getBadgeVariant(record.tipo)}>
-                                    {record.tipo}
+                                  <Badge className={getBadgeVariant(record.tipo || "consulta")}>
+                                    {record.tipo || "Consulta"}
                                   </Badge>
                                 </div>
                                 <div className="flex items-center space-x-4 mt-1 text-sm text-vet-gray-600">
@@ -1034,13 +1034,13 @@ export default function HistorialClinicoVeterinario() {
             <DialogContent className="max-w-2xl">
               <DialogHeader>
                 <DialogTitle className="flex items-center space-x-2">
-                  {selectedRecord && getConsultationIcon(selectedRecord.tipo)}
+                  {selectedRecord && getConsultationIcon(selectedRecord.tipo || "consulta")}
                   <span>Detalle del Registro Médico</span>
                 </DialogTitle>
                 <DialogDescription>
                   {selectedRecord && (
                     <span>
-                      {new Date(selectedRecord.fecha).toLocaleDateString("es-ES")} - {selectedRecord.tipo}
+                      {new Date(selectedRecord.fecha).toLocaleDateString("es-ES")} - {selectedRecord.tipo || "Consulta"}
                     </span>
                   )}
                 </DialogDescription>
@@ -1056,7 +1056,7 @@ export default function HistorialClinicoVeterinario() {
                       <strong>Hora:</strong> {new Date(selectedRecord.fecha).toLocaleTimeString("es-ES")}
                     </div>
                     <div>
-                      <strong>Tipo:</strong> {selectedRecord.tipo}
+                      <strong>Tipo:</strong> {selectedRecord.tipo || "Consulta"}
                     </div>
                     <div>
                       <strong>Veterinario:</strong> Dr. {selectedRecord.veterinario}
