@@ -643,7 +643,7 @@ export default function HistorialClinico() {
           if (consulta.peso) addText(`  • Peso: ${consulta.peso} kg`);
           if (consulta.temperatura) addText(`  • Temperatura: ${consulta.temperatura}°C`);
           if (consulta.presionArterial) addText(`  ��� Presión Arterial: ${consulta.presionArterial}`);
-          if (consulta.frecuenciaCardiaca) addText(`  • Frecuencia Cardíaca: ${consulta.frecuenciaCardiaca} bpm`);
+          if (consulta.frecuenciaCardiaca) addText(`  • Frecuencia Card��aca: ${consulta.frecuenciaCardiaca} bpm`);
         }
 
         // Medicamentos detallados
@@ -779,12 +779,20 @@ export default function HistorialClinico() {
         [
           "Fecha",
           "Veterinario",
+          "Tipo Servicio",
           "Motivo",
           "Diagnóstico",
           "Tratamiento",
+          "Peso (kg)",
+          "Temperatura (°C)",
+          "Presión Arterial",
+          "Freq. Cardíaca",
           "Medicamentos",
+          "Vacunas",
+          "Exámenes",
+          "Servicios",
           "Próxima Cita",
-          "Notas",
+          "Observaciones",
         ],
       ];
 
