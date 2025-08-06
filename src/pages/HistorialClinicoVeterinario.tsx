@@ -364,7 +364,12 @@ export default function HistorialClinicoVeterinario() {
       doc.text(`Veterinario: ${record.veterinario}`, 30, y);
       y += 6;
       doc.text(
-        `Tipo: ${record.tipoConsulta.replace("_", " ").toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}`,
+        `Tipo: ${record.tipoConsulta
+          .replace("_", " ")
+          .toLowerCase()
+          .split(" ")
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(" ")}`,
         30,
         y,
       );
@@ -427,7 +432,12 @@ export default function HistorialClinicoVeterinario() {
     const data = historialMascota.map((record) => ({
       Fecha: new Date(record.fecha).toLocaleDateString("es-ES"),
       Veterinario: record.veterinario,
-      "Tipo de Consulta": record.tipoConsulta.replace("_", " ").toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+      "Tipo de Consulta": record.tipoConsulta
+        .replace("_", " ")
+        .toLowerCase()
+        .split(" ")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" "),
       Motivo: record.motivo || "Consulta médica",
       Diagnóstico: record.diagnostico || "No especificado",
       Tratamiento: record.tratamiento || "No especificado",
@@ -462,14 +472,21 @@ export default function HistorialClinicoVeterinario() {
       content += `REGISTRO #${index + 1}\n`;
       content += `Fecha: ${new Date(record.fecha).toLocaleDateString("es-ES")}\n`;
       content += `Veterinario: ${record.veterinario}\n`;
-      content += `Tipo: ${record.tipoConsulta.replace("_", " ").toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}\n`;
+      content += `Tipo: ${record.tipoConsulta
+        .replace("_", " ")
+        .toLowerCase()
+        .split(" ")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ")}\n`;
       content += `Motivo: ${record.motivo || "Consulta médica"}\n`;
       content += `Diagnóstico: ${record.diagnostico || "No especificado"}\n`;
       content += `Tratamiento: ${record.tratamiento || "No especificado"}\n`;
       if (record.peso) content += `Peso: ${record.peso} kg\n`;
-      if (record.temperatura) content += `Temperatura: ${record.temperatura}°C\n`;
+      if (record.temperatura)
+        content += `Temperatura: ${record.temperatura}°C\n`;
       content += `Estado: ${record.estado}\n`;
-      if (record.observaciones) content += `Observaciones: ${record.observaciones}\n`;
+      if (record.observaciones)
+        content += `Observaciones: ${record.observaciones}\n`;
       content += `${"-".repeat(30)}\n\n`;
     });
 
@@ -1222,7 +1239,16 @@ export default function HistorialClinicoVeterinario() {
                                     record.tipoConsulta,
                                   )}
                                 >
-                                  {record.tipoConsulta.replace("_", " ").toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                                  {record.tipoConsulta
+                                    .replace("_", " ")
+                                    .toLowerCase()
+                                    .split(" ")
+                                    .map(
+                                      (word) =>
+                                        word.charAt(0).toUpperCase() +
+                                        word.slice(1),
+                                    )
+                                    .join(" ")}
                                 </Badge>
                               </div>
                               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-vet-gray-600 mb-3">
@@ -1350,7 +1376,15 @@ export default function HistorialClinicoVeterinario() {
                       <Badge
                         className={getBadgeVariant(selectedRecord.tipoConsulta)}
                       >
-                        {selectedRecord.tipoConsulta.replace("_", " ").toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                        {selectedRecord.tipoConsulta
+                          .replace("_", " ")
+                          .toLowerCase()
+                          .split(" ")
+                          .map(
+                            (word) =>
+                              word.charAt(0).toUpperCase() + word.slice(1),
+                          )
+                          .join(" ")}
                       </Badge>
                     </div>
                     <div>

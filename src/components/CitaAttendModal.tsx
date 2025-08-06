@@ -254,7 +254,12 @@ export default function CitaAttendModal({
       icon: AlertCircle,
       color: "red-600",
       description: "Atención médica de urgencia",
-      requiredVitals: ["peso", "temperatura", "presionArterial", "frecuenciaCardiaca"],
+      requiredVitals: [
+        "peso",
+        "temperatura",
+        "presionArterial",
+        "frecuenciaCardiaca",
+      ],
       showMedications: true,
       showExams: true,
     },
@@ -272,7 +277,12 @@ export default function CitaAttendModal({
       icon: Stethoscope,
       color: "orange-600",
       description: "Procedimiento quirúrgico",
-      requiredVitals: ["peso", "temperatura", "presionArterial", "frecuenciaCardiaca"],
+      requiredVitals: [
+        "peso",
+        "temperatura",
+        "presionArterial",
+        "frecuenciaCardiaca",
+      ],
       showMedications: true,
       showExams: true,
     },
@@ -287,7 +297,8 @@ export default function CitaAttendModal({
     },
   };
 
-  const serviceConfig = serviceConfigs[cita.tipoConsulta] || serviceConfigs.consulta_general;
+  const serviceConfig =
+    serviceConfigs[cita.tipoConsulta] || serviceConfigs.consulta_general;
   const ServiceIcon = serviceConfig.icon;
 
   return (
@@ -295,7 +306,9 @@ export default function CitaAttendModal({
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <div className="flex items-center space-x-3">
-            <div className={`w-10 h-10 bg-${serviceConfig.color}/10 rounded-lg flex items-center justify-center`}>
+            <div
+              className={`w-10 h-10 bg-${serviceConfig.color}/10 rounded-lg flex items-center justify-center`}
+            >
               <ServiceIcon className={`w-5 h-5 text-${serviceConfig.color}`} />
             </div>
             <div>
@@ -311,11 +324,15 @@ export default function CitaAttendModal({
 
         <div className="space-y-6 pt-4">
           {/* Service Type Information */}
-          <div className={`bg-${serviceConfig.color}/5 border border-${serviceConfig.color}/20 rounded-lg p-4 mb-4`}>
+          <div
+            className={`bg-${serviceConfig.color}/5 border border-${serviceConfig.color}/20 rounded-lg p-4 mb-4`}
+          >
             <div className="flex items-center space-x-3">
               <ServiceIcon className={`w-6 h-6 text-${serviceConfig.color}`} />
               <div>
-                <h4 className={`font-semibold text-${serviceConfig.color} text-lg`}>
+                <h4
+                  className={`font-semibold text-${serviceConfig.color} text-lg`}
+                >
                   {serviceConfig.title}
                 </h4>
                 <p className="text-sm text-vet-gray-600 mt-1">
@@ -433,7 +450,10 @@ export default function CitaAttendModal({
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   <div className="bg-white rounded-md p-3 border border-blue-100">
-                    <Label htmlFor="peso" className="flex items-center text-sm font-medium text-blue-700 mb-2">
+                    <Label
+                      htmlFor="peso"
+                      className="flex items-center text-sm font-medium text-blue-700 mb-2"
+                    >
                       <Weight className="w-4 h-4 mr-2 text-blue-600" />
                       Peso (kg)
                     </Label>
@@ -448,7 +468,10 @@ export default function CitaAttendModal({
                     />
                   </div>
                   <div className="bg-white rounded-md p-3 border border-blue-100">
-                    <Label htmlFor="temperatura" className="flex items-center text-sm font-medium text-blue-700 mb-2">
+                    <Label
+                      htmlFor="temperatura"
+                      className="flex items-center text-sm font-medium text-blue-700 mb-2"
+                    >
                       <Thermometer className="w-4 h-4 mr-2 text-red-500" />
                       Temperatura (°C)
                     </Label>
@@ -466,7 +489,10 @@ export default function CitaAttendModal({
                     />
                   </div>
                   <div className="bg-white rounded-md p-3 border border-blue-100">
-                    <Label htmlFor="presionArterial" className="flex items-center text-sm font-medium text-blue-700 mb-2">
+                    <Label
+                      htmlFor="presionArterial"
+                      className="flex items-center text-sm font-medium text-blue-700 mb-2"
+                    >
                       <Activity className="w-4 h-4 mr-2 text-green-500" />
                       Presión Arterial
                     </Label>
@@ -484,7 +510,10 @@ export default function CitaAttendModal({
                     />
                   </div>
                   <div className="bg-white rounded-md p-3 border border-blue-100">
-                    <Label htmlFor="frecuenciaCardiaca" className="flex items-center text-sm font-medium text-blue-700 mb-2">
+                    <Label
+                      htmlFor="frecuenciaCardiaca"
+                      className="flex items-center text-sm font-medium text-blue-700 mb-2"
+                    >
                       <Heart className="w-4 h-4 mr-2 text-red-500" />
                       Frecuencia Cardíaca (bpm)
                     </Label>
@@ -609,7 +638,11 @@ export default function CitaAttendModal({
                           <Input
                             value={med.duracion}
                             onChange={(e) =>
-                              updateMedicamento(index, "duracion", e.target.value)
+                              updateMedicamento(
+                                index,
+                                "duracion",
+                                e.target.value,
+                              )
                             }
                             placeholder="Ej: 7 días"
                           />

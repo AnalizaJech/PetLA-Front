@@ -74,7 +74,8 @@ const estadoColors = {
   cancelada: "bg-red-100 text-red-800 border-red-300",
   expirada: "bg-red-100 text-red-800 border-red-300",
   rechazada: "bg-red-100 text-red-800 border-red-300",
-  no_asistio: "bg-orange-100 text-orange-800 border-orange-300 hover:bg-orange-100",
+  no_asistio:
+    "bg-orange-100 text-orange-800 border-orange-300 hover:bg-orange-100",
 };
 
 const estadoLabels = {
@@ -654,7 +655,6 @@ export default function Calendario() {
                                         )}
                                       </div>
 
-
                                       {/* Motivo de la consulta */}
                                       <div className="flex items-start space-x-2">
                                         <FileText className="w-4 h-4 text-vet-gray-600 mt-0.5" />
@@ -672,7 +672,6 @@ export default function Calendario() {
                                           </span>
                                         </div>
                                       )}
-
                                     </div>
 
                                     {/* Botones de acción */}
@@ -697,7 +696,8 @@ export default function Calendario() {
                                           onClick={(e) => {
                                             e.stopPropagation();
                                             if (mascota) {
-                                              const propietario = citaData.propietario;
+                                              const propietario =
+                                                citaData.propietario;
                                               navigate(
                                                 `/historial-clinico-veterinario?view=history&ownerId=${propietario?.id || "unknown"}&petId=${mascota.id}`,
                                               );
@@ -838,7 +838,6 @@ export default function Calendario() {
                                         </Badge>
                                       )}
                                     </div>
-
 
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                                       <div className="space-y-2">
