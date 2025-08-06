@@ -365,7 +365,7 @@ export default function DashboardVeterinario() {
                     <p className="text-sm text-purple-700 font-medium mb-1">
                       Pacientes
                     </p>
-                    <p className="text-3xl font-bold text-purple-900">
+                    <p className="text-3xl font-bold text-vet-secondary-dark">
                       {stats.pacientesUnicos}
                     </p>
                     <p className="text-xs text-purple-600 mt-1">
@@ -756,11 +756,11 @@ Generado automáticamente por PetLA
                         <div className="w-8 h-8 bg-vet-secondary rounded-lg flex items-center justify-center">
                           <PawPrint className="w-4 h-4 text-white" />
                         </div>
-                        <span className="text-sm font-medium text-purple-900">
+                        <span className="text-sm font-medium text-vet-secondary-dark">
                           Pacientes únicos
                         </span>
                       </div>
-                      <span className="font-bold text-purple-900">
+                      <span className="font-bold text-vet-secondary-dark">
                         {stats.pacientesUnicos}
                       </span>
                     </div>
