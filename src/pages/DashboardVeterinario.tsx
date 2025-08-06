@@ -389,7 +389,7 @@ export default function DashboardVeterinario() {
                     <p className="text-3xl font-bold text-amber-900">
                       {stats.citasPendientes}
                     </p>
-                    <p className="text-xs text-amber-600 mt-1">
+                    <p className="text-xs text-vet-secondary mt-1">
                       Requieren atención
                     </p>
                   </div>
@@ -531,7 +531,7 @@ export default function DashboardVeterinario() {
                 <CardHeader className="pb-4">
                   <CardTitle className="flex items-center space-x-2 text-xl">
                     <div className="w-8 h-8 bg-vet-secondary/10 rounded-lg flex items-center justify-center">
-                      <Clock className="w-4 h-4 text-amber-600" />
+                      <Clock className="w-4 h-4 text-vet-secondary" />
                     </div>
                     <span>Próximas Citas</span>
                     {citasProximas.length > 0 && (
@@ -591,7 +591,7 @@ export default function DashboardVeterinario() {
 
                                 <div className="flex-1">
                                   <div className="flex items-center space-x-2 mb-1">
-                                    <PawPrint className="w-3 h-3 text-amber-600" />
+                                    <PawPrint className="w-3 h-3 text-vet-secondary" />
                                     <span className="text-sm font-medium text-vet-gray-900">
                                       {cita.mascota}
                                     </span>
