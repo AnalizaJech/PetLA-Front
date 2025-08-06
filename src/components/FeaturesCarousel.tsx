@@ -300,7 +300,7 @@ export default function FeaturesCarousel() {
           </div>
 
           {/* Dots Indicator */}
-          <div className="flex items-center justify-center space-x-2">
+          <div className="flex items-center justify-center space-x-2 mb-8">
             {features.map((_, index) => (
               <button
                 key={index}
