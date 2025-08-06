@@ -202,7 +202,7 @@ export default function Login() {
                     <Input
                       id="login-identifier"
                       type="text"
-                      placeholder="correo@vetcare.com"
+                      placeholder="correo@vetcare.com, usuario123 o +51 999 123 456"
                       className="pl-10 h-10 border-vet-gray-200 focus:border-vet-primary focus:ring-vet-primary/10"
                       value={loginData.identifier}
                       onChange={(e) =>
