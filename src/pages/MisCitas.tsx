@@ -526,7 +526,7 @@ export default function MisCitas() {
                           <div className="text-lg sm:text-xl lg:text-2xl font-bold text-vet-gray-900 mb-2 sm:mb-3">
                             S/. {cita.precio.toLocaleString()}
                           </div>
-                          <div className="flex flex-col sm:flex-col gap-2">
+                          <div className="flex flex-col sm:flex-col gap-3">
                             {user?.rol === "veterinario" ? (
                               <>
                                 {cita.estado === "aceptada" && (
