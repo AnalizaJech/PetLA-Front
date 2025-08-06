@@ -92,8 +92,16 @@ const formatDateForInput = (date: any): string => {
 };
 
 export default function Configuracion() {
-  const { user, setUser, updateUsuario, deleteAccount, logout, refreshDataFromStorage, mascotas, citas } =
-    useAppContext();
+  const {
+    user,
+    setUser,
+    updateUsuario,
+    deleteAccount,
+    logout,
+    refreshDataFromStorage,
+    mascotas,
+    citas,
+  } = useAppContext();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [savedMessage, setSavedMessage] = useState("");
@@ -1753,7 +1761,8 @@ export default function Configuracion() {
                     <span>Gestión de Datos</span>
                   </CardTitle>
                   <CardDescription className="text-sm">
-                    Herramientas para gestionar y recuperar tus datos almacenados
+                    Herramientas para gestionar y recuperar tus datos
+                    almacenados
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6 p-4 sm:p-6">
@@ -1764,7 +1773,8 @@ export default function Configuracion() {
                         Recuperar Datos
                       </h4>
                       <p className="text-sm text-gray-600 mb-4">
-                        Si tus mascotas o citas han desaparecido, usa esta función para recargarlos desde el almacenamiento local.
+                        Si tus mascotas o citas han desaparecido, usa esta
+                        función para recargarlos desde el almacenamiento local.
                       </p>
                       <Button
                         onClick={() => {
@@ -1773,7 +1783,9 @@ export default function Configuracion() {
                           setTimeout(() => {
                             setIsLoading(false);
                             if (success) {
-                              setSavedMessage("Datos recargados exitosamente desde el almacenamiento");
+                              setSavedMessage(
+                                "Datos recargados exitosamente desde el almacenamiento",
+                              );
                               setErrorMessage("");
                             } else {
                               setErrorMessage("Error al recargar los datos");
@@ -1800,19 +1812,33 @@ export default function Configuracion() {
 
                     {/* Data Status */}
                     <div className="bg-gray-50 p-4 rounded-lg">
-                      <h5 className="font-medium text-gray-900 mb-2">Estado de los Datos</h5>
+                      <h5 className="font-medium text-gray-900 mb-2">
+                        Estado de los Datos
+                      </h5>
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
                         <div>
                           <span className="text-gray-600">Mascotas:</span>
-                          <span className="ml-2 font-medium">{mascotas.filter(m => m.clienteId === user?.id).length}</span>
+                          <span className="ml-2 font-medium">
+                            {
+                              mascotas.filter((m) => m.clienteId === user?.id)
+                                .length
+                            }
+                          </span>
                         </div>
                         <div>
                           <span className="text-gray-600">Citas:</span>
-                          <span className="ml-2 font-medium">{citas.filter(c => c.clienteId === user?.id).length}</span>
+                          <span className="ml-2 font-medium">
+                            {
+                              citas.filter((c) => c.clienteId === user?.id)
+                                .length
+                            }
+                          </span>
                         </div>
                         <div>
                           <span className="text-gray-600">Usuario:</span>
-                          <span className="ml-2 font-medium">{user ? 'Conectado' : 'Desconectado'}</span>
+                          <span className="ml-2 font-medium">
+                            {user ? "Conectado" : "Desconectado"}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -1821,9 +1847,10 @@ export default function Configuracion() {
                     <Alert>
                       <Info className="w-4 h-4" />
                       <AlertDescription>
-                        Los datos se almacenan localmente en tu navegador. Si has perdido información,
-                        es posible que se haya limpiado el almacenamiento del navegador. La función de
-                        recarga intentará recuperar los datos disponibles.
+                        Los datos se almacenan localmente en tu navegador. Si
+                        has perdido información, es posible que se haya limpiado
+                        el almacenamiento del navegador. La función de recarga
+                        intentará recuperar los datos disponibles.
                       </AlertDescription>
                     </Alert>
                   </div>

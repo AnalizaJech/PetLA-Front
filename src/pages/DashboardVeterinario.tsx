@@ -156,7 +156,7 @@ export default function DashboardVeterinario() {
   // Calculate growth metrics
   const lastMonth = new Date();
   lastMonth.setMonth(lastMonth.getMonth() - 1);
-  
+
   const citasEsteMes = misCitas.filter((cita) => {
     const fechaCita = new Date(cita.fecha);
     const inicioMes = new Date();
@@ -174,9 +174,10 @@ export default function DashboardVeterinario() {
     return fechaCita >= inicioMesPasado && fechaCita <= finMesPasado;
   }).length;
 
-  const crecimientoCitas = citasMesPasado > 0 
-    ? ((citasEsteMes - citasMesPasado) / citasMesPasado * 100).toFixed(1)
-    : "0";
+  const crecimientoCitas =
+    citasMesPasado > 0
+      ? (((citasEsteMes - citasMesPasado) / citasMesPasado) * 100).toFixed(1)
+      : "0";
 
   const getStatusBadge = (estado: string) => {
     switch (estado) {
@@ -346,8 +347,8 @@ export default function DashboardVeterinario() {
                       {stats.citasCompletadas}
                     </p>
                     <div className="flex items-center text-xs text-green-600 mt-1">
-                      <ArrowUp className="w-3 h-3 mr-1" />
-                      +{crecimientoCitas}% este mes
+                      <ArrowUp className="w-3 h-3 mr-1" />+{crecimientoCitas}%
+                      este mes
                     </div>
                   </div>
                   <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center">
@@ -416,15 +417,14 @@ export default function DashboardVeterinario() {
                         <span>Agenda de Hoy</span>
                       </CardTitle>
                       <CardDescription className="mt-1">
-                        {citasHoy.length > 0 
+                        {citasHoy.length > 0
                           ? `${citasHoy.length} citas programadas para hoy`
-                          : "No tienes citas programadas para hoy"
-                        }
+                          : "No tienes citas programadas para hoy"}
                       </CardDescription>
                     </div>
                     {citasHoy.length > 0 && (
-                      <Button 
-                        variant="outline" 
+                      <Button
+                        variant="outline"
                         size="sm"
                         onClick={handleViewFullSchedule}
                         className="text-blue-600 border-blue-200 hover:bg-blue-50"
@@ -471,7 +471,7 @@ export default function DashboardVeterinario() {
                                   </div>
                                   <div className="w-8 h-0.5 bg-blue-200 rounded mt-1"></div>
                                 </div>
-                                
+
                                 <div className="flex-1">
                                   <div className="flex items-center space-x-2 mb-1">
                                     <PawPrint className="w-4 h-4 text-blue-600" />
@@ -482,17 +482,20 @@ export default function DashboardVeterinario() {
                                   </div>
                                   <div className="flex items-center space-x-2 text-sm text-gray-600">
                                     <UserCheck className="w-3 h-3" />
-                                    <span>{propietario?.nombre || "Sin asignar"}</span>
+                                    <span>
+                                      {propietario?.nombre || "Sin asignar"}
+                                    </span>
                                   </div>
                                   <p className="text-sm text-gray-500 mt-1">
-                                    {cita.tipoConsulta} • {cita.motivo.length > 30
+                                    {cita.tipoConsulta} •{" "}
+                                    {cita.motivo.length > 30
                                       ? `${cita.motivo.substring(0, 30)}...`
                                       : cita.motivo}
                                   </p>
                                   {getUrgencyLevel(cita.motivo)}
                                 </div>
                               </div>
-                              
+
                               <div className="flex items-center space-x-2">
                                 <CitaQuickActions cita={cita} />
                               </div>
@@ -511,7 +514,7 @@ export default function DashboardVeterinario() {
                       <p className="text-gray-600 mb-4">
                         No tienes citas programadas para hoy
                       </p>
-                      <Button 
+                      <Button
                         onClick={handleViewFullSchedule}
                         className="bg-blue-600 hover:bg-blue-700"
                       >
@@ -585,7 +588,7 @@ export default function DashboardVeterinario() {
                                     )}
                                   </p>
                                 </div>
-                                
+
                                 <div className="flex-1">
                                   <div className="flex items-center space-x-2 mb-1">
                                     <PawPrint className="w-3 h-3 text-amber-600" />
@@ -594,11 +597,12 @@ export default function DashboardVeterinario() {
                                     </span>
                                   </div>
                                   <p className="text-xs text-gray-600">
-                                    {propietario?.nombre || "Sin asignar"} • {cita.tipoConsulta}
+                                    {propietario?.nombre || "Sin asignar"} •{" "}
+                                    {cita.tipoConsulta}
                                   </p>
                                 </div>
                               </div>
-                              
+
                               <div className="flex items-center space-x-2">
                                 {getStatusBadge(cita.estado)}
                                 <Button
@@ -647,7 +651,7 @@ export default function DashboardVeterinario() {
                     <ClipboardList className="w-4 h-4 mr-3" />
                     Gestionar Pacientes
                   </Button>
-                  
+
                   <Button
                     variant="outline"
                     className="w-full justify-start border-gray-200 hover:bg-gray-50"
@@ -656,7 +660,7 @@ export default function DashboardVeterinario() {
                     <Calendar className="w-4 h-4 mr-3" />
                     Mi Agenda Completa
                   </Button>
-                  
+
                   <Button
                     variant="outline"
                     className="w-full justify-start border-gray-200 hover:bg-gray-50"
@@ -746,7 +750,7 @@ Generado automáticamente por PetLA
                         {stats.citasCompletadas}
                       </span>
                     </div>
-                    
+
                     <div className="flex items-center justify-between p-3 bg-gradient-to-r from-purple-50 to-purple-100/50 rounded-lg">
                       <div className="flex items-center space-x-3">
                         <div className="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center">
@@ -760,7 +764,7 @@ Generado automáticamente por PetLA
                         {stats.pacientesUnicos}
                       </span>
                     </div>
-                    
+
                     <div className="flex items-center justify-between p-3 bg-gradient-to-r from-amber-50 to-amber-100/50 rounded-lg">
                       <div className="flex items-center space-x-3">
                         <div className="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center">
@@ -774,7 +778,10 @@ Generado automáticamente por PetLA
                         <span className="font-bold text-amber-900">4.9</span>
                         <div className="flex">
                           {[...Array(5)].map((_, i) => (
-                            <Star key={i} className="w-3 h-3 fill-amber-400 text-amber-400" />
+                            <Star
+                              key={i}
+                              className="w-3 h-3 fill-amber-400 text-amber-400"
+                            />
                           ))}
                         </div>
                       </div>
@@ -791,7 +798,9 @@ Generado automáticamente por PetLA
                       </div>
                       <div className="flex items-center space-x-1">
                         <ArrowUp className="w-3 h-3 text-green-600" />
-                        <span className="font-bold text-green-900">+{crecimientoCitas}%</span>
+                        <span className="font-bold text-green-900">
+                          +{crecimientoCitas}%
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -883,7 +892,8 @@ Generado automáticamente por PetLA
                       Buscar Paciente
                     </DialogTitle>
                     <DialogDescription className="text-gray-600">
-                      Encuentra pacientes por nombre, especie, raza o propietario
+                      Encuentra pacientes por nombre, especie, raza o
+                      propietario
                     </DialogDescription>
                   </div>
                 </div>

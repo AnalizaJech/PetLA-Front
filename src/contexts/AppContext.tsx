@@ -1029,11 +1029,17 @@ export function AppProvider({ children }: { children: ReactNode }) {
         const formattedMascotas = parsedMascotas.map((mascota: any) => ({
           ...mascota,
           fechaNacimiento: new Date(mascota.fechaNacimiento),
-          proximaCita: mascota.proximaCita ? new Date(mascota.proximaCita) : null,
-          ultimaVacuna: mascota.ultimaVacuna ? new Date(mascota.ultimaVacuna) : null,
+          proximaCita: mascota.proximaCita
+            ? new Date(mascota.proximaCita)
+            : null,
+          ultimaVacuna: mascota.ultimaVacuna
+            ? new Date(mascota.ultimaVacuna)
+            : null,
         }));
         setMascotas(formattedMascotas);
-        console.log(`✅ Loaded ${formattedMascotas.length} pets from localStorage`);
+        console.log(
+          `✅ Loaded ${formattedMascotas.length} pets from localStorage`,
+        );
       }
 
       // Reload citas
@@ -1049,7 +1055,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
           clienteNombre: cita.clienteNombre || undefined,
         }));
         setCitas(formattedCitas);
-        console.log(`✅ Loaded ${formattedCitas.length} appointments from localStorage`);
+        console.log(
+          `✅ Loaded ${formattedCitas.length} appointments from localStorage`,
+        );
       }
 
       // Reload other data...
@@ -1060,10 +1068,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
           ...preCita,
           fechaPreferida: new Date(preCita.fechaPreferida),
           fechaCreacion: new Date(preCita.fechaCreacion),
-          fechaNueva: preCita.fechaNueva ? new Date(preCita.fechaNueva) : undefined,
+          fechaNueva: preCita.fechaNueva
+            ? new Date(preCita.fechaNueva)
+            : undefined,
         }));
         setPreCitas(formattedPreCitas);
-        console.log(`✅ Loaded ${formattedPreCitas.length} pre-appointments from localStorage`);
+        console.log(
+          `✅ Loaded ${formattedPreCitas.length} pre-appointments from localStorage`,
+        );
       }
 
       console.log("✅ Data refresh completed");

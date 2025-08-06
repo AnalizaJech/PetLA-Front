@@ -106,7 +106,9 @@ export default function GestionCitas() {
   const enhancedCitas = citas.map((cita) => {
     const mascota = mascotas.find((m) => m.nombre === cita.mascota);
     const veterinario = usuarios.find((u) => u.nombre === cita.veterinario);
-    const propietario = mascota ? usuarios.find((u) => u.id === mascota.clienteId) : null;
+    const propietario = mascota
+      ? usuarios.find((u) => u.id === mascota.clienteId)
+      : null;
     return {
       ...cita,
       mascotaInfo: mascota,
@@ -895,83 +897,88 @@ export default function GestionCitas() {
                     {/* Owner Information Section */}
                     {selectedCita &&
                       (() => {
-                        const enhancedCita = enhancedCitas.find(c => c.id === selectedCita.id);
+                        const enhancedCita = enhancedCitas.find(
+                          (c) => c.id === selectedCita.id,
+                        );
                         return enhancedCita?.propietarioInfo;
                       })() && (
-                      <div className="bg-blue-50 rounded-lg p-6">
-                        <div className="flex items-center space-x-2 mb-4">
-                          <User className="w-5 h-5 text-blue-600" />
-                          <h4 className="font-semibold text-vet-gray-900">
-                            Información del Propietario
-                          </h4>
-                        </div>
+                        <div className="bg-blue-50 rounded-lg p-6">
+                          <div className="flex items-center space-x-2 mb-4">
+                            <User className="w-5 h-5 text-blue-600" />
+                            <h4 className="font-semibold text-vet-gray-900">
+                              Información del Propietario
+                            </h4>
+                          </div>
 
-                        {(() => {
-                          const enhancedCita = enhancedCitas.find(c => c.id === selectedCita.id);
-                          const propietario = enhancedCita?.propietarioInfo;
+                          {(() => {
+                            const enhancedCita = enhancedCitas.find(
+                              (c) => c.id === selectedCita.id,
+                            );
+                            const propietario = enhancedCita?.propietarioInfo;
 
-                          if (!propietario) return null;
+                            if (!propietario) return null;
 
-                          return (
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                              <div className="space-y-1">
-                                <span className="text-xs font-medium text-vet-gray-500 uppercase tracking-wide">
-                                  Nombre Completo
-                                </span>
-                                <div className="flex items-center space-x-2">
-                                  <User className="w-4 h-4 text-blue-600" />
-                                  <p className="font-medium text-vet-gray-900">
-                                    {propietario.nombre} {propietario.apellidos || ''}
-                                  </p>
+                            return (
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="space-y-1">
+                                  <span className="text-xs font-medium text-vet-gray-500 uppercase tracking-wide">
+                                    Nombre Completo
+                                  </span>
+                                  <div className="flex items-center space-x-2">
+                                    <User className="w-4 h-4 text-blue-600" />
+                                    <p className="font-medium text-vet-gray-900">
+                                      {propietario.nombre}{" "}
+                                      {propietario.apellidos || ""}
+                                    </p>
+                                  </div>
                                 </div>
+
+                                {propietario.email && (
+                                  <div className="space-y-1">
+                                    <span className="text-xs font-medium text-vet-gray-500 uppercase tracking-wide">
+                                      Correo Electrónico
+                                    </span>
+                                    <div className="flex items-center space-x-2">
+                                      <Mail className="w-4 h-4 text-green-600" />
+                                      <p className="font-medium text-vet-gray-900">
+                                        {propietario.email}
+                                      </p>
+                                    </div>
+                                  </div>
+                                )}
+
+                                {propietario.telefono && (
+                                  <div className="space-y-1">
+                                    <span className="text-xs font-medium text-vet-gray-500 uppercase tracking-wide">
+                                      Teléfono
+                                    </span>
+                                    <div className="flex items-center space-x-2">
+                                      <Phone className="w-4 h-4 text-purple-600" />
+                                      <p className="font-medium text-vet-gray-900">
+                                        {propietario.telefono}
+                                      </p>
+                                    </div>
+                                  </div>
+                                )}
+
+                                {propietario.direccion && (
+                                  <div className="space-y-1">
+                                    <span className="text-xs font-medium text-vet-gray-500 uppercase tracking-wide">
+                                      Dirección
+                                    </span>
+                                    <div className="flex items-center space-x-2">
+                                      <MapPin className="w-4 h-4 text-orange-600" />
+                                      <p className="font-medium text-vet-gray-900">
+                                        {propietario.direccion}
+                                      </p>
+                                    </div>
+                                  </div>
+                                )}
                               </div>
-
-                              {propietario.email && (
-                                <div className="space-y-1">
-                                  <span className="text-xs font-medium text-vet-gray-500 uppercase tracking-wide">
-                                    Correo Electrónico
-                                  </span>
-                                  <div className="flex items-center space-x-2">
-                                    <Mail className="w-4 h-4 text-green-600" />
-                                    <p className="font-medium text-vet-gray-900">
-                                      {propietario.email}
-                                    </p>
-                                  </div>
-                                </div>
-                              )}
-
-                              {propietario.telefono && (
-                                <div className="space-y-1">
-                                  <span className="text-xs font-medium text-vet-gray-500 uppercase tracking-wide">
-                                    Teléfono
-                                  </span>
-                                  <div className="flex items-center space-x-2">
-                                    <Phone className="w-4 h-4 text-purple-600" />
-                                    <p className="font-medium text-vet-gray-900">
-                                      {propietario.telefono}
-                                    </p>
-                                  </div>
-                                </div>
-                              )}
-
-                              {propietario.direccion && (
-                                <div className="space-y-1">
-                                  <span className="text-xs font-medium text-vet-gray-500 uppercase tracking-wide">
-                                    Dirección
-                                  </span>
-                                  <div className="flex items-center space-x-2">
-                                    <MapPin className="w-4 h-4 text-orange-600" />
-                                    <p className="font-medium text-vet-gray-900">
-                                      {propietario.direccion}
-                                    </p>
-                                  </div>
-                                </div>
-                              )}
-                            </div>
-                          );
-                        })()}
-                      </div>
-                    )}
+                            );
+                          })()}
+                        </div>
+                      )}
 
                     {/* Payment Validation Section */}
                     {dialogMode === "validate" && (

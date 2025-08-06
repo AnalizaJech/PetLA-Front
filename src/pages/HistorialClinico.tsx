@@ -245,9 +245,7 @@ export default function HistorialClinico() {
   const getHistorialReal = (nombreMascota) => {
     // Only include attended appointments that have been completed by the veterinarian
     const citasRelevantes = citas.filter(
-      (cita) =>
-        cita.mascota === nombreMascota &&
-        cita.estado === "atendida", // Only show attended appointments in clinical history
+      (cita) => cita.mascota === nombreMascota && cita.estado === "atendida", // Only show attended appointments in clinical history
     );
 
     // Agrupar por los 6 servicios específicos de la veterinaria
@@ -924,7 +922,9 @@ export default function HistorialClinico() {
                         <PawPrint className="w-5 h-5 text-vet-primary" />
                       </div>
                       <div>
-                        <p className="text-sm text-vet-gray-600">Total Mascotas</p>
+                        <p className="text-sm text-vet-gray-600">
+                          Total Mascotas
+                        </p>
                         <p className="text-xl font-bold text-vet-gray-900">
                           {availableMascotas.length}
                         </p>
@@ -940,14 +940,17 @@ export default function HistorialClinico() {
                         <CheckCircle className="w-5 h-5 text-green-600" />
                       </div>
                       <div>
-                        <p className="text-sm text-vet-gray-600">Servicios Confirmados</p>
+                        <p className="text-sm text-vet-gray-600">
+                          Servicios Confirmados
+                        </p>
                         <p className="text-xl font-bold text-vet-gray-900">
                           {(() => {
                             // Count all attended appointments (admin confirmed services)
                             const serviciosConfirmados = citas.filter(
                               (cita) =>
-                                availableMascotas.some((m) => m.nombre === cita.mascota) &&
-                                cita.estado === "atendida"
+                                availableMascotas.some(
+                                  (m) => m.nombre === cita.mascota,
+                                ) && cita.estado === "atendida",
                             ).length;
                             return serviciosConfirmados;
                           })()}
@@ -964,18 +967,27 @@ export default function HistorialClinico() {
                         <Calendar className="w-5 h-5 text-blue-600" />
                       </div>
                       <div>
-                        <p className="text-sm text-vet-gray-600">Última Visita</p>
+                        <p className="text-sm text-vet-gray-600">
+                          Última Visita
+                        </p>
                         <p className="text-sm font-medium text-vet-gray-900">
                           {(() => {
                             const ultimaVisita = citas
                               .filter(
                                 (cita) =>
-                                  availableMascotas.some((m) => m.nombre === cita.mascota) &&
-                                  cita.estado === "atendida"
+                                  availableMascotas.some(
+                                    (m) => m.nombre === cita.mascota,
+                                  ) && cita.estado === "atendida",
                               )
-                              .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())[0];
+                              .sort(
+                                (a, b) =>
+                                  new Date(b.fecha).getTime() -
+                                  new Date(a.fecha).getTime(),
+                              )[0];
                             return ultimaVisita
-                              ? new Date(ultimaVisita.fecha).toLocaleDateString("es-ES")
+                              ? new Date(ultimaVisita.fecha).toLocaleDateString(
+                                  "es-ES",
+                                )
                               : "Sin visitas";
                           })()}
                         </p>
@@ -997,8 +1009,11 @@ export default function HistorialClinico() {
                             // Count pending appointments
                             const citasEnProceso = citas.filter(
                               (cita) =>
-                                availableMascotas.some((m) => m.nombre === cita.mascota) &&
-                                (cita.estado === "aceptada" || cita.estado === "en_validacion")
+                                availableMascotas.some(
+                                  (m) => m.nombre === cita.mascota,
+                                ) &&
+                                (cita.estado === "aceptada" ||
+                                  cita.estado === "en_validacion"),
                             ).length;
                             return citasEnProceso;
                           })()}

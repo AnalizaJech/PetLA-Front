@@ -273,7 +273,6 @@ export default function MisPacientes() {
     };
   }, [enhancedCitas, validateDataRelationships, misCitas, user?.nombre]);
 
-
   useEffect(() => {
     window.scrollTo(0, 0);
 
@@ -504,7 +503,6 @@ export default function MisPacientes() {
                   </AlertDescription>
                 </Alert>
               )}
-
             </div>
           )}
 
