@@ -465,9 +465,18 @@ export default function HistorialClinicoVeterinario() {
     try {
       let content = `HISTORIAL CLÍNICO VETERINARIO\n`;
       content += `========================================\n\n`;
-      content += `Mascota: ${selectedPet.nombre}\n`;
-      content += `Propietario: ${selectedOwner?.nombre || "No registrado"}\n`;
-      content += `Veterinario: ${user.nombre}\n`;
+      content += `INFORMACIÓN DE LA MASCOTA:\n`;
+      content += `-------------------------\n`;
+      content += `Nombre: ${selectedPet.nombre}\n`;
+      content += `Especie: ${selectedPet.especie || "No especificada"}\n`;
+      content += `Raza: ${selectedPet.raza || "No especificada"}\n`;
+      content += `Sexo: ${selectedPet.sexo || "No especificado"}\n\n`;
+      content += `INFORMACIÓN DEL PROPIETARIO:\n`;
+      content += `----------------------------\n`;
+      content += `Nombre: ${selectedOwner ? `${selectedOwner.nombre} ${selectedOwner.apellidos || ''}` : "No registrado"}\n`;
+      if (selectedOwner?.telefono) content += `Teléfono: ${selectedOwner.telefono}\n`;
+      if (selectedOwner?.email) content += `Email: ${selectedOwner.email}\n`;
+      content += `\nVeterinario: ${user.nombre}\n`;
       content += `Generado el: ${new Date().toLocaleDateString("es-ES")}\n\n`;
 
       if (filteredHistory.length === 0) {
