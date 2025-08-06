@@ -802,7 +802,7 @@ export default function MisPacientes() {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                               <div className="space-y-2">
                                 <div className="flex items-center space-x-2">
-                                  <PawPrint className="w-4 h-4 text-vet-gray-600" />
+                                  <PawPrint className="w-4 h-4 text-blue-600" />
                                   <span>
                                     <strong>Especie:</strong>{" "}
                                     {mascota?.especie ||
@@ -812,14 +812,14 @@ export default function MisPacientes() {
                                 </div>
                                 {/* Always show breed information if available, even for unregistered pets */}
                                 <div className="flex items-center space-x-2">
-                                  <Info className="w-4 h-4 text-vet-gray-600" />
+                                  <Info className="w-4 h-4 text-purple-600" />
                                   <span>
                                     <strong>Raza:</strong>{" "}
                                     {mascota?.raza || "No especificada"}
                                   </span>
                                 </div>
                                 <div className="flex items-center space-x-2">
-                                  <Calendar className="w-4 h-4 text-vet-gray-600" />
+                                  <Calendar className="w-4 h-4 text-green-600" />
                                   <span>
                                     <strong>Fecha:</strong>{" "}
                                     {new Date(cita.fecha).toLocaleDateString(
@@ -837,7 +837,7 @@ export default function MisPacientes() {
 
                               <div className="space-y-2">
                                 <div className="flex items-center space-x-2">
-                                  <Clock className="w-4 h-4 text-vet-gray-600" />
+                                  <Clock className="w-4 h-4 text-blue-600" />
                                   <span>
                                     <strong>Hora:</strong>{" "}
                                     {new Date(cita.fecha).toLocaleTimeString(
@@ -850,7 +850,7 @@ export default function MisPacientes() {
                                   </span>
                                 </div>
                                 <div className="flex items-start space-x-2">
-                                  <FileText className="w-4 h-4 text-vet-gray-600 mt-0.5" />
+                                  <FileText className="w-4 h-4 text-teal-600 mt-0.5" />
                                   <span>
                                     <strong>Motivo:</strong> {cita.motivo}
                                   </span>
