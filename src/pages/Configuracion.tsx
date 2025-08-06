@@ -256,14 +256,38 @@ export default function Configuracion() {
     }
   }, [user]);
 
-  // Clear messages after delay
+  // Clear messages after delay - pero mantener errores de validación hasta que se resuelvan
   useEffect(() => {
-    if (savedMessage || errorMessage) {
+    if (savedMessage) {
+      // Los mensajes de éxito se limpian automáticamente
       const timer = setTimeout(() => {
         setSavedMessage("");
-        setErrorMessage("");
       }, 4000);
       return () => clearTimeout(timer);
+    }
+
+    if (errorMessage) {
+      // Los errores de validación persisten hasta que se corrijan
+      const validationErrors = [
+        "El nombre es obligatorio",
+        "Los apellidos son obligatorios",
+        "El nombre de usuario es obligatorio",
+        "Por favor ingresa un email válido",
+        "El teléfono es obligatorio",
+        "La especialidad es obligatoria para veterinarios",
+        "El número de colegiatura es obligatorio para veterinarios"
+      ];
+
+      const isValidationError = validationErrors.some(error => errorMessage.includes(error));
+
+      if (!isValidationError) {
+        // Solo los errores que no son de validación se limpian automáticamente
+        const timer = setTimeout(() => {
+          setErrorMessage("");
+        }, 6000); // Más tiempo para errores de sistema
+        return () => clearTimeout(timer);
+      }
+      // Los errores de validación NO se limpian automáticamente
     }
   }, [savedMessage, errorMessage]);
 
