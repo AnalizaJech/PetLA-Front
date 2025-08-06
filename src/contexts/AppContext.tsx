@@ -1014,11 +1014,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
   };
 
   const login = async (
-    email: string,
+    identifier: string,
     password: string,
   ): Promise<Usuario | null> => {
-    // Find user by email
-    const existingUser = usuarios.find((u) => u.email === email);
+    // Find user by email, username, or phone
+    const existingUser = usuarios.find((u) =>
+      u.email === identifier ||
+      u.username === identifier ||
+      u.telefono === identifier
+    );
 
     if (existingUser) {
       // Check if user has a password set
