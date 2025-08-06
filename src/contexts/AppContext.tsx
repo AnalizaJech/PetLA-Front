@@ -621,7 +621,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
       // Si está cerca del límite (>80%), limpiar datos innecesarios
       if (total > maxSize * 0.8) {
-        console.warn("��� localStorage cerca del límite, optimizando...");
+        console.warn("🚨 localStorage cerca del límite, optimizando...");
 
         // Limpiar datos temporales o innecesarios
         const keysToClean = [
@@ -1098,26 +1098,26 @@ export function AppProvider({ children }: { children: ReactNode }) {
         return false;
       }
 
-      console.log(`🗑️ Iniciando eliminación de cuenta para usuario: ${userToDelete.nombre}`);
+      console.log(`[DELETE] Iniciando eliminación de cuenta para usuario: ${userToDelete.nombre}`);
 
       // 1. Eliminar todas las mascotas del usuario
       const mascotasDelUsuario = mascotas.filter((m) => m.clienteId === userId);
-      console.log(`📋 Eliminando ${mascotasDelUsuario.length} mascotas del usuario`);
+      console.log(`[PETS] Eliminando ${mascotasDelUsuario.length} mascotas del usuario`);
 
       setMascotas((prev) => prev.filter((m) => m.clienteId !== userId));
 
       // 2. Cancelar/eliminar todas las citas del usuario
       const citasDelUsuario = citas.filter((c) => c.clienteId === userId);
-      console.log(`📅 Cancelando ${citasDelUsuario.length} citas del usuario`);
+      console.log(`[APPOINTMENTS] Cancelando ${citasDelUsuario.length} citas del usuario`);
 
       setCitas((prev) => prev.filter((c) => c.clienteId !== userId));
 
-      // 3. Eliminar historial cl��nico de las mascotas del usuario
+      // 3. Eliminar historial clínico de las mascotas del usuario
       const mascotaIds = mascotasDelUsuario.map((m) => m.id);
       const historialEliminado = historialClinico.filter((h) =>
         mascotaIds.includes(h.mascotaId)
       );
-      console.log(`🏥 Eliminando ${historialEliminado.length} entradas de historial clínico`);
+      console.log(`[MEDICAL] Eliminando ${historialEliminado.length} entradas de historial clínico`);
 
       setHistorialClinico((prev) =>
         prev.filter((h) => !mascotaIds.includes(h.mascotaId))
@@ -1125,7 +1125,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
       // 4. Eliminar notificaciones del usuario
       const notificacionesDelUsuario = notificaciones.filter((n) => n.usuarioId === userId);
-      console.log(`🔔 Eliminando ${notificacionesDelUsuario.length} notificaciones del usuario`);
+      console.log(`[NOTIFICATIONS] Eliminando ${notificacionesDelUsuario.length} notificaciones del usuario`);
 
       setNotificaciones((prev) => prev.filter((n) => n.usuarioId !== userId));
 
@@ -1136,7 +1136,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
           localStorage.removeItem(storageKey);
         }
       });
-      console.log(`💳 Comprobantes de pago eliminados`);
+      console.log(`[RECEIPTS] Comprobantes de pago eliminados`);
 
       // 6. Limpiar datos específicos del usuario en localStorage
       const keysToRemove = [
@@ -1154,13 +1154,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
       keysToRemove.forEach((key) => {
         localStorage.removeItem(key);
       });
-      console.log(`🧹 Datos de configuración personal eliminados`);
+      console.log(`[CONFIG] Datos de configuración personal eliminados`);
 
       // 7. Finalmente, eliminar el usuario del sistema
       setUsuarios((prev) => prev.filter((u) => u.id !== userId));
 
-      console.log(`✅ Cuenta eliminada exitosamente para ${userToDelete.nombre}`);
-      console.log(`📊 Resumen de eliminación:`);
+      console.log(`[SUCCESS] Cuenta eliminada exitosamente para ${userToDelete.nombre}`);
+      console.log(`[SUMMARY] Resumen de eliminación:`);
       console.log(`   - Usuario: ${userToDelete.nombre} (${userToDelete.email})`);
       console.log(`   - Mascotas eliminadas: ${mascotasDelUsuario.length}`);
       console.log(`   - Citas canceladas: ${citasDelUsuario.length}`);
@@ -1169,7 +1169,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
       return true;
     } catch (error) {
-      console.error("❌ Error eliminando cuenta:", error);
+      console.error("[ERROR] Error eliminando cuenta:", error);
       return false;
     }
   };
@@ -1380,7 +1380,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       );
 
       if (errors.length > 0) {
-        console.warn("⚠��� Errores durante la reparación:", errors);
+        console.warn("⚠️ Errores durante la reparación:", errors);
       }
 
       // Force a refresh of localStorage to persist changes
