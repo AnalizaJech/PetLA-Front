@@ -1945,43 +1945,36 @@ export default function Configuracion() {
                 </div>
               </div>
 
-              <DialogFooter className="flex-shrink-0 pt-4">
-                <div className="flex flex-col w-full gap-3">
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      onClick={() => {
-                        setShowDeleteAccountModal(false);
-                        setDeleteConfirmationText("");
-                      }}
-                      className="flex-1 text-sm h-9"
-                    >
-                      Cancelar
-                    </Button>
-                    <Button
-                      onClick={handleDeleteAccount}
-                      disabled={deleteConfirmationText !== "ELIMINAR MI CUENTA" || isLoading}
-                      className="flex-1 bg-red-600 hover:bg-red-700 text-white text-sm h-9 disabled:bg-red-300 disabled:cursor-not-allowed"
-                    >
-                      {isLoading ? (
-                        <>
-                          <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-1" />
-                          Eliminando...
-                        </>
-                      ) : (
-                        <>
-                          <Trash2 className="w-4 h-4 mr-1" />
-                          Eliminar cuenta
-                        </>
-                      )}
-                    </Button>
-                  </div>
+              <DialogFooter className="flex-shrink-0 pt-6">
+                <div className="flex flex-col w-full gap-4">
+                  <Button
+                    onClick={handleDeleteAccount}
+                    disabled={deleteConfirmationText !== "ELIMINAR MI CUENTA" || isLoading}
+                    className="w-full bg-red-600 hover:bg-red-700 text-white h-12 text-base font-semibold disabled:bg-vet-gray-300 disabled:cursor-not-allowed transition-all"
+                  >
+                    {isLoading ? (
+                      <>
+                        <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent mr-2" />
+                        Eliminando cuenta...
+                      </>
+                    ) : (
+                      <>
+                        <Trash2 className="w-5 h-5 mr-2" />
+                        Eliminar mi cuenta permanentemente
+                      </>
+                    )}
+                  </Button>
 
-                  {deleteConfirmationText !== "ELIMINAR MI CUENTA" && deleteConfirmationText.length > 0 && (
-                    <p className="text-xs text-red-600 text-center">
-                      Debes escribir exactamente "ELIMINAR MI CUENTA" para continuar
-                    </p>
-                  )}
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setShowDeleteAccountModal(false);
+                      setDeleteConfirmationText("");
+                    }}
+                    className="w-full h-10 text-vet-gray-700 border-vet-gray-300 hover:bg-vet-gray-50"
+                  >
+                    Cancelar y mantener mi cuenta
+                  </Button>
                 </div>
               </DialogFooter>
             </DialogContent>
