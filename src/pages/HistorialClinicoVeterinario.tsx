@@ -1038,8 +1038,8 @@ export default function HistorialClinicoVeterinario() {
 
           {/* Record Detail Modal */}
           <Dialog open={showDetailModal} onOpenChange={setShowDetailModal}>
-            <DialogContent className="max-w-2xl">
-              <DialogHeader>
+            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+              <DialogHeader className="sticky top-0 bg-white z-10 pb-4 border-b">
                 <DialogTitle className="flex items-center space-x-2">
                   {selectedRecord && getConsultationIcon(selectedRecord.tipo || "consulta")}
                   <span>Detalle del Registro Médico</span>
@@ -1047,7 +1047,7 @@ export default function HistorialClinicoVeterinario() {
                 <DialogDescription>
                   {selectedRecord && (
                     <span>
-                      {new Date(selectedRecord.fecha).toLocaleDateString("es-ES")} - {selectedRecord.tipo || "Consulta"}
+                      {new Date(selectedRecord.fecha).toLocaleDateString("es-ES")} - {selectedRecord.tipo || selectedRecord.tipoConsulta || "Consulta"}
                     </span>
                   )}
                 </DialogDescription>
