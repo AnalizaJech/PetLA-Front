@@ -606,8 +606,8 @@ export default function DashboardVeterinario() {
                       const reportData = {
                         veterinario: user?.nombre || "Veterinario",
                         periodo: currentMonth,
-                        citasCompletadas: monthlyStats.citasCompletadas,
-                        pacientesUnicos: monthlyStats.pacientesUnicos,
+                        citasCompletadas: stats.citasCompletadas,
+                        pacientesUnicos: stats.pacientesUnicos,
                         fecha: new Date().toLocaleDateString("es-ES"),
                       };
 
