@@ -1017,12 +1017,25 @@ export function AppProvider({ children }: { children: ReactNode }) {
     identifier: string,
     password: string,
   ): Promise<Usuario | null> => {
+    // Normalize identifier (trim spaces and lowercase for email/username)
+    const normalizedIdentifier = identifier.trim();
+
     // Find user by email, username, or phone
-    const existingUser = usuarios.find((u) =>
-      u.email === identifier ||
-      u.username === identifier ||
-      u.telefono === identifier
-    );
+    const existingUser = usuarios.find((u) => {
+      // Compare email (case-insensitive)
+      if (u.email && u.email.toLowerCase() === normalizedIdentifier.toLowerCase()) {
+        return true;
+      }
+      // Compare username (case-insensitive)
+      if (u.username && u.username.toLowerCase() === normalizedIdentifier.toLowerCase()) {
+        return true;
+      }
+      // Compare phone (exact match, trimmed)
+      if (u.telefono && u.telefono.trim() === normalizedIdentifier) {
+        return true;
+      }
+      return false;
+    });
 
     if (existingUser) {
       // Check if user has a password set
