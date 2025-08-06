@@ -1270,7 +1270,12 @@ export default function HistorialClinicoVeterinario() {
                                     <span>
                                       {new Date(
                                         record.fecha,
-                                      ).toLocaleDateString("es-ES")}
+                                      ).toLocaleDateString("es-ES", {
+                                        weekday: "long",
+                                        day: "numeric",
+                                        month: "long",
+                                        year: "numeric",
+                                      })}
                                     </span>
                                   </div>
                                   <div className="flex items-center space-x-1">
@@ -1287,56 +1292,187 @@ export default function HistorialClinicoVeterinario() {
                                 </div>
                               </div>
                             </div>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => {
-                                setSelectedRecord(record);
-                                setShowDetailModal(true);
-                              }}
-                            >
-                              <Eye className="w-4 h-4" />
-                            </Button>
                           </div>
 
-                          <div className="space-y-3">
+                          <div className="space-y-4">
+                            {/* Motivo de consulta */}
+                            {record.motivo && (
+                              <div>
+                                <h5 className="font-medium text-vet-gray-900 mb-1 flex items-center">
+                                  <FileText className="w-4 h-4 mr-2 text-vet-primary" />
+                                  Motivo de Consulta:
+                                </h5>
+                                <p className="text-vet-gray-700 ml-6">
+                                  {record.motivo}
+                                </p>
+                              </div>
+                            )}
+
+                            {/* Signos vitales */}
+                            {(record.peso || record.temperatura || record.presionArterial || record.frecuenciaCardiaca) && (
+                              <div>
+                                <h5 className="font-medium text-vet-gray-900 mb-2 flex items-center">
+                                  <Heart className="w-4 h-4 mr-2 text-red-600" />
+                                  Signos Vitales:
+                                </h5>
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 ml-6 text-sm">
+                                  {record.peso && (
+                                    <div className="flex items-center space-x-1">
+                                      <Weight className="w-3 h-3 text-vet-gray-600" />
+                                      <span><strong>Peso:</strong> {record.peso} kg</span>
+                                    </div>
+                                  )}
+                                  {record.temperatura && (
+                                    <div className="flex items-center space-x-1">
+                                      <Thermometer className="w-3 h-3 text-vet-gray-600" />
+                                      <span><strong>Temp:</strong> {record.temperatura}°C</span>
+                                    </div>
+                                  )}
+                                  {record.presionArterial && (
+                                    <div className="flex items-center space-x-1">
+                                      <Activity className="w-3 h-3 text-vet-gray-600" />
+                                      <span><strong>P.A.:</strong> {record.presionArterial}</span>
+                                    </div>
+                                  )}
+                                  {record.frecuenciaCardiaca && (
+                                    <div className="flex items-center space-x-1">
+                                      <Heart className="w-3 h-3 text-vet-gray-600" />
+                                      <span><strong>F.C.:</strong> {record.frecuenciaCardiaca} bpm</span>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Diagnóstico */}
                             {record.diagnostico && (
                               <div>
-                                <h5 className="font-medium text-vet-gray-900 mb-1">
+                                <h5 className="font-medium text-vet-gray-900 mb-1 flex items-center">
+                                  <Stethoscope className="w-4 h-4 mr-2 text-vet-primary" />
                                   Diagnóstico:
                                 </h5>
-                                <p className="text-vet-gray-700">
+                                <p className="text-vet-gray-700 ml-6">
                                   {record.diagnostico}
                                 </p>
                               </div>
                             )}
 
+                            {/* Tratamiento */}
                             {record.tratamiento && (
                               <div>
-                                <h5 className="font-medium text-vet-gray-900 mb-1">
+                                <h5 className="font-medium text-vet-gray-900 mb-1 flex items-center">
+                                  <Pill className="w-4 h-4 mr-2 text-green-600" />
                                   Tratamiento:
                                 </h5>
-                                <p className="text-vet-gray-700">
+                                <p className="text-vet-gray-700 ml-6">
                                   {record.tratamiento}
                                 </p>
                               </div>
                             )}
 
+                            {/* Medicamentos */}
+                            {record.medicamentos && record.medicamentos.length > 0 && (
+                              <div>
+                                <h5 className="font-medium text-vet-gray-900 mb-2 flex items-center">
+                                  <Pill className="w-4 h-4 mr-2 text-blue-600" />
+                                  Medicamentos Recetados:
+                                </h5>
+                                <div className="space-y-2 ml-6">
+                                  {record.medicamentos.map((med, index) => (
+                                    <div key={index} className="border border-vet-gray-200 rounded-lg p-3">
+                                      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm">
+                                        <div>
+                                          <strong>Medicamento:</strong> {med.nombre}
+                                        </div>
+                                        <div>
+                                          <strong>Dosis:</strong> {med.dosis}
+                                        </div>
+                                        <div>
+                                          <strong>Frecuencia:</strong> {med.frecuencia}
+                                        </div>
+                                        {med.duracion && (
+                                          <div>
+                                            <strong>Duración:</strong> {med.duracion}
+                                          </div>
+                                        )}
+                                        {med.indicaciones && (
+                                          <div className="md:col-span-3">
+                                            <strong>Indicaciones:</strong> {med.indicaciones}
+                                          </div>
+                                        )}
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Servicios adicionales */}
+                            {record.servicios && record.servicios.length > 0 && (
+                              <div>
+                                <h5 className="font-medium text-vet-gray-900 mb-2 flex items-center">
+                                  <Activity className="w-4 h-4 mr-2 text-purple-600" />
+                                  Servicios Realizados:
+                                </h5>
+                                <div className="space-y-2 ml-6">
+                                  {record.servicios.map((servicio, index) => (
+                                    <div key={index} className="border border-vet-gray-200 rounded-lg p-3">
+                                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+                                        <div>
+                                          <strong>Servicio:</strong> {servicio.nombre}
+                                        </div>
+                                        {servicio.precio && (
+                                          <div>
+                                            <strong>Precio:</strong> ${servicio.precio}
+                                          </div>
+                                        )}
+                                        {servicio.descripcion && (
+                                          <div className="md:col-span-2">
+                                            <strong>Descripción:</strong> {servicio.descripcion}
+                                          </div>
+                                        )}
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Observaciones */}
                             {record.observaciones && (
                               <div>
-                                <h5 className="font-medium text-vet-gray-900 mb-1">
+                                <h5 className="font-medium text-vet-gray-900 mb-1 flex items-center">
+                                  <FileText className="w-4 h-4 mr-2 text-vet-gray-600" />
                                   Observaciones:
                                 </h5>
-                                <p className="text-vet-gray-700">
+                                <p className="text-vet-gray-700 ml-6">
                                   {record.observaciones}
                                 </p>
                               </div>
                             )}
 
-                            <div className="flex items-center justify-between pt-2 border-t border-vet-gray-200">
+                            {/* Próxima cita */}
+                            {(record.proximaVisita || record.proximaCita) && (
+                              <div>
+                                <h5 className="font-medium text-vet-gray-900 mb-1 flex items-center">
+                                  <CalendarIcon className="w-4 h-4 mr-2 text-vet-primary" />
+                                  Próxima Cita:
+                                </h5>
+                                <p className="text-vet-gray-700 ml-6">
+                                  {new Date(record.proximaVisita || record.proximaCita).toLocaleDateString("es-ES", {
+                                    weekday: "long",
+                                    year: "numeric",
+                                    month: "long",
+                                    day: "numeric",
+                                  })}
+                                </p>
+                              </div>
+                            )}
+
+                            <div className="flex items-center justify-between pt-3 border-t border-vet-gray-200">
                               <div className="flex items-center space-x-1 text-xs text-vet-gray-500">
                                 <User className="w-3 h-3" />
-                                <span>{record.veterinario}</span>
+                                <span>Dr. {record.veterinario}</span>
                               </div>
                             </div>
                           </div>
