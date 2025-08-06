@@ -363,7 +363,7 @@ export default function CitaDetailModal({
                   Veterinario Asignado
                 </Label>
                 <p className="text-vet-gray-900 font-medium">
-                  Dr. {selectedCita.cita.veterinario}
+                  {selectedCita.cita.veterinario}
                 </p>
               </div>
 
