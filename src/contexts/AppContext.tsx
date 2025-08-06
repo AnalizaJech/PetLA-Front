@@ -288,6 +288,7 @@ interface AppContextType {
   register: (
     userData: Omit<Usuario, "id" | "fechaRegistro"> & { password: string },
   ) => Promise<Usuario | null>;
+  deleteAccount: (userId: string) => Promise<boolean>;
 
   // Data relationship helpers
   getMascotaWithOwner: (mascotaId: string) => {
@@ -687,7 +688,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         }));
         localStorage.setItem("mascotas", JSON.stringify(mascotasSinFotos));
         console.warn(
-          "Mascotas guardadas sin fotos para preservar datos b��sicos",
+          "Mascotas guardadas sin fotos para preservar datos básicos",
         );
       } catch (fallbackError) {
         console.error("Error crítico guardando mascotas:", fallbackError);
