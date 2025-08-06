@@ -504,7 +504,10 @@ export default function HistorialClinico() {
     contenido += `Fecha de Nacimiento: ${mascotaInfo.fechaNacimiento.toLocaleDateString("es-ES")}\n`;
     contenido += `Peso: ${mascotaInfo.peso ? `${mascotaInfo.peso} kg` : "No registrado"}\n`;
     contenido += `Sexo: ${mascotaInfo.sexo || "No registrado"}\n`;
-    contenido += `Microchip: ${mascotaInfo.microchip || "No registrado"}\n\n`;
+    if (mascotaInfo.microchip) {
+      contenido += `Microchip: ${mascotaInfo.microchip}\n`;
+    }
+    contenido += `\n`;
 
     // Obtener todas las consultas de todos los tipos
     const todasLasConsultas = [
@@ -645,7 +648,9 @@ export default function HistorialClinico() {
       `Peso: ${mascotaInfo.peso ? `${mascotaInfo.peso} kg` : "No registrado"}`,
     );
     addText(`Sexo: ${mascotaInfo.sexo || "No registrado"}`);
-    addText(`Microchip: ${mascotaInfo.microchip || "No registrado"}`);
+    if (mascotaInfo.microchip) {
+      addText(`Microchip: ${mascotaInfo.microchip}`);
+    }
     yPosition += 5;
 
     // Consultas médicas
@@ -735,7 +740,7 @@ export default function HistorialClinico() {
       ],
       ["Peso", mascotaInfo.peso ? `${mascotaInfo.peso} kg` : "No registrado"],
       ["Sexo", mascotaInfo.sexo || "No registrado"],
-      ["Microchip", mascotaInfo.microchip || "No registrado"],
+      ...(mascotaInfo.microchip ? [["Microchip", mascotaInfo.microchip]] : []),
     ];
 
     const wsMascota = XLSX.utils.aoa_to_sheet(mascotaData);
