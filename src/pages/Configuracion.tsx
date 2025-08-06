@@ -411,6 +411,11 @@ export default function Configuracion() {
       });
     } catch (error) {
       setErrorMessage("Error al guardar las notificaciones");
+      // Scroll to top to show error message
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -421,27 +426,34 @@ export default function Configuracion() {
     setSavedMessage("");
     setErrorMessage("");
 
-    // Validation for password change
+    // Validation for password change with scroll to top helper
+    const showSecurityErrorAndScroll = (message: string) => {
+      setErrorMessage(message);
+      setIsLoading(false);
+      // Scroll to top to show error message
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    };
+
     if (
       securityData.newPassword ||
       securityData.confirmPassword ||
       securityData.currentPassword
     ) {
       if (!securityData.currentPassword) {
-        setErrorMessage("Debes ingresar tu contraseña actual");
-        setIsLoading(false);
+        showSecurityErrorAndScroll("Debes ingresar tu contraseña actual");
         return;
       }
 
       if (securityData.newPassword.length < 8) {
-        setErrorMessage("La nueva contraseña debe tener al menos 8 caracteres");
-        setIsLoading(false);
+        showSecurityErrorAndScroll("La nueva contraseña debe tener al menos 8 caracteres");
         return;
       }
 
       if (securityData.newPassword !== securityData.confirmPassword) {
-        setErrorMessage("Las contraseñas nuevas no coinciden");
-        setIsLoading(false);
+        showSecurityErrorAndScroll("Las contraseñas nuevas no coinciden");
         return;
       }
     }
@@ -476,6 +488,11 @@ export default function Configuracion() {
       }));
     } catch (error) {
       setErrorMessage("Error al actualizar la seguridad");
+      // Scroll to top to show error message
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
     } finally {
       setIsLoading(false);
     }
