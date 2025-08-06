@@ -765,7 +765,7 @@ Generado automáticamente por PetLA
                       </span>
                     </div>
 
-                    <div className="flex items-center justify-between p-3 bg-gradient-to-r from-amber-50 to-amber-100/50 rounded-lg">
+                    <div className="flex items-center justify-between p-3 bg-gradient-to-r from-vet-warning/5 to-vet-warning/10 rounded-lg">
                       <div className="flex items-center space-x-3">
                         <div className="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center">
                           <Star className="w-4 h-4 text-white" />
