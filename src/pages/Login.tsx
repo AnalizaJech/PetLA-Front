@@ -24,6 +24,8 @@ import {
   MapPin,
   Calendar,
   UserCheck,
+  CreditCard,
+  FileText,
 } from "lucide-react";
 import {
   Select,
