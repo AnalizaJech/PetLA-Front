@@ -295,7 +295,7 @@ export default function DashboardVeterinario() {
                     </span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <Timer className="w-5 h-5 text-green-600" />
+                    <Timer className="w-5 h-5 text-vet-success" />
                     <span className="text-vet-gray-600">
                       {new Date().toLocaleTimeString("es-ES", {
                         hour: "2-digit",
@@ -346,7 +346,7 @@ export default function DashboardVeterinario() {
                     <p className="text-3xl font-bold text-green-900">
                       {stats.citasCompletadas}
                     </p>
-                    <div className="flex items-center text-xs text-green-600 mt-1">
+                    <div className="flex items-center text-xs text-vet-success mt-1">
                       <ArrowUp className="w-3 h-3 mr-1" />+{crecimientoCitas}%
                       este mes
                     </div>
@@ -638,7 +638,7 @@ export default function DashboardVeterinario() {
                 <CardHeader className="pb-4">
                   <CardTitle className="flex items-center space-x-2 text-xl">
                     <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                      <Zap className="w-4 h-4 text-green-600" />
+                      <Zap className="w-4 h-4 text-vet-success" />
                     </div>
                     <span>Acciones Rápidas</span>
                   </CardTitle>
@@ -797,7 +797,7 @@ Generado automáticamente por PetLA
                         </span>
                       </div>
                       <div className="flex items-center space-x-1">
-                        <ArrowUp className="w-3 h-3 text-green-600" />
+                        <ArrowUp className="w-3 h-3 text-vet-success" />
                         <span className="font-bold text-green-900">
                           +{crecimientoCitas}%
                         </span>
