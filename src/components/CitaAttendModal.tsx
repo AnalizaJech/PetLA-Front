@@ -295,15 +295,15 @@ export default function CitaAttendModal({
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-vet-primary/10 rounded-lg flex items-center justify-center">
-              <Activity className="w-5 h-5 text-vet-primary" />
+            <div className={`w-10 h-10 bg-${serviceConfig.color}/10 rounded-lg flex items-center justify-center`}>
+              <ServiceIcon className={`w-5 h-5 text-${serviceConfig.color}`} />
             </div>
             <div>
               <DialogTitle className="text-xl font-semibold text-vet-gray-900">
-                Registrar Atención Médica
+                Registrar {serviceConfig.title}
               </DialogTitle>
               <DialogDescription className="text-vet-gray-600">
-                Registra la consulta médica para {cita.mascota}
+                {serviceConfig.description} para {cita.mascota}
               </DialogDescription>
             </div>
           </div>
