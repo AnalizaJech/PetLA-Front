@@ -762,7 +762,7 @@ export default function Configuracion() {
 
       if (success) {
         // Mostrar mensaje de éxito
-        setSavedMessage("✅ Tu cuenta ha sido eliminada exitosamente. Serás redirigido al inicio.");
+        setSavedMessage("Tu cuenta ha sido eliminada exitosamente. Serás redirigido al inicio.");
 
         // Esperar un momento para que el usuario vea el mensaje
         await new Promise((resolve) => setTimeout(resolve, 2000));
