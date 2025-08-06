@@ -362,6 +362,19 @@ export default function HistorialClinicoVeterinario() {
           doc.setFont("helvetica", "normal");
           doc.setFontSize(10);
 
+          // Información detallada del registro
+          doc.setFont("helvetica", "bold");
+          doc.text(`Detalles del Servicio:`, margin + 5, yPosition);
+          yPosition += 8;
+          doc.setFont("helvetica", "normal");
+
+          doc.text(`Veterinario: Dr. ${record.veterinario}`, margin + 5, yPosition);
+          yPosition += 5;
+          doc.text(`Hora: ${new Date(record.fecha).toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" })}`, margin + 5, yPosition);
+          yPosition += 5;
+          doc.text(`Estado: ${record.estado === "completada" ? "Completada" : record.estado}`, margin + 5, yPosition);
+          yPosition += 8;
+
           // Información básica
           if (record.motivo) {
             const motivoLines = doc.splitTextToSize(
@@ -904,7 +917,7 @@ export default function HistorialClinicoVeterinario() {
                       <SelectItem value="emergencia">Emergencia</SelectItem>
                       <SelectItem value="cirugia">Cirugía</SelectItem>
                       <SelectItem value="grooming">Grooming</SelectItem>
-                      <SelectItem value="diagnostico">Diagnóstico</SelectItem>
+                      <SelectItem value="diagnostico">Diagn��stico</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
