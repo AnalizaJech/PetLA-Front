@@ -460,7 +460,7 @@ export default function DashboardVeterinario() {
                             >
                               <div className="flex items-center space-x-4 flex-1">
                                 <div className="flex flex-col items-center">
-                                  <div className="text-sm font-medium text-gray-900">
+                                  <div className="text-sm font-medium text-vet-gray-900">
                                     {new Date(cita.fecha).toLocaleTimeString(
                                       "es-ES",
                                       {
@@ -469,7 +469,7 @@ export default function DashboardVeterinario() {
                                       },
                                     )}
                                   </div>
-                                  <div className="w-8 h-0.5 bg-blue-200 rounded mt-1"></div>
+                                  <div className="w-8 h-0.5 bg-vet-primary/30 rounded mt-1"></div>
                                 </div>
 
                                 <div className="flex-1">
