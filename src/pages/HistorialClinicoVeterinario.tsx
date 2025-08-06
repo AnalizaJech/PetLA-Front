@@ -226,7 +226,7 @@ export default function HistorialClinicoVeterinario() {
 
         return {
           ...record,
-          tipo: correspondingCita?.tipoConsulta || record.tipo || "Consulta General"
+          tipo: correspondingCita?.tipoConsulta || record.tipo || record.tipoConsulta || "Consulta"
         };
       })
       .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
