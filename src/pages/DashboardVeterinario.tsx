@@ -621,7 +621,7 @@ export default function DashboardVeterinario() {
                     </div>
                   ) : (
                     <div className="text-center py-8">
-                      <Clock className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                      <Clock className="w-12 h-12 text-vet-gray-400 mx-auto mb-4" />
                       <p className="text-vet-gray-600">
                         No hay citas próximas programadas
                       </p>
@@ -858,14 +858,14 @@ Generado automáticamente por PetLA
                                 )}
                               </p>
                             </div>
-                            <ChevronRight className="w-4 h-4 text-gray-400" />
+                            <ChevronRight className="w-4 h-4 text-vet-gray-400" />
                           </div>
                         );
                       })}
                     </div>
                   ) : (
                     <div className="text-center py-6">
-                      <Heart className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                      <Heart className="w-8 h-8 text-vet-gray-400 mx-auto mb-2" />
                       <p className="text-sm text-vet-gray-600">
                         No hay consultas recientes
                       </p>
@@ -901,7 +901,7 @@ Generado automáticamente por PetLA
 
               <div className="space-y-4 pt-4">
                 <div className="relative">
-                  <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                  <Search className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
                   <Input
                     placeholder="Buscar por nombre del paciente, propietario, especie..."
                     value={searchTerm}
@@ -997,7 +997,7 @@ Generado automáticamente por PetLA
                                       {citasPaciente.length !== 1 ? "s" : ""}
                                     </Badge>
                                   )}
-                                  <Eye className="w-4 h-4 text-gray-400" />
+                                  <Eye className="w-4 h-4 text-vet-gray-400" />
                                 </div>
                               </div>
                             </div>
@@ -1006,7 +1006,7 @@ Generado automáticamente por PetLA
                       </div>
                     ) : (
                       <div className="text-center py-8">
-                        <Search className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                        <Search className="w-12 h-12 text-vet-gray-400 mx-auto mb-4" />
                         <h3 className="text-lg font-medium text-vet-gray-900 mb-2">
                           No se encontraron pacientes
                         </h3>
@@ -1020,7 +1020,7 @@ Generado automáticamente por PetLA
 
                 {searchTerm.length <= 2 && searchTerm.length > 0 && (
                   <div className="text-center py-8">
-                    <Search className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                    <Search className="w-12 h-12 text-vet-gray-400 mx-auto mb-4" />
                     <p className="text-vet-gray-600">
                       Escribe al menos 3 caracteres para buscar
                     </p>
@@ -1029,7 +1029,7 @@ Generado automáticamente por PetLA
 
                 {searchTerm.length === 0 && (
                   <div className="text-center py-8">
-                    <PawPrint className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                    <PawPrint className="w-12 h-12 text-vet-gray-400 mx-auto mb-4" />
                     <h3 className="text-lg font-medium text-vet-gray-900 mb-2">
                       Buscar Pacientes
                     </h3>
