@@ -207,6 +207,21 @@ export default function FeaturesCarousel() {
 
         {/* Carousel Container */}
         <div className="relative">
+          {/* Navigation Arrows - Mobile */}
+          <button
+            onClick={() => setCurrentIndex((prev) => (prev - 1 + features.length) % features.length)}
+            className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white shadow-lg rounded-full flex items-center justify-center lg:hidden hover:bg-vet-gray-50 transition-colors"
+          >
+            <ArrowLeft className="w-5 h-5 text-vet-gray-600" />
+          </button>
+
+          <button
+            onClick={() => setCurrentIndex((prev) => (prev + 1) % features.length)}
+            className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white shadow-lg rounded-full flex items-center justify-center lg:hidden hover:bg-vet-gray-50 transition-colors"
+          >
+            <ArrowRight className="w-5 h-5 text-vet-gray-600" />
+          </button>
+
           {/* Main Carousel */}
           <div
             className={`flex items-center justify-center space-x-2 sm:space-x-4 lg:space-x-8 mb-12 cursor-grab ${isDragging ? "cursor-grabbing" : ""}`}
