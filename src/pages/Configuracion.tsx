@@ -862,7 +862,7 @@ export default function Configuracion() {
           </div>
 
           <Tabs defaultValue="profile" className="space-y-4 sm:space-y-6">
-            <TabsList className="grid w-full grid-cols-3 h-auto">
+            <TabsList className="grid w-full grid-cols-4 h-auto">
               <TabsTrigger
                 value="profile"
                 className="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm p-2 sm:p-3"
@@ -1962,7 +1962,7 @@ export default function Configuracion() {
                         mascotas
                       </p>
                       <p>
-                        • Si tienes citas programadas, se notificará a la
+                        ��� Si tienes citas programadas, se notificará a la
                         clínica automáticamente
                       </p>
                     </div>
