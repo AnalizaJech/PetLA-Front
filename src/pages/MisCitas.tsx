@@ -97,6 +97,7 @@ export default function MisCitas() {
     const input = document.createElement("input");
     input.type = "file";
     input.accept = "image/*,.pdf";
+
     input.onchange = (e) => {
       const file = (e.target as HTMLInputElement).files?.[0];
       if (file) {
@@ -110,8 +111,34 @@ export default function MisCitas() {
         }
         setShowPreviewModal(true);
         setUploadingCitaId(null);
+      } else {
+        // File selection was cancelled, reset the uploading state
+        setUploadingCitaId(null);
+        setCurrentCitaId(null);
       }
     };
+
+    // Handle case where dialog is cancelled (oncancel event)
+    input.oncancel = () => {
+      setUploadingCitaId(null);
+      setCurrentCitaId(null);
+    };
+
+    // Fallback: reset state after a timeout in case neither onchange nor oncancel fire
+    const resetTimeout = setTimeout(() => {
+      if (uploadingCitaId === citaId) {
+        setUploadingCitaId(null);
+        setCurrentCitaId(null);
+      }
+    }, 1000);
+
+    // Clear timeout if file is selected
+    const originalOnChange = input.onchange;
+    input.onchange = (e) => {
+      clearTimeout(resetTimeout);
+      if (originalOnChange) originalOnChange(e);
+    };
+
     input.click();
   };
 
