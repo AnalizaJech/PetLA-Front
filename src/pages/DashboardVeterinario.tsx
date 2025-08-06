@@ -343,7 +343,7 @@ export default function DashboardVeterinario() {
                     <p className="text-sm text-green-700 font-medium mb-1">
                       Completadas
                     </p>
-                    <p className="text-3xl font-bold text-green-900">
+                    <p className="text-3xl font-bold text-vet-success">
                       {stats.citasCompletadas}
                     </p>
                     <div className="flex items-center text-xs text-vet-success mt-1">
@@ -792,13 +792,13 @@ Generado automáticamente por PetLA
                         <div className="w-8 h-8 bg-vet-success rounded-lg flex items-center justify-center">
                           <TrendingUp className="w-4 h-4 text-white" />
                         </div>
-                        <span className="text-sm font-medium text-green-900">
+                        <span className="text-sm font-medium text-vet-success">
                           Crecimiento
                         </span>
                       </div>
                       <div className="flex items-center space-x-1">
                         <ArrowUp className="w-3 h-3 text-vet-success" />
-                        <span className="font-bold text-green-900">
+                        <span className="font-bold text-vet-success">
                           +{crecimientoCitas}%
                         </span>
                       </div>
