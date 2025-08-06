@@ -1858,7 +1858,7 @@ export default function Configuracion() {
                         <span><strong>Se eliminarán todas tus mascotas registradas</strong> y su información</span>
                       </li>
                       <li className="flex items-start space-x-2">
-                        <span className="text-red-600 font-bold mt-0.5">��</span>
+                        <span className="text-red-600 font-bold mt-0.5">•</span>
                         <span><strong>Perderás el historial clínico completo</strong> de todas tus mascotas</span>
                       </li>
                       <li className="flex items-start space-x-2">
