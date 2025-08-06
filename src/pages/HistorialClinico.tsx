@@ -195,7 +195,7 @@ const formatDateSafe = (date, options = {}) => {
 };
 
 export default function HistorialClinico() {
-  const { user, mascotas, usuarios, citas } = useAppContext();
+  const { user, mascotas, usuarios, citas, historialClinico } = useAppContext();
   const [selectedMascota, setSelectedMascota] = useState("");
   const [selectedTab, setSelectedTab] = useState("consulta_general");
 
@@ -241,12 +241,21 @@ export default function HistorialClinico() {
     }
   }, [availableMascotas]);
 
-  // Obtener historial real basado en citas completadas y atendidas
+  // Obtener historial real basado en registros médicos del historialClinico
   const getHistorialReal = (nombreMascota) => {
-    // Only include attended appointments that have been completed by the veterinarian
-    const citasRelevantes = citas.filter(
-      (cita) => cita.mascota === nombreMascota && cita.estado === "atendida", // Only show attended appointments in clinical history
-    );
+    // Buscar mascota para obtener su ID
+    const mascota = mascotas.find((m) => m.nombre === nombreMascota);
+
+    // Filtrar registros médicos para esta mascota
+    const registrosMedicos = historialClinico.filter((record) => {
+      // Match by pet ID or name
+      const matchesPet =
+        (mascota && record.mascotaId === mascota.id) ||
+        (record.mascotaNombre &&
+          record.mascotaNombre.toLowerCase() === nombreMascota.toLowerCase());
+
+      return matchesPet;
+    });
 
     // Agrupar por los 6 servicios específicos de la veterinaria
     const servicios = {
@@ -258,33 +267,31 @@ export default function HistorialClinico() {
       diagnostico: [],
     };
 
-    citasRelevantes.forEach((cita) => {
-      const tipoConsulta = cita.tipoConsulta || "Consulta";
-      const diagnosticoDefault = getDiagnosticoDefecto(
-        tipoConsulta,
-        cita.estado,
-      );
-      const tratamientoDefault = getTratamientoDefecto(
-        tipoConsulta,
-        cita.estado,
-      );
+    registrosMedicos.forEach((record) => {
+      const tipoConsulta = record.tipoConsulta || record.tipo || "Consulta";
 
       const baseRecord = {
-        id: cita.id,
-        fecha: new Date(cita.fecha),
-        veterinario: cita.veterinario,
-        motivo: cita.motivo || "Sin motivo especificado",
+        id: record.id || `${record.mascotaId}-${record.fecha}`,
+        fecha: new Date(record.fecha),
+        veterinario: record.veterinario,
+        motivo: record.motivo || "Sin motivo especificado",
         tipoConsulta: tipoConsulta,
-        estado: cita.estado,
-        diagnostico: cita.consulta?.diagnostico || diagnosticoDefault,
-        tratamiento: cita.consulta?.tratamiento || tratamientoDefault,
-        medicamentos: cita.consulta?.medicamentos || [],
-        proxima_cita: cita.consulta?.proximaCita
-          ? new Date(cita.consulta.proximaCita)
-          : getProximaConsulta(tipoConsulta, cita.fecha),
-        notas:
-          cita.consulta?.notas || getNotasDefecto(tipoConsulta, cita.estado),
-        precio: cita.precio,
+        estado: record.estado || "completada",
+        diagnostico: record.diagnostico,
+        tratamiento: record.tratamiento,
+        medicamentos: record.medicamentos || [],
+        proxima_cita: record.proximaVisita
+          ? new Date(record.proximaVisita)
+          : null,
+        notas: record.observaciones,
+        precio: 0, // No available in medical records
+        // Campos adicionales del historial médico
+        peso: record.peso,
+        temperatura: record.temperatura,
+        presionArterial: record.presionArterial,
+        frecuenciaCardiaca: record.frecuenciaCardiaca,
+        examenes: record.examenes || [],
+        servicios: record.servicios || [],
       };
 
       // Normalizar texto para búsqueda (manejo de UTF-8 y caracteres especiales)
@@ -299,10 +306,7 @@ export default function HistorialClinico() {
       };
 
       const tipoNormalizado = normalizeText(tipoConsulta);
-      const motivoNormalizado = normalizeText(cita.motivo || "");
-
-      // Clasificar según el servicio específico (verificar tanto tipo como motivo)
-      const textoCompleto = `${tipoNormalizado} ${motivoNormalizado}`;
+      const motivoNormalizado = normalizeText(record.motivo || "");
 
       // 1. VACUNACIÓN
       if (
@@ -372,100 +376,9 @@ export default function HistorialClinico() {
     return servicios;
   };
 
-  // Función auxiliar para calcular próxima vacuna
-  const getProximaVacuna = (fechaActual) => {
-    const fecha = new Date(fechaActual);
-    fecha.setFullYear(fecha.getFullYear() + 1); // Vacunas anuales por defecto
-    return fecha;
-  };
+  // Funciones auxiliares eliminadas - solo mostrar datos reales del veterinario
 
-  // Función auxiliar para calcular próxima consulta según tipo
-  const getProximaConsulta = (tipoConsulta, fechaActual) => {
-    const fecha = new Date(fechaActual);
-
-    if (
-      tipoConsulta.toLowerCase().includes("control") ||
-      tipoConsulta.toLowerCase().includes("seguimiento")
-    ) {
-      fecha.setMonth(fecha.getMonth() + 3); // 3 meses para controles
-    } else if (tipoConsulta.toLowerCase().includes("dental")) {
-      fecha.setMonth(fecha.getMonth() + 6); // 6 meses para dental
-    } else {
-      fecha.setFullYear(fecha.getFullYear() + 1); // 1 año para consultas generales
-    }
-
-    return fecha;
-  };
-
-  // Funciones auxiliares para contenido por defecto basado en los 6 servicios oficiales
-  const getDiagnosticoDefecto = (tipoConsulta, estado) => {
-    if (estado === "pendiente_pago")
-      return "Servicio pendiente de confirmación de pago";
-    if (estado === "aceptada")
-      return "Servicio confirmado - Programado para atención";
-
-    const tipo = tipoConsulta.toLowerCase();
-    // Servicios oficiales de la veterinaria
-    if (tipo.includes("consulta general"))
-      return "Evaluación general completada - Estado de salud óptimo";
-    if (tipo.includes("vacunación") || tipo.includes("vacunacion"))
-      return "Vacunación aplicada exitosamente";
-    if (tipo.includes("emergencia"))
-      return "Atención de emergencia - Paciente estabilizado";
-    if (tipo.includes("grooming"))
-      return "Servicio de grooming completado - Mascota aseada y saludable";
-    if (tipo.includes("cirugía") || tipo.includes("cirugia"))
-      return "Procedimiento quirúrgico realizado exitosamente";
-    if (tipo.includes("diagnóstico") || tipo.includes("diagnostico"))
-      return "Exámenes diagnósticos completados - Resultados disponibles";
-    return "Servicio veterinario completado exitosamente";
-  };
-
-  const getTratamientoDefecto = (tipoConsulta, estado) => {
-    if (estado === "pendiente_pago")
-      return "Tratamiento será aplicado tras confirmación de pago";
-    if (estado === "aceptada")
-      return "Tratamiento programado según servicio seleccionado";
-
-    const tipo = tipoConsulta.toLowerCase();
-    // Tratamientos según los 6 servicios oficiales
-    if (tipo.includes("consulta general"))
-      return "Revisión médica general, peso, temperatura y cuidados preventivos";
-    if (tipo.includes("vacunación") || tipo.includes("vacunacion"))
-      return "Aplicación de vacuna según calendario de inmunización";
-    if (tipo.includes("emergencia"))
-      return "Tratamiento de emergencia inmediato - Estabilización y cuidados críticos";
-    if (tipo.includes("grooming"))
-      return "Baño completo, corte de pelo, limpieza de oídos y corte de uñas";
-    if (tipo.includes("cirugía") || tipo.includes("cirugia"))
-      return "Procedimiento quirúrgico especializado con anestesia y cuidados post-operatorios";
-    if (tipo.includes("diagnóstico") || tipo.includes("diagnostico"))
-      return "Exámenes de laboratorio y estudios diagnósticos especializados";
-    return "Tratamiento veterinario aplicado según protocolo del servicio";
-  };
-
-  const getNotasDefecto = (tipoConsulta, estado) => {
-    if (estado === "pendiente_pago")
-      return "Servicio agendado - Pendiente de confirmación de pago";
-    if (estado === "aceptada") return "Servicio confirmado y programado";
-
-    const tipo = tipoConsulta.toLowerCase();
-    // Notas específicas por servicio
-    if (tipo.includes("consulta general"))
-      return "Consulta general completada. Mascota en buen estado de salud. Continuar con cuidados preventivos.";
-    if (tipo.includes("vacunación") || tipo.includes("vacunacion"))
-      return "Vacunación aplicada exitosamente. Próxima dosis programada según calendario.";
-    if (tipo.includes("emergencia"))
-      return "Emergencia atendida exitosamente. Monitorear evolución en las próximas 24-48 horas.";
-    if (tipo.includes("grooming"))
-      return "Servicio de grooming completado. Mascota limpia y aseada. Recomendar mantenimiento cada 4-6 semanas.";
-    if (tipo.includes("cirugía") || tipo.includes("cirugia"))
-      return "Cirugía realizada exitosamente. Seguir indicaciones post-operatorias estrictamente.";
-    if (tipo.includes("diagnóstico") || tipo.includes("diagnostico"))
-      return "Exámenes diagnósticos completados. Resultados dentro de parámetros normales.";
-
-    return `${tipoConsulta} completada exitosamente. Seguir recomendaciones del veterinario tratante.`;
-  };
+  // Funciones auxiliares eliminadas - solo mostrar datos reales del veterinario
 
   const historialMascota = selectedMascota
     ? getHistorialReal(selectedMascota)
@@ -499,7 +412,10 @@ export default function HistorialClinico() {
     contenido += `Fecha de Nacimiento: ${mascotaInfo.fechaNacimiento.toLocaleDateString("es-ES")}\n`;
     contenido += `Peso: ${mascotaInfo.peso ? `${mascotaInfo.peso} kg` : "No registrado"}\n`;
     contenido += `Sexo: ${mascotaInfo.sexo || "No registrado"}\n`;
-    contenido += `Microchip: ${mascotaInfo.microchip || "No registrado"}\n\n`;
+    if (mascotaInfo.microchip) {
+      contenido += `Microchip: ${mascotaInfo.microchip}\n`;
+    }
+    contenido += `\n`;
 
     // Obtener todas las consultas de todos los tipos
     const todasLasConsultas = [
@@ -518,14 +434,85 @@ export default function HistorialClinico() {
         contenido += `\nConsulta #${index + 1}\n`;
         contenido += `Fecha: ${consulta.fecha.toLocaleDateString("es-ES")}\n`;
         contenido += `Veterinario: ${consulta.veterinario}\n`;
-        contenido += `Motivo: ${consulta.motivo}\n`;
-        contenido += `Diagnóstico: ${consulta.diagnostico}\n`;
-        contenido += `Tratamiento: ${consulta.tratamiento}\n`;
+        if (consulta.motivo) contenido += `Motivo: ${consulta.motivo}\n`;
+        if (consulta.diagnostico)
+          contenido += `Diagnóstico: ${consulta.diagnostico}\n`;
+        if (consulta.tratamiento)
+          contenido += `Tratamiento: ${consulta.tratamiento}\n`;
 
+        // Signos vitales
+        if (
+          consulta.peso ||
+          consulta.temperatura ||
+          consulta.presionArterial ||
+          consulta.frecuenciaCardiaca
+        ) {
+          contenido += `Signos Vitales:\n`;
+          if (consulta.peso) contenido += `  - Peso: ${consulta.peso} kg\n`;
+          if (consulta.temperatura)
+            contenido += `  - Temperatura: ${consulta.temperatura}°C\n`;
+          if (consulta.presionArterial)
+            contenido += `  - Presión Arterial: ${consulta.presionArterial}\n`;
+          if (consulta.frecuenciaCardiaca)
+            contenido += `  - Frecuencia Cardíaca: ${consulta.frecuenciaCardiaca} bpm\n`;
+        }
+
+        // Medicamentos detallados
         if (consulta.medicamentos && consulta.medicamentos.length > 0) {
-          contenido += `Medicamentos:\n`;
-          consulta.medicamentos.forEach((med) => {
-            contenido += `  - ${med.nombre}: ${med.dosis} (${med.duracion})\n`;
+          contenido += `Medicamentos Recetados:\n`;
+          consulta.medicamentos.forEach((med, medIndex) => {
+            contenido += `  ${medIndex + 1}. ${med.nombre}\n`;
+            contenido += `     Dosis: ${med.dosis}\n`;
+            if (med.frecuencia)
+              contenido += `     Frecuencia: ${med.frecuencia}\n`;
+            if (med.duracion) contenido += `     Duración: ${med.duracion}\n`;
+            if (med.indicaciones)
+              contenido += `     Indicaciones: ${med.indicaciones}\n`;
+          });
+        }
+
+        // Vacunas aplicadas
+        if (consulta.vacunas && consulta.vacunas.length > 0) {
+          contenido += `Vacunas Aplicadas:\n`;
+          consulta.vacunas.forEach((vacuna, vacIndex) => {
+            contenido += `  ${vacIndex + 1}. ${vacuna.nombre}\n`;
+            contenido += `     Lote: ${vacuna.lote}\n`;
+            contenido += `     Próxima Dosis: ${new Date(vacuna.proximaFecha).toLocaleDateString("es-ES")}\n`;
+          });
+        }
+
+        // Exámenes realizados
+        if (consulta.examenes && consulta.examenes.length > 0) {
+          contenido += `Exámenes Realizados:\n`;
+          consulta.examenes.forEach((examen, exIndex) => {
+            contenido += `  ${exIndex + 1}. ${examen.tipo}\n`;
+            contenido += `     Resultado: ${examen.resultado}\n`;
+            if (examen.archivo)
+              contenido += `     Archivo: ${examen.archivo}\n`;
+          });
+        }
+
+        // Servicios adicionales
+        if (consulta.servicios && consulta.servicios.length > 0) {
+          contenido += `Servicios Realizados:\n`;
+          consulta.servicios.forEach((servicio, servIndex) => {
+            contenido += `  ${servIndex + 1}. ${servicio.nombre}\n`;
+            if (servicio.descripcion)
+              contenido += `     Descripción: ${servicio.descripcion}\n`;
+            if (servicio.precio)
+              contenido += `     Precio: S/${servicio.precio}\n`;
+            if (servicio.duracion)
+              contenido += `     Duración: ${servicio.duracion}\n`;
+            if (servicio.notas) contenido += `     Notas: ${servicio.notas}\n`;
+          });
+        }
+
+        // Archivos adjuntos
+        if (consulta.archivosAdjuntos && consulta.archivosAdjuntos.length > 0) {
+          contenido += `Archivos Adjuntos:\n`;
+          consulta.archivosAdjuntos.forEach((archivo, archIndex) => {
+            contenido += `  ${archIndex + 1}. ${archivo.nombre} (${archivo.tipo})\n`;
+            if (archivo.url) contenido += `     URL: ${archivo.url}\n`;
           });
         }
 
@@ -534,7 +521,7 @@ export default function HistorialClinico() {
         }
 
         if (consulta.notas) {
-          contenido += `Notas: ${consulta.notas}\n`;
+          contenido += `Observaciones del Veterinario: ${consulta.notas}\n`;
         }
         contenido += `\n${"·".repeat(40)}\n`;
       });
@@ -640,7 +627,9 @@ export default function HistorialClinico() {
       `Peso: ${mascotaInfo.peso ? `${mascotaInfo.peso} kg` : "No registrado"}`,
     );
     addText(`Sexo: ${mascotaInfo.sexo || "No registrado"}`);
-    addText(`Microchip: ${mascotaInfo.microchip || "No registrado"}`);
+    if (mascotaInfo.microchip) {
+      addText(`Microchip: ${mascotaInfo.microchip}`);
+    }
     yPosition += 5;
 
     // Consultas médicas
@@ -663,14 +652,86 @@ export default function HistorialClinico() {
         addText(`Consulta #${index + 1}`, 12, "bold");
         addText(`Fecha: ${consulta.fecha.toLocaleDateString("es-ES")}`);
         addText(`Veterinario: ${consulta.veterinario}`);
-        addText(`Motivo: ${consulta.motivo}`);
-        addText(`Diagnóstico: ${consulta.diagnostico}`);
-        addText(`Tratamiento: ${consulta.tratamiento}`);
+        if (consulta.motivo) addText(`Motivo: ${consulta.motivo}`);
+        if (consulta.diagnostico)
+          addText(`Diagnóstico: ${consulta.diagnostico}`);
+        if (consulta.tratamiento)
+          addText(`Tratamiento: ${consulta.tratamiento}`);
 
+        // Signos vitales
+        if (
+          consulta.peso ||
+          consulta.temperatura ||
+          consulta.presionArterial ||
+          consulta.frecuenciaCardiaca
+        ) {
+          addText("Signos Vitales:", 11, "bold");
+          if (consulta.peso) addText(`  • Peso: ${consulta.peso} kg`);
+          if (consulta.temperatura)
+            addText(`  • Temperatura: ${consulta.temperatura}°C`);
+          if (consulta.presionArterial)
+            addText(`  ��� Presión Arterial: ${consulta.presionArterial}`);
+          if (consulta.frecuenciaCardiaca)
+            addText(
+              `  • Frecuencia Card��aca: ${consulta.frecuenciaCardiaca} bpm`,
+            );
+        }
+
+        // Medicamentos detallados
         if (consulta.medicamentos && consulta.medicamentos.length > 0) {
-          addText("Medicamentos:", 11, "bold");
-          consulta.medicamentos.forEach((med) => {
-            addText(`  • ${med.nombre}: ${med.dosis} (${med.duracion})`);
+          addText("Medicamentos Recetados:", 11, "bold");
+          consulta.medicamentos.forEach((med, medIndex) => {
+            addText(`  ${medIndex + 1}. ${med.nombre}`);
+            addText(`     Dosis: ${med.dosis}`);
+            if (med.frecuencia) addText(`     Frecuencia: ${med.frecuencia}`);
+            if (med.duracion) addText(`     Duración: ${med.duracion}`);
+            if (med.indicaciones)
+              addText(`     Indicaciones: ${med.indicaciones}`);
+          });
+        }
+
+        // Vacunas aplicadas
+        if (consulta.vacunas && consulta.vacunas.length > 0) {
+          addText("Vacunas Aplicadas:", 11, "bold");
+          consulta.vacunas.forEach((vacuna, vacIndex) => {
+            addText(`  ${vacIndex + 1}. ${vacuna.nombre}`);
+            addText(`     Lote: ${vacuna.lote}`);
+            addText(
+              `     Próxima Dosis: ${new Date(vacuna.proximaFecha).toLocaleDateString("es-ES")}`,
+            );
+          });
+        }
+
+        // Exámenes realizados
+        if (consulta.examenes && consulta.examenes.length > 0) {
+          addText("Exámenes Realizados:", 11, "bold");
+          consulta.examenes.forEach((examen, exIndex) => {
+            addText(`  ${exIndex + 1}. ${examen.tipo}`);
+            addText(`     Resultado: ${examen.resultado}`);
+            if (examen.archivo) addText(`     Archivo: ${examen.archivo}`);
+          });
+        }
+
+        // Servicios adicionales
+        if (consulta.servicios && consulta.servicios.length > 0) {
+          addText("Servicios Realizados:", 11, "bold");
+          consulta.servicios.forEach((servicio, servIndex) => {
+            addText(`  ${servIndex + 1}. ${servicio.nombre}`);
+            if (servicio.descripcion)
+              addText(`     Descripción: ${servicio.descripcion}`);
+            if (servicio.precio) addText(`     Precio: S/${servicio.precio}`);
+            if (servicio.duracion)
+              addText(`     Duración: ${servicio.duracion}`);
+            if (servicio.notas) addText(`     Notas: ${servicio.notas}`);
+          });
+        }
+
+        // Archivos adjuntos
+        if (consulta.archivosAdjuntos && consulta.archivosAdjuntos.length > 0) {
+          addText("Archivos Adjuntos:", 11, "bold");
+          consulta.archivosAdjuntos.forEach((archivo, archIndex) => {
+            addText(`  ${archIndex + 1}. ${archivo.nombre} (${archivo.tipo})`);
+            if (archivo.url) addText(`     URL: ${archivo.url}`);
           });
         }
 
@@ -681,7 +742,11 @@ export default function HistorialClinico() {
         }
 
         if (consulta.notas) {
-          addText(`Notas: ${consulta.notas}`);
+          addText(
+            `Observaciones del Veterinario: ${consulta.notas}`,
+            11,
+            "bold",
+          );
         }
         yPosition += 8;
       });
@@ -730,7 +795,7 @@ export default function HistorialClinico() {
       ],
       ["Peso", mascotaInfo.peso ? `${mascotaInfo.peso} kg` : "No registrado"],
       ["Sexo", mascotaInfo.sexo || "No registrado"],
-      ["Microchip", mascotaInfo.microchip || "No registrado"],
+      ...(mascotaInfo.microchip ? [["Microchip", mascotaInfo.microchip]] : []),
     ];
 
     const wsMascota = XLSX.utils.aoa_to_sheet(mascotaData);
@@ -754,31 +819,65 @@ export default function HistorialClinico() {
         [
           "Fecha",
           "Veterinario",
+          "Tipo Servicio",
           "Motivo",
           "Diagnóstico",
           "Tratamiento",
+          "Peso (kg)",
+          "Temperatura (°C)",
+          "Presión Arterial",
+          "Freq. Cardíaca",
           "Medicamentos",
+          "Vacunas",
+          "Exámenes",
+          "Servicios",
           "Próxima Cita",
-          "Notas",
+          "Observaciones",
         ],
       ];
 
       todasLasConsultas.forEach((consulta) => {
         const medicamentos = (consulta.medicamentos || [])
-          .map((med) => `${med.nombre}: ${med.dosis} (${med.duracion})`)
+          .map(
+            (med) =>
+              `${med.nombre}: ${med.dosis}${med.frecuencia ? ` - ${med.frecuencia}` : ""}${med.duracion ? ` (${med.duracion})` : ""}`,
+          )
+          .join("; ");
+
+        const vacunas = (consulta.vacunas || [])
+          .map((vacuna) => `${vacuna.nombre} (Lote: ${vacuna.lote})`)
+          .join("; ");
+
+        const examenes = (consulta.examenes || [])
+          .map((examen) => `${examen.tipo}: ${examen.resultado}`)
+          .join("; ");
+
+        const servicios = (consulta.servicios || [])
+          .map(
+            (servicio) =>
+              `${servicio.nombre}${servicio.precio ? ` - S/${servicio.precio}` : ""}`,
+          )
           .join("; ");
 
         consultasData.push([
           consulta.fecha.toLocaleDateString("es-ES"),
           consulta.veterinario,
-          consulta.motivo,
-          consulta.diagnostico,
-          consulta.tratamiento,
-          medicamentos || "Ninguno",
+          consulta.tipoConsulta || "",
+          consulta.motivo || "",
+          consulta.diagnostico || "",
+          consulta.tratamiento || "",
+          consulta.peso || "",
+          consulta.temperatura || "",
+          consulta.presionArterial || "",
+          consulta.frecuenciaCardiaca || "",
+          medicamentos || "",
+          vacunas || "",
+          examenes || "",
+          servicios || "",
           consulta.proxima_cita
             ? consulta.proxima_cita.toLocaleDateString("es-ES")
-            : "No programada",
-          consulta.notas || "Sin notas",
+            : "",
+          consulta.notas || "",
         ]);
       });
 
@@ -1088,7 +1187,7 @@ export default function HistorialClinico() {
                       <p className="text-vet-gray-600 mb-6">
                         {selectedMascota} no tiene consultas generales en su
                         historial. Los servicios de consulta general aparecerán
-                        aquí.
+                        aqu��.
                       </p>
                       <Button
                         onClick={() => (window.location.href = "/mis-citas")}
@@ -1137,6 +1236,73 @@ export default function HistorialClinico() {
                             <p className="text-vet-gray-700 mb-4">
                               {consulta.tratamiento}
                             </p>
+
+                            {/* Signos vitales */}
+                            {(consulta.peso ||
+                              consulta.temperatura ||
+                              consulta.presionArterial ||
+                              consulta.frecuenciaCardiaca) && (
+                              <div className="mb-4">
+                                <h4 className="font-semibold text-vet-gray-900 mb-2">
+                                  Signos Vitales
+                                </h4>
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                                  {consulta.peso && (
+                                    <div className="bg-vet-gray-50 rounded-lg p-2">
+                                      <span className="font-medium">Peso:</span>{" "}
+                                      {consulta.peso} kg
+                                    </div>
+                                  )}
+                                  {consulta.temperatura && (
+                                    <div className="bg-vet-gray-50 rounded-lg p-2">
+                                      <span className="font-medium">
+                                        Temperatura:
+                                      </span>{" "}
+                                      {consulta.temperatura}°C
+                                    </div>
+                                  )}
+                                  {consulta.presionArterial && (
+                                    <div className="bg-vet-gray-50 rounded-lg p-2">
+                                      <span className="font-medium">P.A.:</span>{" "}
+                                      {consulta.presionArterial}
+                                    </div>
+                                  )}
+                                  {consulta.frecuenciaCardiaca && (
+                                    <div className="bg-vet-gray-50 rounded-lg p-2">
+                                      <span className="font-medium">F.C.:</span>{" "}
+                                      {consulta.frecuenciaCardiaca} bpm
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Exámenes realizados */}
+                            {consulta.examenes &&
+                              consulta.examenes.length > 0 && (
+                                <div className="mb-4">
+                                  <h4 className="font-semibold text-vet-gray-900 mb-2">
+                                    Exámenes Realizados
+                                  </h4>
+                                  <div className="space-y-2">
+                                    {consulta.examenes.map((examen, index) => (
+                                      <div
+                                        key={index}
+                                        className="bg-vet-gray-50 rounded-lg p-3"
+                                      >
+                                        <div className="flex items-center justify-between mb-1">
+                                          <span className="font-medium text-vet-gray-900">
+                                            {examen.tipo}
+                                          </span>
+                                        </div>
+                                        <p className="text-sm text-vet-gray-600">
+                                          Resultado: {examen.resultado}
+                                        </p>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
 
                             {consulta.servicios &&
                               consulta.servicios.length > 0 && (
@@ -1187,29 +1353,120 @@ export default function HistorialClinico() {
                           <div>
                             {consulta.medicamentos.length > 0 && (
                               <div className="mb-4">
-                                <h4 className="font-semibold text-vet-gray-900 mb-2">
-                                  Medicamentos
+                                <h4 className="font-semibold text-vet-gray-900 mb-2 flex items-center">
+                                  <Pill className="w-4 h-4 mr-2 text-blue-600" />
+                                  Medicamentos Recetados
                                 </h4>
                                 <div className="space-y-2">
                                   {consulta.medicamentos.map((med, index) => (
                                     <div
                                       key={index}
-                                      className="bg-vet-gray-50 rounded-lg p-3"
+                                      className="border border-vet-gray-200 rounded-lg p-3"
                                     >
-                                      <div className="flex items-center space-x-2 mb-1">
-                                        <Pill className="w-4 h-4 text-vet-primary" />
-                                        <span className="font-medium">
+                                      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm">
+                                        <div>
+                                          <strong>Medicamento:</strong>{" "}
                                           {med.nombre}
-                                        </span>
+                                        </div>
+                                        <div>
+                                          <strong>Dosis:</strong> {med.dosis}
+                                        </div>
+                                        <div>
+                                          <strong>Frecuencia:</strong>{" "}
+                                          {med.frecuencia}
+                                        </div>
+                                        {med.duracion && (
+                                          <div>
+                                            <strong>Duración:</strong>{" "}
+                                            {med.duracion}
+                                          </div>
+                                        )}
+                                        {med.indicaciones && (
+                                          <div className="md:col-span-3">
+                                            <strong>Indicaciones:</strong>{" "}
+                                            {med.indicaciones}
+                                          </div>
+                                        )}
                                       </div>
-                                      <p className="text-sm text-vet-gray-600">
-                                        {med.dosis} • {med.duracion}
-                                      </p>
                                     </div>
                                   ))}
                                 </div>
                               </div>
                             )}
+
+                            {/* Vacunas aplicadas */}
+                            {consulta.vacunas &&
+                              consulta.vacunas.length > 0 && (
+                                <div className="mb-4">
+                                  <h4 className="font-semibold text-vet-gray-900 mb-2 flex items-center">
+                                    <Syringe className="w-4 h-4 mr-2 text-green-600" />
+                                    Vacunas Aplicadas
+                                  </h4>
+                                  <div className="space-y-2">
+                                    {consulta.vacunas.map((vacuna, index) => (
+                                      <div
+                                        key={index}
+                                        className="border border-vet-gray-200 rounded-lg p-3"
+                                      >
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm">
+                                          <div>
+                                            <strong>Vacuna:</strong>{" "}
+                                            {vacuna.nombre}
+                                          </div>
+                                          <div>
+                                            <strong>Lote:</strong> {vacuna.lote}
+                                          </div>
+                                          <div>
+                                            <strong>Próxima Dosis:</strong>{" "}
+                                            {new Date(
+                                              vacuna.proximaFecha,
+                                            ).toLocaleDateString("es-ES")}
+                                          </div>
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+
+                            {/* Archivos adjuntos */}
+                            {consulta.archivosAdjuntos &&
+                              consulta.archivosAdjuntos.length > 0 && (
+                                <div className="mb-4">
+                                  <h4 className="font-semibold text-vet-gray-900 mb-2 flex items-center">
+                                    <FileText className="w-4 h-4 mr-2 text-vet-gray-600" />
+                                    Archivos Adjuntos
+                                  </h4>
+                                  <div className="space-y-2">
+                                    {consulta.archivosAdjuntos.map(
+                                      (archivo, index) => (
+                                        <div
+                                          key={index}
+                                          className="border border-vet-gray-200 rounded-lg p-3"
+                                        >
+                                          <div className="flex items-center justify-between text-sm">
+                                            <div>
+                                              <strong>{archivo.nombre}</strong>
+                                              <span className="text-vet-gray-600 ml-2">
+                                                ({archivo.tipo})
+                                              </span>
+                                            </div>
+                                            <a
+                                              href={archivo.url}
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                              className="text-vet-primary hover:underline"
+                                            >
+                                              <Download className="w-4 h-4 inline mr-1" />
+                                              Descargar
+                                            </a>
+                                          </div>
+                                        </div>
+                                      ),
+                                    )}
+                                  </div>
+                                </div>
+                              )}
 
                             {consulta.proxima_cita && (
                               <div className="mb-4">
@@ -1223,6 +1480,120 @@ export default function HistorialClinico() {
                                 </p>
                               </div>
                             )}
+                          </div>
+                        </div>
+
+                        {/* Resumen completo del servicio realizado */}
+                        <div className="mt-6 p-4 bg-gradient-to-r from-vet-primary/5 to-blue-50 rounded-lg border border-vet-primary/20">
+                          <h5 className="font-medium text-vet-primary mb-3 flex items-center">
+                            <CheckCircle className="w-4 h-4 mr-2" />
+                            Resumen del Servicio Completado
+                          </h5>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                              <div className="space-y-2">
+                                <div>
+                                  <strong>Servicio:</strong>{" "}
+                                  {consulta.tipoConsulta || "Consulta"}
+                                </div>
+                                <div>
+                                  <strong>Duración:</strong> Aprox.{" "}
+                                  {(() => {
+                                    const servicesMap = {
+                                      consulta: "30-45 min",
+                                      vacunacion: "15-20 min",
+                                      emergencia: "45-90 min",
+                                      grooming: "60-120 min",
+                                      cirugia: "90-180 min",
+                                      diagnostico: "30-60 min",
+                                    };
+                                    const tipo =
+                                      consulta.tipoConsulta?.toLowerCase() ||
+                                      "consulta";
+                                    return servicesMap[tipo] || "30-45 min";
+                                  })()}
+                                </div>
+                                <div>
+                                  <strong>Estado Final:</strong>
+                                  <span className="ml-1 px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
+                                    Servicio Completado Exitosamente
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                            <div>
+                              <div className="space-y-2">
+                                <div>
+                                  <strong>Fecha de Realización:</strong>{" "}
+                                  {new Date(consulta.fecha).toLocaleDateString(
+                                    "es-ES",
+                                  )}
+                                </div>
+                                <div>
+                                  <strong>Hora de Atención:</strong>{" "}
+                                  {new Date(consulta.fecha).toLocaleTimeString(
+                                    "es-ES",
+                                    { hour: "2-digit", minute: "2-digit" },
+                                  )}
+                                </div>
+                                {consulta.proxima_cita && (
+                                  <div>
+                                    <strong>Próximo Control:</strong>{" "}
+                                    {new Date(
+                                      consulta.proxima_cita,
+                                    ).toLocaleDateString("es-ES")}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Indicadores de calidad del servicio */}
+                          <div className="mt-3 pt-3 border-t border-vet-primary/10">
+                            <div className="flex items-center justify-between text-xs">
+                              <div className="flex items-center space-x-4">
+                                <div className="flex items-center space-x-1 text-green-600">
+                                  <CheckCircle className="w-3 h-3" />
+                                  <span>Protocolo Completo</span>
+                                </div>
+                                {consulta.medicamentos &&
+                                  consulta.medicamentos.length > 0 && (
+                                    <div className="flex items-center space-x-1 text-blue-600">
+                                      <Pill className="w-3 h-3" />
+                                      <span>
+                                        {consulta.medicamentos.length}{" "}
+                                        Medicamento
+                                        {consulta.medicamentos.length > 1
+                                          ? "s"
+                                          : ""}{" "}
+                                        Recetado
+                                        {consulta.medicamentos.length > 1
+                                          ? "s"
+                                          : ""}
+                                      </span>
+                                    </div>
+                                  )}
+                                {consulta.examenes &&
+                                  consulta.examenes.length > 0 && (
+                                    <div className="flex items-center space-x-1 text-purple-600">
+                                      <Activity className="w-3 h-3" />
+                                      <span>
+                                        {consulta.examenes.length} Examen
+                                        {consulta.examenes.length > 1
+                                          ? "es"
+                                          : ""}{" "}
+                                        Realizado
+                                        {consulta.examenes.length > 1
+                                          ? "s"
+                                          : ""}
+                                      </span>
+                                    </div>
+                                  )}
+                              </div>
+                              <div className="text-vet-gray-500">
+                                Registro #{consulta.id}
+                              </div>
+                            </div>
                           </div>
                         </div>
 
@@ -1310,17 +1681,352 @@ export default function HistorialClinico() {
                               {servicio.tratamiento}
                             </p>
                           </div>
-                          {servicio.notas && (
+
+                          {/* Signos vitales */}
+                          {(servicio.peso ||
+                            servicio.temperatura ||
+                            servicio.presionArterial ||
+                            servicio.frecuenciaCardiaca) && (
                             <div>
-                              <span className="font-medium text-vet-gray-700">
-                                Notas:
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Signos Vitales:
                               </span>
-                              <p className="text-vet-gray-600">
-                                {servicio.notas}
-                              </p>
+                              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                                {servicio.peso && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">Peso:</span>{" "}
+                                    {servicio.peso} kg
+                                  </div>
+                                )}
+                                {servicio.temperatura && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">Temp:</span>{" "}
+                                    {servicio.temperatura}°C
+                                  </div>
+                                )}
+                                {servicio.presionArterial && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">P.A.:</span>{" "}
+                                    {servicio.presionArterial}
+                                  </div>
+                                )}
+                                {servicio.frecuenciaCardiaca && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">F.C.:</span>{" "}
+                                    {servicio.frecuenciaCardiaca} bpm
+                                  </div>
+                                )}
+                              </div>
                             </div>
                           )}
+
+                          {/* Medicamentos */}
+                          {servicio.medicamentos &&
+                            servicio.medicamentos.length > 0 && (
+                              <div>
+                                <span className="font-medium text-vet-gray-700 mb-2 block">
+                                  Medicamentos Recetados:
+                                </span>
+                                <div className="space-y-2">
+                                  {servicio.medicamentos.map((med, index) => (
+                                    <div
+                                      key={index}
+                                      className="border border-vet-gray-200 rounded-lg p-3"
+                                    >
+                                      <div className="text-sm">
+                                        <div>
+                                          <strong>Medicamento:</strong>{" "}
+                                          {med.nombre}
+                                        </div>
+                                        <div>
+                                          <strong>Dosis:</strong> {med.dosis}
+                                        </div>
+                                        {med.frecuencia && (
+                                          <div>
+                                            <strong>Frecuencia:</strong>{" "}
+                                            {med.frecuencia}
+                                          </div>
+                                        )}
+                                        {med.duracion && (
+                                          <div>
+                                            <strong>Duración:</strong>{" "}
+                                            {med.duracion}
+                                          </div>
+                                        )}
+                                        {med.indicaciones && (
+                                          <div>
+                                            <strong>Indicaciones:</strong>{" "}
+                                            {med.indicaciones}
+                                          </div>
+                                        )}
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                          {/* Vacunas aplicadas */}
+                          {servicio.vacunas && servicio.vacunas.length > 0 && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Vacunas Aplicadas:
+                              </span>
+                              <div className="space-y-2">
+                                {servicio.vacunas.map((vacuna, index) => (
+                                  <div
+                                    key={index}
+                                    className="border border-vet-gray-200 rounded-lg p-3"
+                                  >
+                                    <div className="text-sm">
+                                      <div>
+                                        <strong>Vacuna:</strong> {vacuna.nombre}
+                                      </div>
+                                      <div>
+                                        <strong>Lote:</strong> {vacuna.lote}
+                                      </div>
+                                      <div>
+                                        <strong>Próxima Dosis:</strong>{" "}
+                                        {new Date(
+                                          vacuna.proximaFecha,
+                                        ).toLocaleDateString("es-ES")}
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Exámenes realizados */}
+                          {servicio.examenes &&
+                            servicio.examenes.length > 0 && (
+                              <div>
+                                <span className="font-medium text-vet-gray-700 mb-2 block">
+                                  Exámenes Realizados:
+                                </span>
+                                <div className="space-y-2">
+                                  {servicio.examenes.map((examen, index) => (
+                                    <div
+                                      key={index}
+                                      className="bg-vet-gray-50 rounded-lg p-3"
+                                    >
+                                      <div className="text-sm">
+                                        <strong>{examen.tipo}:</strong>{" "}
+                                        {examen.resultado}
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                          {/* Servicios adicionales */}
+                          {servicio.servicios &&
+                            servicio.servicios.length > 0 && (
+                              <div>
+                                <span className="font-medium text-vet-gray-700 mb-2 block">
+                                  Servicios Realizados:
+                                </span>
+                                <div className="space-y-2">
+                                  {servicio.servicios.map(
+                                    (servicioItem, index) => (
+                                      <div
+                                        key={index}
+                                        className="bg-vet-gray-50 rounded-lg p-3"
+                                      >
+                                        <div className="text-sm">
+                                          <div>
+                                            <strong>Servicio:</strong>{" "}
+                                            {servicioItem.nombre}
+                                          </div>
+                                          {servicioItem.precio && (
+                                            <div>
+                                              <strong>Precio:</strong> S/
+                                              {servicioItem.precio}
+                                            </div>
+                                          )}
+                                          {servicioItem.descripcion && (
+                                            <div>
+                                              <strong>Descripción:</strong>{" "}
+                                              {servicioItem.descripcion}
+                                            </div>
+                                          )}
+                                          {servicioItem.duracion && (
+                                            <div>
+                                              <strong>Duración:</strong>{" "}
+                                              {servicioItem.duracion}
+                                            </div>
+                                          )}
+                                          {servicioItem.notas && (
+                                            <div>
+                                              <strong>Notas:</strong>{" "}
+                                              {servicioItem.notas}
+                                            </div>
+                                          )}
+                                        </div>
+                                      </div>
+                                    ),
+                                  )}
+                                </div>
+                              </div>
+                            )}
+
+                          {/* Archivos adjuntos */}
+                          {servicio.archivosAdjuntos &&
+                            servicio.archivosAdjuntos.length > 0 && (
+                              <div>
+                                <span className="font-medium text-vet-gray-700 mb-2 block">
+                                  Archivos Adjuntos:
+                                </span>
+                                <div className="space-y-2">
+                                  {servicio.archivosAdjuntos.map(
+                                    (archivo, index) => (
+                                      <div
+                                        key={index}
+                                        className="border border-vet-gray-200 rounded-lg p-3"
+                                      >
+                                        <div className="flex items-center justify-between text-sm">
+                                          <div>
+                                            <strong>{archivo.nombre}</strong>
+                                            <span className="text-vet-gray-600 ml-2">
+                                              ({archivo.tipo})
+                                            </span>
+                                          </div>
+                                          <a
+                                            href={archivo.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-vet-primary hover:underline"
+                                          >
+                                            <Download className="w-4 h-4 inline mr-1" />
+                                            Descargar
+                                          </a>
+                                        </div>
+                                      </div>
+                                    ),
+                                  )}
+                                </div>
+                              </div>
+                            )}
                         </div>
+
+                        {/* Resumen completo del servicio realizado */}
+                        <div className="mt-6 p-4 bg-gradient-to-r from-vet-primary/5 to-blue-50 rounded-lg border border-vet-primary/20">
+                          <h5 className="font-medium text-vet-primary mb-3 flex items-center">
+                            <CheckCircle className="w-4 h-4 mr-2" />
+                            Resumen del Servicio Completado
+                          </h5>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                              <div className="space-y-2">
+                                <div>
+                                  <strong>Servicio:</strong>{" "}
+                                  {servicio.tipoConsulta ||
+                                    "Servicio Veterinario"}
+                                </div>
+                                <div>
+                                  <strong>Duración:</strong> Aprox.{" "}
+                                  {(() => {
+                                    const servicesMap = {
+                                      consulta: "30-45 min",
+                                      vacunacion: "15-20 min",
+                                      emergencia: "45-90 min",
+                                      grooming: "60-120 min",
+                                      cirugia: "90-180 min",
+                                      diagnostico: "30-60 min",
+                                    };
+                                    const tipo =
+                                      servicio.tipoConsulta?.toLowerCase() ||
+                                      "consulta";
+                                    return servicesMap[tipo] || "30-45 min";
+                                  })()}
+                                </div>
+                                <div>
+                                  <strong>Estado Final:</strong>
+                                  <span className="ml-1 px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
+                                    Servicio Completado Exitosamente
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                            <div>
+                              <div className="space-y-2">
+                                <div>
+                                  <strong>Fecha de Realización:</strong>{" "}
+                                  {new Date(servicio.fecha).toLocaleDateString(
+                                    "es-ES",
+                                  )}
+                                </div>
+                                <div>
+                                  <strong>Hora de Atenci��n:</strong>{" "}
+                                  {new Date(servicio.fecha).toLocaleTimeString(
+                                    "es-ES",
+                                    { hour: "2-digit", minute: "2-digit" },
+                                  )}
+                                </div>
+                                {servicio.proxima_cita && (
+                                  <div>
+                                    <strong>Próximo Control:</strong>{" "}
+                                    {new Date(
+                                      servicio.proxima_cita,
+                                    ).toLocaleDateString("es-ES")}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="mt-3 pt-3 border-t border-vet-primary/10">
+                            <div className="flex items-center justify-between text-xs">
+                              <div className="flex items-center space-x-4">
+                                <div className="flex items-center space-x-1 text-green-600">
+                                  <CheckCircle className="w-3 h-3" />
+                                  <span>Protocolo Completo</span>
+                                </div>
+                                {servicio.medicamentos &&
+                                  servicio.medicamentos.length > 0 && (
+                                    <div className="flex items-center space-x-1 text-blue-600">
+                                      <Pill className="w-3 h-3" />
+                                      <span>
+                                        {servicio.medicamentos.length}{" "}
+                                        Medicamento
+                                        {servicio.medicamentos.length > 1
+                                          ? "s"
+                                          : ""}
+                                      </span>
+                                    </div>
+                                  )}
+                                {servicio.examenes &&
+                                  servicio.examenes.length > 0 && (
+                                    <div className="flex items-center space-x-1 text-purple-600">
+                                      <Activity className="w-3 h-3" />
+                                      <span>
+                                        {servicio.examenes.length} Examen
+                                        {servicio.examenes.length > 1
+                                          ? "es"
+                                          : ""}
+                                      </span>
+                                    </div>
+                                  )}
+                              </div>
+                              <div className="text-vet-gray-500">
+                                Registro #{servicio.id}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {servicio.notas && (
+                          <div className="mt-4 p-4 bg-vet-primary/5 rounded-lg border border-vet-primary/20">
+                            <h4 className="font-semibold text-vet-primary mb-2">
+                              Notas del veterinario
+                            </h4>
+                            <p className="text-vet-gray-700">
+                              {servicio.notas}
+                            </p>
+                          </div>
+                        )}
                       </CardContent>
                     </Card>
                   ))
@@ -1395,17 +2101,352 @@ export default function HistorialClinico() {
                               {servicio.tratamiento}
                             </p>
                           </div>
-                          {servicio.notas && (
+
+                          {/* Signos vitales */}
+                          {(servicio.peso ||
+                            servicio.temperatura ||
+                            servicio.presionArterial ||
+                            servicio.frecuenciaCardiaca) && (
                             <div>
-                              <span className="font-medium text-vet-gray-700">
-                                Notas:
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Signos Vitales:
                               </span>
-                              <p className="text-vet-gray-600">
-                                {servicio.notas}
-                              </p>
+                              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                                {servicio.peso && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">Peso:</span>{" "}
+                                    {servicio.peso} kg
+                                  </div>
+                                )}
+                                {servicio.temperatura && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">Temp:</span>{" "}
+                                    {servicio.temperatura}°C
+                                  </div>
+                                )}
+                                {servicio.presionArterial && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">P.A.:</span>{" "}
+                                    {servicio.presionArterial}
+                                  </div>
+                                )}
+                                {servicio.frecuenciaCardiaca && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">F.C.:</span>{" "}
+                                    {servicio.frecuenciaCardiaca} bpm
+                                  </div>
+                                )}
+                              </div>
                             </div>
                           )}
+
+                          {/* Medicamentos */}
+                          {servicio.medicamentos &&
+                            servicio.medicamentos.length > 0 && (
+                              <div>
+                                <span className="font-medium text-vet-gray-700 mb-2 block">
+                                  Medicamentos Recetados:
+                                </span>
+                                <div className="space-y-2">
+                                  {servicio.medicamentos.map((med, index) => (
+                                    <div
+                                      key={index}
+                                      className="border border-vet-gray-200 rounded-lg p-3"
+                                    >
+                                      <div className="text-sm">
+                                        <div>
+                                          <strong>Medicamento:</strong>{" "}
+                                          {med.nombre}
+                                        </div>
+                                        <div>
+                                          <strong>Dosis:</strong> {med.dosis}
+                                        </div>
+                                        {med.frecuencia && (
+                                          <div>
+                                            <strong>Frecuencia:</strong>{" "}
+                                            {med.frecuencia}
+                                          </div>
+                                        )}
+                                        {med.duracion && (
+                                          <div>
+                                            <strong>Duración:</strong>{" "}
+                                            {med.duracion}
+                                          </div>
+                                        )}
+                                        {med.indicaciones && (
+                                          <div>
+                                            <strong>Indicaciones:</strong>{" "}
+                                            {med.indicaciones}
+                                          </div>
+                                        )}
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                          {/* Vacunas aplicadas */}
+                          {servicio.vacunas && servicio.vacunas.length > 0 && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Vacunas Aplicadas:
+                              </span>
+                              <div className="space-y-2">
+                                {servicio.vacunas.map((vacuna, index) => (
+                                  <div
+                                    key={index}
+                                    className="border border-vet-gray-200 rounded-lg p-3"
+                                  >
+                                    <div className="text-sm">
+                                      <div>
+                                        <strong>Vacuna:</strong> {vacuna.nombre}
+                                      </div>
+                                      <div>
+                                        <strong>Lote:</strong> {vacuna.lote}
+                                      </div>
+                                      <div>
+                                        <strong>Próxima Dosis:</strong>{" "}
+                                        {new Date(
+                                          vacuna.proximaFecha,
+                                        ).toLocaleDateString("es-ES")}
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Exámenes realizados */}
+                          {servicio.examenes &&
+                            servicio.examenes.length > 0 && (
+                              <div>
+                                <span className="font-medium text-vet-gray-700 mb-2 block">
+                                  Exámenes Realizados:
+                                </span>
+                                <div className="space-y-2">
+                                  {servicio.examenes.map((examen, index) => (
+                                    <div
+                                      key={index}
+                                      className="bg-vet-gray-50 rounded-lg p-3"
+                                    >
+                                      <div className="text-sm">
+                                        <strong>{examen.tipo}:</strong>{" "}
+                                        {examen.resultado}
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                          {/* Servicios adicionales */}
+                          {servicio.servicios &&
+                            servicio.servicios.length > 0 && (
+                              <div>
+                                <span className="font-medium text-vet-gray-700 mb-2 block">
+                                  Servicios Realizados:
+                                </span>
+                                <div className="space-y-2">
+                                  {servicio.servicios.map(
+                                    (servicioItem, index) => (
+                                      <div
+                                        key={index}
+                                        className="bg-vet-gray-50 rounded-lg p-3"
+                                      >
+                                        <div className="text-sm">
+                                          <div>
+                                            <strong>Servicio:</strong>{" "}
+                                            {servicioItem.nombre}
+                                          </div>
+                                          {servicioItem.precio && (
+                                            <div>
+                                              <strong>Precio:</strong> S/
+                                              {servicioItem.precio}
+                                            </div>
+                                          )}
+                                          {servicioItem.descripcion && (
+                                            <div>
+                                              <strong>Descripción:</strong>{" "}
+                                              {servicioItem.descripcion}
+                                            </div>
+                                          )}
+                                          {servicioItem.duracion && (
+                                            <div>
+                                              <strong>Duración:</strong>{" "}
+                                              {servicioItem.duracion}
+                                            </div>
+                                          )}
+                                          {servicioItem.notas && (
+                                            <div>
+                                              <strong>Notas:</strong>{" "}
+                                              {servicioItem.notas}
+                                            </div>
+                                          )}
+                                        </div>
+                                      </div>
+                                    ),
+                                  )}
+                                </div>
+                              </div>
+                            )}
+
+                          {/* Archivos adjuntos */}
+                          {servicio.archivosAdjuntos &&
+                            servicio.archivosAdjuntos.length > 0 && (
+                              <div>
+                                <span className="font-medium text-vet-gray-700 mb-2 block">
+                                  Archivos Adjuntos:
+                                </span>
+                                <div className="space-y-2">
+                                  {servicio.archivosAdjuntos.map(
+                                    (archivo, index) => (
+                                      <div
+                                        key={index}
+                                        className="border border-vet-gray-200 rounded-lg p-3"
+                                      >
+                                        <div className="flex items-center justify-between text-sm">
+                                          <div>
+                                            <strong>{archivo.nombre}</strong>
+                                            <span className="text-vet-gray-600 ml-2">
+                                              ({archivo.tipo})
+                                            </span>
+                                          </div>
+                                          <a
+                                            href={archivo.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-vet-primary hover:underline"
+                                          >
+                                            <Download className="w-4 h-4 inline mr-1" />
+                                            Descargar
+                                          </a>
+                                        </div>
+                                      </div>
+                                    ),
+                                  )}
+                                </div>
+                              </div>
+                            )}
                         </div>
+
+                        {/* Resumen completo del servicio realizado */}
+                        <div className="mt-6 p-4 bg-gradient-to-r from-vet-primary/5 to-blue-50 rounded-lg border border-vet-primary/20">
+                          <h5 className="font-medium text-vet-primary mb-3 flex items-center">
+                            <CheckCircle className="w-4 h-4 mr-2" />
+                            Resumen del Servicio Completado
+                          </h5>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                              <div className="space-y-2">
+                                <div>
+                                  <strong>Servicio:</strong>{" "}
+                                  {servicio.tipoConsulta ||
+                                    "Servicio Veterinario"}
+                                </div>
+                                <div>
+                                  <strong>Duración:</strong> Aprox.{" "}
+                                  {(() => {
+                                    const servicesMap = {
+                                      consulta: "30-45 min",
+                                      vacunacion: "15-20 min",
+                                      emergencia: "45-90 min",
+                                      grooming: "60-120 min",
+                                      cirugia: "90-180 min",
+                                      diagnostico: "30-60 min",
+                                    };
+                                    const tipo =
+                                      servicio.tipoConsulta?.toLowerCase() ||
+                                      "consulta";
+                                    return servicesMap[tipo] || "30-45 min";
+                                  })()}
+                                </div>
+                                <div>
+                                  <strong>Estado Final:</strong>
+                                  <span className="ml-1 px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
+                                    Servicio Completado Exitosamente
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                            <div>
+                              <div className="space-y-2">
+                                <div>
+                                  <strong>Fecha de Realización:</strong>{" "}
+                                  {new Date(servicio.fecha).toLocaleDateString(
+                                    "es-ES",
+                                  )}
+                                </div>
+                                <div>
+                                  <strong>Hora de Atención:</strong>{" "}
+                                  {new Date(servicio.fecha).toLocaleTimeString(
+                                    "es-ES",
+                                    { hour: "2-digit", minute: "2-digit" },
+                                  )}
+                                </div>
+                                {servicio.proxima_cita && (
+                                  <div>
+                                    <strong>Próximo Control:</strong>{" "}
+                                    {new Date(
+                                      servicio.proxima_cita,
+                                    ).toLocaleDateString("es-ES")}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="mt-3 pt-3 border-t border-vet-primary/10">
+                            <div className="flex items-center justify-between text-xs">
+                              <div className="flex items-center space-x-4">
+                                <div className="flex items-center space-x-1 text-green-600">
+                                  <CheckCircle className="w-3 h-3" />
+                                  <span>Protocolo Completo</span>
+                                </div>
+                                {servicio.medicamentos &&
+                                  servicio.medicamentos.length > 0 && (
+                                    <div className="flex items-center space-x-1 text-blue-600">
+                                      <Pill className="w-3 h-3" />
+                                      <span>
+                                        {servicio.medicamentos.length}{" "}
+                                        Medicamento
+                                        {servicio.medicamentos.length > 1
+                                          ? "s"
+                                          : ""}
+                                      </span>
+                                    </div>
+                                  )}
+                                {servicio.examenes &&
+                                  servicio.examenes.length > 0 && (
+                                    <div className="flex items-center space-x-1 text-purple-600">
+                                      <Activity className="w-3 h-3" />
+                                      <span>
+                                        {servicio.examenes.length} Examen
+                                        {servicio.examenes.length > 1
+                                          ? "es"
+                                          : ""}
+                                      </span>
+                                    </div>
+                                  )}
+                              </div>
+                              <div className="text-vet-gray-500">
+                                Registro #{servicio.id}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {servicio.notas && (
+                          <div className="mt-4 p-4 bg-vet-primary/5 rounded-lg border border-vet-primary/20">
+                            <h4 className="font-semibold text-vet-primary mb-2">
+                              Notas del veterinario
+                            </h4>
+                            <p className="text-vet-gray-700">
+                              {servicio.notas}
+                            </p>
+                          </div>
+                        )}
                       </CardContent>
                     </Card>
                   ))
@@ -1480,17 +2521,352 @@ export default function HistorialClinico() {
                               {servicio.tratamiento}
                             </p>
                           </div>
-                          {servicio.notas && (
+
+                          {/* Signos vitales */}
+                          {(servicio.peso ||
+                            servicio.temperatura ||
+                            servicio.presionArterial ||
+                            servicio.frecuenciaCardiaca) && (
                             <div>
-                              <span className="font-medium text-vet-gray-700">
-                                Notas:
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Signos Vitales:
                               </span>
-                              <p className="text-vet-gray-600">
-                                {servicio.notas}
-                              </p>
+                              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                                {servicio.peso && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">Peso:</span>{" "}
+                                    {servicio.peso} kg
+                                  </div>
+                                )}
+                                {servicio.temperatura && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">Temp:</span>{" "}
+                                    {servicio.temperatura}°C
+                                  </div>
+                                )}
+                                {servicio.presionArterial && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">P.A.:</span>{" "}
+                                    {servicio.presionArterial}
+                                  </div>
+                                )}
+                                {servicio.frecuenciaCardiaca && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">F.C.:</span>{" "}
+                                    {servicio.frecuenciaCardiaca} bpm
+                                  </div>
+                                )}
+                              </div>
                             </div>
                           )}
+
+                          {/* Medicamentos */}
+                          {servicio.medicamentos &&
+                            servicio.medicamentos.length > 0 && (
+                              <div>
+                                <span className="font-medium text-vet-gray-700 mb-2 block">
+                                  Medicamentos Recetados:
+                                </span>
+                                <div className="space-y-2">
+                                  {servicio.medicamentos.map((med, index) => (
+                                    <div
+                                      key={index}
+                                      className="border border-vet-gray-200 rounded-lg p-3"
+                                    >
+                                      <div className="text-sm">
+                                        <div>
+                                          <strong>Medicamento:</strong>{" "}
+                                          {med.nombre}
+                                        </div>
+                                        <div>
+                                          <strong>Dosis:</strong> {med.dosis}
+                                        </div>
+                                        {med.frecuencia && (
+                                          <div>
+                                            <strong>Frecuencia:</strong>{" "}
+                                            {med.frecuencia}
+                                          </div>
+                                        )}
+                                        {med.duracion && (
+                                          <div>
+                                            <strong>Duración:</strong>{" "}
+                                            {med.duracion}
+                                          </div>
+                                        )}
+                                        {med.indicaciones && (
+                                          <div>
+                                            <strong>Indicaciones:</strong>{" "}
+                                            {med.indicaciones}
+                                          </div>
+                                        )}
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                          {/* Vacunas aplicadas */}
+                          {servicio.vacunas && servicio.vacunas.length > 0 && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Vacunas Aplicadas:
+                              </span>
+                              <div className="space-y-2">
+                                {servicio.vacunas.map((vacuna, index) => (
+                                  <div
+                                    key={index}
+                                    className="border border-vet-gray-200 rounded-lg p-3"
+                                  >
+                                    <div className="text-sm">
+                                      <div>
+                                        <strong>Vacuna:</strong> {vacuna.nombre}
+                                      </div>
+                                      <div>
+                                        <strong>Lote:</strong> {vacuna.lote}
+                                      </div>
+                                      <div>
+                                        <strong>Próxima Dosis:</strong>{" "}
+                                        {new Date(
+                                          vacuna.proximaFecha,
+                                        ).toLocaleDateString("es-ES")}
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Exámenes realizados */}
+                          {servicio.examenes &&
+                            servicio.examenes.length > 0 && (
+                              <div>
+                                <span className="font-medium text-vet-gray-700 mb-2 block">
+                                  Exámenes Realizados:
+                                </span>
+                                <div className="space-y-2">
+                                  {servicio.examenes.map((examen, index) => (
+                                    <div
+                                      key={index}
+                                      className="bg-vet-gray-50 rounded-lg p-3"
+                                    >
+                                      <div className="text-sm">
+                                        <strong>{examen.tipo}:</strong>{" "}
+                                        {examen.resultado}
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                          {/* Servicios adicionales */}
+                          {servicio.servicios &&
+                            servicio.servicios.length > 0 && (
+                              <div>
+                                <span className="font-medium text-vet-gray-700 mb-2 block">
+                                  Servicios Realizados:
+                                </span>
+                                <div className="space-y-2">
+                                  {servicio.servicios.map(
+                                    (servicioItem, index) => (
+                                      <div
+                                        key={index}
+                                        className="bg-vet-gray-50 rounded-lg p-3"
+                                      >
+                                        <div className="text-sm">
+                                          <div>
+                                            <strong>Servicio:</strong>{" "}
+                                            {servicioItem.nombre}
+                                          </div>
+                                          {servicioItem.precio && (
+                                            <div>
+                                              <strong>Precio:</strong> S/
+                                              {servicioItem.precio}
+                                            </div>
+                                          )}
+                                          {servicioItem.descripcion && (
+                                            <div>
+                                              <strong>Descripción:</strong>{" "}
+                                              {servicioItem.descripcion}
+                                            </div>
+                                          )}
+                                          {servicioItem.duracion && (
+                                            <div>
+                                              <strong>Duración:</strong>{" "}
+                                              {servicioItem.duracion}
+                                            </div>
+                                          )}
+                                          {servicioItem.notas && (
+                                            <div>
+                                              <strong>Notas:</strong>{" "}
+                                              {servicioItem.notas}
+                                            </div>
+                                          )}
+                                        </div>
+                                      </div>
+                                    ),
+                                  )}
+                                </div>
+                              </div>
+                            )}
+
+                          {/* Archivos adjuntos */}
+                          {servicio.archivosAdjuntos &&
+                            servicio.archivosAdjuntos.length > 0 && (
+                              <div>
+                                <span className="font-medium text-vet-gray-700 mb-2 block">
+                                  Archivos Adjuntos:
+                                </span>
+                                <div className="space-y-2">
+                                  {servicio.archivosAdjuntos.map(
+                                    (archivo, index) => (
+                                      <div
+                                        key={index}
+                                        className="border border-vet-gray-200 rounded-lg p-3"
+                                      >
+                                        <div className="flex items-center justify-between text-sm">
+                                          <div>
+                                            <strong>{archivo.nombre}</strong>
+                                            <span className="text-vet-gray-600 ml-2">
+                                              ({archivo.tipo})
+                                            </span>
+                                          </div>
+                                          <a
+                                            href={archivo.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-vet-primary hover:underline"
+                                          >
+                                            <Download className="w-4 h-4 inline mr-1" />
+                                            Descargar
+                                          </a>
+                                        </div>
+                                      </div>
+                                    ),
+                                  )}
+                                </div>
+                              </div>
+                            )}
                         </div>
+
+                        {/* Resumen completo del servicio realizado */}
+                        <div className="mt-6 p-4 bg-gradient-to-r from-vet-primary/5 to-blue-50 rounded-lg border border-vet-primary/20">
+                          <h5 className="font-medium text-vet-primary mb-3 flex items-center">
+                            <CheckCircle className="w-4 h-4 mr-2" />
+                            Resumen del Servicio Completado
+                          </h5>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                              <div className="space-y-2">
+                                <div>
+                                  <strong>Servicio:</strong>{" "}
+                                  {servicio.tipoConsulta ||
+                                    "Servicio Veterinario"}
+                                </div>
+                                <div>
+                                  <strong>Duración:</strong> Aprox.{" "}
+                                  {(() => {
+                                    const servicesMap = {
+                                      consulta: "30-45 min",
+                                      vacunacion: "15-20 min",
+                                      emergencia: "45-90 min",
+                                      grooming: "60-120 min",
+                                      cirugia: "90-180 min",
+                                      diagnostico: "30-60 min",
+                                    };
+                                    const tipo =
+                                      servicio.tipoConsulta?.toLowerCase() ||
+                                      "consulta";
+                                    return servicesMap[tipo] || "30-45 min";
+                                  })()}
+                                </div>
+                                <div>
+                                  <strong>Estado Final:</strong>
+                                  <span className="ml-1 px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
+                                    Servicio Completado Exitosamente
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                            <div>
+                              <div className="space-y-2">
+                                <div>
+                                  <strong>Fecha de Realización:</strong>{" "}
+                                  {new Date(servicio.fecha).toLocaleDateString(
+                                    "es-ES",
+                                  )}
+                                </div>
+                                <div>
+                                  <strong>Hora de Atención:</strong>{" "}
+                                  {new Date(servicio.fecha).toLocaleTimeString(
+                                    "es-ES",
+                                    { hour: "2-digit", minute: "2-digit" },
+                                  )}
+                                </div>
+                                {servicio.proxima_cita && (
+                                  <div>
+                                    <strong>Próximo Control:</strong>{" "}
+                                    {new Date(
+                                      servicio.proxima_cita,
+                                    ).toLocaleDateString("es-ES")}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="mt-3 pt-3 border-t border-vet-primary/10">
+                            <div className="flex items-center justify-between text-xs">
+                              <div className="flex items-center space-x-4">
+                                <div className="flex items-center space-x-1 text-green-600">
+                                  <CheckCircle className="w-3 h-3" />
+                                  <span>Protocolo Completo</span>
+                                </div>
+                                {servicio.medicamentos &&
+                                  servicio.medicamentos.length > 0 && (
+                                    <div className="flex items-center space-x-1 text-blue-600">
+                                      <Pill className="w-3 h-3" />
+                                      <span>
+                                        {servicio.medicamentos.length}{" "}
+                                        Medicamento
+                                        {servicio.medicamentos.length > 1
+                                          ? "s"
+                                          : ""}
+                                      </span>
+                                    </div>
+                                  )}
+                                {servicio.examenes &&
+                                  servicio.examenes.length > 0 && (
+                                    <div className="flex items-center space-x-1 text-purple-600">
+                                      <Activity className="w-3 h-3" />
+                                      <span>
+                                        {servicio.examenes.length} Examen
+                                        {servicio.examenes.length > 1
+                                          ? "es"
+                                          : ""}
+                                      </span>
+                                    </div>
+                                  )}
+                              </div>
+                              <div className="text-vet-gray-500">
+                                Registro #{servicio.id}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {servicio.notas && (
+                          <div className="mt-4 p-4 bg-vet-primary/5 rounded-lg border border-vet-primary/20">
+                            <h4 className="font-semibold text-vet-primary mb-2">
+                              Notas del veterinario
+                            </h4>
+                            <p className="text-vet-gray-700">
+                              {servicio.notas}
+                            </p>
+                          </div>
+                        )}
                       </CardContent>
                     </Card>
                   ))
@@ -1565,17 +2941,352 @@ export default function HistorialClinico() {
                               {servicio.tratamiento}
                             </p>
                           </div>
-                          {servicio.notas && (
+
+                          {/* Signos vitales */}
+                          {(servicio.peso ||
+                            servicio.temperatura ||
+                            servicio.presionArterial ||
+                            servicio.frecuenciaCardiaca) && (
                             <div>
-                              <span className="font-medium text-vet-gray-700">
-                                Notas:
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Signos Vitales:
                               </span>
-                              <p className="text-vet-gray-600">
-                                {servicio.notas}
-                              </p>
+                              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                                {servicio.peso && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">Peso:</span>{" "}
+                                    {servicio.peso} kg
+                                  </div>
+                                )}
+                                {servicio.temperatura && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">Temp:</span>{" "}
+                                    {servicio.temperatura}°C
+                                  </div>
+                                )}
+                                {servicio.presionArterial && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">P.A.:</span>{" "}
+                                    {servicio.presionArterial}
+                                  </div>
+                                )}
+                                {servicio.frecuenciaCardiaca && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">F.C.:</span>{" "}
+                                    {servicio.frecuenciaCardiaca} bpm
+                                  </div>
+                                )}
+                              </div>
                             </div>
                           )}
+
+                          {/* Medicamentos */}
+                          {servicio.medicamentos &&
+                            servicio.medicamentos.length > 0 && (
+                              <div>
+                                <span className="font-medium text-vet-gray-700 mb-2 block">
+                                  Medicamentos Recetados:
+                                </span>
+                                <div className="space-y-2">
+                                  {servicio.medicamentos.map((med, index) => (
+                                    <div
+                                      key={index}
+                                      className="border border-vet-gray-200 rounded-lg p-3"
+                                    >
+                                      <div className="text-sm">
+                                        <div>
+                                          <strong>Medicamento:</strong>{" "}
+                                          {med.nombre}
+                                        </div>
+                                        <div>
+                                          <strong>Dosis:</strong> {med.dosis}
+                                        </div>
+                                        {med.frecuencia && (
+                                          <div>
+                                            <strong>Frecuencia:</strong>{" "}
+                                            {med.frecuencia}
+                                          </div>
+                                        )}
+                                        {med.duracion && (
+                                          <div>
+                                            <strong>Duración:</strong>{" "}
+                                            {med.duracion}
+                                          </div>
+                                        )}
+                                        {med.indicaciones && (
+                                          <div>
+                                            <strong>Indicaciones:</strong>{" "}
+                                            {med.indicaciones}
+                                          </div>
+                                        )}
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                          {/* Vacunas aplicadas */}
+                          {servicio.vacunas && servicio.vacunas.length > 0 && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Vacunas Aplicadas:
+                              </span>
+                              <div className="space-y-2">
+                                {servicio.vacunas.map((vacuna, index) => (
+                                  <div
+                                    key={index}
+                                    className="border border-vet-gray-200 rounded-lg p-3"
+                                  >
+                                    <div className="text-sm">
+                                      <div>
+                                        <strong>Vacuna:</strong> {vacuna.nombre}
+                                      </div>
+                                      <div>
+                                        <strong>Lote:</strong> {vacuna.lote}
+                                      </div>
+                                      <div>
+                                        <strong>Próxima Dosis:</strong>{" "}
+                                        {new Date(
+                                          vacuna.proximaFecha,
+                                        ).toLocaleDateString("es-ES")}
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Exámenes realizados */}
+                          {servicio.examenes &&
+                            servicio.examenes.length > 0 && (
+                              <div>
+                                <span className="font-medium text-vet-gray-700 mb-2 block">
+                                  Exámenes Realizados:
+                                </span>
+                                <div className="space-y-2">
+                                  {servicio.examenes.map((examen, index) => (
+                                    <div
+                                      key={index}
+                                      className="bg-vet-gray-50 rounded-lg p-3"
+                                    >
+                                      <div className="text-sm">
+                                        <strong>{examen.tipo}:</strong>{" "}
+                                        {examen.resultado}
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                          {/* Servicios adicionales */}
+                          {servicio.servicios &&
+                            servicio.servicios.length > 0 && (
+                              <div>
+                                <span className="font-medium text-vet-gray-700 mb-2 block">
+                                  Servicios Realizados:
+                                </span>
+                                <div className="space-y-2">
+                                  {servicio.servicios.map(
+                                    (servicioItem, index) => (
+                                      <div
+                                        key={index}
+                                        className="bg-vet-gray-50 rounded-lg p-3"
+                                      >
+                                        <div className="text-sm">
+                                          <div>
+                                            <strong>Servicio:</strong>{" "}
+                                            {servicioItem.nombre}
+                                          </div>
+                                          {servicioItem.precio && (
+                                            <div>
+                                              <strong>Precio:</strong> S/
+                                              {servicioItem.precio}
+                                            </div>
+                                          )}
+                                          {servicioItem.descripcion && (
+                                            <div>
+                                              <strong>Descripción:</strong>{" "}
+                                              {servicioItem.descripcion}
+                                            </div>
+                                          )}
+                                          {servicioItem.duracion && (
+                                            <div>
+                                              <strong>Duración:</strong>{" "}
+                                              {servicioItem.duracion}
+                                            </div>
+                                          )}
+                                          {servicioItem.notas && (
+                                            <div>
+                                              <strong>Notas:</strong>{" "}
+                                              {servicioItem.notas}
+                                            </div>
+                                          )}
+                                        </div>
+                                      </div>
+                                    ),
+                                  )}
+                                </div>
+                              </div>
+                            )}
+
+                          {/* Archivos adjuntos */}
+                          {servicio.archivosAdjuntos &&
+                            servicio.archivosAdjuntos.length > 0 && (
+                              <div>
+                                <span className="font-medium text-vet-gray-700 mb-2 block">
+                                  Archivos Adjuntos:
+                                </span>
+                                <div className="space-y-2">
+                                  {servicio.archivosAdjuntos.map(
+                                    (archivo, index) => (
+                                      <div
+                                        key={index}
+                                        className="border border-vet-gray-200 rounded-lg p-3"
+                                      >
+                                        <div className="flex items-center justify-between text-sm">
+                                          <div>
+                                            <strong>{archivo.nombre}</strong>
+                                            <span className="text-vet-gray-600 ml-2">
+                                              ({archivo.tipo})
+                                            </span>
+                                          </div>
+                                          <a
+                                            href={archivo.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-vet-primary hover:underline"
+                                          >
+                                            <Download className="w-4 h-4 inline mr-1" />
+                                            Descargar
+                                          </a>
+                                        </div>
+                                      </div>
+                                    ),
+                                  )}
+                                </div>
+                              </div>
+                            )}
                         </div>
+
+                        {/* Resumen completo del servicio realizado */}
+                        <div className="mt-6 p-4 bg-gradient-to-r from-vet-primary/5 to-blue-50 rounded-lg border border-vet-primary/20">
+                          <h5 className="font-medium text-vet-primary mb-3 flex items-center">
+                            <CheckCircle className="w-4 h-4 mr-2" />
+                            Resumen del Servicio Completado
+                          </h5>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                              <div className="space-y-2">
+                                <div>
+                                  <strong>Servicio:</strong>{" "}
+                                  {servicio.tipoConsulta ||
+                                    "Servicio Veterinario"}
+                                </div>
+                                <div>
+                                  <strong>Duración:</strong> Aprox.{" "}
+                                  {(() => {
+                                    const servicesMap = {
+                                      consulta: "30-45 min",
+                                      vacunacion: "15-20 min",
+                                      emergencia: "45-90 min",
+                                      grooming: "60-120 min",
+                                      cirugia: "90-180 min",
+                                      diagnostico: "30-60 min",
+                                    };
+                                    const tipo =
+                                      servicio.tipoConsulta?.toLowerCase() ||
+                                      "consulta";
+                                    return servicesMap[tipo] || "30-45 min";
+                                  })()}
+                                </div>
+                                <div>
+                                  <strong>Estado Final:</strong>
+                                  <span className="ml-1 px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
+                                    Servicio Completado Exitosamente
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                            <div>
+                              <div className="space-y-2">
+                                <div>
+                                  <strong>Fecha de Realización:</strong>{" "}
+                                  {new Date(servicio.fecha).toLocaleDateString(
+                                    "es-ES",
+                                  )}
+                                </div>
+                                <div>
+                                  <strong>Hora de Atención:</strong>{" "}
+                                  {new Date(servicio.fecha).toLocaleTimeString(
+                                    "es-ES",
+                                    { hour: "2-digit", minute: "2-digit" },
+                                  )}
+                                </div>
+                                {servicio.proxima_cita && (
+                                  <div>
+                                    <strong>Próximo Control:</strong>{" "}
+                                    {new Date(
+                                      servicio.proxima_cita,
+                                    ).toLocaleDateString("es-ES")}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="mt-3 pt-3 border-t border-vet-primary/10">
+                            <div className="flex items-center justify-between text-xs">
+                              <div className="flex items-center space-x-4">
+                                <div className="flex items-center space-x-1 text-green-600">
+                                  <CheckCircle className="w-3 h-3" />
+                                  <span>Protocolo Completo</span>
+                                </div>
+                                {servicio.medicamentos &&
+                                  servicio.medicamentos.length > 0 && (
+                                    <div className="flex items-center space-x-1 text-blue-600">
+                                      <Pill className="w-3 h-3" />
+                                      <span>
+                                        {servicio.medicamentos.length}{" "}
+                                        Medicamento
+                                        {servicio.medicamentos.length > 1
+                                          ? "s"
+                                          : ""}
+                                      </span>
+                                    </div>
+                                  )}
+                                {servicio.examenes &&
+                                  servicio.examenes.length > 0 && (
+                                    <div className="flex items-center space-x-1 text-purple-600">
+                                      <Activity className="w-3 h-3" />
+                                      <span>
+                                        {servicio.examenes.length} Examen
+                                        {servicio.examenes.length > 1
+                                          ? "es"
+                                          : ""}
+                                      </span>
+                                    </div>
+                                  )}
+                              </div>
+                              <div className="text-vet-gray-500">
+                                Registro #{servicio.id}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {servicio.notas && (
+                          <div className="mt-4 p-4 bg-vet-primary/5 rounded-lg border border-vet-primary/20">
+                            <h4 className="font-semibold text-vet-primary mb-2">
+                              Notas del veterinario
+                            </h4>
+                            <p className="text-vet-gray-700">
+                              {servicio.notas}
+                            </p>
+                          </div>
+                        )}
                       </CardContent>
                     </Card>
                   ))
@@ -1650,17 +3361,352 @@ export default function HistorialClinico() {
                               {servicio.tratamiento}
                             </p>
                           </div>
-                          {servicio.notas && (
+
+                          {/* Signos vitales */}
+                          {(servicio.peso ||
+                            servicio.temperatura ||
+                            servicio.presionArterial ||
+                            servicio.frecuenciaCardiaca) && (
                             <div>
-                              <span className="font-medium text-vet-gray-700">
-                                Notas:
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Signos Vitales:
                               </span>
-                              <p className="text-vet-gray-600">
-                                {servicio.notas}
-                              </p>
+                              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                                {servicio.peso && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">Peso:</span>{" "}
+                                    {servicio.peso} kg
+                                  </div>
+                                )}
+                                {servicio.temperatura && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">Temp:</span>{" "}
+                                    {servicio.temperatura}°C
+                                  </div>
+                                )}
+                                {servicio.presionArterial && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">P.A.:</span>{" "}
+                                    {servicio.presionArterial}
+                                  </div>
+                                )}
+                                {servicio.frecuenciaCardiaca && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">F.C.:</span>{" "}
+                                    {servicio.frecuenciaCardiaca} bpm
+                                  </div>
+                                )}
+                              </div>
                             </div>
                           )}
+
+                          {/* Medicamentos */}
+                          {servicio.medicamentos &&
+                            servicio.medicamentos.length > 0 && (
+                              <div>
+                                <span className="font-medium text-vet-gray-700 mb-2 block">
+                                  Medicamentos Recetados:
+                                </span>
+                                <div className="space-y-2">
+                                  {servicio.medicamentos.map((med, index) => (
+                                    <div
+                                      key={index}
+                                      className="border border-vet-gray-200 rounded-lg p-3"
+                                    >
+                                      <div className="text-sm">
+                                        <div>
+                                          <strong>Medicamento:</strong>{" "}
+                                          {med.nombre}
+                                        </div>
+                                        <div>
+                                          <strong>Dosis:</strong> {med.dosis}
+                                        </div>
+                                        {med.frecuencia && (
+                                          <div>
+                                            <strong>Frecuencia:</strong>{" "}
+                                            {med.frecuencia}
+                                          </div>
+                                        )}
+                                        {med.duracion && (
+                                          <div>
+                                            <strong>Duración:</strong>{" "}
+                                            {med.duracion}
+                                          </div>
+                                        )}
+                                        {med.indicaciones && (
+                                          <div>
+                                            <strong>Indicaciones:</strong>{" "}
+                                            {med.indicaciones}
+                                          </div>
+                                        )}
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                          {/* Vacunas aplicadas */}
+                          {servicio.vacunas && servicio.vacunas.length > 0 && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Vacunas Aplicadas:
+                              </span>
+                              <div className="space-y-2">
+                                {servicio.vacunas.map((vacuna, index) => (
+                                  <div
+                                    key={index}
+                                    className="border border-vet-gray-200 rounded-lg p-3"
+                                  >
+                                    <div className="text-sm">
+                                      <div>
+                                        <strong>Vacuna:</strong> {vacuna.nombre}
+                                      </div>
+                                      <div>
+                                        <strong>Lote:</strong> {vacuna.lote}
+                                      </div>
+                                      <div>
+                                        <strong>Próxima Dosis:</strong>{" "}
+                                        {new Date(
+                                          vacuna.proximaFecha,
+                                        ).toLocaleDateString("es-ES")}
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Exámenes realizados */}
+                          {servicio.examenes &&
+                            servicio.examenes.length > 0 && (
+                              <div>
+                                <span className="font-medium text-vet-gray-700 mb-2 block">
+                                  Exámenes Realizados:
+                                </span>
+                                <div className="space-y-2">
+                                  {servicio.examenes.map((examen, index) => (
+                                    <div
+                                      key={index}
+                                      className="bg-vet-gray-50 rounded-lg p-3"
+                                    >
+                                      <div className="text-sm">
+                                        <strong>{examen.tipo}:</strong>{" "}
+                                        {examen.resultado}
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                          {/* Servicios adicionales */}
+                          {servicio.servicios &&
+                            servicio.servicios.length > 0 && (
+                              <div>
+                                <span className="font-medium text-vet-gray-700 mb-2 block">
+                                  Servicios Realizados:
+                                </span>
+                                <div className="space-y-2">
+                                  {servicio.servicios.map(
+                                    (servicioItem, index) => (
+                                      <div
+                                        key={index}
+                                        className="bg-vet-gray-50 rounded-lg p-3"
+                                      >
+                                        <div className="text-sm">
+                                          <div>
+                                            <strong>Servicio:</strong>{" "}
+                                            {servicioItem.nombre}
+                                          </div>
+                                          {servicioItem.precio && (
+                                            <div>
+                                              <strong>Precio:</strong> S/
+                                              {servicioItem.precio}
+                                            </div>
+                                          )}
+                                          {servicioItem.descripcion && (
+                                            <div>
+                                              <strong>Descripción:</strong>{" "}
+                                              {servicioItem.descripcion}
+                                            </div>
+                                          )}
+                                          {servicioItem.duracion && (
+                                            <div>
+                                              <strong>Duración:</strong>{" "}
+                                              {servicioItem.duracion}
+                                            </div>
+                                          )}
+                                          {servicioItem.notas && (
+                                            <div>
+                                              <strong>Notas:</strong>{" "}
+                                              {servicioItem.notas}
+                                            </div>
+                                          )}
+                                        </div>
+                                      </div>
+                                    ),
+                                  )}
+                                </div>
+                              </div>
+                            )}
+
+                          {/* Archivos adjuntos */}
+                          {servicio.archivosAdjuntos &&
+                            servicio.archivosAdjuntos.length > 0 && (
+                              <div>
+                                <span className="font-medium text-vet-gray-700 mb-2 block">
+                                  Archivos Adjuntos:
+                                </span>
+                                <div className="space-y-2">
+                                  {servicio.archivosAdjuntos.map(
+                                    (archivo, index) => (
+                                      <div
+                                        key={index}
+                                        className="border border-vet-gray-200 rounded-lg p-3"
+                                      >
+                                        <div className="flex items-center justify-between text-sm">
+                                          <div>
+                                            <strong>{archivo.nombre}</strong>
+                                            <span className="text-vet-gray-600 ml-2">
+                                              ({archivo.tipo})
+                                            </span>
+                                          </div>
+                                          <a
+                                            href={archivo.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-vet-primary hover:underline"
+                                          >
+                                            <Download className="w-4 h-4 inline mr-1" />
+                                            Descargar
+                                          </a>
+                                        </div>
+                                      </div>
+                                    ),
+                                  )}
+                                </div>
+                              </div>
+                            )}
                         </div>
+
+                        {/* Resumen completo del servicio realizado */}
+                        <div className="mt-6 p-4 bg-gradient-to-r from-vet-primary/5 to-blue-50 rounded-lg border border-vet-primary/20">
+                          <h5 className="font-medium text-vet-primary mb-3 flex items-center">
+                            <CheckCircle className="w-4 h-4 mr-2" />
+                            Resumen del Servicio Completado
+                          </h5>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                              <div className="space-y-2">
+                                <div>
+                                  <strong>Servicio:</strong>{" "}
+                                  {servicio.tipoConsulta ||
+                                    "Servicio Veterinario"}
+                                </div>
+                                <div>
+                                  <strong>Duración:</strong> Aprox.{" "}
+                                  {(() => {
+                                    const servicesMap = {
+                                      consulta: "30-45 min",
+                                      vacunacion: "15-20 min",
+                                      emergencia: "45-90 min",
+                                      grooming: "60-120 min",
+                                      cirugia: "90-180 min",
+                                      diagnostico: "30-60 min",
+                                    };
+                                    const tipo =
+                                      servicio.tipoConsulta?.toLowerCase() ||
+                                      "consulta";
+                                    return servicesMap[tipo] || "30-45 min";
+                                  })()}
+                                </div>
+                                <div>
+                                  <strong>Estado Final:</strong>
+                                  <span className="ml-1 px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
+                                    Servicio Completado Exitosamente
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                            <div>
+                              <div className="space-y-2">
+                                <div>
+                                  <strong>Fecha de Realización:</strong>{" "}
+                                  {new Date(servicio.fecha).toLocaleDateString(
+                                    "es-ES",
+                                  )}
+                                </div>
+                                <div>
+                                  <strong>Hora de Atención:</strong>{" "}
+                                  {new Date(servicio.fecha).toLocaleTimeString(
+                                    "es-ES",
+                                    { hour: "2-digit", minute: "2-digit" },
+                                  )}
+                                </div>
+                                {servicio.proxima_cita && (
+                                  <div>
+                                    <strong>Próximo Control:</strong>{" "}
+                                    {new Date(
+                                      servicio.proxima_cita,
+                                    ).toLocaleDateString("es-ES")}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="mt-3 pt-3 border-t border-vet-primary/10">
+                            <div className="flex items-center justify-between text-xs">
+                              <div className="flex items-center space-x-4">
+                                <div className="flex items-center space-x-1 text-green-600">
+                                  <CheckCircle className="w-3 h-3" />
+                                  <span>Protocolo Completo</span>
+                                </div>
+                                {servicio.medicamentos &&
+                                  servicio.medicamentos.length > 0 && (
+                                    <div className="flex items-center space-x-1 text-blue-600">
+                                      <Pill className="w-3 h-3" />
+                                      <span>
+                                        {servicio.medicamentos.length}{" "}
+                                        Medicamento
+                                        {servicio.medicamentos.length > 1
+                                          ? "s"
+                                          : ""}
+                                      </span>
+                                    </div>
+                                  )}
+                                {servicio.examenes &&
+                                  servicio.examenes.length > 0 && (
+                                    <div className="flex items-center space-x-1 text-purple-600">
+                                      <Activity className="w-3 h-3" />
+                                      <span>
+                                        {servicio.examenes.length} Examen
+                                        {servicio.examenes.length > 1
+                                          ? "es"
+                                          : ""}
+                                      </span>
+                                    </div>
+                                  )}
+                              </div>
+                              <div className="text-vet-gray-500">
+                                Registro #{servicio.id}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {servicio.notas && (
+                          <div className="mt-4 p-4 bg-vet-primary/5 rounded-lg border border-vet-primary/20">
+                            <h4 className="font-semibold text-vet-primary mb-2">
+                              Notas del veterinario
+                            </h4>
+                            <p className="text-vet-gray-700">
+                              {servicio.notas}
+                            </p>
+                          </div>
+                        )}
                       </CardContent>
                     </Card>
                   ))

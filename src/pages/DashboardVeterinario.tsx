@@ -183,21 +183,21 @@ export default function DashboardVeterinario() {
     switch (estado) {
       case "aceptada":
         return (
-          <Badge className="bg-blue-100 text-blue-800 border-blue-200">
+          <Badge className="bg-vet-primary/10 text-blue-800 border-blue-200">
             <CheckCircle className="w-3 h-3 mr-1" />
             Confirmada
           </Badge>
         );
       case "atendida":
         return (
-          <Badge className="bg-green-100 text-green-800 border-green-200">
+          <Badge className="bg-vet-success/10 text-vet-success border-green-200">
             <CheckCircle className="w-3 h-3 mr-1" />
             Atendida
           </Badge>
         );
       case "en_validacion":
         return (
-          <Badge className="bg-amber-100 text-amber-800 border-amber-200">
+          <Badge className="bg-vet-secondary/10 text-vet-secondary-dark border-amber-200">
             <Clock className="w-3 h-3 mr-1" />
             En Proceso
           </Badge>
@@ -246,15 +246,15 @@ export default function DashboardVeterinario() {
                   <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
                     <Stethoscope className="w-8 h-8 text-white" />
                   </div>
-                  <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                  <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-vet-success rounded-full flex items-center justify-center">
                     <div className="w-2 h-2 bg-white rounded-full"></div>
                   </div>
                 </div>
                 <div>
-                  <h1 className="text-3xl font-bold text-gray-900 mb-1">
+                  <h1 className="text-3xl font-bold text-vet-gray-900 mb-1">
                     Panel Veterinario
                   </h1>
-                  <p className="text-gray-600 flex items-center">
+                  <p className="text-vet-gray-600 flex items-center">
                     <span>Bienvenido, {user.nombre}</span>
                     <Award className="w-4 h-4 ml-2 text-amber-500" />
                   </p>
@@ -264,14 +264,14 @@ export default function DashboardVeterinario() {
               <div className="flex items-center space-x-3">
                 <Button
                   onClick={() => setSearchPatientDialog(true)}
-                  className="bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 shadow-sm"
+                  className="bg-white text-gray-700 border border-vet-gray-200 hover:bg-vet-gray-50 shadow-sm"
                 >
                   <Search className="w-4 h-4 mr-2" />
                   Buscar Paciente
                 </Button>
                 <Button
                   onClick={handleViewFullSchedule}
-                  className="bg-blue-600 hover:bg-blue-700 shadow-sm"
+                  className="bg-vet-primary hover:bg-vet-primary-dark shadow-sm"
                 >
                   <Calendar className="w-4 h-4 mr-2" />
                   Mi Agenda
@@ -284,8 +284,8 @@ export default function DashboardVeterinario() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                   <div className="flex items-center space-x-2">
-                    <CalendarIcon className="w-5 h-5 text-blue-600" />
-                    <span className="font-medium text-gray-900">
+                    <CalendarIcon className="w-5 h-5 text-vet-primary" />
+                    <span className="font-medium text-vet-gray-900">
                       {new Date().toLocaleDateString("es-ES", {
                         weekday: "long",
                         year: "numeric",
@@ -295,8 +295,8 @@ export default function DashboardVeterinario() {
                     </span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <Timer className="w-5 h-5 text-green-600" />
-                    <span className="text-gray-600">
+                    <Timer className="w-5 h-5 text-vet-success" />
+                    <span className="text-vet-gray-600">
                       {new Date().toLocaleTimeString("es-ES", {
                         hour: "2-digit",
                         minute: "2-digit",
@@ -305,7 +305,7 @@ export default function DashboardVeterinario() {
                   </div>
                 </div>
                 {citasHoy.length > 0 && (
-                  <Badge className="bg-blue-100 text-blue-800 px-3 py-1">
+                  <Badge className="bg-vet-primary/10 text-blue-800 px-3 py-1">
                     {citasHoy.length} citas hoy
                   </Badge>
                 )}
@@ -322,14 +322,14 @@ export default function DashboardVeterinario() {
                     <p className="text-sm text-blue-700 font-medium mb-1">
                       Citas Hoy
                     </p>
-                    <p className="text-3xl font-bold text-blue-900">
+                    <p className="text-3xl font-bold text-vet-primary-dark">
                       {stats.citasHoy}
                     </p>
-                    <p className="text-xs text-blue-600 mt-1">
+                    <p className="text-xs text-vet-primary mt-1">
                       {stats.citasPendientes} pendientes
                     </p>
                   </div>
-                  <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-vet-primary rounded-xl flex items-center justify-center">
                     <Clock className="w-6 h-6 text-white" />
                   </div>
                 </div>
@@ -343,15 +343,15 @@ export default function DashboardVeterinario() {
                     <p className="text-sm text-green-700 font-medium mb-1">
                       Completadas
                     </p>
-                    <p className="text-3xl font-bold text-green-900">
+                    <p className="text-3xl font-bold text-vet-success">
                       {stats.citasCompletadas}
                     </p>
-                    <div className="flex items-center text-xs text-green-600 mt-1">
+                    <div className="flex items-center text-xs text-vet-success mt-1">
                       <ArrowUp className="w-3 h-3 mr-1" />+{crecimientoCitas}%
                       este mes
                     </div>
                   </div>
-                  <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-vet-success rounded-xl flex items-center justify-center">
                     <CheckCircle className="w-6 h-6 text-white" />
                   </div>
                 </div>
@@ -365,14 +365,14 @@ export default function DashboardVeterinario() {
                     <p className="text-sm text-purple-700 font-medium mb-1">
                       Pacientes
                     </p>
-                    <p className="text-3xl font-bold text-purple-900">
+                    <p className="text-3xl font-bold text-vet-secondary-dark">
                       {stats.pacientesUnicos}
                     </p>
-                    <p className="text-xs text-purple-600 mt-1">
+                    <p className="text-xs text-vet-secondary mt-1">
                       Únicos atendidos
                     </p>
                   </div>
-                  <div className="w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-vet-secondary rounded-xl flex items-center justify-center">
                     <PawPrint className="w-6 h-6 text-white" />
                   </div>
                 </div>
@@ -386,14 +386,14 @@ export default function DashboardVeterinario() {
                     <p className="text-sm text-amber-700 font-medium mb-1">
                       En Proceso
                     </p>
-                    <p className="text-3xl font-bold text-amber-900">
+                    <p className="text-3xl font-bold text-vet-warning">
                       {stats.citasPendientes}
                     </p>
-                    <p className="text-xs text-amber-600 mt-1">
+                    <p className="text-xs text-vet-secondary mt-1">
                       Requieren atención
                     </p>
                   </div>
-                  <div className="w-12 h-12 bg-amber-500 rounded-xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-vet-warning rounded-xl flex items-center justify-center">
                     <Activity className="w-6 h-6 text-white" />
                   </div>
                 </div>
@@ -411,8 +411,8 @@ export default function DashboardVeterinario() {
                   <div className="flex items-center justify-between">
                     <div>
                       <CardTitle className="flex items-center space-x-2 text-xl">
-                        <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                          <Calendar className="w-4 h-4 text-blue-600" />
+                        <div className="w-8 h-8 bg-vet-primary/10 rounded-lg flex items-center justify-center">
+                          <Calendar className="w-4 h-4 text-vet-primary" />
                         </div>
                         <span>Agenda de Hoy</span>
                       </CardTitle>
@@ -427,7 +427,7 @@ export default function DashboardVeterinario() {
                         variant="outline"
                         size="sm"
                         onClick={handleViewFullSchedule}
-                        className="text-blue-600 border-blue-200 hover:bg-blue-50"
+                        className="text-vet-primary border-vet-primary/20 hover:bg-vet-primary/5"
                       >
                         Ver todas
                         <ChevronRight className="w-4 h-4 ml-1" />
@@ -456,11 +456,11 @@ export default function DashboardVeterinario() {
                           return (
                             <div
                               key={cita.id}
-                              className="flex items-center justify-between p-4 bg-gray-50/50 rounded-xl border border-gray-100 hover:bg-gray-50 transition-colors"
+                              className="flex items-center justify-between p-4 bg-vet-gray-50 rounded-xl border border-vet-gray-200 hover:bg-vet-gray-100 transition-colors"
                             >
                               <div className="flex items-center space-x-4 flex-1">
                                 <div className="flex flex-col items-center">
-                                  <div className="text-sm font-medium text-gray-900">
+                                  <div className="text-sm font-medium text-vet-gray-900">
                                     {new Date(cita.fecha).toLocaleTimeString(
                                       "es-ES",
                                       {
@@ -469,24 +469,24 @@ export default function DashboardVeterinario() {
                                       },
                                     )}
                                   </div>
-                                  <div className="w-8 h-0.5 bg-blue-200 rounded mt-1"></div>
+                                  <div className="w-8 h-0.5 bg-vet-primary/30 rounded mt-1"></div>
                                 </div>
 
                                 <div className="flex-1">
                                   <div className="flex items-center space-x-2 mb-1">
-                                    <PawPrint className="w-4 h-4 text-blue-600" />
-                                    <span className="font-medium text-gray-900">
+                                    <PawPrint className="w-4 h-4 text-vet-primary" />
+                                    <span className="font-medium text-vet-gray-900">
                                       {cita.mascota}
                                     </span>
                                     {getStatusBadge(cita.estado)}
                                   </div>
-                                  <div className="flex items-center space-x-2 text-sm text-gray-600">
+                                  <div className="flex items-center space-x-2 text-sm text-vet-gray-600">
                                     <UserCheck className="w-3 h-3" />
                                     <span>
                                       {propietario?.nombre || "Sin asignar"}
                                     </span>
                                   </div>
-                                  <p className="text-sm text-gray-500 mt-1">
+                                  <p className="text-sm text-vet-gray-500 mt-1">
                                     {cita.tipoConsulta} •{" "}
                                     {cita.motivo.length > 30
                                       ? `${cita.motivo.substring(0, 30)}...`
@@ -505,18 +505,18 @@ export default function DashboardVeterinario() {
                     </div>
                   ) : (
                     <div className="text-center py-12">
-                      <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <Calendar className="w-8 h-8 text-blue-600" />
+                      <div className="w-16 h-16 bg-vet-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Calendar className="w-8 h-8 text-vet-primary" />
                       </div>
-                      <h3 className="text-lg font-medium text-gray-900 mb-2">
+                      <h3 className="text-lg font-medium text-vet-gray-900 mb-2">
                         Día libre
                       </h3>
-                      <p className="text-gray-600 mb-4">
+                      <p className="text-vet-gray-600 mb-4">
                         No tienes citas programadas para hoy
                       </p>
                       <Button
                         onClick={handleViewFullSchedule}
-                        className="bg-blue-600 hover:bg-blue-700"
+                        className="bg-vet-primary hover:bg-vet-primary-dark"
                       >
                         <Calendar className="w-4 h-4 mr-2" />
                         Ver agenda completa
@@ -530,12 +530,12 @@ export default function DashboardVeterinario() {
               <Card className="shadow-sm border-0 bg-white/80 backdrop-blur-sm">
                 <CardHeader className="pb-4">
                   <CardTitle className="flex items-center space-x-2 text-xl">
-                    <div className="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center">
-                      <Clock className="w-4 h-4 text-amber-600" />
+                    <div className="w-8 h-8 bg-vet-secondary/10 rounded-lg flex items-center justify-center">
+                      <Clock className="w-4 h-4 text-vet-secondary" />
                     </div>
                     <span>Próximas Citas</span>
                     {citasProximas.length > 0 && (
-                      <Badge className="bg-amber-100 text-amber-800 ml-2">
+                      <Badge className="bg-vet-secondary/10 text-vet-secondary-dark ml-2">
                         {citasProximas.length}
                       </Badge>
                     )}
@@ -565,11 +565,11 @@ export default function DashboardVeterinario() {
                           return (
                             <div
                               key={cita.id}
-                              className="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                              className="flex items-center justify-between p-3 border border-vet-gray-200 rounded-lg hover:bg-vet-gray-50 transition-colors"
                             >
                               <div className="flex items-center space-x-3 flex-1">
                                 <div className="text-center min-w-[60px]">
-                                  <p className="text-sm font-medium text-gray-900">
+                                  <p className="text-sm font-medium text-vet-gray-900">
                                     {new Date(cita.fecha).toLocaleDateString(
                                       "es-ES",
                                       {
@@ -578,7 +578,7 @@ export default function DashboardVeterinario() {
                                       },
                                     )}
                                   </p>
-                                  <p className="text-xs text-gray-600">
+                                  <p className="text-xs text-vet-gray-600">
                                     {new Date(cita.fecha).toLocaleTimeString(
                                       "es-ES",
                                       {
@@ -591,12 +591,12 @@ export default function DashboardVeterinario() {
 
                                 <div className="flex-1">
                                   <div className="flex items-center space-x-2 mb-1">
-                                    <PawPrint className="w-3 h-3 text-amber-600" />
-                                    <span className="text-sm font-medium text-gray-900">
+                                    <PawPrint className="w-3 h-3 text-vet-secondary" />
+                                    <span className="text-sm font-medium text-vet-gray-900">
                                       {cita.mascota}
                                     </span>
                                   </div>
-                                  <p className="text-xs text-gray-600">
+                                  <p className="text-xs text-vet-gray-600">
                                     {propietario?.nombre || "Sin asignar"} •{" "}
                                     {cita.tipoConsulta}
                                   </p>
@@ -621,8 +621,8 @@ export default function DashboardVeterinario() {
                     </div>
                   ) : (
                     <div className="text-center py-8">
-                      <Clock className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                      <p className="text-gray-600">
+                      <Clock className="w-12 h-12 text-vet-gray-400 mx-auto mb-4" />
+                      <p className="text-vet-gray-600">
                         No hay citas próximas programadas
                       </p>
                     </div>
@@ -638,14 +638,14 @@ export default function DashboardVeterinario() {
                 <CardHeader className="pb-4">
                   <CardTitle className="flex items-center space-x-2 text-xl">
                     <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                      <Zap className="w-4 h-4 text-green-600" />
+                      <Zap className="w-4 h-4 text-vet-success" />
                     </div>
                     <span>Acciones Rápidas</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <Button
-                    className="w-full bg-blue-600 hover:bg-blue-700 justify-start"
+                    className="w-full bg-vet-primary hover:bg-vet-primary-dark justify-start"
                     onClick={handleRegisterConsultation}
                   >
                     <ClipboardList className="w-4 h-4 mr-3" />
@@ -654,7 +654,7 @@ export default function DashboardVeterinario() {
 
                   <Button
                     variant="outline"
-                    className="w-full justify-start border-gray-200 hover:bg-gray-50"
+                    className="w-full justify-start border-vet-gray-200 hover:bg-vet-gray-50"
                     onClick={handleViewFullSchedule}
                   >
                     <Calendar className="w-4 h-4 mr-3" />
@@ -663,7 +663,7 @@ export default function DashboardVeterinario() {
 
                   <Button
                     variant="outline"
-                    className="w-full justify-start border-gray-200 hover:bg-gray-50"
+                    className="w-full justify-start border-vet-gray-200 hover:bg-vet-gray-50"
                     onClick={handleViewPatientHistory}
                   >
                     <FileText className="w-4 h-4 mr-3" />
@@ -672,7 +672,7 @@ export default function DashboardVeterinario() {
 
                   <Button
                     variant="outline"
-                    className="w-full justify-start border-gray-200 hover:bg-gray-50"
+                    className="w-full justify-start border-vet-gray-200 hover:bg-vet-gray-50"
                     onClick={() => {
                       const currentMonth = new Date().toLocaleDateString(
                         "es-ES",
@@ -729,76 +729,76 @@ Generado automáticamente por PetLA
               <Card className="shadow-sm border-0 bg-white/80 backdrop-blur-sm">
                 <CardHeader className="pb-4">
                   <CardTitle className="flex items-center space-x-2 text-xl">
-                    <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
-                      <TrendingUp className="w-4 h-4 text-purple-600" />
+                    <div className="w-8 h-8 bg-vet-secondary/10 rounded-lg flex items-center justify-center">
+                      <TrendingUp className="w-4 h-4 text-vet-secondary" />
                     </div>
                     <span>Resumen del Mes</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between p-3 bg-gradient-to-r from-blue-50 to-blue-100/50 rounded-lg">
+                    <div className="flex items-center justify-between p-3 bg-gradient-to-r from-vet-primary/5 to-vet-primary/10 rounded-lg">
                       <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                        <div className="w-8 h-8 bg-vet-primary rounded-lg flex items-center justify-center">
                           <CheckCircle className="w-4 h-4 text-white" />
                         </div>
-                        <span className="text-sm font-medium text-blue-900">
+                        <span className="text-sm font-medium text-vet-primary-dark">
                           Citas completadas
                         </span>
                       </div>
-                      <span className="font-bold text-blue-900">
+                      <span className="font-bold text-vet-primary-dark">
                         {stats.citasCompletadas}
                       </span>
                     </div>
 
-                    <div className="flex items-center justify-between p-3 bg-gradient-to-r from-purple-50 to-purple-100/50 rounded-lg">
+                    <div className="flex items-center justify-between p-3 bg-gradient-to-r from-vet-secondary/5 to-vet-secondary/10 rounded-lg">
                       <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center">
+                        <div className="w-8 h-8 bg-vet-secondary rounded-lg flex items-center justify-center">
                           <PawPrint className="w-4 h-4 text-white" />
                         </div>
-                        <span className="text-sm font-medium text-purple-900">
+                        <span className="text-sm font-medium text-vet-secondary-dark">
                           Pacientes únicos
                         </span>
                       </div>
-                      <span className="font-bold text-purple-900">
+                      <span className="font-bold text-vet-secondary-dark">
                         {stats.pacientesUnicos}
                       </span>
                     </div>
 
-                    <div className="flex items-center justify-between p-3 bg-gradient-to-r from-amber-50 to-amber-100/50 rounded-lg">
+                    <div className="flex items-center justify-between p-3 bg-gradient-to-r from-vet-warning/5 to-vet-warning/10 rounded-lg">
                       <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center">
+                        <div className="w-8 h-8 bg-vet-warning rounded-lg flex items-center justify-center">
                           <Star className="w-4 h-4 text-white" />
                         </div>
-                        <span className="text-sm font-medium text-amber-900">
+                        <span className="text-sm font-medium text-vet-warning">
                           Satisfacción
                         </span>
                       </div>
                       <div className="flex items-center space-x-1">
-                        <span className="font-bold text-amber-900">4.9</span>
+                        <span className="font-bold text-vet-warning">4.9</span>
                         <div className="flex">
                           {[...Array(5)].map((_, i) => (
                             <Star
                               key={i}
-                              className="w-3 h-3 fill-amber-400 text-amber-400"
+                              className="w-3 h-3 fill-vet-warning text-vet-warning"
                             />
                           ))}
                         </div>
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between p-3 bg-gradient-to-r from-green-50 to-green-100/50 rounded-lg">
+                    <div className="flex items-center justify-between p-3 bg-gradient-to-r from-vet-success/5 to-vet-success/10 rounded-lg">
                       <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
+                        <div className="w-8 h-8 bg-vet-success rounded-lg flex items-center justify-center">
                           <TrendingUp className="w-4 h-4 text-white" />
                         </div>
-                        <span className="text-sm font-medium text-green-900">
+                        <span className="text-sm font-medium text-vet-success">
                           Crecimiento
                         </span>
                       </div>
                       <div className="flex items-center space-x-1">
-                        <ArrowUp className="w-3 h-3 text-green-600" />
-                        <span className="font-bold text-green-900">
+                        <ArrowUp className="w-3 h-3 text-vet-success" />
+                        <span className="font-bold text-vet-success">
                           +{crecimientoCitas}%
                         </span>
                       </div>
@@ -811,8 +811,8 @@ Generado automáticamente por PetLA
               <Card className="shadow-sm border-0 bg-white/80 backdrop-blur-sm">
                 <CardHeader className="pb-4">
                   <CardTitle className="flex items-center space-x-2 text-xl">
-                    <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                      <Heart className="w-4 h-4 text-blue-600" />
+                    <div className="w-8 h-8 bg-vet-primary/10 rounded-lg flex items-center justify-center">
+                      <Heart className="w-4 h-4 text-vet-primary" />
                     </div>
                     <span>Pacientes Recientes</span>
                   </CardTitle>
@@ -834,39 +834,39 @@ Generado automáticamente por PetLA
                         return (
                           <div
                             key={cita.id}
-                            className="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
+                            className="flex items-center justify-between p-3 border border-vet-gray-200 rounded-lg hover:bg-vet-gray-50 transition-colors cursor-pointer"
                             onClick={() =>
                               navigate(`/mis-pacientes?cita=${cita.id}`)
                             }
                           >
                             <div className="flex-1">
                               <div className="flex items-center space-x-2 mb-1">
-                                <PawPrint className="w-3 h-3 text-blue-600" />
+                                <PawPrint className="w-3 h-3 text-vet-primary" />
                                 <span className="text-sm font-medium">
                                   {cita.mascota}
                                 </span>
                               </div>
                               <div className="flex items-center space-x-2 mb-1">
-                                <UserCheck className="w-3 h-3 text-gray-500" />
-                                <span className="text-xs text-gray-600">
+                                <UserCheck className="w-3 h-3 text-vet-gray-500" />
+                                <span className="text-xs text-vet-gray-600">
                                   {propietario?.nombre || "Sin asignar"}
                                 </span>
                               </div>
-                              <p className="text-xs text-gray-500">
+                              <p className="text-xs text-vet-gray-500">
                                 {new Date(cita.fecha).toLocaleDateString(
                                   "es-ES",
                                 )}
                               </p>
                             </div>
-                            <ChevronRight className="w-4 h-4 text-gray-400" />
+                            <ChevronRight className="w-4 h-4 text-vet-gray-400" />
                           </div>
                         );
                       })}
                     </div>
                   ) : (
                     <div className="text-center py-6">
-                      <Heart className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                      <p className="text-sm text-gray-600">
+                      <Heart className="w-8 h-8 text-vet-gray-400 mx-auto mb-2" />
+                      <p className="text-sm text-vet-gray-600">
                         No hay consultas recientes
                       </p>
                     </div>
@@ -884,14 +884,14 @@ Generado automáticamente por PetLA
             <DialogContent className="sm:max-w-2xl max-h-[80vh] overflow-y-auto scrollbar-hide">
               <DialogHeader>
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <Search className="w-5 h-5 text-blue-600" />
+                  <div className="w-10 h-10 bg-vet-primary/10 rounded-lg flex items-center justify-center">
+                    <Search className="w-5 h-5 text-vet-primary" />
                   </div>
                   <div>
-                    <DialogTitle className="text-xl font-semibold text-gray-900">
+                    <DialogTitle className="text-xl font-semibold text-vet-gray-900">
                       Buscar Paciente
                     </DialogTitle>
-                    <DialogDescription className="text-gray-600">
+                    <DialogDescription className="text-vet-gray-600">
                       Encuentra pacientes por nombre, especie, raza o
                       propietario
                     </DialogDescription>
@@ -901,18 +901,18 @@ Generado automáticamente por PetLA
 
               <div className="space-y-4 pt-4">
                 <div className="relative">
-                  <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                  <Search className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
                   <Input
                     placeholder="Buscar por nombre del paciente, propietario, especie..."
                     value={searchTerm}
                     onChange={(e) => handleSearchPatients(e.target.value)}
-                    className="pl-10 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                    className="pl-10 border-vet-gray-300 focus:border-vet-primary focus:ring-vet-primary"
                   />
                 </div>
 
                 {searchTerm.length > 2 && (
                   <div className="space-y-3">
-                    <h4 className="font-medium text-gray-900">
+                    <h4 className="font-medium text-vet-gray-900">
                       Resultados de búsqueda ({foundPatients.length})
                     </h4>
 
@@ -935,7 +935,7 @@ Generado automáticamente por PetLA
                           return (
                             <div
                               key={mascota.id}
-                              className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors"
+                              className="p-4 border border-vet-gray-200 rounded-lg hover:bg-vet-gray-50 cursor-pointer transition-colors"
                               onClick={() => {
                                 if (ultimaCita) {
                                   navigate(
@@ -952,24 +952,24 @@ Generado automáticamente por PetLA
                               <div className="flex items-center justify-between">
                                 <div className="space-y-2">
                                   <div className="flex items-center space-x-2">
-                                    <PawPrint className="w-4 h-4 text-blue-600" />
-                                    <span className="font-medium text-gray-900">
+                                    <PawPrint className="w-4 h-4 text-vet-primary" />
+                                    <span className="font-medium text-vet-gray-900">
                                       {mascota.nombre}
                                     </span>
-                                    <span className="text-sm text-gray-600">
+                                    <span className="text-sm text-vet-gray-600">
                                       ({mascota.especie})
                                     </span>
                                   </div>
 
-                                  <div className="bg-gray-50 p-2 rounded">
+                                  <div className="bg-vet-gray-50 p-2 rounded">
                                     <div className="flex items-center space-x-2 text-sm">
-                                      <UserCheck className="w-3 h-3 text-blue-600" />
+                                      <UserCheck className="w-3 h-3 text-vet-primary" />
                                       <span className="font-medium">
                                         {propietario?.nombre || "Sin asignar"}
                                       </span>
                                     </div>
                                     {propietario?.telefono && (
-                                      <div className="flex items-center space-x-2 text-xs text-gray-600 mt-1">
+                                      <div className="flex items-center space-x-2 text-xs text-vet-gray-600 mt-1">
                                         <Phone className="w-3 h-3" />
                                         <span>{propietario.telefono}</span>
                                       </div>
@@ -977,12 +977,12 @@ Generado automáticamente por PetLA
                                   </div>
 
                                   {mascota.raza && (
-                                    <p className="text-xs text-gray-500">
+                                    <p className="text-xs text-vet-gray-500">
                                       Raza: {mascota.raza}
                                     </p>
                                   )}
                                   {ultimaCita && (
-                                    <p className="text-xs text-gray-500">
+                                    <p className="text-xs text-vet-gray-500">
                                       Última cita:{" "}
                                       {new Date(
                                         ultimaCita.fecha,
@@ -992,12 +992,12 @@ Generado automáticamente por PetLA
                                 </div>
                                 <div className="flex flex-col items-end space-y-2">
                                   {citasPaciente.length > 0 && (
-                                    <Badge className="bg-green-100 text-green-800">
+                                    <Badge className="bg-vet-success/10 text-vet-success">
                                       {citasPaciente.length} cita
                                       {citasPaciente.length !== 1 ? "s" : ""}
                                     </Badge>
                                   )}
-                                  <Eye className="w-4 h-4 text-gray-400" />
+                                  <Eye className="w-4 h-4 text-vet-gray-400" />
                                 </div>
                               </div>
                             </div>
@@ -1006,11 +1006,11 @@ Generado automáticamente por PetLA
                       </div>
                     ) : (
                       <div className="text-center py-8">
-                        <Search className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                        <h3 className="text-lg font-medium text-gray-900 mb-2">
+                        <Search className="w-12 h-12 text-vet-gray-400 mx-auto mb-4" />
+                        <h3 className="text-lg font-medium text-vet-gray-900 mb-2">
                           No se encontraron pacientes
                         </h3>
-                        <p className="text-gray-600">
+                        <p className="text-vet-gray-600">
                           Intenta con otros términos de búsqueda
                         </p>
                       </div>
@@ -1020,8 +1020,8 @@ Generado automáticamente por PetLA
 
                 {searchTerm.length <= 2 && searchTerm.length > 0 && (
                   <div className="text-center py-8">
-                    <Search className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                    <p className="text-gray-600">
+                    <Search className="w-12 h-12 text-vet-gray-400 mx-auto mb-4" />
+                    <p className="text-vet-gray-600">
                       Escribe al menos 3 caracteres para buscar
                     </p>
                   </div>
@@ -1029,11 +1029,11 @@ Generado automáticamente por PetLA
 
                 {searchTerm.length === 0 && (
                   <div className="text-center py-8">
-                    <PawPrint className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">
+                    <PawPrint className="w-12 h-12 text-vet-gray-400 mx-auto mb-4" />
+                    <h3 className="text-lg font-medium text-vet-gray-900 mb-2">
                       Buscar Pacientes
                     </h3>
-                    <p className="text-gray-600">
+                    <p className="text-vet-gray-600">
                       Comienza a escribir para buscar entre tus pacientes
                     </p>
                   </div>

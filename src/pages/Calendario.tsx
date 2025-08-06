@@ -277,7 +277,9 @@ export default function Calendario() {
     const Icon = config.icon;
 
     return (
-      <Badge className={config.color}>
+      <Badge
+        className={`${config.color} hover:!bg-current hover:!text-current`}
+      >
         <Icon className="w-3 h-3 mr-1" />
         {config.label}
       </Badge>
@@ -644,7 +646,7 @@ export default function Calendario() {
                                       <div className="flex flex-wrap items-center gap-1 sm:gap-2 ml-auto">
                                         <Badge
                                           variant="secondary"
-                                          className={estadoColors[cita.estado]}
+                                          className={`${estadoColors[cita.estado]} hover:bg-inherit`}
                                         >
                                           <StatusIcon
                                             className={`w-3 h-3 mr-1 ${estadoIconsColors[cita.estado]}`}
@@ -672,7 +674,7 @@ export default function Calendario() {
                                       {cita.tipoConsulta && (
                                         <div className="flex items-center space-x-2">
                                           <Stethoscope className="w-4 h-4 text-vet-primary" />
-                                          <Badge className="bg-vet-primary/10 text-vet-primary border-vet-primary/20">
+                                          <Badge className="bg-vet-primary/10 text-vet-primary border-vet-primary/20 hover:!bg-vet-primary/10 hover:!text-vet-primary">
                                             {cita.tipoConsulta}
                                           </Badge>
                                         </div>
@@ -847,7 +849,7 @@ export default function Calendario() {
                                         {cita.mascota}
                                       </h4>
                                       <Badge
-                                        className={estadoColors[cita.estado]}
+                                        className={`${estadoColors[cita.estado]} hover:bg-inherit`}
                                       >
                                         <StatusIcon
                                           className={`w-3 h-3 mr-1 ${estadoIconsColors[cita.estado]}`}
@@ -857,7 +859,7 @@ export default function Calendario() {
                                       {isToday && (
                                         <Badge
                                           variant="secondary"
-                                          className="bg-vet-primary text-white"
+                                          className="bg-vet-primary text-white hover:!bg-vet-primary hover:!text-white"
                                         >
                                           HOY
                                         </Badge>
@@ -897,7 +899,7 @@ export default function Calendario() {
                                         {cita.tipoConsulta && (
                                           <div className="flex items-center space-x-2">
                                             <Stethoscope className="w-4 h-4 text-vet-primary" />
-                                            <Badge className="bg-vet-primary/10 text-vet-primary border-vet-primary/20">
+                                            <Badge className="bg-vet-primary/10 text-vet-primary border-vet-primary/20 hover:!bg-vet-primary/10 hover:!text-vet-primary">
                                               {cita.tipoConsulta}
                                             </Badge>
                                           </div>
