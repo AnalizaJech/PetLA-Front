@@ -353,7 +353,7 @@ export default function HistorialClinicoVeterinario() {
       y += 8;
 
       doc.setFontSize(10);
-      doc.text(`Veterinario: Dr. ${record.veterinario}`, 30, y);
+      doc.text(`Veterinario: ${record.veterinario}`, 30, y);
       y += 6;
       doc.text(
         `Tipo: ${record.tipoConsulta.replace("_", " ").toUpperCase()}`,
