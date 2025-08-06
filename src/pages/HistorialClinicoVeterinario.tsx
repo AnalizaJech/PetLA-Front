@@ -294,16 +294,25 @@ export default function HistorialClinicoVeterinario() {
       doc.setFontSize(12);
       doc.setFont("helvetica", "normal");
       doc.text(`Mascota: ${selectedPet.nombre}`, margin, yPosition);
+      doc.text(`Especie: ${selectedPet.especie || "No especificada"}`, margin, yPosition + 10);
+      doc.text(`Raza: ${selectedPet.raza || "No especificada"}`, margin, yPosition + 20);
+      doc.text(`Sexo: ${selectedPet.sexo || "No especificado"}`, margin, yPosition + 30);
       doc.text(
-        `Propietario: ${selectedOwner?.nombre || "No registrado"}`,
+        `Propietario: ${selectedOwner ? `${selectedOwner.nombre} ${selectedOwner.apellidos || ''}` : "No registrado"}`,
         margin,
-        yPosition + 10,
+        yPosition + 40,
       );
-      doc.text(`Veterinario: ${user.nombre}`, margin, yPosition + 20);
+      if (selectedOwner?.telefono) {
+        doc.text(`Teléfono: ${selectedOwner.telefono}`, margin, yPosition + 50);
+      }
+      if (selectedOwner?.email) {
+        doc.text(`Email: ${selectedOwner.email}`, margin, yPosition + 60);
+      }
+      doc.text(`Veterinario: ${user.nombre}`, margin, yPosition + 70);
       doc.text(
         `Generado el: ${new Date().toLocaleDateString("es-ES")}`,
         margin,
-        yPosition + 30,
+        yPosition + 80,
       );
 
       yPosition += 50;
