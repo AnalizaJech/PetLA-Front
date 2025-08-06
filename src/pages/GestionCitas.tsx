@@ -579,8 +579,8 @@ export default function GestionCitas() {
                               </span>
                             </div>
                             <div className="flex items-center space-x-2 text-sm text-vet-gray-600">
-                              <Coins className="w-3 h-3" />
-                              <span className="font-semibold text-green-600">
+                              <Coins className="w-3 h-3 text-vet-gray-600" />
+                              <span className="font-semibold text-vet-gray-900">
                                 S/. {cita.precio.toLocaleString()}
                               </span>
                             </div>
