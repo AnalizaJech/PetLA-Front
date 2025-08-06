@@ -62,6 +62,8 @@ export default function Login() {
     direccion: "",
     fechaNacimiento: "",
     genero: "",
+    documento: "",
+    tipoDocumento: "dni",
     password: "",
     confirmPassword: "",
   });
