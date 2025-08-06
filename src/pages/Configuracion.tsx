@@ -256,6 +256,37 @@ export default function Configuracion() {
     }
   }, [user]);
 
+  // Limpiar mensaje de error cuando el usuario corrija los campos requeridos
+  useEffect(() => {
+    if (errorMessage) {
+      const validationErrors = [
+        { error: "El nombre es obligatorio", field: "nombre" },
+        { error: "Los apellidos son obligatorios", field: "apellidos" },
+        { error: "El nombre de usuario es obligatorio", field: "username" },
+        { error: "Por favor ingresa un email válido", field: "email" },
+        { error: "El teléfono es obligatorio", field: "telefono" },
+        { error: "La especialidad es obligatoria para veterinarios", field: "especialidad" },
+        { error: "El número de colegiatura es obligatorio para veterinarios", field: "colegiatura" }
+      ];
+
+      const currentError = validationErrors.find(ve => errorMessage.includes(ve.error));
+
+      if (currentError) {
+        const fieldValue = profileData[currentError.field as keyof typeof profileData];
+
+        // Si el campo está ahora completo, limpiar el error
+        if (currentError.field === "email") {
+          // Validación especial para email
+          if (fieldValue && typeof fieldValue === "string" && /\S+@\S+\.\S+/.test(fieldValue)) {
+            setErrorMessage("");
+          }
+        } else if (fieldValue && typeof fieldValue === "string" && fieldValue.trim()) {
+          setErrorMessage("");
+        }
+      }
+    }
+  }, [profileData, errorMessage]);
+
   // Clear messages after delay - pero mantener errores de validación hasta que se resuelvan
   useEffect(() => {
     if (savedMessage) {
