@@ -39,6 +39,7 @@ import {
   AlertCircle,
   Trash2,
   Download,
+  MessageCircle,
 } from "lucide-react";
 
 const estadoColors = {
@@ -425,7 +426,7 @@ export default function MisCitas() {
                   >
                     <CardContent className="p-4 sm:p-6">
                       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
-                        <div className="flex items-center space-x-4">
+                        <div className="flex items-center space-x-4 md:space-x-6">
                           {(() => {
                             const mascota = mascotas.find(
                               (m) => m.nombre === cita.mascota,
@@ -434,21 +435,21 @@ export default function MisCitas() {
                               <img
                                 src={mascota.foto}
                                 alt={cita.mascota}
-                                className="w-16 h-16 rounded-full object-cover border-2 border-vet-primary/20"
+                                className="w-20 h-20 md:w-32 md:h-32 lg:w-28 lg:h-28 rounded-full object-cover border-2 border-vet-primary/30 flex-shrink-0"
                               />
                             ) : (
-                              <div className="w-16 h-16 bg-vet-primary/10 rounded-full flex items-center justify-center">
-                                <PawPrint className="w-8 h-8 text-vet-primary" />
+                              <div className="w-20 h-20 md:w-32 md:h-32 lg:w-28 lg:h-28 bg-vet-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                                <PawPrint className="w-10 h-10 md:w-16 md:h-16 lg:w-14 lg:h-14 text-vet-primary" />
                               </div>
                             );
                           })()}
                           <div>
                             <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2 mb-2">
-                              <h4 className="font-semibold text-base sm:text-lg text-vet-gray-900">
+                              <h4 className="font-semibold text-base sm:text-lg md:text-2xl text-vet-gray-900">
                                 {cita.mascota}
                               </h4>
                               <div className="flex space-x-2">
-                                <Badge className="text-xs sm:text-sm">
+                                <Badge className="text-xs sm:text-sm md:text-lg">
                                   {cita.especie}
                                 </Badge>
                                 <Badge className={estadoColors[cita.estado]}>
@@ -456,7 +457,7 @@ export default function MisCitas() {
                                 </Badge>
                               </div>
                             </div>
-                            <p className="text-sm sm:text-base text-vet-gray-600 mb-3">
+                            <p className="text-sm sm:text-base md:text-xl text-vet-gray-600 mb-3">
                               <span className="font-medium text-vet-primary">
                                 {cita.tipoConsulta}
                               </span>
@@ -469,28 +470,32 @@ export default function MisCitas() {
                                 • {cita.veterinario}
                               </span>
                             </p>
-                            <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-6 text-sm sm:text-base text-vet-gray-500">
-                              <div className="flex items-center space-x-2">
-                                <Calendar className="w-5 h-5 sm:w-4 sm:h-4 text-vet-primary" />
-                                <span className="font-medium">
-                                  {cita.fecha.toLocaleDateString("es-ES", {
-                                    weekday: "short",
-                                    month: "short",
-                                    day: "numeric",
-                                  })}
-                                </span>
+                            <div className="space-y-2">
+                              {/* Fecha y Hora en una línea */}
+                              <div className="flex items-center space-x-4 md:space-x-6 text-sm sm:text-base md:text-lg text-vet-gray-500">
+                                <div className="flex items-center space-x-2">
+                                  <Calendar className="w-5 h-5 md:w-6 md:h-6 text-vet-primary" />
+                                  <span className="font-medium">
+                                    {cita.fecha.toLocaleDateString("es-ES", {
+                                      weekday: "short",
+                                      month: "short",
+                                      day: "numeric",
+                                    })}
+                                  </span>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                  <Clock className="w-5 h-5 md:w-6 md:h-6 text-vet-primary" />
+                                  <span className="font-medium">
+                                    {cita.fecha.toLocaleTimeString("es-ES", {
+                                      hour: "2-digit",
+                                      minute: "2-digit",
+                                    })}
+                                  </span>
+                                </div>
                               </div>
-                              <div className="flex items-center space-x-2">
-                                <Clock className="w-5 h-5 sm:w-4 sm:h-4 text-vet-primary" />
-                                <span className="font-medium">
-                                  {cita.fecha.toLocaleTimeString("es-ES", {
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                  })}
-                                </span>
-                              </div>
-                              <div className="flex items-center space-x-2">
-                                <MapPin className="w-5 h-5 sm:w-4 sm:h-4 text-vet-primary" />
+                              {/* Clínica en línea separada */}
+                              <div className="flex items-center space-x-2 text-sm sm:text-base md:text-lg text-vet-gray-500">
+                                <MapPin className="w-5 h-5 md:w-6 md:h-6 text-vet-primary" />
                                 <span className="font-medium">
                                   {cita.ubicacion}
                                 </span>
@@ -522,10 +527,10 @@ export default function MisCitas() {
                         </div>
 
                         <div className="text-left sm:text-right">
-                          <div className="text-lg sm:text-xl lg:text-2xl font-bold text-vet-gray-900 mb-2 sm:mb-3">
+                          <div className="text-lg sm:text-xl md:text-3xl lg:text-3xl font-bold text-vet-gray-900 mb-2 sm:mb-3 md:mb-6">
                             S/. {cita.precio.toLocaleString()}
                           </div>
-                          <div className="flex flex-col sm:flex-col gap-2">
+                          <div className="flex flex-col sm:flex-col gap-3 md:gap-6">
                             {user?.rol === "veterinario" ? (
                               <>
                                 {cita.estado === "aceptada" && (
@@ -577,9 +582,9 @@ export default function MisCitas() {
                                     <Button
                                       variant="outline"
                                       onClick={() => handleViewReceipt(cita.id)}
-                                      className="border-vet-primary text-vet-primary hover:bg-vet-primary/10 w-full sm:w-auto"
+                                      className="border-vet-primary text-vet-primary hover:bg-vet-primary/10 hover:border-vet-primary-dark transition-all duration-200 w-full sm:w-auto shadow-sm"
                                     >
-                                      <Eye className="w-4 h-4 mr-2" />
+                                      <Eye className="w-5 h-5 md:w-7 md:h-7 mr-2" />
                                       Ver Comprobante
                                     </Button>
                                   )}
@@ -592,6 +597,37 @@ export default function MisCitas() {
                                     <Trash2 className="w-4 h-4 mr-2" />
                                     Eliminar Cita
                                   </Button>
+                                )}
+                                {/* Botones de contacto para citas en validación */}
+                                {cita.estado === "en_validacion" && (
+                                  <>
+                                    <Button
+                                      variant="outline"
+                                      onClick={() => {
+                                        window.open(
+                                          `tel:+51987654321`,
+                                          "_self",
+                                        );
+                                      }}
+                                      className="border-blue-300 text-blue-700 hover:bg-blue-50 hover:border-blue-400 transition-all duration-200 w-full sm:w-auto shadow-sm"
+                                    >
+                                      <Phone className="w-5 h-5 md:w-7 md:h-7 mr-2" />
+                                      Llamar
+                                    </Button>
+                                    <Button
+                                      variant="outline"
+                                      onClick={() => {
+                                        window.open(
+                                          `https://wa.me/51987654321?text=Hola, tengo una consulta sobre mi cita con ${cita.mascota} programada para el ${cita.fecha.toLocaleDateString("es-ES")}`,
+                                          "_blank",
+                                        );
+                                      }}
+                                      className="border-green-400 text-green-700 hover:bg-green-50 hover:border-green-500 bg-green-25 transition-all duration-200 w-full sm:w-auto shadow-sm"
+                                    >
+                                      <MessageCircle className="w-5 h-5 md:w-7 md:h-7 mr-2" />
+                                      WhatsApp
+                                    </Button>
+                                  </>
                                 )}
                                 {cita.estado === "atendida" && (
                                   <Button
