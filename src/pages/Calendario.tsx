@@ -665,6 +665,16 @@ export default function Calendario() {
                                         )}
                                       </div>
 
+                                      {/* Tipo de servicio */}
+                                      {cita.tipoConsulta && (
+                                        <div className="flex items-center space-x-2">
+                                          <Stethoscope className="w-4 h-4 text-vet-primary" />
+                                          <Badge className="bg-vet-primary/10 text-vet-primary border-vet-primary/20">
+                                            {cita.tipoConsulta}
+                                          </Badge>
+                                        </div>
+                                      )}
+
                                       {/* Motivo de la consulta */}
                                       <div className="flex items-start space-x-2">
                                         <FileText className="w-4 h-4 text-vet-gray-600 mt-0.5" />
