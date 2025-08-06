@@ -70,7 +70,7 @@ export default function CitaQuickActions({
     pendiente_pago: "bg-yellow-100 text-yellow-800 border-yellow-200",
     en_validacion: "bg-yellow-100 text-yellow-800 border-yellow-200",
     aceptada: "bg-green-100 text-green-800 border-green-200",
-    atendida: "bg-gray-100 text-gray-800 border-gray-200",
+    atendida: "bg-purple-100 text-purple-800 border-purple-200",
     cancelada: "bg-red-100 text-red-800 border-red-200",
     expirada: "bg-red-100 text-red-800 border-red-200",
     rechazada: "bg-red-100 text-red-800 border-red-200",
