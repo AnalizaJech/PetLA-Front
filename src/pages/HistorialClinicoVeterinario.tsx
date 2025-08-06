@@ -557,7 +557,7 @@ export default function HistorialClinicoVeterinario() {
                           className={`cursor-pointer hover:text-vet-primary ${currentView === "pets" ? "text-vet-primary font-medium" : ""}`}
                           onClick={handleBackToPets}
                         >
-                          {selectedOwner.nombre}
+                          {selectedOwner.nombre} {selectedOwner.apellidos || ''}
                         </span>
                       </>
                     )}
@@ -719,7 +719,7 @@ export default function HistorialClinicoVeterinario() {
                                 </div>
                                 <div className="flex-1 min-w-0">
                                   <h4 className="font-medium text-vet-gray-900 truncate">
-                                    {cliente.nombre}
+                                    {cliente.nombre} {cliente.apellidos || ''}
                                   </h4>
                                   <div className="flex items-center space-x-2 mt-1">
                                     {cliente.telefono && (
@@ -767,24 +767,10 @@ export default function HistorialClinicoVeterinario() {
 
           {currentView === "pets" && selectedOwner && (
             <div>
-              <div className="flex items-center space-x-4 mb-6">
-                <Button
-                  variant="outline"
-                  onClick={handleBackToOwners}
-                  size="sm"
-                >
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Volver
-                </Button>
-                <div>
-                  <h2 className="text-xl font-bold text-vet-gray-900">
-                    Mascotas de {selectedOwner.nombre}
-                  </h2>
-                  <p className="text-vet-gray-600">
-                    {mascotasDelPropietario.length} mascota
-                    {mascotasDelPropietario.length !== 1 ? "s" : ""}
-                  </p>
-                </div>
+              <div className="mb-6">
+                <h2 className="text-xl font-bold text-vet-gray-900">
+                  {selectedOwner.nombre} {selectedOwner.apellidos || ''}
+                </h2>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
