@@ -825,11 +825,6 @@ export default function MisPacientes() {
                                   <span>
                                     <strong>Raza:</strong>{" "}
                                     {mascota?.raza || "No especificada"}
-                                    {!mascota?.raza && (
-                                      <Badge className="bg-gray-100 text-gray-600 border-gray-200 text-xs ml-2">
-                                        No especificada
-                                      </Badge>
-                                    )}
                                   </span>
                                 </div>
                                 <div className="flex items-center space-x-2">
