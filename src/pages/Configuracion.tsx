@@ -364,7 +364,7 @@ export default function Configuracion() {
     }
 
     if (!profileData.telefono.trim()) {
-      showErrorAndScroll("El teléfono es obligatorio");
+      showErrorAndScroll("El tel��fono es obligatorio");
       return;
     }
 
@@ -1834,11 +1834,11 @@ export default function Configuracion() {
                 <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto">
                   <AlertTriangle className="w-8 h-8 text-red-600" />
                 </div>
-                <div>
+                <div className="text-center">
                   <DialogTitle className="text-xl font-bold text-red-700">
                     Eliminar cuenta permanentemente
                   </DialogTitle>
-                  <DialogDescription className="text-vet-gray-600 mt-2">
+                  <DialogDescription className="text-vet-gray-600 mt-2 max-w-md mx-auto">
                     Esta es una acción irreversible que eliminará todos tus datos.
                   </DialogDescription>
                 </div>
