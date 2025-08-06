@@ -1181,10 +1181,8 @@ export default function HistorialClinicoVeterinario() {
                         <CardContent className="p-6">
                           <div className="flex items-start justify-between mb-4">
                             <div className="flex items-center space-x-3">
-                              <div
-                                className={`w-10 h-10 rounded-lg flex items-center justify-center ${getBadgeVariant(record.tipo || "consulta")}`}
-                              >
-                                {Icon}
+                              <div className="w-10 h-10 rounded-lg bg-vet-gray-100 flex items-center justify-center">
+                                {getServiceIconSVG(record.tipo || "consulta")}
                               </div>
                               <div>
                                 <div className="flex items-center space-x-2">
@@ -1194,13 +1192,6 @@ export default function HistorialClinicoVeterinario() {
                                         record.tipo.slice(1)
                                       : "Consulta"}
                                   </h4>
-                                  <Badge
-                                    className={getBadgeVariant(
-                                      record.tipo || "consulta",
-                                    )}
-                                  >
-                                    {record.tipo || "Consulta"}
-                                  </Badge>
                                 </div>
                                 <div className="flex items-center space-x-4 mt-1 text-sm text-vet-gray-600">
                                   <div className="flex items-center space-x-1">
