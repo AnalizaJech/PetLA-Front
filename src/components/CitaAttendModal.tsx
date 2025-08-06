@@ -430,7 +430,7 @@ export default function CitaAttendModal({
                 variant={attended === false ? "default" : "outline"}
                 onClick={() => setAttended(false)}
                 className={
-                  attended === false ? "bg-orange-600 hover:bg-orange-700" : ""
+                  attended === false ? "bg-red-600 hover:bg-red-700" : ""
                 }
               >
                 <X className="w-4 h-4 mr-2" />
