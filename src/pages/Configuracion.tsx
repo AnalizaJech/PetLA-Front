@@ -1844,8 +1844,8 @@ export default function Configuracion() {
                 </div>
               </DialogHeader>
 
-              <div className="flex-1 overflow-y-auto">
-                <div className="space-y-4 py-2">
+              <div className="flex-1 overflow-y-auto scrollbar-hide">
+                <div className="space-y-6 py-4 px-1">
                   {/* Advertencias principales */}
                   <div className="bg-red-50 border border-red-200 rounded-lg p-4">
                     <h4 className="font-semibold text-red-900 mb-3 flex items-center">
