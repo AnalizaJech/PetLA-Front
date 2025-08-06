@@ -1007,12 +1007,83 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const logout = () => {
     setUserState(null);
-    // Clear user-specific data only
-    setMascotas([]);
-    // Force clear localStorage for user-specific data only
+
+    // Only clear user-specific localStorage data, not the general data
     localStorage.removeItem("user");
-    localStorage.removeItem("mascotas");
-    // Note: citas and preCitas are global system data and should not be cleared on logout
+
+    // Don't clear mascotas or citas from localStorage as they are system-wide data
+    // The UI will filter them based on the logged-in user
+    // Don't modify the mascotas state or localStorage - let them persist
+    // Note: citas, preCitas, mascotas are global system data and should persist in localStorage
+  };
+
+  // Function to refresh data from localStorage - useful when data seems lost
+  const refreshDataFromStorage = () => {
+    try {
+      console.log("🔄 Refreshing data from localStorage...");
+
+      // Reload mascotas
+      const mascotasStr = localStorage.getItem("mascotas");
+      if (mascotasStr) {
+        const parsedMascotas = JSON.parse(mascotasStr);
+        const formattedMascotas = parsedMascotas.map((mascota: any) => ({
+          ...mascota,
+          fechaNacimiento: new Date(mascota.fechaNacimiento),
+          proximaCita: mascota.proximaCita
+            ? new Date(mascota.proximaCita)
+            : null,
+          ultimaVacuna: mascota.ultimaVacuna
+            ? new Date(mascota.ultimaVacuna)
+            : null,
+        }));
+        setMascotas(formattedMascotas);
+        console.log(
+          `✅ Loaded ${formattedMascotas.length} pets from localStorage`,
+        );
+      }
+
+      // Reload citas
+      const citasStr = localStorage.getItem("citas");
+      if (citasStr) {
+        const parsedCitas = JSON.parse(citasStr);
+        const formattedCitas = parsedCitas.map((cita: any) => ({
+          ...cita,
+          fecha: new Date(cita.fecha),
+          tipoConsulta: cita.tipoConsulta || "Consulta General",
+          mascotaId: cita.mascotaId || undefined,
+          clienteId: cita.clienteId || undefined,
+          clienteNombre: cita.clienteNombre || undefined,
+        }));
+        setCitas(formattedCitas);
+        console.log(
+          `✅ Loaded ${formattedCitas.length} appointments from localStorage`,
+        );
+      }
+
+      // Reload other data...
+      const preCitasStr = localStorage.getItem("preCitas");
+      if (preCitasStr) {
+        const parsedPreCitas = JSON.parse(preCitasStr);
+        const formattedPreCitas = parsedPreCitas.map((preCita: any) => ({
+          ...preCita,
+          fechaPreferida: new Date(preCita.fechaPreferida),
+          fechaCreacion: new Date(preCita.fechaCreacion),
+          fechaNueva: preCita.fechaNueva
+            ? new Date(preCita.fechaNueva)
+            : undefined,
+        }));
+        setPreCitas(formattedPreCitas);
+        console.log(
+          `✅ Loaded ${formattedPreCitas.length} pre-appointments from localStorage`,
+        );
+      }
+
+      console.log("✅ Data refresh completed");
+      return true;
+    } catch (error) {
+      console.error("❌ Error refreshing data from localStorage:", error);
+      return false;
+    }
   };
 
   const login = async (
@@ -1056,6 +1127,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
         // Validate password
         if (existingUser.password === password) {
           setUserState(existingUser);
+          // Refresh data from localStorage to ensure user sees their data
+          setTimeout(() => refreshDataFromStorage(), 100);
           return existingUser;
         } else {
           return null; // Wrong password
@@ -1065,6 +1138,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
         // This is for backward compatibility with existing client accounts
         if (existingUser.rol === "cliente") {
           setUserState(existingUser);
+          // Refresh data from localStorage to ensure user sees their data
+          setTimeout(() => refreshDataFromStorage(), 100);
           return existingUser;
         } else {
           // Veterinarians and admins must have passwords
@@ -2017,6 +2092,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     getCitaWithRelations,
     validateDataRelationships,
     getStats,
+    refreshDataFromStorage,
   };
 
   return (

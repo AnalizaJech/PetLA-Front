@@ -11,7 +11,6 @@ import {
   getCitasStats,
   validateCitaData,
   getUrgencyLevel,
-  autoFixCitaData,
   type CitaFilter,
   type SortBy,
   type CitaRelationData,
@@ -77,7 +76,7 @@ import {
 
 const estadoColors = {
   pendiente_pago: "bg-yellow-100 text-yellow-800 border-yellow-200",
-  en_validacion: "bg-gray-100 text-gray-800 border-gray-200",
+  en_validacion: "bg-yellow-100 text-yellow-800 border-yellow-200",
   aceptada: "bg-green-100 text-green-800 border-green-200",
   atendida: "bg-gray-100 text-gray-800 border-gray-200",
   cancelada: "bg-red-100 text-red-800 border-red-200",
@@ -140,8 +139,6 @@ export default function MisPacientes() {
   const [filterEstado, setFilterEstado] = useState("todos");
   const [sortBy, setSortBy] = useState<SortBy>("fecha_desc");
   const [showDataIssues, setShowDataIssues] = useState(false);
-  const [showAutoFix, setShowAutoFix] = useState(false);
-  const [autoFixResults, setAutoFixResults] = useState<any>(null);
 
   // Estados para modales
   const [selectedCita, setSelectedCita] = useState<CitaRelationData | null>(
@@ -275,47 +272,6 @@ export default function MisPacientes() {
       citasIncompletas: myDataIssues.incompleteCitas,
     };
   }, [enhancedCitas, validateDataRelationships, misCitas, user?.nombre]);
-
-  // Enhanced auto-fix handler using context repair functionality
-  const handleAutoFix = () => {
-    try {
-      console.log("🔧 Iniciando reparación automática de datos...");
-      const results = repairDataIntegrity();
-
-      // Create a compatible results object for UI display
-      const compatibleResults = {
-        newMascotas: Array.from({ length: results.createdPets }, (_, i) => ({
-          nombre: `Mascota ${i + 1}`,
-        })),
-        errors: results.errors,
-      };
-
-      setAutoFixResults(compatibleResults);
-
-      console.log("🔧 Resultados de reparación automática:", results);
-
-      if (results.createdPets > 0) {
-        console.log(`➕ ${results.createdPets} mascotas creadas`);
-      }
-
-      if (results.repairedPets > 0) {
-        console.log(`🔧 ${results.repairedPets} mascotas reparadas`);
-      }
-
-      if (results.errors.length > 0) {
-        console.warn("⚠️ Errores durante la reparación:", results.errors);
-      }
-
-      setShowAutoFix(true);
-
-      // Refresh the page after a delay to show the repaired data
-      setTimeout(() => {
-        window.location.reload();
-      }, 3000);
-    } catch (error) {
-      console.error("Error aplicando correcciones automáticas:", error);
-    }
-  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -547,75 +503,6 @@ export default function MisPacientes() {
                   </AlertDescription>
                 </Alert>
               )}
-
-              {/* Problemas reparables */}
-              {fixableCitas.length > 0 && (
-                <Alert className="border-yellow-200 bg-yellow-50">
-                  <Info className="w-4 h-4 text-yellow-600" />
-                  <AlertDescription className="text-yellow-800">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <strong>
-                          {fixableCitas.length} problemas pueden repararse
-                          automáticamente.
-                        </strong>
-                        <div className="mt-2 text-sm">
-                          {fixableCitas
-                            .slice(0, 2)
-                            .map(({ cita, suggestedFix }) => (
-                              <div key={cita.id}>
-                                • <strong>{cita.mascota}</strong>:{" "}
-                                {suggestedFix}
-                              </div>
-                            ))}
-                          {fixableCitas.length > 2 && (
-                            <div>... y {fixableCitas.length - 2} más</div>
-                          )}
-                        </div>
-                      </div>
-                      <Button
-                        size="sm"
-                        onClick={handleAutoFix}
-                        className="bg-yellow-600 hover:bg-yellow-700 text-white"
-                      >
-                        Reparar Datos
-                      </Button>
-                    </div>
-                  </AlertDescription>
-                </Alert>
-              )}
-
-              {/* Resultados de la reparación automática */}
-              {showAutoFix && autoFixResults && (
-                <Alert className="border-green-200 bg-green-50">
-                  <CheckCircle className="w-4 h-4 text-green-600" />
-                  <AlertDescription className="text-green-800">
-                    <div>
-                      <strong>Reparación completada:</strong>
-                      <div className="mt-2 text-sm space-y-1">
-                        {autoFixResults.newMascotas.length > 0 && (
-                          <div>
-                            {autoFixResults.newMascotas.length} mascotas creadas
-                          </div>
-                        )}
-                        {autoFixResults.errors.length > 0 && (
-                          <div>
-                            {autoFixResults.errors.length} errores encontrados
-                          </div>
-                        )}
-                      </div>
-                      <Button
-                        variant="link"
-                        size="sm"
-                        onClick={() => setShowAutoFix(false)}
-                        className="text-green-800 p-0 ml-2"
-                      >
-                        Cerrar
-                      </Button>
-                    </div>
-                  </AlertDescription>
-                </Alert>
-              )}
             </div>
           )}
 
@@ -808,7 +695,7 @@ export default function MisPacientes() {
                     className="hover:shadow-lg transition-all duration-200 border-l-4 border-l-vet-primary"
                   >
                     <CardContent className="p-4 sm:p-6">
-                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between space-y-4 sm:space-y-0">
+                      <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between space-y-4 lg:space-y-0 gap-4">
                         <div className="flex items-start space-x-4 flex-1">
                           <div className="w-12 h-12 bg-vet-primary/10 rounded-full flex items-center justify-center flex-shrink-0 relative">
                             {mascota?.foto ? (
@@ -901,7 +788,7 @@ export default function MisPacientes() {
                               )}
                             </div>
 
-                            {/* Información de la mascota */}
+                            {/* Informaci��n de la mascota */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                               <div className="space-y-2">
                                 <div className="flex items-center space-x-2">
@@ -912,11 +799,6 @@ export default function MisPacientes() {
                                       cita.especie ||
                                       "No especificado"}
                                   </span>
-                                  {!mascota && (
-                                    <Badge className="bg-orange-100 text-orange-800 border-orange-200 text-xs">
-                                      No registrada
-                                    </Badge>
-                                  )}
                                 </div>
                                 {/* Always show breed information if available, even for unregistered pets */}
                                 <div className="flex items-center space-x-2">
@@ -924,11 +806,6 @@ export default function MisPacientes() {
                                   <span>
                                     <strong>Raza:</strong>{" "}
                                     {mascota?.raza || "No especificada"}
-                                    {!mascota?.raza && (
-                                      <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200 text-xs ml-2">
-                                        Sin registrar
-                                      </Badge>
-                                    )}
                                   </span>
                                 </div>
                                 <div className="flex items-center space-x-2">
@@ -974,25 +851,25 @@ export default function MisPacientes() {
                         </div>
 
                         {/* Botones de acción */}
-                        <div className="flex flex-col space-y-2 sm:ml-4 sm:flex-shrink-0">
+                        <div className="flex flex-col space-y-2 sm:ml-4 sm:flex-shrink-0 sm:min-w-[140px]">
                           <Button
                             variant="outline"
                             size="sm"
                             onClick={() => handleViewDetail(citaData)}
-                            className="h-9"
+                            className="h-9 w-full"
                           >
                             <Eye className="w-4 h-4 mr-2" />
-                            Ver Detalle
+                            <span className="truncate">Ver Detalle</span>
                           </Button>
 
                           {cita.estado === "aceptada" && (
                             <Button
                               size="sm"
                               onClick={() => handleAttendCita(citaData)}
-                              className="bg-vet-primary hover:bg-vet-primary-dark h-9"
+                              className="bg-vet-primary hover:bg-vet-primary-dark h-9 w-full"
                             >
                               <Activity className="w-4 h-4 mr-2" />
-                              Atender
+                              <span className="truncate">Atender</span>
                             </Button>
                           )}
 
@@ -1011,10 +888,10 @@ export default function MisPacientes() {
                                 );
                               }
                             }}
-                            className="h-9"
+                            className="h-9 w-full"
                           >
                             <FileText className="w-4 h-4 mr-2" />
-                            Historial
+                            <span className="truncate">Historial</span>
                           </Button>
                         </div>
                       </div>

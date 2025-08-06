@@ -50,6 +50,17 @@ import {
   Filter,
   UserCheck,
   Download,
+  ArrowUp,
+  ArrowDown,
+  Target,
+  Star,
+  Heart,
+  Zap,
+  Award,
+  ChevronRight,
+  Calendar as CalendarIcon,
+  ClipboardList,
+  Timer,
 } from "lucide-react";
 
 export default function DashboardVeterinario() {
@@ -88,7 +99,6 @@ export default function DashboardVeterinario() {
   };
 
   const handleRegisterConsultation = () => {
-    // Navigate to patients list to select patient and register consultation
     navigate("/mis-pacientes");
   };
 
@@ -143,27 +153,53 @@ export default function DashboardVeterinario() {
     pacientesUnicos: [...new Set(misCitas.map((c) => c.mascota))].length,
   };
 
+  // Calculate growth metrics
+  const lastMonth = new Date();
+  lastMonth.setMonth(lastMonth.getMonth() - 1);
+
+  const citasEsteMes = misCitas.filter((cita) => {
+    const fechaCita = new Date(cita.fecha);
+    const inicioMes = new Date();
+    inicioMes.setDate(1);
+    return fechaCita >= inicioMes;
+  }).length;
+
+  const citasMesPasado = misCitas.filter((cita) => {
+    const fechaCita = new Date(cita.fecha);
+    const inicioMesPasado = new Date();
+    inicioMesPasado.setMonth(inicioMesPasado.getMonth() - 1);
+    inicioMesPasado.setDate(1);
+    const finMesPasado = new Date();
+    finMesPasado.setDate(0);
+    return fechaCita >= inicioMesPasado && fechaCita <= finMesPasado;
+  }).length;
+
+  const crecimientoCitas =
+    citasMesPasado > 0
+      ? (((citasEsteMes - citasMesPasado) / citasMesPasado) * 100).toFixed(1)
+      : "0";
+
   const getStatusBadge = (estado: string) => {
     switch (estado) {
       case "aceptada":
         return (
-          <Badge className="bg-green-100 text-green-800 border-green-200">
+          <Badge className="bg-blue-100 text-blue-800 border-blue-200">
             <CheckCircle className="w-3 h-3 mr-1" />
             Confirmada
           </Badge>
         );
       case "atendida":
         return (
-          <Badge className="bg-purple-100 text-purple-800 border-purple-200">
+          <Badge className="bg-green-100 text-green-800 border-green-200">
             <CheckCircle className="w-3 h-3 mr-1" />
             Atendida
           </Badge>
         );
       case "en_validacion":
         return (
-          <Badge className="bg-gray-100 text-gray-800 border-gray-200">
+          <Badge className="bg-amber-100 text-amber-800 border-amber-200">
             <Clock className="w-3 h-3 mr-1" />
-            En Validación
+            En Proceso
           </Badge>
         );
       default:
@@ -200,279 +236,215 @@ export default function DashboardVeterinario() {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-vet-gray-50 py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Header */}
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {/* Modern Header */}
           <div className="mb-8">
-            <div className="flex items-center space-x-3 mb-4">
-              <div className="w-10 h-10 bg-vet-primary rounded-xl flex items-center justify-center">
-                <Stethoscope className="w-6 h-6 text-white" />
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6">
+              <div className="flex items-center space-x-4 mb-4 lg:mb-0">
+                <div className="relative">
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
+                    <Stethoscope className="w-8 h-8 text-white" />
+                  </div>
+                  <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                    <div className="w-2 h-2 bg-white rounded-full"></div>
+                  </div>
+                </div>
+                <div>
+                  <h1 className="text-3xl font-bold text-gray-900 mb-1">
+                    Panel Veterinario
+                  </h1>
+                  <p className="text-gray-600 flex items-center">
+                    <span>Bienvenido, Dr. {user.nombre}</span>
+                    <Award className="w-4 h-4 ml-2 text-amber-500" />
+                  </p>
+                </div>
               </div>
-              <div>
-                <h1 className="text-3xl font-bold text-vet-gray-900">
-                  Panel Veterinario
-                </h1>
-                <p className="text-vet-gray-600">Bienvenido, {user.nombre}</p>
+
+              <div className="flex items-center space-x-3">
+                <Button
+                  onClick={() => setSearchPatientDialog(true)}
+                  className="bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 shadow-sm"
+                >
+                  <Search className="w-4 h-4 mr-2" />
+                  Buscar Paciente
+                </Button>
+                <Button
+                  onClick={handleViewFullSchedule}
+                  className="bg-blue-600 hover:bg-blue-700 shadow-sm"
+                >
+                  <Calendar className="w-4 h-4 mr-2" />
+                  Mi Agenda
+                </Button>
               </div>
             </div>
 
-            {/* Welcome Alert */}
-            <Alert className="border-vet-primary/20 bg-vet-primary/5">
-              <Stethoscope className="w-4 h-4 text-vet-primary" />
-              <AlertDescription className="text-vet-primary">
-                <strong>¡Bienvenido a tu panel profesional!</strong> Aquí puedes
-                gestionar tus citas, revisar pacientes y mantener actualizado el
-                historial clínico.
-              </AlertDescription>
-            </Alert>
-          </div>
-
-          {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
-            <Card>
-              <CardContent className="p-4 sm:p-6">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-vet-primary/10 rounded-xl flex items-center justify-center">
-                    <Calendar className="w-5 h-5 sm:w-6 sm:h-6 text-vet-primary" />
+            {/* Date and Time */}
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 mb-6 border border-white/20">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center space-x-2">
+                    <CalendarIcon className="w-5 h-5 text-blue-600" />
+                    <span className="font-medium text-gray-900">
+                      {new Date().toLocaleDateString("es-ES", {
+                        weekday: "long",
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })}
+                    </span>
                   </div>
-                  <div>
-                    <p className="text-xs sm:text-sm text-vet-gray-600">
-                      Total Citas
-                    </p>
-                    <p className="text-2xl sm:text-3xl font-bold text-vet-gray-900">
-                      {stats.totalCitas}
-                    </p>
+                  <div className="flex items-center space-x-2">
+                    <Timer className="w-5 h-5 text-green-600" />
+                    <span className="text-gray-600">
+                      {new Date().toLocaleTimeString("es-ES", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </span>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+                {citasHoy.length > 0 && (
+                  <Badge className="bg-blue-100 text-blue-800 px-3 py-1">
+                    {citasHoy.length} citas hoy
+                  </Badge>
+                )}
+              </div>
+            </div>
+          </div>
 
-            <Card>
-              <CardContent className="p-4 sm:p-6">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-100 rounded-xl flex items-center justify-center">
-                    <Clock className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600" />
-                  </div>
+          {/* Enhanced Stats Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <Card className="bg-gradient-to-br from-blue-50 to-blue-100/50 border-blue-200/50 shadow-sm hover:shadow-md transition-all duration-200">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-xs sm:text-sm text-vet-gray-600">Hoy</p>
-                    <p className="text-2xl sm:text-3xl font-bold text-gray-600">
+                    <p className="text-sm text-blue-700 font-medium mb-1">
+                      Citas Hoy
+                    </p>
+                    <p className="text-3xl font-bold text-blue-900">
                       {stats.citasHoy}
                     </p>
+                    <p className="text-xs text-blue-600 mt-1">
+                      {stats.citasPendientes} pendientes
+                    </p>
+                  </div>
+                  <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center">
+                    <Clock className="w-6 h-6 text-white" />
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card>
-              <CardContent className="p-4 sm:p-6">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-orange-100 rounded-xl flex items-center justify-center">
-                    <Activity className="w-5 h-5 sm:w-6 sm:h-6 text-orange-600" />
-                  </div>
+            <Card className="bg-gradient-to-br from-green-50 to-green-100/50 border-green-200/50 shadow-sm hover:shadow-md transition-all duration-200">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-xs sm:text-sm text-vet-gray-600">
-                      Pendientes
-                    </p>
-                    <p className="text-2xl sm:text-3xl font-bold text-orange-600">
-                      {stats.citasPendientes}
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="p-4 sm:p-6">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                    <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />
-                  </div>
-                  <div>
-                    <p className="text-xs sm:text-sm text-vet-gray-600">
+                    <p className="text-sm text-green-700 font-medium mb-1">
                       Completadas
                     </p>
-                    <p className="text-2xl sm:text-3xl font-bold text-green-600">
+                    <p className="text-3xl font-bold text-green-900">
                       {stats.citasCompletadas}
                     </p>
+                    <div className="flex items-center text-xs text-green-600 mt-1">
+                      <ArrowUp className="w-3 h-3 mr-1" />+{crecimientoCitas}%
+                      este mes
+                    </div>
+                  </div>
+                  <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center">
+                    <CheckCircle className="w-6 h-6 text-white" />
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card>
-              <CardContent className="p-4 sm:p-6">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-purple-100 rounded-xl flex items-center justify-center">
-                    <PawPrint className="w-5 h-5 sm:w-6 sm:h-6 text-purple-600" />
-                  </div>
+            <Card className="bg-gradient-to-br from-purple-50 to-purple-100/50 border-purple-200/50 shadow-sm hover:shadow-md transition-all duration-200">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-xs sm:text-sm text-vet-gray-600">
+                    <p className="text-sm text-purple-700 font-medium mb-1">
                       Pacientes
                     </p>
-                    <p className="text-2xl sm:text-3xl font-bold text-purple-600">
+                    <p className="text-3xl font-bold text-purple-900">
                       {stats.pacientesUnicos}
                     </p>
+                    <p className="text-xs text-purple-600 mt-1">
+                      Únicos atendidos
+                    </p>
+                  </div>
+                  <div className="w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center">
+                    <PawPrint className="w-6 h-6 text-white" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-gradient-to-br from-amber-50 to-amber-100/50 border-amber-200/50 shadow-sm hover:shadow-md transition-all duration-200">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-amber-700 font-medium mb-1">
+                      En Proceso
+                    </p>
+                    <p className="text-3xl font-bold text-amber-900">
+                      {stats.citasPendientes}
+                    </p>
+                    <p className="text-xs text-amber-600 mt-1">
+                      Requieren atención
+                    </p>
+                  </div>
+                  <div className="w-12 h-12 bg-amber-500 rounded-xl flex items-center justify-center">
+                    <Activity className="w-6 h-6 text-white" />
                   </div>
                 </div>
               </CardContent>
             </Card>
           </div>
 
-          {/* Main Content Grid */}
+          {/* Main Dashboard Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Left Column - Today's Schedule */}
-            <div className="lg:col-span-2 space-y-8">
+            {/* Left Column - Today's Schedule & Upcoming */}
+            <div className="lg:col-span-2 space-y-6">
               {/* Today's Appointments */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <Calendar className="w-5 h-5 text-vet-primary" />
-                    <span>Citas de Hoy</span>
-                    {stats.citasHoy > 0 && (
-                      <Badge className="bg-gray-100 text-gray-800">
-                        {stats.citasHoy}
-                      </Badge>
+              <Card className="shadow-sm border-0 bg-white/80 backdrop-blur-sm">
+                <CardHeader className="pb-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle className="flex items-center space-x-2 text-xl">
+                        <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                          <Calendar className="w-4 h-4 text-blue-600" />
+                        </div>
+                        <span>Agenda de Hoy</span>
+                      </CardTitle>
+                      <CardDescription className="mt-1">
+                        {citasHoy.length > 0
+                          ? `${citasHoy.length} citas programadas para hoy`
+                          : "No tienes citas programadas para hoy"}
+                      </CardDescription>
+                    </div>
+                    {citasHoy.length > 0 && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleViewFullSchedule}
+                        className="text-blue-600 border-blue-200 hover:bg-blue-50"
+                      >
+                        Ver todas
+                        <ChevronRight className="w-4 h-4 ml-1" />
+                      </Button>
                     )}
-                  </CardTitle>
-                  <CardDescription>
-                    {new Date().toLocaleDateString("es-ES", {
-                      weekday: "long",
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </CardDescription>
+                  </div>
                 </CardHeader>
                 <CardContent>
                   {citasHoy.length > 0 ? (
-                    <div className="overflow-x-auto">
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead>Hora</TableHead>
-                            <TableHead>Paciente & Propietario</TableHead>
-                            <TableHead>Motivo</TableHead>
-                            <TableHead>Estado</TableHead>
-                            <TableHead className="text-center">
-                              Acciones
-                            </TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {citasHoy
-                            .sort(
-                              (a, b) =>
-                                new Date(a.fecha).getTime() -
-                                new Date(b.fecha).getTime(),
-                            )
-                            .map((cita) => {
-                              const mascota = mascotas.find(
-                                (m) => m.nombre === cita.mascota,
-                              );
-                              const propietario = usuarios.find(
-                                (u) => u.id === mascota?.clienteId,
-                              );
-
-                              return (
-                                <TableRow
-                                  key={cita.id}
-                                  className="hover:bg-vet-gray-50"
-                                >
-                                  <TableCell className="font-medium">
-                                    {new Date(cita.fecha).toLocaleTimeString(
-                                      "es-ES",
-                                      {
-                                        hour: "2-digit",
-                                        minute: "2-digit",
-                                      },
-                                    )}
-                                  </TableCell>
-                                  <TableCell>
-                                    <div className="space-y-2">
-                                      <div className="flex items-center space-x-2">
-                                        <PawPrint className="w-4 h-4 text-vet-secondary" />
-                                        <span className="font-medium">
-                                          {cita.mascota}
-                                        </span>
-                                      </div>
-                                      <div className="flex items-center space-x-2 text-sm text-vet-gray-600">
-                                        <UserCheck className="w-3 h-3" />
-                                        <span>
-                                          {propietario?.nombre || "Sin asignar"}
-                                        </span>
-                                      </div>
-                                      <p className="text-xs text-vet-gray-500">
-                                        {mascota?.especie}{" "}
-                                        {mascota?.raza && `• ${mascota.raza}`}
-                                      </p>
-                                    </div>
-                                  </TableCell>
-                                  <TableCell>
-                                    <div className="space-y-1">
-                                      <p className="text-sm">
-                                        <span className="font-medium text-vet-primary">
-                                          {cita.tipoConsulta}
-                                        </span>
-                                        <br />
-                                        {cita.motivo.length > 40
-                                          ? `${cita.motivo.substring(0, 40)}...`
-                                          : cita.motivo}
-                                      </p>
-                                      {getUrgencyLevel(cita.motivo)}
-                                    </div>
-                                  </TableCell>
-                                  <TableCell>
-                                    {getStatusBadge(cita.estado)}
-                                  </TableCell>
-                                  <TableCell>
-                                    <CitaQuickActions cita={cita} />
-                                  </TableCell>
-                                </TableRow>
-                              );
-                            })}
-                        </TableBody>
-                      </Table>
-                    </div>
-                  ) : (
-                    <div className="text-center py-8">
-                      <Calendar className="w-12 h-12 text-vet-gray-400 mx-auto mb-4" />
-                      <h3 className="text-lg font-medium text-vet-gray-900 mb-2">
-                        No hay citas hoy
-                      </h3>
-                      <p className="text-vet-gray-600">
-                        Disfruta de tu día libre o aprovecha para ponerte al día
-                      </p>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-
-              {/* Upcoming Appointments */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <Clock className="w-5 h-5 text-vet-primary" />
-                    <span>Próximas Citas (7 días)</span>
-                    {citasProximas.length > 0 && (
-                      <Badge className="bg-orange-100 text-orange-800">
-                        {citasProximas.length}
-                      </Badge>
-                    )}
-                  </CardTitle>
-                  <CardDescription>
-                    Citas programadas para la próxima semana
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {citasProximas.length > 0 ? (
                     <div className="space-y-4">
-                      {citasProximas
+                      {citasHoy
                         .sort(
                           (a, b) =>
                             new Date(a.fecha).getTime() -
                             new Date(b.fecha).getTime(),
                         )
-                        .slice(0, 5)
+                        .slice(0, 4)
                         .map((cita) => {
                           const mascota = mascotas.find(
                             (m) => m.nombre === cita.mascota,
@@ -484,11 +456,120 @@ export default function DashboardVeterinario() {
                           return (
                             <div
                               key={cita.id}
-                              className="flex items-center justify-between p-4 border border-vet-gray-200 rounded-lg hover:bg-vet-gray-50 transition-colors"
+                              className="flex items-center justify-between p-4 bg-gray-50/50 rounded-xl border border-gray-100 hover:bg-gray-50 transition-colors"
                             >
                               <div className="flex items-center space-x-4 flex-1">
-                                <div className="text-center">
-                                  <p className="text-sm font-medium text-vet-gray-900">
+                                <div className="flex flex-col items-center">
+                                  <div className="text-sm font-medium text-gray-900">
+                                    {new Date(cita.fecha).toLocaleTimeString(
+                                      "es-ES",
+                                      {
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                      },
+                                    )}
+                                  </div>
+                                  <div className="w-8 h-0.5 bg-blue-200 rounded mt-1"></div>
+                                </div>
+
+                                <div className="flex-1">
+                                  <div className="flex items-center space-x-2 mb-1">
+                                    <PawPrint className="w-4 h-4 text-blue-600" />
+                                    <span className="font-medium text-gray-900">
+                                      {cita.mascota}
+                                    </span>
+                                    {getStatusBadge(cita.estado)}
+                                  </div>
+                                  <div className="flex items-center space-x-2 text-sm text-gray-600">
+                                    <UserCheck className="w-3 h-3" />
+                                    <span>
+                                      {propietario?.nombre || "Sin asignar"}
+                                    </span>
+                                  </div>
+                                  <p className="text-sm text-gray-500 mt-1">
+                                    {cita.tipoConsulta} •{" "}
+                                    {cita.motivo.length > 30
+                                      ? `${cita.motivo.substring(0, 30)}...`
+                                      : cita.motivo}
+                                  </p>
+                                  {getUrgencyLevel(cita.motivo)}
+                                </div>
+                              </div>
+
+                              <div className="flex items-center space-x-2">
+                                <CitaQuickActions cita={cita} />
+                              </div>
+                            </div>
+                          );
+                        })}
+                    </div>
+                  ) : (
+                    <div className="text-center py-12">
+                      <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Calendar className="w-8 h-8 text-blue-600" />
+                      </div>
+                      <h3 className="text-lg font-medium text-gray-900 mb-2">
+                        Día libre
+                      </h3>
+                      <p className="text-gray-600 mb-4">
+                        No tienes citas programadas para hoy
+                      </p>
+                      <Button
+                        onClick={handleViewFullSchedule}
+                        className="bg-blue-600 hover:bg-blue-700"
+                      >
+                        <Calendar className="w-4 h-4 mr-2" />
+                        Ver agenda completa
+                      </Button>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Upcoming Appointments */}
+              <Card className="shadow-sm border-0 bg-white/80 backdrop-blur-sm">
+                <CardHeader className="pb-4">
+                  <CardTitle className="flex items-center space-x-2 text-xl">
+                    <div className="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center">
+                      <Clock className="w-4 h-4 text-amber-600" />
+                    </div>
+                    <span>Próximas Citas</span>
+                    {citasProximas.length > 0 && (
+                      <Badge className="bg-amber-100 text-amber-800 ml-2">
+                        {citasProximas.length}
+                      </Badge>
+                    )}
+                  </CardTitle>
+                  <CardDescription>
+                    Citas programadas para los próximos 7 días
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {citasProximas.length > 0 ? (
+                    <div className="space-y-3">
+                      {citasProximas
+                        .sort(
+                          (a, b) =>
+                            new Date(a.fecha).getTime() -
+                            new Date(b.fecha).getTime(),
+                        )
+                        .slice(0, 3)
+                        .map((cita) => {
+                          const mascota = mascotas.find(
+                            (m) => m.nombre === cita.mascota,
+                          );
+                          const propietario = usuarios.find(
+                            (u) => u.id === mascota?.clienteId,
+                          );
+
+                          return (
+                            <div
+                              key={cita.id}
+                              className="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                            >
+                              <div className="flex items-center space-x-3 flex-1">
+                                <div className="text-center min-w-[60px]">
+                                  <p className="text-sm font-medium text-gray-900">
                                     {new Date(cita.fecha).toLocaleDateString(
                                       "es-ES",
                                       {
@@ -497,7 +578,7 @@ export default function DashboardVeterinario() {
                                       },
                                     )}
                                   </p>
-                                  <p className="text-xs text-vet-gray-600">
+                                  <p className="text-xs text-gray-600">
                                     {new Date(cita.fecha).toLocaleTimeString(
                                       "es-ES",
                                       {
@@ -507,32 +588,22 @@ export default function DashboardVeterinario() {
                                     )}
                                   </p>
                                 </div>
+
                                 <div className="flex-1">
                                   <div className="flex items-center space-x-2 mb-1">
-                                    <PawPrint className="w-4 h-4 text-vet-secondary" />
-                                    <span className="font-medium text-vet-gray-900">
+                                    <PawPrint className="w-3 h-3 text-amber-600" />
+                                    <span className="text-sm font-medium text-gray-900">
                                       {cita.mascota}
                                     </span>
                                   </div>
-                                  <div className="flex items-center space-x-2 mb-1">
-                                    <UserCheck className="w-3 h-3 text-vet-gray-600" />
-                                    <span className="text-sm text-vet-gray-600">
-                                      {propietario?.nombre || "Sin asignar"}
-                                    </span>
-                                  </div>
-                                  <p className="text-sm text-vet-gray-600">
-                                    <span className="font-medium text-vet-primary">
-                                      {cita.tipoConsulta}
-                                    </span>
-                                    <br />
-                                    {cita.motivo.length > 40
-                                      ? `${cita.motivo.substring(0, 40)}...`
-                                      : cita.motivo}
+                                  <p className="text-xs text-gray-600">
+                                    {propietario?.nombre || "Sin asignar"} •{" "}
+                                    {cita.tipoConsulta}
                                   </p>
-                                  {getUrgencyLevel(cita.motivo)}
                                 </div>
                               </div>
-                              <div className="flex items-center space-x-3">
+
+                              <div className="flex items-center space-x-2">
                                 {getStatusBadge(cita.estado)}
                                 <Button
                                   variant="ghost"
@@ -540,9 +611,8 @@ export default function DashboardVeterinario() {
                                   onClick={() =>
                                     navigate(`/mis-pacientes?cita=${cita.id}`)
                                   }
-                                  title="Ver detalles de la cita"
                                 >
-                                  <Eye className="w-4 h-4" />
+                                  <Eye className="w-3 h-3" />
                                 </Button>
                               </div>
                             </div>
@@ -551,12 +621,9 @@ export default function DashboardVeterinario() {
                     </div>
                   ) : (
                     <div className="text-center py-8">
-                      <Clock className="w-12 h-12 text-vet-gray-400 mx-auto mb-4" />
-                      <h3 className="text-lg font-medium text-vet-gray-900 mb-2">
-                        No hay citas próximas
-                      </h3>
-                      <p className="text-vet-gray-600">
-                        Tu agenda está libre para los próximos 7 días
+                      <Clock className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                      <p className="text-gray-600">
+                        No hay citas próximas programadas
                       </p>
                     </div>
                   )}
@@ -564,37 +631,49 @@ export default function DashboardVeterinario() {
               </Card>
             </div>
 
-            {/* Right Column - Quick Stats and Actions */}
-            <div className="space-y-8">
+            {/* Right Column - Quick Actions & Performance */}
+            <div className="space-y-6">
               {/* Quick Actions */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <Activity className="w-5 h-5 text-vet-primary" />
+              <Card className="shadow-sm border-0 bg-white/80 backdrop-blur-sm">
+                <CardHeader className="pb-4">
+                  <CardTitle className="flex items-center space-x-2 text-xl">
+                    <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                      <Zap className="w-4 h-4 text-green-600" />
+                    </div>
                     <span>Acciones Rápidas</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <Button
-                    className="w-full bg-vet-primary hover:bg-vet-primary-dark"
+                    className="w-full bg-blue-600 hover:bg-blue-700 justify-start"
+                    onClick={handleRegisterConsultation}
+                  >
+                    <ClipboardList className="w-4 h-4 mr-3" />
+                    Gestionar Pacientes
+                  </Button>
+
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start border-gray-200 hover:bg-gray-50"
                     onClick={handleViewFullSchedule}
                   >
-                    <Calendar className="w-4 h-4 mr-2" />
-                    Ver Agenda Completa
+                    <Calendar className="w-4 h-4 mr-3" />
+                    Mi Agenda Completa
                   </Button>
+
                   <Button
                     variant="outline"
-                    className="w-full"
-                    onClick={() => setSearchPatientDialog(true)}
+                    className="w-full justify-start border-gray-200 hover:bg-gray-50"
+                    onClick={handleViewPatientHistory}
                   >
-                    <Search className="w-4 h-4 mr-2" />
-                    Buscar Paciente
+                    <FileText className="w-4 h-4 mr-3" />
+                    Historiales Clínicos
                   </Button>
+
                   <Button
                     variant="outline"
-                    className="w-full"
+                    className="w-full justify-start border-gray-200 hover:bg-gray-50"
                     onClick={() => {
-                      // Generate and download a summary report
                       const currentMonth = new Date().toLocaleDateString(
                         "es-ES",
                         {
@@ -606,8 +685,8 @@ export default function DashboardVeterinario() {
                       const reportData = {
                         veterinario: user?.nombre || "Veterinario",
                         periodo: currentMonth,
-                        citasCompletadas: monthlyStats.citasCompletadas,
-                        pacientesUnicos: monthlyStats.pacientesUnicos,
+                        citasCompletadas: stats.citasCompletadas,
+                        pacientesUnicos: stats.pacientesUnicos,
                         fecha: new Date().toLocaleDateString("es-ES"),
                       };
 
@@ -622,7 +701,7 @@ Fecha de generación: ${reportData.fecha}
 ESTADÍSTICAS:
 - Citas completadas: ${reportData.citasCompletadas}
 - Pacientes únicos: ${reportData.pacientesUnicos}
-- Satisfacción promedio: 4.9/5
+- Crecimiento: +${crecimientoCitas}%
 
 Generado automáticamente por PetLA
                       `;
@@ -640,25 +719,101 @@ Generado automáticamente por PetLA
                       window.URL.revokeObjectURL(url);
                     }}
                   >
-                    <Download className="w-4 h-4 mr-2" />
+                    <Download className="w-4 h-4 mr-3" />
                     Descargar Reporte
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full"
-                    onClick={handleViewPatientHistory}
-                  >
-                    <FileText className="w-4 h-4 mr-2" />
-                    Historial Clínico
                   </Button>
                 </CardContent>
               </Card>
 
+              {/* Performance Summary */}
+              <Card className="shadow-sm border-0 bg-white/80 backdrop-blur-sm">
+                <CardHeader className="pb-4">
+                  <CardTitle className="flex items-center space-x-2 text-xl">
+                    <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                      <TrendingUp className="w-4 h-4 text-purple-600" />
+                    </div>
+                    <span>Resumen del Mes</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between p-3 bg-gradient-to-r from-blue-50 to-blue-100/50 rounded-lg">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                          <CheckCircle className="w-4 h-4 text-white" />
+                        </div>
+                        <span className="text-sm font-medium text-blue-900">
+                          Citas completadas
+                        </span>
+                      </div>
+                      <span className="font-bold text-blue-900">
+                        {stats.citasCompletadas}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between p-3 bg-gradient-to-r from-purple-50 to-purple-100/50 rounded-lg">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center">
+                          <PawPrint className="w-4 h-4 text-white" />
+                        </div>
+                        <span className="text-sm font-medium text-purple-900">
+                          Pacientes únicos
+                        </span>
+                      </div>
+                      <span className="font-bold text-purple-900">
+                        {stats.pacientesUnicos}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between p-3 bg-gradient-to-r from-amber-50 to-amber-100/50 rounded-lg">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center">
+                          <Star className="w-4 h-4 text-white" />
+                        </div>
+                        <span className="text-sm font-medium text-amber-900">
+                          Satisfacción
+                        </span>
+                      </div>
+                      <div className="flex items-center space-x-1">
+                        <span className="font-bold text-amber-900">4.9</span>
+                        <div className="flex">
+                          {[...Array(5)].map((_, i) => (
+                            <Star
+                              key={i}
+                              className="w-3 h-3 fill-amber-400 text-amber-400"
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between p-3 bg-gradient-to-r from-green-50 to-green-100/50 rounded-lg">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
+                          <TrendingUp className="w-4 h-4 text-white" />
+                        </div>
+                        <span className="text-sm font-medium text-green-900">
+                          Crecimiento
+                        </span>
+                      </div>
+                      <div className="flex items-center space-x-1">
+                        <ArrowUp className="w-3 h-3 text-green-600" />
+                        <span className="font-bold text-green-900">
+                          +{crecimientoCitas}%
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
               {/* Recent Patients */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <PawPrint className="w-5 h-5 text-vet-primary" />
+              <Card className="shadow-sm border-0 bg-white/80 backdrop-blur-sm">
+                <CardHeader className="pb-4">
+                  <CardTitle className="flex items-center space-x-2 text-xl">
+                    <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                      <Heart className="w-4 h-4 text-blue-600" />
+                    </div>
                     <span>Pacientes Recientes</span>
                   </CardTitle>
                   <CardDescription>
@@ -667,8 +822,8 @@ Generado automáticamente por PetLA
                 </CardHeader>
                 <CardContent>
                   {citasCompletadas.length > 0 ? (
-                    <div className="space-y-4">
-                      {citasCompletadas.map((cita) => {
+                    <div className="space-y-3">
+                      {citasCompletadas.slice(0, 3).map((cita) => {
                         const mascota = mascotas.find(
                           (m) => m.nombre === cita.mascota,
                         );
@@ -679,94 +834,43 @@ Generado automáticamente por PetLA
                         return (
                           <div
                             key={cita.id}
-                            className="flex items-center justify-between p-3 border border-vet-gray-200 rounded-lg hover:bg-vet-gray-50 transition-colors"
+                            className="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
+                            onClick={() =>
+                              navigate(`/mis-pacientes?cita=${cita.id}`)
+                            }
                           >
                             <div className="flex-1">
                               <div className="flex items-center space-x-2 mb-1">
-                                <PawPrint className="w-3 h-3 text-vet-secondary" />
-                                <span className="font-medium text-sm">
+                                <PawPrint className="w-3 h-3 text-blue-600" />
+                                <span className="text-sm font-medium">
                                   {cita.mascota}
                                 </span>
                               </div>
                               <div className="flex items-center space-x-2 mb-1">
-                                <UserCheck className="w-3 h-3 text-vet-gray-500" />
-                                <span className="text-xs text-vet-gray-600">
+                                <UserCheck className="w-3 h-3 text-gray-500" />
+                                <span className="text-xs text-gray-600">
                                   {propietario?.nombre || "Sin asignar"}
                                 </span>
                               </div>
-                              <p className="text-xs text-vet-gray-600">
+                              <p className="text-xs text-gray-500">
                                 {new Date(cita.fecha).toLocaleDateString(
                                   "es-ES",
                                 )}
                               </p>
                             </div>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() =>
-                                navigate(`/mis-pacientes?cita=${cita.id}`)
-                              }
-                              title="Ver historial del paciente"
-                            >
-                              <Eye className="w-3 h-3" />
-                            </Button>
+                            <ChevronRight className="w-4 h-4 text-gray-400" />
                           </div>
                         );
                       })}
                     </div>
                   ) : (
                     <div className="text-center py-6">
-                      <PawPrint className="w-8 h-8 text-vet-gray-400 mx-auto mb-2" />
-                      <p className="text-sm text-vet-gray-600">
+                      <Heart className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                      <p className="text-sm text-gray-600">
                         No hay consultas recientes
                       </p>
                     </div>
                   )}
-                </CardContent>
-              </Card>
-
-              {/* Performance Summary */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <TrendingUp className="w-5 h-5 text-vet-primary" />
-                    <span>Resumen del Mes</span>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-vet-gray-600">
-                        Citas completadas
-                      </span>
-                      <span className="font-medium">
-                        {stats.citasCompletadas}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-vet-gray-600">
-                        Pacientes únicos
-                      </span>
-                      <span className="font-medium">
-                        {stats.pacientesUnicos}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-vet-gray-600">
-                        Satisfacción
-                      </span>
-                      <div className="flex items-center space-x-1">
-                        <span className="font-medium text-yellow-600">4.9</span>
-                        <div className="flex">
-                          {[...Array(5)].map((_, i) => (
-                            <span key={i} className="text-yellow-500 text-xs">
-                              ★
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                 </CardContent>
               </Card>
             </div>
@@ -780,14 +884,14 @@ Generado automáticamente por PetLA
             <DialogContent className="sm:max-w-2xl max-h-[80vh] overflow-y-auto scrollbar-hide">
               <DialogHeader>
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-vet-primary/10 rounded-lg flex items-center justify-center">
-                    <Search className="w-5 h-5 text-vet-primary" />
+                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <Search className="w-5 h-5 text-blue-600" />
                   </div>
                   <div>
-                    <DialogTitle className="text-xl font-semibold text-vet-gray-900">
+                    <DialogTitle className="text-xl font-semibold text-gray-900">
                       Buscar Paciente
                     </DialogTitle>
-                    <DialogDescription className="text-vet-gray-600">
+                    <DialogDescription className="text-gray-600">
                       Encuentra pacientes por nombre, especie, raza o
                       propietario
                     </DialogDescription>
@@ -797,25 +901,24 @@ Generado automáticamente por PetLA
 
               <div className="space-y-4 pt-4">
                 <div className="relative">
-                  <Search className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
+                  <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                   <Input
                     placeholder="Buscar por nombre del paciente, propietario, especie..."
                     value={searchTerm}
                     onChange={(e) => handleSearchPatients(e.target.value)}
-                    className="pl-10 border-vet-gray-300 focus:border-vet-primary focus:ring-vet-primary"
+                    className="pl-10 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
                   />
                 </div>
 
                 {searchTerm.length > 2 && (
                   <div className="space-y-3">
-                    <h4 className="font-medium text-vet-gray-900">
+                    <h4 className="font-medium text-gray-900">
                       Resultados de búsqueda ({foundPatients.length})
                     </h4>
 
                     {foundPatients.length > 0 ? (
                       <div className="max-h-60 overflow-y-auto space-y-2">
                         {foundPatients.map((mascota) => {
-                          // Find appointments for this pet with this vet
                           const citasPaciente = misCitas.filter(
                             (c) => c.mascota === mascota.nombre,
                           );
@@ -832,7 +935,7 @@ Generado automáticamente por PetLA
                           return (
                             <div
                               key={mascota.id}
-                              className="p-4 border border-vet-gray-200 rounded-lg hover:bg-vet-gray-50 cursor-pointer transition-colors"
+                              className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors"
                               onClick={() => {
                                 if (ultimaCita) {
                                   navigate(
@@ -849,24 +952,24 @@ Generado automáticamente por PetLA
                               <div className="flex items-center justify-between">
                                 <div className="space-y-2">
                                   <div className="flex items-center space-x-2">
-                                    <PawPrint className="w-4 h-4 text-vet-secondary" />
-                                    <span className="font-medium text-vet-gray-900">
+                                    <PawPrint className="w-4 h-4 text-blue-600" />
+                                    <span className="font-medium text-gray-900">
                                       {mascota.nombre}
                                     </span>
-                                    <span className="text-sm text-vet-gray-600">
+                                    <span className="text-sm text-gray-600">
                                       ({mascota.especie})
                                     </span>
                                   </div>
 
-                                  <div className="bg-vet-gray-50 p-2 rounded">
+                                  <div className="bg-gray-50 p-2 rounded">
                                     <div className="flex items-center space-x-2 text-sm">
-                                      <UserCheck className="w-3 h-3 text-vet-primary" />
+                                      <UserCheck className="w-3 h-3 text-blue-600" />
                                       <span className="font-medium">
                                         {propietario?.nombre || "Sin asignar"}
                                       </span>
                                     </div>
                                     {propietario?.telefono && (
-                                      <div className="flex items-center space-x-2 text-xs text-vet-gray-600 mt-1">
+                                      <div className="flex items-center space-x-2 text-xs text-gray-600 mt-1">
                                         <Phone className="w-3 h-3" />
                                         <span>{propietario.telefono}</span>
                                       </div>
@@ -874,12 +977,12 @@ Generado automáticamente por PetLA
                                   </div>
 
                                   {mascota.raza && (
-                                    <p className="text-xs text-vet-gray-500">
+                                    <p className="text-xs text-gray-500">
                                       Raza: {mascota.raza}
                                     </p>
                                   )}
                                   {ultimaCita && (
-                                    <p className="text-xs text-vet-gray-500">
+                                    <p className="text-xs text-gray-500">
                                       Última cita:{" "}
                                       {new Date(
                                         ultimaCita.fecha,
@@ -894,7 +997,7 @@ Generado automáticamente por PetLA
                                       {citasPaciente.length !== 1 ? "s" : ""}
                                     </Badge>
                                   )}
-                                  <Eye className="w-4 h-4 text-vet-gray-400" />
+                                  <Eye className="w-4 h-4 text-gray-400" />
                                 </div>
                               </div>
                             </div>
@@ -903,11 +1006,11 @@ Generado automáticamente por PetLA
                       </div>
                     ) : (
                       <div className="text-center py-8">
-                        <Search className="w-12 h-12 text-vet-gray-400 mx-auto mb-4" />
-                        <h3 className="text-lg font-medium text-vet-gray-900 mb-2">
+                        <Search className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                        <h3 className="text-lg font-medium text-gray-900 mb-2">
                           No se encontraron pacientes
                         </h3>
-                        <p className="text-vet-gray-600">
+                        <p className="text-gray-600">
                           Intenta con otros términos de búsqueda
                         </p>
                       </div>
@@ -917,8 +1020,8 @@ Generado automáticamente por PetLA
 
                 {searchTerm.length <= 2 && searchTerm.length > 0 && (
                   <div className="text-center py-8">
-                    <Search className="w-12 h-12 text-vet-gray-400 mx-auto mb-4" />
-                    <p className="text-vet-gray-600">
+                    <Search className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                    <p className="text-gray-600">
                       Escribe al menos 3 caracteres para buscar
                     </p>
                   </div>
@@ -926,11 +1029,11 @@ Generado automáticamente por PetLA
 
                 {searchTerm.length === 0 && (
                   <div className="text-center py-8">
-                    <PawPrint className="w-12 h-12 text-vet-gray-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-vet-gray-900 mb-2">
+                    <PawPrint className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">
                       Buscar Pacientes
                     </h3>
-                    <p className="text-vet-gray-600">
+                    <p className="text-gray-600">
                       Comienza a escribir para buscar entre tus pacientes
                     </p>
                   </div>
