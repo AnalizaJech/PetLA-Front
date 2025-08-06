@@ -106,10 +106,12 @@ export default function GestionCitas() {
   const enhancedCitas = citas.map((cita) => {
     const mascota = mascotas.find((m) => m.nombre === cita.mascota);
     const veterinario = usuarios.find((u) => u.nombre === cita.veterinario);
+    const propietario = mascota ? usuarios.find((u) => u.id === mascota.clienteId) : null;
     return {
       ...cita,
       mascotaInfo: mascota,
       veterinarioInfo: veterinario,
+      propietarioInfo: propietario,
     };
   });
 
