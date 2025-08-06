@@ -410,7 +410,7 @@ export default function MisPacientes() {
             </CardContent>
           </Card>
 
-          {/* Lista simplificada de mascotas */}
+          {/* Lista rediseñada de mascotas siguiendo el diseño de la imagen */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredMascotas.length === 0 ? (
               <div className="col-span-full">
@@ -430,98 +430,91 @@ export default function MisPacientes() {
               filteredMascotas.map((mascota) => (
                 <Card
                   key={mascota.id}
-                  className="hover:shadow-lg transition-all duration-200 border-l-4 border-l-vet-primary"
+                  className="overflow-hidden border-l-4 border-l-vet-primary hover:shadow-md transition-all duration-200"
                 >
-                  <CardContent className="p-4">
-                    {/* Header con foto y nombre */}
-                    <div className="flex items-start space-x-3 mb-4">
-                      <div className="w-12 h-12 bg-vet-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                        {mascota.foto ? (
-                          <img
-                            src={mascota.foto}
-                            alt={mascota.nombre}
-                            className="w-full h-full rounded-full object-cover"
-                          />
-                        ) : (
-                          <PawPrint className="w-6 h-6 text-vet-primary" />
-                        )}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="font-bold text-lg text-vet-gray-900 truncate">
-                          {mascota.nombre}
-                        </h4>
-                        <p className="text-sm text-vet-gray-600">
-                          {mascota.especie}
-                        </p>
+                  <CardContent className="p-0">
+                    {/* Header con foto, nombre y especie */}
+                    <div className="p-4 pb-3">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 bg-vet-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                          {mascota.foto ? (
+                            <img
+                              src={mascota.foto}
+                              alt={mascota.nombre}
+                              className="w-full h-full rounded-full object-cover"
+                            />
+                          ) : (
+                            <PawPrint className="w-5 h-5 text-vet-primary" />
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-semibold text-lg text-gray-900 truncate">
+                            {mascota.nombre}
+                          </h3>
+                          <p className="text-sm text-gray-600">
+                            {mascota.especie}
+                          </p>
+                        </div>
                       </div>
                     </div>
 
                     {/* Información del propietario */}
-                    <div className="mb-4 p-3 bg-vet-gray-50 rounded-lg">
-                      <div className="flex items-center space-x-2">
-                        <User className="w-4 h-4 text-vet-primary" />
-                        <span className="font-medium text-vet-gray-900">
+                    <div className="px-4 pb-3">
+                      <div className="flex items-center space-x-2 mb-1">
+                        <User className="w-4 h-4 text-gray-500" />
+                        <span className="font-medium text-gray-900">
                           {mascota.propietario?.nombre || "Sin propietario"}
                         </span>
                       </div>
                       {mascota.propietario?.telefono && (
-                        <div className="flex items-center space-x-2 mt-1">
-                          <Phone className="w-3 h-3 text-vet-gray-600" />
-                          <span className="text-sm text-vet-gray-600">
+                        <div className="flex items-center space-x-2">
+                          <Phone className="w-4 h-4 text-gray-500" />
+                          <span className="text-sm text-gray-600">
                             {mascota.propietario.telefono}
                           </span>
                         </div>
                       )}
                     </div>
 
-                    {/* Próxima cita */}
-                    <div className="mb-4">
-                      {mascota.proximaCita ? (
-                        <div className="flex items-center space-x-2 p-2 bg-green-50 rounded-lg">
-                          <Calendar className="w-4 h-4 text-green-600" />
-                          <div>
-                            <p className="text-sm font-medium text-green-900">
-                              Próxima cita
-                            </p>
-                            <p className="text-xs text-green-700">
-                              {new Date(mascota.proximaCita.fecha).toLocaleDateString("es-ES", {
+                    {/* Estado de citas */}
+                    <div className="px-4 pb-4">
+                      <div className="flex items-center space-x-2">
+                        <Calendar className="w-4 h-4 text-gray-500" />
+                        <span className="text-sm text-gray-600">
+                          {mascota.proximaCita ? (
+                            <>
+                              Próxima: {new Date(mascota.proximaCita.fecha).toLocaleDateString("es-ES", {
                                 day: "numeric",
-                                month: "short",
-                                year: "numeric"
+                                month: "short"
                               })} a las {new Date(mascota.proximaCita.fecha).toLocaleTimeString("es-ES", {
                                 hour: "2-digit",
                                 minute: "2-digit"
                               })}
-                            </p>
-                            {mascota.proximaCita.tipoConsulta && (
-                              <Badge className="bg-green-100 text-green-800 text-xs mt-1">
-                                {mascota.proximaCita.tipoConsulta}
-                              </Badge>
-                            )}
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="flex items-center space-x-2 p-2 bg-gray-50 rounded-lg">
-                          <Calendar className="w-4 h-4 text-gray-600" />
-                          <p className="text-sm text-gray-600">
-                            Sin citas programadas
-                          </p>
-                        </div>
-                      )}
+                            </>
+                          ) : (
+                            "Sin citas programadas"
+                          )}
+                        </span>
+                      </div>
                     </div>
 
-                    {/* Botón de historial */}
-                    <Button
-                      onClick={() => handleViewHistory(mascota)}
-                      className="w-full bg-vet-primary hover:bg-vet-primary-dark"
-                    >
-                      <FileText className="w-4 h-4 mr-2" />
-                      Ver Historial Médico
-                    </Button>
+                    {/* Botón de acción */}
+                    <div className="px-4 pb-4">
+                      <Button
+                        onClick={() => handleViewHistory(mascota)}
+                        className="w-full bg-vet-primary hover:bg-vet-primary-dark text-white"
+                        size="sm"
+                      >
+                        <FileText className="w-4 h-4 mr-2" />
+                        Ver Historial Médico
+                      </Button>
+                    </div>
 
-                    {/* Info adicional */}
-                    <div className="mt-3 text-xs text-vet-gray-500 text-center">
-                      {mascota.citasCount} cita{mascota.citasCount !== 1 ? 's' : ''} registrada{mascota.citasCount !== 1 ? 's' : ''}
+                    {/* Footer con contador de citas */}
+                    <div className="bg-gray-50 px-4 py-2 text-center">
+                      <span className="text-xs text-gray-500">
+                        {mascota.citasCount} cita{mascota.citasCount !== 1 ? 's' : ''} registrada{mascota.citasCount !== 1 ? 's' : ''}
+                      </span>
                     </div>
                   </CardContent>
                 </Card>
