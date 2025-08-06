@@ -88,8 +88,6 @@ export default function HistorialClinicoVeterinario() {
   );
   const [selectedOwner, setSelectedOwner] = useState<any>(null);
   const [selectedPet, setSelectedPet] = useState<any>(null);
-  const [selectedRecord, setSelectedRecord] = useState<any>(null);
-  const [showDetailModal, setShowDetailModal] = useState(false);
 
   // Filter states
   const [searchTerm, setSearchTerm] = useState("");
