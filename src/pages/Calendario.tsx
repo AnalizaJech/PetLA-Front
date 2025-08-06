@@ -714,6 +714,7 @@ export default function Calendario() {
                                           e.stopPropagation();
                                           handleViewDetail(citaData);
                                         }}
+                                        className="w-full sm:w-auto"
                                       >
                                         <Eye className="w-4 h-4 mr-1" />
                                         Detalle de la Cita
