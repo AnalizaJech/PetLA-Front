@@ -1255,7 +1255,7 @@ export default function HistorialClinicoVeterinario() {
           )}
 
           {/* Record Detail Modal */}
-          <Dialog open={showDetailModal} onOpenChange={setShowDetailModal}>
+          <Dialog open={showDetailModal}>
             <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
               <DialogHeader className="sticky top-0 bg-white z-10 pb-4 border-b">
                 <DialogTitle className="flex items-center space-x-2">
