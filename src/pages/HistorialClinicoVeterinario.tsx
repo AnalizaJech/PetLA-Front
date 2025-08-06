@@ -946,24 +946,6 @@ export default function HistorialClinicoVeterinario() {
                                   {mascota.especie} •{" "}
                                   {mascota.raza || "Raza no especificada"}
                                 </p>
-                                {/* Mostrar tipo de servicio de la última visita */}
-                                {ultimaVisita && (
-                                  <div className="mt-1">
-                                    <Badge
-                                      className={getBadgeVariant(
-                                        ultimaVisita.tipo || "consulta",
-                                      )}
-                                      size="sm"
-                                    >
-                                      {getConsultationIcon(
-                                        ultimaVisita.tipo || "consulta",
-                                      )}
-                                      <span className="ml-1">
-                                        {ultimaVisita.tipo || "Consulta"}
-                                      </span>
-                                    </Badge>
-                                  </div>
-                                )}
                               </div>
                             </div>
                             <ChevronRight className="w-5 h-5 text-vet-gray-400" />
