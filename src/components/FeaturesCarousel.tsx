@@ -206,10 +206,10 @@ export default function FeaturesCarousel() {
         </div>
 
         {/* Carousel Container */}
-        <div className="relative">
+        <div className="relative px-4 sm:px-6 md:px-0">
           {/* Main Carousel */}
           <div
-            className={`flex items-center justify-center space-x-4 md:space-x-8 mb-12 cursor-grab ${isDragging ? "cursor-grabbing" : ""}`}
+            className={`flex items-center justify-center gap-4 md:gap-8 mb-12 cursor-grab ${isDragging ? "cursor-grabbing" : ""}`}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
@@ -225,7 +225,7 @@ export default function FeaturesCarousel() {
               return (
                 <Card
                   key={`${feature.id}-${feature.position}`}
-                  className={`transition-all duration-1000 ease-in-out select-none ${
+                  className={`transition-all duration-1000 ease-in-out select-none w-full max-w-sm mx-auto ${
                     isCenter
                       ? "scale-110 shadow-2xl z-10 bg-white border-vet-primary/20"
                       : "scale-95 opacity-70 hover:opacity-90"
