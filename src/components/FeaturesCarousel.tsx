@@ -300,17 +300,22 @@ export default function FeaturesCarousel() {
           </div>
 
           {/* Dots Indicator */}
-          <div className="flex items-center justify-center space-x-2 mb-8">
+          <div className="flex items-center justify-center gap-3 mb-8">
             {features.map((_, index) => (
               <button
                 key={index}
                 onClick={() => goToSlide(index)}
-                className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                  index === currentIndex
-                    ? "bg-vet-primary scale-125"
-                    : "bg-vet-gray-300 hover:bg-vet-primary/50"
-                }`}
-              />
+                className={`p-2 rounded-full transition-all duration-300 touch-manipulation`}
+                style={{ WebkitTapHighlightColor: 'transparent' }}
+              >
+                <div
+                  className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full transition-all duration-300 ${
+                    index === currentIndex
+                      ? "bg-vet-primary scale-125"
+                      : "bg-vet-gray-300 hover:bg-vet-primary/50"
+                  }`}
+                />
+              </button>
             ))}
           </div>
         </div>
