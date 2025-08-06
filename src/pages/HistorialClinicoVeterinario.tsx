@@ -420,6 +420,68 @@ export default function HistorialClinicoVeterinario() {
     );
   };
 
+  // Download clinical history as Excel
+  const downloadHistorialExcel = () => {
+    if (!selectedPet || !historialMascota.length) return;
+
+    const data = historialMascota.map((record) => ({
+      Fecha: new Date(record.fecha).toLocaleDateString("es-ES"),
+      Veterinario: record.veterinario,
+      "Tipo de Consulta": record.tipoConsulta.replace("_", " ").toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+      Motivo: record.motivo || "Consulta médica",
+      Diagnóstico: record.diagnostico || "No especificado",
+      Tratamiento: record.tratamiento || "No especificado",
+      Peso: record.peso || "No registrado",
+      Temperatura: record.temperatura || "No registrada",
+      Estado: record.estado,
+      Observaciones: record.observaciones || "Sin observaciones",
+    }));
+
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Historial Clínico");
+
+    XLSX.writeFile(
+      wb,
+      `historial_${selectedPet.nombre}_${new Date().toISOString().split("T")[0]}.xlsx`,
+    );
+  };
+
+  // Download clinical history as TXT
+  const downloadHistorialTXT = () => {
+    if (!selectedPet || !historialMascota.length) return;
+
+    let content = `HISTORIAL CLÍNICO VETERINARIO\n`;
+    content += `Mascota: ${selectedPet.nombre}\n`;
+    content += `Especie: ${selectedPet.especie}\n`;
+    content += `Propietario: ${selectedOwner?.nombre || "No especificado"}\n`;
+    content += `Fecha de generación: ${new Date().toLocaleDateString("es-ES")}\n`;
+    content += `${"=".repeat(50)}\n\n`;
+
+    historialMascota.forEach((record, index) => {
+      content += `REGISTRO #${index + 1}\n`;
+      content += `Fecha: ${new Date(record.fecha).toLocaleDateString("es-ES")}\n`;
+      content += `Veterinario: ${record.veterinario}\n`;
+      content += `Tipo: ${record.tipoConsulta.replace("_", " ").toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}\n`;
+      content += `Motivo: ${record.motivo || "Consulta médica"}\n`;
+      content += `Diagnóstico: ${record.diagnostico || "No especificado"}\n`;
+      content += `Tratamiento: ${record.tratamiento || "No especificado"}\n`;
+      if (record.peso) content += `Peso: ${record.peso} kg\n`;
+      if (record.temperatura) content += `Temperatura: ${record.temperatura}°C\n`;
+      content += `Estado: ${record.estado}\n`;
+      if (record.observaciones) content += `Observaciones: ${record.observaciones}\n`;
+      content += `${"-".repeat(30)}\n\n`;
+    });
+
+    const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `historial_${selectedPet.nombre}_${new Date().toISOString().split("T")[0]}.txt`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
   // Navigation functions
   const handleSelectOwner = (owner: any) => {
     setSelectedOwner(owner);
