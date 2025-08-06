@@ -36,7 +36,6 @@ import {
   Phone,
   Search,
   Filter,
-  Eye,
   Activity,
   Download,
   X,
