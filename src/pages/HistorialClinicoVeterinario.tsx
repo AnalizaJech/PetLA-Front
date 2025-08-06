@@ -975,13 +975,29 @@ export default function HistorialClinicoVeterinario() {
                 </div>
 
                 {historialMascota.length > 0 && (
-                  <Button
-                    onClick={downloadHistorialPDF}
-                    className="bg-vet-primary hover:bg-vet-primary-dark"
-                  >
-                    <Download className="w-4 h-4 mr-2" />
-                    Descargar PDF
-                  </Button>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button className="bg-vet-primary hover:bg-vet-primary-dark">
+                        <Download className="w-4 h-4 mr-2" />
+                        Descargar Historial
+                        <ChevronDown className="w-4 h-4 ml-2" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem onClick={downloadHistorialPDF}>
+                        <Download className="w-4 h-4 mr-2" />
+                        PDF
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={downloadHistorialExcel}>
+                        <Download className="w-4 h-4 mr-2" />
+                        Excel
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={downloadHistorialTXT}>
+                        <Download className="w-4 h-4 mr-2" />
+                        TXT
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 )}
               </div>
 
