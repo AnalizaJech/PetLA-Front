@@ -192,6 +192,8 @@ export default function Configuracion() {
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoPreviewURL, setPhotoPreviewURL] = useState<string | null>(null);
   const [showPhotoModal, setShowPhotoModal] = useState(false);
+  const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false);
+  const [deleteConfirmationText, setDeleteConfirmationText] = useState("");
 
   // Notifications settings
   const [notificationSettings, setNotificationSettings] = useState(
