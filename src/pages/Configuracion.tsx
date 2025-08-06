@@ -272,49 +272,52 @@ export default function Configuracion() {
     setSavedMessage("");
     setErrorMessage("");
 
-    // Enhanced validation for all required fields
-    if (!profileData.nombre.trim()) {
-      setErrorMessage("El nombre es obligatorio");
+    // Enhanced validation for all required fields with scroll to top
+    const showErrorAndScroll = (message: string) => {
+      setErrorMessage(message);
       setIsLoading(false);
+      // Scroll to top to show error message
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    };
+
+    if (!profileData.nombre.trim()) {
+      showErrorAndScroll("El nombre es obligatorio");
       return;
     }
 
     if (!profileData.apellidos.trim()) {
-      setErrorMessage("Los apellidos son obligatorios");
-      setIsLoading(false);
+      showErrorAndScroll("Los apellidos son obligatorios");
       return;
     }
 
     if (!profileData.username.trim()) {
-      setErrorMessage("El nombre de usuario es obligatorio");
-      setIsLoading(false);
+      showErrorAndScroll("El nombre de usuario es obligatorio");
       return;
     }
 
     if (!profileData.email.trim() || !/\S+@\S+\.\S+/.test(profileData.email)) {
-      setErrorMessage("Por favor ingresa un email válido");
-      setIsLoading(false);
+      showErrorAndScroll("Por favor ingresa un email válido");
       return;
     }
 
     if (!profileData.telefono.trim()) {
-      setErrorMessage("El teléfono es obligatorio");
-      setIsLoading(false);
+      showErrorAndScroll("El teléfono es obligatorio");
       return;
     }
 
     // Additional validation for veterinarians
     if (user?.rol === "veterinario") {
       if (!profileData.especialidad.trim()) {
-        setErrorMessage("La especialidad es obligatoria para veterinarios");
-        setIsLoading(false);
+        showErrorAndScroll("La especialidad es obligatoria para veterinarios");
         return;
       }
       if (!profileData.colegiatura.trim()) {
-        setErrorMessage(
+        showErrorAndScroll(
           "El número de colegiatura es obligatorio para veterinarios",
         );
-        setIsLoading(false);
         return;
       }
     }
