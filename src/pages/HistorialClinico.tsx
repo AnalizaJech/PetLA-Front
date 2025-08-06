@@ -1156,24 +1156,88 @@ export default function HistorialClinico() {
                           <div>
                             {consulta.medicamentos.length > 0 && (
                               <div className="mb-4">
-                                <h4 className="font-semibold text-vet-gray-900 mb-2">
-                                  Medicamentos
+                                <h4 className="font-semibold text-vet-gray-900 mb-2 flex items-center">
+                                  <Pill className="w-4 h-4 mr-2 text-blue-600" />
+                                  Medicamentos Recetados
                                 </h4>
                                 <div className="space-y-2">
                                   {consulta.medicamentos.map((med, index) => (
-                                    <div
-                                      key={index}
-                                      className="bg-vet-gray-50 rounded-lg p-3"
-                                    >
-                                      <div className="flex items-center space-x-2 mb-1">
-                                        <Pill className="w-4 h-4 text-vet-primary" />
-                                        <span className="font-medium">
-                                          {med.nombre}
-                                        </span>
+                                    <div key={index} className="border border-vet-gray-200 rounded-lg p-3">
+                                      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm">
+                                        <div>
+                                          <strong>Medicamento:</strong> {med.nombre}
+                                        </div>
+                                        <div>
+                                          <strong>Dosis:</strong> {med.dosis}
+                                        </div>
+                                        <div>
+                                          <strong>Frecuencia:</strong> {med.frecuencia}
+                                        </div>
+                                        {med.duracion && (
+                                          <div>
+                                            <strong>Duración:</strong> {med.duracion}
+                                          </div>
+                                        )}
+                                        {med.indicaciones && (
+                                          <div className="md:col-span-3">
+                                            <strong>Indicaciones:</strong> {med.indicaciones}
+                                          </div>
+                                        )}
                                       </div>
-                                      <p className="text-sm text-vet-gray-600">
-                                        {med.dosis} • {med.duracion}
-                                      </p>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Vacunas aplicadas */}
+                            {consulta.vacunas && consulta.vacunas.length > 0 && (
+                              <div className="mb-4">
+                                <h4 className="font-semibold text-vet-gray-900 mb-2 flex items-center">
+                                  <Syringe className="w-4 h-4 mr-2 text-green-600" />
+                                  Vacunas Aplicadas
+                                </h4>
+                                <div className="space-y-2">
+                                  {consulta.vacunas.map((vacuna, index) => (
+                                    <div key={index} className="border border-vet-gray-200 rounded-lg p-3">
+                                      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm">
+                                        <div>
+                                          <strong>Vacuna:</strong> {vacuna.nombre}
+                                        </div>
+                                        <div>
+                                          <strong>Lote:</strong> {vacuna.lote}
+                                        </div>
+                                        <div>
+                                          <strong>Próxima Dosis:</strong> {new Date(vacuna.proximaFecha).toLocaleDateString("es-ES")}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Archivos adjuntos */}
+                            {consulta.archivosAdjuntos && consulta.archivosAdjuntos.length > 0 && (
+                              <div className="mb-4">
+                                <h4 className="font-semibold text-vet-gray-900 mb-2 flex items-center">
+                                  <FileText className="w-4 h-4 mr-2 text-vet-gray-600" />
+                                  Archivos Adjuntos
+                                </h4>
+                                <div className="space-y-2">
+                                  {consulta.archivosAdjuntos.map((archivo, index) => (
+                                    <div key={index} className="border border-vet-gray-200 rounded-lg p-3">
+                                      <div className="flex items-center justify-between text-sm">
+                                        <div>
+                                          <strong>{archivo.nombre}</strong>
+                                          <span className="text-vet-gray-600 ml-2">({archivo.tipo})</span>
+                                        </div>
+                                        <a href={archivo.url} target="_blank" rel="noopener noreferrer"
+                                           className="text-vet-primary hover:underline">
+                                          <Download className="w-4 h-4 inline mr-1" />
+                                          Descargar
+                                        </a>
+                                      </div>
                                     </div>
                                   ))}
                                 </div>
