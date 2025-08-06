@@ -594,6 +594,31 @@ export default function MisCitas() {
                                     Eliminar Cita
                                   </Button>
                                 )}
+                                {/* Botones de contacto para citas en validación */}
+                                {cita.estado === "en_validacion" && (
+                                  <>
+                                    <Button
+                                      variant="outline"
+                                      onClick={() => {
+                                        window.open(`tel:+51987654321`, '_self');
+                                      }}
+                                      className="border-green-300 text-green-700 hover:bg-green-50 w-full sm:w-auto"
+                                    >
+                                      <Phone className="w-4 h-4 mr-2" />
+                                      Llamar
+                                    </Button>
+                                    <Button
+                                      variant="outline"
+                                      onClick={() => {
+                                        window.open(`https://wa.me/51987654321?text=Hola, tengo una consulta sobre mi cita con ${cita.mascota} programada para el ${cita.fecha.toLocaleDateString('es-ES')}`, '_blank');
+                                      }}
+                                      className="border-green-300 text-green-700 hover:bg-green-50 w-full sm:w-auto"
+                                    >
+                                      <MessageCircle className="w-4 h-4 mr-2" />
+                                      WhatsApp
+                                    </Button>
+                                  </>
+                                )}
                                 {cita.estado === "atendida" && (
                                   <Button
                                     variant="outline"
