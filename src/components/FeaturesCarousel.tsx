@@ -209,7 +209,7 @@ export default function FeaturesCarousel() {
         <div className="relative">
           {/* Main Carousel */}
           <div
-            className={`flex items-center justify-center space-x-8 mb-12 cursor-grab ${isDragging ? "cursor-grabbing" : ""}`}
+            className={`flex items-center justify-center space-x-4 md:space-x-8 mb-12 cursor-grab ${isDragging ? "cursor-grabbing" : ""}`}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
@@ -229,7 +229,7 @@ export default function FeaturesCarousel() {
                     isCenter
                       ? "scale-110 shadow-2xl z-10 bg-white border-vet-primary/20"
                       : "scale-95 opacity-70 hover:opacity-90"
-                  } ${index === 0 ? "hidden lg:block" : ""} ${index === 2 ? "hidden lg:block" : ""}`}
+                  } ${index === 0 ? "hidden md:block" : ""} ${index === 2 ? "hidden md:block" : ""}`}
                 >
                   <div className="p-8 text-center">
                     <div

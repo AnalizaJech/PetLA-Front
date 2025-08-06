@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import Layout from "@/components/Layout";
 import {
   Mail,
-  Heart,
+  Dog,
   Calendar,
   BookOpen,
   Users,
@@ -67,7 +67,7 @@ export default function NewsletterInfo() {
                 <div className="space-y-6">
                   <div className="flex items-start space-x-4">
                     <div className="w-12 h-12 bg-vet-primary/10 rounded-xl flex items-center justify-center mt-1">
-                      <Heart className="w-6 h-6 text-vet-primary" />
+                      <Dog className="w-6 h-6 text-vet-primary" />
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold text-vet-gray-900 mb-2">
@@ -237,7 +237,7 @@ export default function NewsletterInfo() {
                 <div className="border border-vet-gray-200 rounded-xl p-6 bg-vet-gray-50">
                   <div className="flex items-center space-x-3 mb-4">
                     <div className="w-10 h-10 bg-vet-primary rounded-full flex items-center justify-center">
-                      <Heart className="w-5 h-5 text-white" />
+                      <Dog className="w-5 h-5 text-white" />
                     </div>
                     <div>
                       <h3 className="font-bold text-vet-gray-900">

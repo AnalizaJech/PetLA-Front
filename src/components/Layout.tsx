@@ -17,7 +17,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import {
-  Heart,
+  Dog,
   Calendar,
   Users,
   Settings,
@@ -214,7 +214,7 @@ export default function Layout({
               className="flex items-center space-x-2 hover:opacity-80 transition-opacity duration-200"
             >
               <div className="flex items-center justify-center w-8 h-8 bg-vet-primary rounded-lg">
-                <Heart className="w-5 h-5 text-white" />
+                <Dog className="w-5 h-5 text-white" />
               </div>
               <span className="text-xl font-bold text-vet-gray-900">
                 Pet<span className="text-vet-primary">LA</span>
@@ -631,7 +631,7 @@ export default function Layout({
                       <SheetHeader>
                         <SheetTitle className="flex items-center space-x-2 text-left">
                           <div className="flex items-center justify-center w-8 h-8 bg-vet-primary rounded-lg">
-                            <Heart className="w-5 h-5 text-white" />
+                            <Dog className="w-5 h-5 text-white" />
                           </div>
                           <span className="text-xl font-bold text-vet-gray-900">
                             Pet<span className="text-vet-primary">LA</span>
