@@ -82,7 +82,7 @@ const estadoColors = {
   cancelada: "bg-red-100 text-red-800 border-red-200",
   expirada: "bg-red-100 text-red-800 border-red-200",
   rechazada: "bg-red-100 text-red-800 border-red-200",
-  no_asistio: "bg-orange-100 text-orange-800 border-orange-200",
+  no_asistio: "bg-gray-100 text-gray-800 border-gray-200",
 };
 
 const estadoLabels = {
@@ -115,7 +115,7 @@ const estadoIconsColors = {
   cancelada: "text-red-600",
   expirada: "text-red-600",
   rechazada: "text-red-600",
-  no_asistio: "text-orange-600",
+  no_asistio: "text-gray-600",
 };
 
 export default function MisPacientes() {
