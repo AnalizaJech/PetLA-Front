@@ -427,7 +427,7 @@ export default function DashboardVeterinario() {
                         variant="outline"
                         size="sm"
                         onClick={handleViewFullSchedule}
-                        className="text-blue-600 border-blue-200 hover:bg-blue-50"
+                        className="text-vet-primary border-vet-primary/20 hover:bg-vet-primary/5"
                       >
                         Ver todas
                         <ChevronRight className="w-4 h-4 ml-1" />
