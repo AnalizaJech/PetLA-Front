@@ -1936,11 +1936,8 @@ export default function Configuracion() {
                       Cancelar
                     </Button>
                     <Button
-                      onClick={() => {
-                        // TODO: Implementar función de eliminación
-                        console.log("Eliminar cuenta");
-                      }}
-                      disabled={deleteConfirmationText !== "ELIMINAR MI CUENTA"}
+                      onClick={handleDeleteAccount}
+                      disabled={deleteConfirmationText !== "ELIMINAR MI CUENTA" || isLoading}
                       className="flex-1 bg-red-600 hover:bg-red-700 text-white text-sm h-9 disabled:bg-red-300 disabled:cursor-not-allowed"
                     >
                       <Trash2 className="w-4 h-4 mr-1" />
