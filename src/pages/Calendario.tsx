@@ -888,6 +888,16 @@ export default function Calendario() {
                                       </div>
 
                                       <div className="space-y-2">
+                                        {/* Tipo de servicio */}
+                                        {cita.tipoConsulta && (
+                                          <div className="flex items-center space-x-2">
+                                            <Stethoscope className="w-4 h-4 text-vet-primary" />
+                                            <Badge className="bg-vet-primary/10 text-vet-primary border-vet-primary/20">
+                                              {cita.tipoConsulta}
+                                            </Badge>
+                                          </div>
+                                        )}
+
                                         <div className="flex items-center space-x-2">
                                           <PawPrint className="w-4 h-4 text-vet-gray-600" />
                                           <span>
