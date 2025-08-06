@@ -593,12 +593,15 @@ export default function HistorialClinicoVeterinario() {
       content += `Nombre: ${selectedPet.nombre}\n`;
       content += `Especie: ${selectedPet.especie || "No especificada"}\n`;
       content += `Raza: ${selectedPet.raza || "No especificada"}\n`;
-      content += `Sexo: ${selectedPet.sexo || "No especificado"}\n\n`;
-      content += `INFORMACIÓN DEL PROPIETARIO:\n`;
+      content += `Sexo: ${selectedPet.sexo || "No especificado"}\n`;
+      if (selectedPet.fechaNacimiento) content += `Fecha de Nacimiento: ${new Date(selectedPet.fechaNacimiento).toLocaleDateString("es-ES")}\n`;
+      if (selectedPet.microchip) content += `Microchip: ${selectedPet.microchip}\n`;
+      content += `\nINFORMACIÓN DEL PROPIETARIO:\n`;
       content += `----------------------------\n`;
       content += `Nombre: ${selectedOwner ? `${selectedOwner.nombre} ${selectedOwner.apellidos || ''}` : "No registrado"}\n`;
       if (selectedOwner?.telefono) content += `Teléfono: ${selectedOwner.telefono}\n`;
       if (selectedOwner?.email) content += `Email: ${selectedOwner.email}\n`;
+      if (selectedOwner?.direccion) content += `Dirección: ${selectedOwner.direccion}\n`;
       content += `\nVeterinario: ${user.nombre}\n`;
       content += `Generado el: ${new Date().toLocaleDateString("es-ES")}\n\n`;
 
