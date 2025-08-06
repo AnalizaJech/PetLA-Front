@@ -334,7 +334,7 @@ export default function CitaDetailModal({
                       ? selectedCita.cita.tipoConsulta
                           .replace("_", " ")
                           .replace(/\b\w/g, (l) => l.toUpperCase())
-                      : "Consulta General"}
+                      : "Consulta"}
                   </p>
                 </div>
                 <div>
