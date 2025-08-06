@@ -548,70 +548,19 @@ export default function MisPacientes() {
                 </Alert>
               )}
 
-              {/* Problemas reparables */}
-              {fixableCitas.length > 0 && (
-                <Alert className="border-yellow-200 bg-yellow-50">
-                  <Info className="w-4 h-4 text-yellow-600" />
-                  <AlertDescription className="text-yellow-800">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <strong>
-                          {fixableCitas.length} problemas pueden repararse
-                          automáticamente.
-                        </strong>
-                        <div className="mt-2 text-sm">
-                          {fixableCitas
-                            .slice(0, 2)
-                            .map(({ cita, suggestedFix }) => (
-                              <div key={cita.id}>
-                                • <strong>{cita.mascota}</strong>:{" "}
-                                {suggestedFix}
-                              </div>
-                            ))}
-                          {fixableCitas.length > 2 && (
-                            <div>... y {fixableCitas.length - 2} más</div>
-                          )}
-                        </div>
-                      </div>
-                      <Button
-                        size="sm"
-                        onClick={handleAutoFix}
-                        className="bg-yellow-600 hover:bg-yellow-700 text-white"
-                      >
-                        Reparar Datos
-                      </Button>
-                    </div>
-                  </AlertDescription>
-                </Alert>
-              )}
-
-              {/* Resultados de la reparación automática */}
-              {showAutoFix && autoFixResults && (
-                <Alert className="border-green-200 bg-green-50">
-                  <CheckCircle className="w-4 h-4 text-green-600" />
-                  <AlertDescription className="text-green-800">
+              {/* Información sobre mascotas no registradas - Solo informativo */}
+              {stats.sinMascota > 0 && (
+                <Alert className="border-blue-200 bg-blue-50">
+                  <Info className="w-4 h-4 text-blue-600" />
+                  <AlertDescription className="text-blue-800">
                     <div>
-                      <strong>Reparación completada:</strong>
-                      <div className="mt-2 text-sm space-y-1">
-                        {autoFixResults.newMascotas.length > 0 && (
-                          <div>
-                            {autoFixResults.newMascotas.length} mascotas creadas
-                          </div>
-                        )}
-                        {autoFixResults.errors.length > 0 && (
-                          <div>
-                            {autoFixResults.errors.length} errores encontrados
-                          </div>
-                        )}
+                      <strong>
+                        {stats.sinMascota} citas tienen mascotas que requieren registro.
+                      </strong>
+                      <div className="mt-2 text-sm">
+                        Las mascotas deben ser registradas por sus propietarios antes de la consulta.
+                        Como veterinario, puede proceder con la atención utilizando los datos básicos de la cita.
                       </div>
-                      <Button
-                        variant="link"
-                        size="sm"
-                        onClick={() => setShowAutoFix(false)}
-                        className="text-green-800 p-0 ml-2"
-                      >
-                        Cerrar
-                      </Button>
                     </div>
                   </AlertDescription>
                 </Alert>
