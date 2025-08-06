@@ -329,7 +329,7 @@ export default function DashboardVeterinario() {
                       {stats.citasPendientes} pendientes
                     </p>
                   </div>
-                  <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-vet-primary rounded-xl flex items-center justify-center">
                     <Clock className="w-6 h-6 text-white" />
                   </div>
                 </div>
@@ -739,7 +739,7 @@ Generado automáticamente por PetLA
                   <div className="space-y-4">
                     <div className="flex items-center justify-between p-3 bg-gradient-to-r from-vet-primary/5 to-vet-primary/10 rounded-lg">
                       <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                        <div className="w-8 h-8 bg-vet-primary rounded-lg flex items-center justify-center">
                           <CheckCircle className="w-4 h-4 text-white" />
                         </div>
                         <span className="text-sm font-medium text-blue-900">
