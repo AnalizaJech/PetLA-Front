@@ -673,18 +673,6 @@ export default function Calendario() {
                                         </div>
                                       )}
 
-                                      {/* Estado badge - solo mostrar si NO es atendida */}
-                                      {cita.estado !== "atendida" && (
-                                        <div className="flex justify-end mt-2">
-                                          <Badge
-                                            variant="secondary"
-                                            className={estadoColors[cita.estado]}
-                                          >
-                                            <StatusIcon className="w-3 h-3 mr-1" />
-                                            {estadoLabels[cita.estado]}
-                                          </Badge>
-                                        </div>
-                                      )}
                                     </div>
 
                                     {/* Botones de acción */}
