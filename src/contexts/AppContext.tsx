@@ -1376,16 +1376,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
       const totalRepairs = repairedPets + createdPets + repairedCitas;
       console.log(
-        `🎉 Reparación completada: ${repairedPets} mascotas reparadas, ${createdPets} mascotas creadas, ${repairedCitas} citas reparadas`,
+        `[COMPLETE] Reparación completada: ${repairedPets} mascotas reparadas, ${createdPets} mascotas creadas, ${repairedCitas} citas reparadas`,
       );
 
       if (errors.length > 0) {
-        console.warn("⚠️ Errores durante la reparación:", errors);
+        console.warn("[WARNING] Errores durante la reparación:", errors);
       }
 
       // Force a refresh of localStorage to persist changes
       setTimeout(() => {
-        console.log("🔄 Forzando persistencia de datos reparados...");
+        console.log("[REFRESH] Forzando persistencia de datos reparados...");
       }, 100);
     } catch (error) {
       console.error("❌ Error durante la reparación de datos:", error);
