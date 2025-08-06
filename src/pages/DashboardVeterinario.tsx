@@ -322,7 +322,7 @@ export default function DashboardVeterinario() {
                     <p className="text-sm text-blue-700 font-medium mb-1">
                       Citas Hoy
                     </p>
-                    <p className="text-3xl font-bold text-blue-900">
+                    <p className="text-3xl font-bold text-vet-primary-dark">
                       {stats.citasHoy}
                     </p>
                     <p className="text-xs text-vet-primary mt-1">
@@ -742,11 +742,11 @@ Generado automáticamente por PetLA
                         <div className="w-8 h-8 bg-vet-primary rounded-lg flex items-center justify-center">
                           <CheckCircle className="w-4 h-4 text-white" />
                         </div>
-                        <span className="text-sm font-medium text-blue-900">
+                        <span className="text-sm font-medium text-vet-primary-dark">
                           Citas completadas
                         </span>
                       </div>
-                      <span className="font-bold text-blue-900">
+                      <span className="font-bold text-vet-primary-dark">
                         {stats.citasCompletadas}
                       </span>
                     </div>
