@@ -54,6 +54,7 @@ import {
   Info,
   Activity,
   Heart,
+  Stethoscope,
 } from "lucide-react";
 import {
   enhanceMultipleCitas,
