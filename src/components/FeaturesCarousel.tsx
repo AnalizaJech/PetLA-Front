@@ -100,6 +100,7 @@ export default function FeaturesCarousel() {
   }, [isDragging]);
 
   const goToSlide = (index: number) => {
+    setIsDragging(false); // Stop any dragging state
     setCurrentIndex(index);
   };
 
