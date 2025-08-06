@@ -356,9 +356,9 @@ export default function CitaAttendModal({
                   Signos Vitales
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                  <div>
-                    <Label htmlFor="peso" className="flex items-center">
-                      <Weight className="w-3 h-3 mr-1" />
+                  <div className="bg-white rounded-md p-3 border border-blue-100">
+                    <Label htmlFor="peso" className="flex items-center text-sm font-medium text-blue-700 mb-2">
+                      <Weight className="w-4 h-4 mr-2 text-blue-600" />
                       Peso (kg)
                     </Label>
                     <Input
@@ -368,11 +368,12 @@ export default function CitaAttendModal({
                         setFormData({ ...formData, peso: e.target.value })
                       }
                       placeholder="Ej: 5.2"
+                      className="border-blue-200 focus:border-blue-500 focus:ring-blue-500"
                     />
                   </div>
-                  <div>
-                    <Label htmlFor="temperatura" className="flex items-center">
-                      <Thermometer className="w-3 h-3 mr-1" />
+                  <div className="bg-white rounded-md p-3 border border-blue-100">
+                    <Label htmlFor="temperatura" className="flex items-center text-sm font-medium text-blue-700 mb-2">
+                      <Thermometer className="w-4 h-4 mr-2 text-red-500" />
                       Temperatura (°C)
                     </Label>
                     <Input
@@ -385,10 +386,14 @@ export default function CitaAttendModal({
                         })
                       }
                       placeholder="Ej: 38.5"
+                      className="border-blue-200 focus:border-blue-500 focus:ring-blue-500"
                     />
                   </div>
-                  <div>
-                    <Label htmlFor="presionArterial">Presión Arterial</Label>
+                  <div className="bg-white rounded-md p-3 border border-blue-100">
+                    <Label htmlFor="presionArterial" className="flex items-center text-sm font-medium text-blue-700 mb-2">
+                      <Activity className="w-4 h-4 mr-2 text-green-500" />
+                      Presión Arterial
+                    </Label>
                     <Input
                       id="presionArterial"
                       value={formData.presionArterial}
@@ -399,10 +404,12 @@ export default function CitaAttendModal({
                         })
                       }
                       placeholder="Ej: 120/80"
+                      className="border-blue-200 focus:border-blue-500 focus:ring-blue-500"
                     />
                   </div>
-                  <div>
-                    <Label htmlFor="frecuenciaCardiaca">
+                  <div className="bg-white rounded-md p-3 border border-blue-100">
+                    <Label htmlFor="frecuenciaCardiaca" className="flex items-center text-sm font-medium text-blue-700 mb-2">
+                      <Heart className="w-4 h-4 mr-2 text-red-500" />
                       Frecuencia Cardíaca (bpm)
                     </Label>
                     <Input
@@ -415,6 +422,7 @@ export default function CitaAttendModal({
                         })
                       }
                       placeholder="Ej: 80"
+                      className="border-blue-200 focus:border-blue-500 focus:ring-blue-500"
                     />
                   </div>
                 </div>
