@@ -881,12 +881,12 @@ export default function HistorialClinicoVeterinario() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="todos">Todos los tipos</SelectItem>
-                      <SelectItem value="consulta">Consulta</SelectItem>
+                      <SelectItem value="consulta">Consulta General</SelectItem>
                       <SelectItem value="vacunacion">Vacunación</SelectItem>
                       <SelectItem value="emergencia">Emergencia</SelectItem>
                       <SelectItem value="cirugia">Cirugía</SelectItem>
-                      <SelectItem value="control">Control</SelectItem>
                       <SelectItem value="grooming">Grooming</SelectItem>
+                      <SelectItem value="diagnostico">Diagnóstico</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
