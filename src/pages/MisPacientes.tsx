@@ -892,7 +892,7 @@ export default function MisPacientes() {
                             }}
                             className="h-9 w-full"
                           >
-                            <FileText className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                            <FileText className="w-4 h-4 mr-2" />
                             <span className="truncate">Historial</span>
                           </Button>
                         </div>
