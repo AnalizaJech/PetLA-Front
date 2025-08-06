@@ -22,6 +22,7 @@ import {
   Eye,
   Activity,
   ChevronDown,
+  CheckCircle,
 } from "lucide-react";
 import {
   DropdownMenu,
