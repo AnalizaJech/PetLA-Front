@@ -681,9 +681,9 @@ export default function HistorialClinico() {
         addText(`Consulta #${index + 1}`, 12, "bold");
         addText(`Fecha: ${consulta.fecha.toLocaleDateString("es-ES")}`);
         addText(`Veterinario: ${consulta.veterinario}`);
-        addText(`Motivo: ${consulta.motivo}`);
-        addText(`Diagnóstico: ${consulta.diagnostico}`);
-        addText(`Tratamiento: ${consulta.tratamiento}`);
+        if (consulta.motivo) addText(`Motivo: ${consulta.motivo}`);
+        if (consulta.diagnostico) addText(`Diagnóstico: ${consulta.diagnostico}`);
+        if (consulta.tratamiento) addText(`Tratamiento: ${consulta.tratamiento}`);
 
         if (consulta.medicamentos && consulta.medicamentos.length > 0) {
           addText("Medicamentos:", 11, "bold");
