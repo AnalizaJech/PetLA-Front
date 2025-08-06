@@ -39,6 +39,7 @@ import {
   AlertCircle,
   Trash2,
   Download,
+  MessageCircle,
 } from "lucide-react";
 
 const estadoColors = {
