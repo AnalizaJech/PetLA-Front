@@ -644,7 +644,7 @@ export default function Calendario() {
                                       <div className="flex flex-wrap items-center gap-1 sm:gap-2 ml-auto">
                                         <Badge
                                           variant="secondary"
-                                          className={estadoColors[cita.estado]}
+                                          className={`${estadoColors[cita.estado]} hover:bg-inherit`}
                                         >
                                           <StatusIcon
                                             className={`w-3 h-3 mr-1 ${estadoIconsColors[cita.estado]}`}
@@ -847,7 +847,7 @@ export default function Calendario() {
                                         {cita.mascota}
                                       </h4>
                                       <Badge
-                                        className={estadoColors[cita.estado]}
+                                        className={`${estadoColors[cita.estado]} hover:bg-inherit`}
                                       >
                                         <StatusIcon
                                           className={`w-3 h-3 mr-1 ${estadoIconsColors[cita.estado]}`}
