@@ -602,7 +602,7 @@ export default function MisCitas() {
                                       onClick={() => {
                                         window.open(`tel:+51987654321`, '_self');
                                       }}
-                                      className="border-green-300 text-green-700 hover:bg-green-50 w-full sm:w-auto"
+                                      className="border-blue-300 text-blue-700 hover:bg-blue-50 hover:border-blue-400 transition-all duration-200 w-full sm:w-auto shadow-sm"
                                     >
                                       <Phone className="w-4 h-4 mr-2" />
                                       Llamar
@@ -612,7 +612,7 @@ export default function MisCitas() {
                                       onClick={() => {
                                         window.open(`https://wa.me/51987654321?text=Hola, tengo una consulta sobre mi cita con ${cita.mascota} programada para el ${cita.fecha.toLocaleDateString('es-ES')}`, '_blank');
                                       }}
-                                      className="border-green-300 text-green-700 hover:bg-green-50 w-full sm:w-auto"
+                                      className="border-green-400 text-green-700 hover:bg-green-50 hover:border-green-500 bg-green-25 transition-all duration-200 w-full sm:w-auto shadow-sm"
                                     >
                                       <MessageCircle className="w-4 h-4 mr-2" />
                                       WhatsApp
