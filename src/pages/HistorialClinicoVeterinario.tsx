@@ -977,7 +977,7 @@ export default function HistorialClinicoVeterinario() {
                             <div className="flex items-center justify-between pt-2 border-t border-vet-gray-200">
                               <div className="flex items-center space-x-1 text-xs text-vet-gray-500">
                                 <User className="w-3 h-3" />
-                                <span>Dr. {record.veterinario}</span>
+                                <span>{record.veterinario}</span>
                               </div>
                             </div>
                           </div>
@@ -1047,7 +1047,7 @@ export default function HistorialClinicoVeterinario() {
                           <strong className="text-vet-gray-900">Veterinario:</strong>
                           <p className="text-vet-gray-700 flex items-center">
                             <User className="w-4 h-4 mr-1" />
-                            Dr. {selectedRecord.veterinario}
+                            {selectedRecord.veterinario}
                           </p>
                         </div>
                         {selectedRecord.motivo && (
