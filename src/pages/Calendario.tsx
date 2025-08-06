@@ -737,6 +737,7 @@ export default function Calendario() {
                                             );
                                           }
                                         }}
+                                        className="w-full sm:w-auto"
                                       >
                                         <FileText className="w-4 h-4 mr-1" />
                                         Ver Historial
