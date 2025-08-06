@@ -297,8 +297,19 @@ export default function CitaAttendModal({
     },
   };
 
-  const serviceConfig =
-    serviceConfigs[cita.tipoConsulta] || serviceConfigs.consulta_general;
+  // Mapeo de nombres de servicios a claves de configuración
+  const serviceNameToKey = {
+    "Consulta General": "consulta_general",
+    "Vacunación": "vacunacion",
+    "Emergencia": "emergencia",
+    "Grooming": "grooming",
+    "Cirugía": "cirugia",
+    "Diagnóstico": "diagnostico"
+  };
+
+  // Buscar configuración por nombre o por clave directa
+  const serviceKey = serviceNameToKey[cita.tipoConsulta] || cita.tipoConsulta;
+  const serviceConfig = serviceConfigs[serviceKey] || serviceConfigs.consulta_general;
   const ServiceIcon = serviceConfig.icon;
 
   return (
