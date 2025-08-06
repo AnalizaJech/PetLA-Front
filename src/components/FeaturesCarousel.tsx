@@ -115,6 +115,7 @@ export default function FeaturesCarousel() {
     // Ensure index is valid
     const validIndex = Math.max(0, Math.min(index, features.length - 1));
     setIsDragging(false); // Stop any dragging state
+    setIsManualNavigation(true); // Pause autoplay temporarily
     setCurrentIndex(validIndex);
   };
 
