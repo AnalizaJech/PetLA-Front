@@ -159,16 +159,22 @@ export default function MisPacientes() {
 
     enhancedCitas.forEach(({ cita, mascota, propietario }) => {
       const mascotaKey = mascota?.id || cita.mascota.toLowerCase();
-      
+
       if (!mascotasMap.has(mascotaKey)) {
         // Encontrar próxima cita
         const proximasCitas = enhancedCitas
-          .filter(({ cita: c, mascota: m }) => 
-            (m?.id === mascota?.id || c.mascota.toLowerCase() === cita.mascota.toLowerCase()) &&
-            new Date(c.fecha) > new Date() &&
-            c.estado === "aceptada"
+          .filter(
+            ({ cita: c, mascota: m }) =>
+              (m?.id === mascota?.id ||
+                c.mascota.toLowerCase() === cita.mascota.toLowerCase()) &&
+              new Date(c.fecha) > new Date() &&
+              c.estado === "aceptada",
           )
-          .sort((a, b) => new Date(a.cita.fecha).getTime() - new Date(b.cita.fecha).getTime());
+          .sort(
+            (a, b) =>
+              new Date(a.cita.fecha).getTime() -
+              new Date(b.cita.fecha).getTime(),
+          );
 
         mascotasMap.set(mascotaKey, {
           id: mascota?.id || `temp-${cita.mascota}`,
@@ -178,9 +184,11 @@ export default function MisPacientes() {
           propietario: propietario,
           proximaCita: proximasCitas[0]?.cita || null,
           ultimaVisita: cita,
-          citasCount: enhancedCitas.filter(({ cita: c, mascota: m }) => 
-            m?.id === mascota?.id || c.mascota.toLowerCase() === cita.mascota.toLowerCase()
-          ).length
+          citasCount: enhancedCitas.filter(
+            ({ cita: c, mascota: m }) =>
+              m?.id === mascota?.id ||
+              c.mascota.toLowerCase() === cita.mascota.toLowerCase(),
+          ).length,
         });
       }
     });
@@ -194,19 +202,24 @@ export default function MisPacientes() {
 
     if (searchTerm.trim()) {
       const search = searchTerm.toLowerCase();
-      filtered = filtered.filter(mascota =>
-        mascota.nombre.toLowerCase().includes(search) ||
-        mascota.propietario?.nombre.toLowerCase().includes(search) ||
-        mascota.especie.toLowerCase().includes(search)
+      filtered = filtered.filter(
+        (mascota) =>
+          mascota.nombre.toLowerCase().includes(search) ||
+          mascota.propietario?.nombre.toLowerCase().includes(search) ||
+          mascota.especie.toLowerCase().includes(search),
       );
     }
 
     if (filterOwner !== "todos") {
-      filtered = filtered.filter(mascota => mascota.propietario?.id === filterOwner);
+      filtered = filtered.filter(
+        (mascota) => mascota.propietario?.id === filterOwner,
+      );
     }
 
     if (filterEspecie !== "todos") {
-      filtered = filtered.filter(mascota => mascota.especie === filterEspecie);
+      filtered = filtered.filter(
+        (mascota) => mascota.especie === filterEspecie,
+      );
     }
 
     return filtered.sort((a, b) => a.nombre.localeCompare(b.nombre));
@@ -390,7 +403,9 @@ export default function MisPacientes() {
                   <div className="flex items-center space-x-2 text-sm text-vet-gray-600">
                     <Filter className="w-4 h-4" />
                     <span>
-                      {filteredMascotas.length} mascota{filteredMascotas.length !== 1 ? "s" : ""} encontrada{filteredMascotas.length !== 1 ? "s" : ""}
+                      {filteredMascotas.length} mascota
+                      {filteredMascotas.length !== 1 ? "s" : ""} encontrada
+                      {filteredMascotas.length !== 1 ? "s" : ""}
                     </span>
                   </div>
                   <Button
@@ -483,12 +498,19 @@ export default function MisPacientes() {
                         <span className="text-sm text-gray-600">
                           {mascota.proximaCita ? (
                             <>
-                              Próxima: {new Date(mascota.proximaCita.fecha).toLocaleDateString("es-ES", {
+                              Próxima:{" "}
+                              {new Date(
+                                mascota.proximaCita.fecha,
+                              ).toLocaleDateString("es-ES", {
                                 day: "numeric",
-                                month: "short"
-                              })} a las {new Date(mascota.proximaCita.fecha).toLocaleTimeString("es-ES", {
+                                month: "short",
+                              })}{" "}
+                              a las{" "}
+                              {new Date(
+                                mascota.proximaCita.fecha,
+                              ).toLocaleTimeString("es-ES", {
                                 hour: "2-digit",
-                                minute: "2-digit"
+                                minute: "2-digit",
                               })}
                             </>
                           ) : (
@@ -513,7 +535,9 @@ export default function MisPacientes() {
                     {/* Footer con contador de citas */}
                     <div className="bg-gray-50 px-4 py-2 text-center">
                       <span className="text-xs text-gray-500">
-                        {mascota.citasCount} cita{mascota.citasCount !== 1 ? 's' : ''} registrada{mascota.citasCount !== 1 ? 's' : ''}
+                        {mascota.citasCount} cita
+                        {mascota.citasCount !== 1 ? "s" : ""} registrada
+                        {mascota.citasCount !== 1 ? "s" : ""}
                       </span>
                     </div>
                   </CardContent>

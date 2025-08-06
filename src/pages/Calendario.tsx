@@ -646,7 +646,9 @@ export default function Calendario() {
                                           variant="secondary"
                                           className={estadoColors[cita.estado]}
                                         >
-                                          <StatusIcon className={`w-3 h-3 mr-1 ${estadoIconsColors[cita.estado]}`} />
+                                          <StatusIcon
+                                            className={`w-3 h-3 mr-1 ${estadoIconsColors[cita.estado]}`}
+                                          />
                                           {estadoLabels[cita.estado]}
                                         </Badge>
                                       </div>
@@ -847,7 +849,9 @@ export default function Calendario() {
                                       <Badge
                                         className={estadoColors[cita.estado]}
                                       >
-                                        <StatusIcon className={`w-3 h-3 mr-1 ${estadoIconsColors[cita.estado]}`} />
+                                        <StatusIcon
+                                          className={`w-3 h-3 mr-1 ${estadoIconsColors[cita.estado]}`}
+                                        />
                                         {estadoLabels[cita.estado]}
                                       </Badge>
                                       {isToday && (
