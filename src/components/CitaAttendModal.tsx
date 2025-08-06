@@ -630,7 +630,7 @@ export default function CitaAttendModal({
                       })
                     }
                     placeholder="Observaciones adicionales sobre la consulta..."
-                    rows={4}
+                    className="h-32 resize-none overflow-y-auto"
                   />
                 </div>
                 <div>
