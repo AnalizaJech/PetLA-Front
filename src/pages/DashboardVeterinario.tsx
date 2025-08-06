@@ -393,7 +393,7 @@ export default function DashboardVeterinario() {
                       Requieren atención
                     </p>
                   </div>
-                  <div className="w-12 h-12 bg-amber-500 rounded-xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-vet-warning rounded-xl flex items-center justify-center">
                     <Activity className="w-6 h-6 text-white" />
                   </div>
                 </div>
@@ -767,7 +767,7 @@ Generado automáticamente por PetLA
 
                     <div className="flex items-center justify-between p-3 bg-gradient-to-r from-vet-warning/5 to-vet-warning/10 rounded-lg">
                       <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center">
+                        <div className="w-8 h-8 bg-vet-warning rounded-lg flex items-center justify-center">
                           <Star className="w-4 h-4 text-white" />
                         </div>
                         <span className="text-sm font-medium text-amber-900">
