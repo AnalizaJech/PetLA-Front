@@ -598,7 +598,7 @@ export default function HistorialClinicoVeterinario() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="todos">Todos los tipos</SelectItem>
-                      <SelectItem value="consulta">Consulta general</SelectItem>
+                      <SelectItem value="consulta">Consulta</SelectItem>
                       <SelectItem value="vacunacion">Vacunación</SelectItem>
                       <SelectItem value="emergencia">Emergencia</SelectItem>
                       <SelectItem value="cirugia">Cirugía</SelectItem>
@@ -897,7 +897,7 @@ export default function HistorialClinicoVeterinario() {
                         <div className="mt-1">
                           <Badge className={getBadgeVariant(historialMascota[0].tipo || "consulta")}>
                             <Stethoscope className="w-3 h-3 mr-1" />
-                            {historialMascota[0].tipo || "Consulta General"}
+                            {historialMascota[0].tipo || "Consulta"}
                           </Badge>
                         </div>
                       )}
@@ -1071,7 +1071,7 @@ export default function HistorialClinicoVeterinario() {
                           <strong className="text-vet-gray-900">Tipo de Servicio:</strong>
                           <div className="mt-1">
                             <Badge className={getBadgeVariant(selectedRecord.tipo || "consulta")}>
-                              {selectedRecord.tipo || "Consulta General"}
+                              {selectedRecord.tipo || selectedRecord.tipoConsulta || "Consulta"}
                             </Badge>
                           </div>
                         </div>
