@@ -274,46 +274,6 @@ export default function MisPacientes() {
     };
   }, [enhancedCitas, validateDataRelationships, misCitas, user?.nombre]);
 
-  // Enhanced auto-fix handler using context repair functionality
-  const handleAutoFix = () => {
-    try {
-      console.log("🔧 Iniciando reparación automática de datos...");
-      const results = repairDataIntegrity();
-
-      // Create a compatible results object for UI display
-      const compatibleResults = {
-        newMascotas: Array.from({ length: results.createdPets }, (_, i) => ({
-          nombre: `Mascota ${i + 1}`,
-        })),
-        errors: results.errors,
-      };
-
-      setAutoFixResults(compatibleResults);
-
-      console.log("🔧 Resultados de reparación automática:", results);
-
-      if (results.createdPets > 0) {
-        console.log(`➕ ${results.createdPets} mascotas creadas`);
-      }
-
-      if (results.repairedPets > 0) {
-        console.log(`🔧 ${results.repairedPets} mascotas reparadas`);
-      }
-
-      if (results.errors.length > 0) {
-        console.warn("⚠️ Errores durante la reparación:", results.errors);
-      }
-
-      setShowAutoFix(true);
-
-      // Refresh the page after a delay to show the repaired data
-      setTimeout(() => {
-        window.location.reload();
-      }, 3000);
-    } catch (error) {
-      console.error("Error aplicando correcciones automáticas:", error);
-    }
-  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
