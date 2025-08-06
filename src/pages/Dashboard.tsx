@@ -313,7 +313,7 @@ export default function Dashboard() {
                               e.target.value,
                             )
                           }
-                          placeholder="Descripci��n del servicio..."
+                          placeholder="Descripción del servicio..."
                           rows={2}
                         />
                       </div>
@@ -745,7 +745,7 @@ function AdminDashboard({
                             className={`w-4 h-4 ${
                               activity.color === "green"
                                 ? "text-green-600"
-                                : "text-indigo-600"
+                                : "text-vet-primary"
                             }`}
                           />
                         )}
@@ -754,7 +754,7 @@ function AdminDashboard({
                             className={`w-4 h-4 ${
                               activity.color === "blue"
                                 ? "text-blue-600"
-                                : "text-indigo-600"
+                                : "text-vet-primary"
                             }`}
                           />
                         )}
@@ -772,7 +772,7 @@ function AdminDashboard({
                             className={`w-4 h-4 ${
                               activity.color === "purple"
                                 ? "text-purple-600"
-                                : "text-indigo-600"
+                                : "text-vet-primary"
                             }`}
                           />
                         )}
