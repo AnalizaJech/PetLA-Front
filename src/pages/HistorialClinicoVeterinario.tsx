@@ -1658,8 +1658,9 @@ export default function HistorialClinicoVeterinario() {
                   {/* Botón Cerrar */}
                   <div className="flex justify-end pt-6 border-t border-vet-gray-200">
                     <Button
+                      variant="outline"
                       onClick={() => setShowDetailModal(false)}
-                      className="bg-vet-primary hover:bg-vet-primary-dark"
+                      className="border-vet-gray-300 hover:bg-vet-gray-50"
                     >
                       Cerrar
                     </Button>
