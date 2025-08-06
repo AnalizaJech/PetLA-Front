@@ -326,22 +326,50 @@ export default function HistorialClinicoVeterinario() {
         yPosition += 15;
 
         filteredHistory.forEach((record, index) => {
-          if (yPosition > 250) {
+          if (yPosition > 220) {
             doc.addPage();
             yPosition = 30;
           }
 
-          doc.setFontSize(11);
+          // Encabezado del registro
+          doc.setFontSize(12);
           doc.setFont("helvetica", "bold");
           doc.text(
             `${index + 1}. ${new Date(record.fecha).toLocaleDateString("es-ES")} - ${record.tipo || "Consulta"}`,
             margin,
             yPosition,
           );
-          yPosition += 10;
+          yPosition += 15;
 
           doc.setFont("helvetica", "normal");
+          doc.setFontSize(10);
 
+          // Información básica
+          if (record.motivo) {
+            const motivoLines = doc.splitTextToSize(
+              `Motivo de Consulta: ${record.motivo}`,
+              pageWidth - 2 * margin,
+            );
+            motivoLines.forEach((line: string) => {
+              doc.text(line, margin + 5, yPosition);
+              yPosition += 5;
+            });
+            yPosition += 3;
+          }
+
+          // Signos vitales
+          let vitalSigns = [];
+          if (record.peso) vitalSigns.push(`Peso: ${record.peso} kg`);
+          if (record.temperatura) vitalSigns.push(`Temperatura: ${record.temperatura}°C`);
+          if (record.presionArterial) vitalSigns.push(`P.A.: ${record.presionArterial}`);
+          if (record.frecuenciaCardiaca) vitalSigns.push(`F.C.: ${record.frecuenciaCardiaca} bpm`);
+
+          if (vitalSigns.length > 0) {
+            doc.text(`Signos Vitales: ${vitalSigns.join(", ")}`, margin + 5, yPosition);
+            yPosition += 8;
+          }
+
+          // Diagnóstico
           if (record.diagnostico) {
             const diagnosticoLines = doc.splitTextToSize(
               `Diagnóstico: ${record.diagnostico}`,
@@ -349,11 +377,12 @@ export default function HistorialClinicoVeterinario() {
             );
             diagnosticoLines.forEach((line: string) => {
               doc.text(line, margin + 5, yPosition);
-              yPosition += 6;
+              yPosition += 5;
             });
             yPosition += 3;
           }
 
+          // Tratamiento
           if (record.tratamiento) {
             const tratamientoLines = doc.splitTextToSize(
               `Tratamiento: ${record.tratamiento}`,
@@ -361,11 +390,59 @@ export default function HistorialClinicoVeterinario() {
             );
             tratamientoLines.forEach((line: string) => {
               doc.text(line, margin + 5, yPosition);
-              yPosition += 6;
+              yPosition += 5;
             });
             yPosition += 3;
           }
 
+          // Medicamentos
+          if (record.medicamentos && record.medicamentos.length > 0) {
+            doc.text(`Medicamentos:`, margin + 5, yPosition);
+            yPosition += 6;
+            record.medicamentos.forEach((med, medIndex) => {
+              const medText = `${medIndex + 1}. ${med.nombre} - ${med.dosis} - ${med.frecuencia}${med.duracion ? ` (${med.duracion})` : ''}`;
+              const medLines = doc.splitTextToSize(medText, pageWidth - 2 * margin - 10);
+              medLines.forEach((line: string) => {
+                doc.text(line, margin + 10, yPosition);
+                yPosition += 5;
+              });
+              if (med.indicaciones) {
+                const instrLines = doc.splitTextToSize(
+                  `   Indicaciones: ${med.indicaciones}`,
+                  pageWidth - 2 * margin - 15
+                );
+                instrLines.forEach((line: string) => {
+                  doc.text(line, margin + 15, yPosition);
+                  yPosition += 5;
+                });
+              }
+            });
+            yPosition += 3;
+          }
+
+          // Servicios adicionales
+          if (record.servicios && record.servicios.length > 0) {
+            doc.text(`Servicios Realizados:`, margin + 5, yPosition);
+            yPosition += 6;
+            record.servicios.forEach((servicio, servIndex) => {
+              const servText = `${servIndex + 1}. ${servicio.nombre}${servicio.precio ? ` - $${servicio.precio}` : ''}`;
+              doc.text(servText, margin + 10, yPosition);
+              yPosition += 5;
+              if (servicio.descripcion) {
+                const descLines = doc.splitTextToSize(
+                  `   ${servicio.descripcion}`,
+                  pageWidth - 2 * margin - 15
+                );
+                descLines.forEach((line: string) => {
+                  doc.text(line, margin + 15, yPosition);
+                  yPosition += 5;
+                });
+              }
+            });
+            yPosition += 3;
+          }
+
+          // Observaciones
           if (record.observaciones) {
             const observacionesLines = doc.splitTextToSize(
               `Observaciones: ${record.observaciones}`,
@@ -373,11 +450,23 @@ export default function HistorialClinicoVeterinario() {
             );
             observacionesLines.forEach((line: string) => {
               doc.text(line, margin + 5, yPosition);
-              yPosition += 6;
+              yPosition += 5;
             });
+            yPosition += 3;
           }
 
-          yPosition += 10;
+          // Próxima cita
+          if (record.proximaVisita || record.proximaCita) {
+            const fechaProxima = record.proximaVisita || record.proximaCita;
+            doc.text(
+              `Próxima Cita: ${new Date(fechaProxima).toLocaleDateString("es-ES")}`,
+              margin + 5,
+              yPosition
+            );
+            yPosition += 8;
+          }
+
+          yPosition += 15; // Espacio entre registros
         });
       }
 
