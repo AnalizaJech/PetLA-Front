@@ -1529,11 +1529,61 @@ export default function HistorialClinicoVeterinario() {
                               </div>
                             )}
 
+                            {/* Archivos adjuntos */}
+                            {record.archivosAdjuntos && record.archivosAdjuntos.length > 0 && (
+                              <div>
+                                <h5 className="font-medium text-vet-gray-900 mb-2 flex items-center">
+                                  <FileText className="w-4 h-4 mr-2 text-vet-gray-600" />
+                                  Archivos Adjuntos:
+                                </h5>
+                                <div className="space-y-2 ml-6">
+                                  {record.archivosAdjuntos.map((archivo, index) => (
+                                    <div key={index} className="border border-vet-gray-200 rounded-lg p-3">
+                                      <div className="flex items-center justify-between text-sm">
+                                        <div>
+                                          <strong>{archivo.nombre}</strong>
+                                          <span className="text-vet-gray-600 ml-2">({archivo.tipo})</span>
+                                        </div>
+                                        <a href={archivo.url} target="_blank" rel="noopener noreferrer"
+                                           className="text-vet-primary hover:underline">
+                                          <Download className="w-4 h-4 inline mr-1" />
+                                          Descargar
+                                        </a>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
                             <div className="flex items-center justify-between pt-3 border-t border-vet-gray-200">
                               <div className="flex items-center space-x-1 text-xs text-vet-gray-500">
                                 <User className="w-3 h-3" />
                                 <span>Dr. {record.veterinario}</span>
                               </div>
+                              {/* Estado del registro */}
+                              {record.estado && (
+                                <div className="flex items-center space-x-1">
+                                  {record.estado === "completada" && (
+                                    <div className="flex items-center space-x-1 text-xs text-green-600">
+                                      <CheckCircle className="w-3 h-3" />
+                                      <span>Completada</span>
+                                    </div>
+                                  )}
+                                  {record.estado === "pendiente_seguimiento" && (
+                                    <div className="flex items-center space-x-1 text-xs text-yellow-600">
+                                      <Clock className="w-3 h-3" />
+                                      <span>Pendiente de Seguimiento</span>
+                                    </div>
+                                  )}
+                                  {record.estado === "requiere_atencion" && (
+                                    <div className="flex items-center space-x-1 text-xs text-red-600">
+                                      <AlertCircle className="w-3 h-3" />
+                                      <span>Requiere Atención</span>
+                                    </div>
+                                  )}
+                                </div>
+                              )}
                             </div>
                           </div>
                         </CardContent>
