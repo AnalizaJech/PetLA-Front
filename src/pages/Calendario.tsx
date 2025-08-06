@@ -619,7 +619,7 @@ export default function Calendario() {
                                     <div className="flex items-center justify-between mb-3">
                                       <div className="flex items-center space-x-2">
                                         <Clock className="w-4 h-4 text-vet-primary" />
-                                        <span className="font-bold text-vet-primary">
+                                        <span className="font-bold text-vet-primary text-sm sm:text-base">
                                           {new Date(
                                             cita.fecha,
                                           ).toLocaleTimeString("es-ES", {
