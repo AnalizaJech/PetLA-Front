@@ -912,6 +912,102 @@ export default function HistorialClinico() {
                 ))}
               </div>
             )}
+
+            {/* Summary Panel - only show for clients */}
+            {user?.rol !== "veterinario" && availableMascotas.length > 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <Card>
+                  <CardContent className="p-4">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 bg-vet-primary/10 rounded-lg flex items-center justify-center">
+                        <PawPrint className="w-5 h-5 text-vet-primary" />
+                      </div>
+                      <div>
+                        <p className="text-sm text-vet-gray-600">Total Mascotas</p>
+                        <p className="text-xl font-bold text-vet-gray-900">
+                          {availableMascotas.length}
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardContent className="p-4">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                        <CheckCircle className="w-5 h-5 text-green-600" />
+                      </div>
+                      <div>
+                        <p className="text-sm text-vet-gray-600">Servicios Confirmados</p>
+                        <p className="text-xl font-bold text-vet-gray-900">
+                          {(() => {
+                            // Count all attended appointments (admin confirmed services)
+                            const serviciosConfirmados = citas.filter(
+                              (cita) =>
+                                availableMascotas.some((m) => m.nombre === cita.mascota) &&
+                                cita.estado === "atendida"
+                            ).length;
+                            return serviciosConfirmados;
+                          })()}
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardContent className="p-4">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <Calendar className="w-5 h-5 text-blue-600" />
+                      </div>
+                      <div>
+                        <p className="text-sm text-vet-gray-600">Última Visita</p>
+                        <p className="text-sm font-medium text-vet-gray-900">
+                          {(() => {
+                            const ultimaVisita = citas
+                              .filter(
+                                (cita) =>
+                                  availableMascotas.some((m) => m.nombre === cita.mascota) &&
+                                  cita.estado === "atendida"
+                              )
+                              .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())[0];
+                            return ultimaVisita
+                              ? new Date(ultimaVisita.fecha).toLocaleDateString("es-ES")
+                              : "Sin visitas";
+                          })()}
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardContent className="p-4">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
+                        <Activity className="w-5 h-5 text-orange-600" />
+                      </div>
+                      <div>
+                        <p className="text-sm text-vet-gray-600">En Proceso</p>
+                        <p className="text-xl font-bold text-vet-gray-900">
+                          {(() => {
+                            // Count pending appointments
+                            const citasEnProceso = citas.filter(
+                              (cita) =>
+                                availableMascotas.some((m) => m.nombre === cita.mascota) &&
+                                (cita.estado === "aceptada" || cita.estado === "en_validacion")
+                            ).length;
+                            return citasEnProceso;
+                          })()}
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
           </div>
 
           {/* Mostrar mensaje si no hay mascotas disponibles */}
