@@ -78,7 +78,7 @@ const currentStack = {
   // Formularios y Validación
   forms: "React Hook Form 7.53.0",
   validation: "Zod 3.23.8",
-  
+
   // Testing y Desarrollo
   testing: "Vitest 3.1.4",
   typeChecking: "TypeScript strict mode",
@@ -168,6 +168,7 @@ graph TD
 ### 🟦 Cliente (Propietario de Mascotas)
 
 **Funcionalidades principales:**
+
 - ✅ Registro y gestión de mascotas con fotos
 - ✅ Agendamiento autónomo de citas médicas
 - ✅ Subida y gestión de comprobantes de pago
@@ -176,6 +177,7 @@ graph TD
 - ✅ Sistema de notificaciones personalizadas
 
 **Rutas específicas:**
+
 - `/dashboard` - Dashboard personalizado del cliente
 - `/mascotas` / `/mis-mascotas` - Gestión de mascotas
 - `/mis-citas` - Gestión de citas
@@ -185,6 +187,7 @@ graph TD
 ### 🟩 Veterinario
 
 **Funcionalidades principales:**
+
 - ✅ Agenda médica personalizada y optimizada
 - ✅ Gestión completa de pacientes asignados
 - ✅ Registro detallado de consultas médicas
@@ -193,6 +196,7 @@ graph TD
 - ✅ Estadísticas de práctica profesional
 
 **Rutas específicas:**
+
 - `/dashboard` - Dashboard veterinario con métricas
 - `/calendario` - Agenda médica interactiva
 - `/mis-pacientes` - Lista y gestión de pacientes
@@ -201,6 +205,7 @@ graph TD
 ### 🟥 Administrador
 
 **Funcionalidades principales:**
+
 - ✅ Gestión completa de usuarios y veterinarios
 - ✅ Validación digital de comprobantes de pago
 - ✅ Procesamiento de pre-citas del landing
@@ -209,6 +214,7 @@ graph TD
 - ✅ Estadísticas globales y reportes
 
 **Rutas específicas:**
+
 - `/dashboard` - Dashboard administrativo global
 - `/pre-citas` - Gestión de solicitudes públicas
 - `/gestion-citas` - Gestión completa de citas
@@ -279,6 +285,7 @@ graph TD
 ### 👤 Entidades Principales
 
 **Usuario:**
+
 ```typescript
 interface Usuario {
   id: string;
@@ -302,6 +309,7 @@ interface Usuario {
 ```
 
 **Mascota:**
+
 ```typescript
 interface Mascota {
   id: string;
@@ -321,6 +329,7 @@ interface Mascota {
 ```
 
 **Cita:**
+
 ```typescript
 interface Cita {
   id: string;
@@ -342,14 +351,14 @@ interface Cita {
   notasAdmin?: string;
 }
 
-type EstadoCita = 
-  | "pendiente_pago" 
-  | "en_validacion" 
-  | "aceptada" 
-  | "atendida" 
-  | "cancelada" 
-  | "expirada" 
-  | "rechazada" 
+type EstadoCita =
+  | "pendiente_pago"
+  | "en_validacion"
+  | "aceptada"
+  | "atendida"
+  | "cancelada"
+  | "expirada"
+  | "rechazada"
   | "no_asistio";
 ```
 
@@ -366,7 +375,7 @@ stateDiagram-v2
     rechazada --> pendiente_pago : Cliente corrige
     pendiente_pago --> cancelada : Cliente cancela
     pendiente_pago --> expirada : Tiempo límite
-    
+
     atendida --> [*]
     no_asistio --> [*]
     cancelada --> [*]
@@ -380,16 +389,19 @@ stateDiagram-v2
 ### Frontend Actual
 
 **Core Framework:**
+
 - React 18.3.1 con TypeScript 5.5.3
 - Vite 6.2.2 para desarrollo y build
 - React Router 6.26.2 (Single Page Application)
 
 **Gestión de Estado:**
+
 - Context API para estado global
 - localStorage para persistencia
 - Sistema de auto-reparación de datos
 
 **UI y Styling:**
+
 - TailwindCSS 3.4.11 (utility-first)
 - Radix UI para componentes accesibles
 - 42+ componentes UI pre-construidos
@@ -397,11 +409,13 @@ stateDiagram-v2
 - Framer Motion para animaciones
 
 **Formularios y Validación:**
+
 - React Hook Form 7.53.0
 - Zod 3.23.8 para validación de schemas
 - Validación en tiempo real
 
 **Testing y Calidad:**
+
 - Vitest 3.1.4 para testing
 - TypeScript en modo strict
 - ESLint + Prettier para calidad de código
@@ -476,6 +490,7 @@ npm run format.fix       # Formatear código con Prettier
 ### 📅 Sistema de Citas Avanzado
 
 **Características:**
+
 - ✅ Agendamiento paso a paso intuitivo
 - ✅ Estados automatizados (8 estados diferentes)
 - ✅ Validación digital de comprobantes
@@ -484,6 +499,7 @@ npm run format.fix       # Formatear código con Prettier
 - ✅ Gestión de múltiples métodos de pago (YAPE, PLIN, bancos)
 
 **Servicios Disponibles:**
+
 - Consulta General (S/. 80)
 - Vacunación (S/. 65)
 - Emergencia (S/. 150)
@@ -494,6 +510,7 @@ npm run format.fix       # Formatear código con Prettier
 ### 🐕 Gestión de Mascotas
 
 **Funcionalidades:**
+
 - ✅ Registro completo con foto
 - ✅ Compresión automática de imágenes
 - ✅ Gestión de peso y microchip
@@ -503,6 +520,7 @@ npm run format.fix       # Formatear código con Prettier
 ### 🩺 Historial Clínico Digital
 
 **Características:**
+
 - ✅ Registro detallado de consultas
 - ✅ Signos vitales completos
 - ✅ Diagnóstico y tratamiento
@@ -513,6 +531,7 @@ npm run format.fix       # Formatear código con Prettier
 ### 💾 Sistema de Almacenamiento Inteligente
 
 **Características:**
+
 - ✅ Auto-reparación de datos inconsistentes
 - ✅ Compresión automática de imágenes
 - ✅ Sincronización Context ↔ localStorage
@@ -522,6 +541,7 @@ npm run format.fix       # Formatear código con Prettier
 ### 🔍 Búsqueda Avanzada
 
 **Funcionalidades:**
+
 - ✅ Búsqueda fuzzy tolerante a errores
 - ✅ Filtros múltiples simultáneos
 - ✅ Búsqueda en tiempo real
@@ -530,6 +550,7 @@ npm run format.fix       # Formatear código con Prettier
 ### 📊 Dashboard Inteligente
 
 **Por Rol:**
+
 - **Cliente**: Estadísticas de mascotas, próximas citas, historial
 - **Veterinario**: Citas del día, pacientes asignados, estadísticas personales
 - **Admin**: Métricas globales, citas pendientes, gestión de usuarios
@@ -564,6 +585,7 @@ xl: 1280px    /* Desktops */
 ### 🛡️ Autenticación y Autorización
 
 **Sistema de Roles:**
+
 ```typescript
 // Protección de rutas por roles
 <ProtectedRoute allowedRoles={["admin", "veterinario"]}>
@@ -572,6 +594,7 @@ xl: 1280px    /* Desktops */
 ```
 
 **Validaciones:**
+
 - Validación de sesión en cada ruta
 - Verificación de permisos por componente
 - Ocultación de funcionalidades según rol
@@ -580,12 +603,14 @@ xl: 1280px    /* Desktops */
 ### 🔐 Validaciones de Datos
 
 **Frontend:**
+
 - Validación en tiempo real con Zod
 - Sanitización de inputs de usuario
 - Validación de archivos (tipo, tamaño, contenido)
 - Compresión segura de imágenes
 
 **Integridad de Datos:**
+
 - Auto-detección de relaciones rotas
 - Reparación automática de inconsistencias
 - Validación de relaciones entre entidades
@@ -598,11 +623,13 @@ xl: 1280px    /* Desktops */
 ### 🔬 Estrategia de Testing
 
 **Tipos de Tests:**
+
 - **Unit Tests**: Funciones utilitarias (utils, citaUtils, imageUtils)
 - **Component Tests**: Componentes React individuales
 - **Integration Tests**: Flujos de usuario completos
 
 **Herramientas:**
+
 - Vitest para testing framework
 - React Testing Library (recomendado para componentes)
 - Playwright (recomendado para E2E)
@@ -645,19 +672,19 @@ src/lib/utils.spec.ts    # Tests de utilidades generales
   // Autenticación y usuarios
   user: Usuario | null,
   usuarios: Usuario[],
-  
+
   // Entidades principales
   mascotas: Mascota[],
   citas: Cita[],
   preCitas: PreCita[],
   historialClinico: HistorialClinico[],
-  
+
   // Sistema de notificaciones
   notificaciones: Notificacion[],
-  
+
   // Archivos y comprobantes
   comprobante_[citaId]: ComprobanteData,
-  
+
   // Configuración
   veterinary_services: Servicio[],
   newsletter_subscribers: SuscriptorNewsletter[],
@@ -677,11 +704,12 @@ const autoRepairData = () => {
   citas.forEach((cita) => {
     // Reparar relación mascota-propietario
     if (!cita.clienteId) {
-      const mascota = mascotas.find(m => m.nombre === cita.mascota);
+      const mascota = mascotas.find((m) => m.nombre === cita.mascota);
       if (mascota?.clienteId) {
         updateCita(cita.id, {
           clienteId: mascota.clienteId,
-          clienteNombre: usuarios.find(u => u.id === mascota.clienteId)?.nombre
+          clienteNombre: usuarios.find((u) => u.id === mascota.clienteId)
+            ?.nombre,
         });
       }
     }
@@ -694,13 +722,13 @@ const autoRepairData = () => {
 ```typescript
 // Compresión inteligente de imágenes
 const compressImage = async (file: File): Promise<CompressedImage> => {
-  const canvas = document.createElement('canvas');
-  const ctx = canvas.getContext('2d')!;
-  
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d")!;
+
   // Optimización automática basada en tamaño
   const maxWidth = file.size > 2000000 ? 800 : 1200;
   const quality = file.size > 1000000 ? 0.6 : 0.8;
-  
+
   // Proceso de compresión...
 };
 ```
@@ -710,11 +738,11 @@ const compressImage = async (file: File): Promise<CompressedImage> => {
 ```css
 /* Variables CSS personalizadas para veterinaria */
 :root {
-  --vet-primary: #0ea5e9;     /* Azul médico */
-  --vet-secondary: #f97316;   /* Naranja energético */
-  --vet-success: #22c55e;     /* Verde éxito */
-  --vet-warning: #f59e0b;     /* Amarillo advertencia */
-  --vet-danger: #ef4444;      /* Rojo error */
+  --vet-primary: #0ea5e9; /* Azul médico */
+  --vet-secondary: #f97316; /* Naranja energético */
+  --vet-success: #22c55e; /* Verde éxito */
+  --vet-warning: #f59e0b; /* Amarillo advertencia */
+  --vet-danger: #ef4444; /* Rojo error */
 }
 ```
 
@@ -838,7 +866,7 @@ CREATE TABLE citas (
     veterinario_id UUID REFERENCES usuarios(id) ON DELETE SET NULL,
     fecha TIMESTAMP NOT NULL,
     estado VARCHAR(20) NOT NULL CHECK (estado IN (
-        'pendiente_pago', 'en_validacion', 'aceptada', 'atendida', 
+        'pendiente_pago', 'en_validacion', 'aceptada', 'atendida',
         'cancelada', 'expirada', 'rechazada', 'no_asistio'
     )),
     tipo_consulta VARCHAR(50) NOT NULL,
@@ -947,7 +975,7 @@ CREATE TABLE newsletter_emails (
 ```python
 # Autenticación JWT
 POST   /api/auth/login
-POST   /api/auth/register  
+POST   /api/auth/register
 POST   /api/auth/refresh-token
 POST   /api/auth/logout
 POST   /api/auth/forgot-password
@@ -1021,6 +1049,7 @@ GET    /api/reportes/ingresos?periodo=
 ```
 
 **Características Técnicas Backend**:
+
 - Autenticación JWT con refresh tokens
 - Autorización basada en roles (RBAC)
 - Validación con Pydantic (FastAPI) o DRF Serializers (Django)
@@ -1039,6 +1068,7 @@ GET    /api/reportes/ingresos?periodo=
 **Framework**: Angular 17+ con TypeScript 5.0+
 
 **Arquitectura Requerida**:
+
 ```
 src/
 ├── app/
@@ -1067,6 +1097,7 @@ src/
 ```
 
 **Librerías UI Requeridas**:
+
 - PrimeNG 17+ (completo con todos los componentes)
 - PrimeFlex para layout responsive
 - PrimeIcons para iconografía
@@ -1079,56 +1110,59 @@ src/
 // auth.service.ts
 @Injectable()
 export class AuthService {
-  login(credentials: LoginDto): Observable<AuthResponse>
-  register(userData: RegisterDto): Observable<User>
-  logout(): void
-  refreshToken(): Observable<string>
-  getCurrentUser(): Observable<User>
-  isAuthenticated(): boolean
-  hasRole(roles: string[]): boolean
+  login(credentials: LoginDto): Observable<AuthResponse>;
+  register(userData: RegisterDto): Observable<User>;
+  logout(): void;
+  refreshToken(): Observable<string>;
+  getCurrentUser(): Observable<User>;
+  isAuthenticated(): boolean;
+  hasRole(roles: string[]): boolean;
 }
 
-// citas.service.ts  
+// citas.service.ts
 @Injectable()
 export class CitasService {
-  getCitas(filters?: CitaFilters): Observable<PaginatedResponse<Cita>>
-  getCita(id: string): Observable<Cita>
-  createCita(cita: CreateCitaDto): Observable<Cita>
-  updateCita(id: string, updates: UpdateCitaDto): Observable<Cita>
-  deleteCita(id: string): Observable<void>
-  uploadComprobante(citaId: string, file: File): Observable<UploadResponse>
-  validarPago(citaId: string, valid: boolean, notas?: string): Observable<Cita>
+  getCitas(filters?: CitaFilters): Observable<PaginatedResponse<Cita>>;
+  getCita(id: string): Observable<Cita>;
+  createCita(cita: CreateCitaDto): Observable<Cita>;
+  updateCita(id: string, updates: UpdateCitaDto): Observable<Cita>;
+  deleteCita(id: string): Observable<void>;
+  uploadComprobante(citaId: string, file: File): Observable<UploadResponse>;
+  validarPago(citaId: string, valid: boolean, notas?: string): Observable<Cita>;
 }
 
 // mascotas.service.ts
 @Injectable()
 export class MascotasService {
-  getMascotas(clienteId?: string): Observable<Mascota[]>
-  getMascota(id: string): Observable<Mascota>
-  createMascota(mascota: CreateMascotaDto): Observable<Mascota>
-  updateMascota(id: string, updates: UpdateMascotaDto): Observable<Mascota>
-  deleteMascota(id: string): Observable<void>
-  uploadPhoto(mascotaId: string, file: File): Observable<UploadResponse>
+  getMascotas(clienteId?: string): Observable<Mascota[]>;
+  getMascota(id: string): Observable<Mascota>;
+  createMascota(mascota: CreateMascotaDto): Observable<Mascota>;
+  updateMascota(id: string, updates: UpdateMascotaDto): Observable<Mascota>;
+  deleteMascota(id: string): Observable<void>;
+  uploadPhoto(mascotaId: string, file: File): Observable<UploadResponse>;
 }
 
 // usuarios.service.ts
 @Injectable()
 export class UsuariosService {
-  getUsuarios(filters?: UserFilters): Observable<PaginatedResponse<Usuario>>
-  getUsuario(id: string): Observable<Usuario>
-  createUsuario(usuario: CreateUserDto): Observable<Usuario>
-  updateUsuario(id: string, updates: UpdateUserDto): Observable<Usuario>
-  deleteUsuario(id: string): Observable<void>
+  getUsuarios(filters?: UserFilters): Observable<PaginatedResponse<Usuario>>;
+  getUsuario(id: string): Observable<Usuario>;
+  createUsuario(usuario: CreateUserDto): Observable<Usuario>;
+  updateUsuario(id: string, updates: UpdateUserDto): Observable<Usuario>;
+  deleteUsuario(id: string): Observable<void>;
 }
 
 // historial.service.ts
 @Injectable()
 export class HistorialService {
-  getHistorialMascota(mascotaId: string): Observable<HistorialClinico[]>
-  getConsulta(id: string): Observable<HistorialClinico>
-  createConsulta(consulta: CreateConsultaDto): Observable<HistorialClinico>
-  updateConsulta(id: string, updates: UpdateConsultaDto): Observable<HistorialClinico>
-  generateReporte(mascotaId: string, format: 'pdf'|'excel'): Observable<Blob>
+  getHistorialMascota(mascotaId: string): Observable<HistorialClinico[]>;
+  getConsulta(id: string): Observable<HistorialClinico>;
+  createConsulta(consulta: CreateConsultaDto): Observable<HistorialClinico>;
+  updateConsulta(
+    id: string,
+    updates: UpdateConsultaDto,
+  ): Observable<HistorialClinico>;
+  generateReporte(mascotaId: string, format: "pdf" | "excel"): Observable<Blob>;
 }
 ```
 
@@ -1138,25 +1172,31 @@ export class HistorialService {
 // auth.guard.ts
 @Injectable()
 export class AuthGuard implements CanActivate {
-  canActivate(route: ActivatedRouteSnapshot): boolean
+  canActivate(route: ActivatedRouteSnapshot): boolean;
 }
 
 // role.guard.ts
 @Injectable()
 export class RoleGuard implements CanActivate {
-  canActivate(route: ActivatedRouteSnapshot): boolean
+  canActivate(route: ActivatedRouteSnapshot): boolean;
 }
 
 // auth.interceptor.ts
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>>
+  intercept(
+    req: HttpRequest<any>,
+    next: HttpHandler,
+  ): Observable<HttpEvent<any>>;
 }
 
 // error.interceptor.ts
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>>
+  intercept(
+    req: HttpRequest<any>,
+    next: HttpHandler,
+  ): Observable<HttpEvent<any>>;
 }
 ```
 
@@ -1165,13 +1205,13 @@ export class ErrorInterceptor implements HttpInterceptor {
 ```typescript
 // dashboard.component.ts - Dashboard dinámico por rol
 export class DashboardComponent implements OnInit {
-  userRole: string
-  statistics: DashboardStats
-  
+  userRole: string;
+  statistics: DashboardStats;
+
   ngOnInit(): void {
-    this.loadDashboardData()
+    this.loadDashboardData();
   }
-  
+
   private loadDashboardData(): void {
     // Lógica específica por rol
   }
@@ -1179,42 +1219,42 @@ export class DashboardComponent implements OnInit {
 
 // citas-list.component.ts - Lista de citas con filtros
 export class CitasListComponent implements OnInit {
-  citas: Cita[] = []
-  filtros: CitaFilters = {}
-  loading = false
-  
-  searchCitas(): void
-  filterByEstado(estado: string): void
-  openCitaDetail(cita: Cita): void
+  citas: Cita[] = [];
+  filtros: CitaFilters = {};
+  loading = false;
+
+  searchCitas(): void;
+  filterByEstado(estado: string): void;
+  openCitaDetail(cita: Cita): void;
 }
 
 // cita-form.component.ts - Formulario de nueva cita
 export class CitaFormComponent implements OnInit {
-  citaForm: FormGroup
-  mascotas: Mascota[] = []
-  servicios: Servicio[] = []
-  
-  onSubmit(): void
-  onFileUpload(event: any): void
+  citaForm: FormGroup;
+  mascotas: Mascota[] = [];
+  servicios: Servicio[] = [];
+
+  onSubmit(): void;
+  onFileUpload(event: any): void;
 }
 
 // mascota-form.component.ts - Formulario de mascota
 export class MascotaFormComponent implements OnInit {
-  mascotaForm: FormGroup
-  photoPreview: string | null = null
-  
-  onSubmit(): void
-  onPhotoUpload(event: any): void
-  compressImage(file: File): Promise<File>
+  mascotaForm: FormGroup;
+  photoPreview: string | null = null;
+
+  onSubmit(): void;
+  onPhotoUpload(event: any): void;
+  compressImage(file: File): Promise<File>;
 }
 
 // calendario.component.ts - Calendario veterinario
 export class CalendarioComponent implements OnInit {
-  calendarEvents: CalendarEvent[] = []
-  calendarOptions: CalendarOptions
-  
-  handleDateClick(info: DateClickArg): void
-  handleEventClick(info: EventClickArg): void
+  calendarEvents: CalendarEvent[] = [];
+  calendarOptions: CalendarOptions;
+
+  handleDateClick(info: DateClickArg): void;
+  handleEventClick(info: EventClickArg): void;
 }
 ```
 
@@ -1223,56 +1263,62 @@ export class CalendarioComponent implements OnInit {
 ```typescript
 // app-routing.module.ts
 const routes: Routes = [
-  { path: '', component: LandingComponent },
-  { path: 'login', component: LoginComponent, canActivate: [GuestGuard] },
-  { path: 'registro', component: RegisterComponent, canActivate: [GuestGuard] },
-  
+  { path: "", component: LandingComponent },
+  { path: "login", component: LoginComponent, canActivate: [GuestGuard] },
+  { path: "registro", component: RegisterComponent, canActivate: [GuestGuard] },
+
   // Rutas autenticadas
-  { 
-    path: 'dashboard', 
-    component: DashboardComponent, 
-    canActivate: [AuthGuard] 
+  {
+    path: "dashboard",
+    component: DashboardComponent,
+    canActivate: [AuthGuard],
   },
-  
+
   // Rutas del cliente
-  { 
-    path: 'mascotas', 
-    loadChildren: () => import('./features/mascotas/mascotas.module').then(m => m.MascotasModule),
+  {
+    path: "mascotas",
+    loadChildren: () =>
+      import("./features/mascotas/mascotas.module").then(
+        (m) => m.MascotasModule,
+      ),
     canActivate: [AuthGuard, RoleGuard],
-    data: { roles: ['cliente'] }
+    data: { roles: ["cliente"] },
   },
-  { 
-    path: 'citas', 
-    loadChildren: () => import('./features/citas/citas.module').then(m => m.CitasModule),
+  {
+    path: "citas",
+    loadChildren: () =>
+      import("./features/citas/citas.module").then((m) => m.CitasModule),
     canActivate: [AuthGuard, RoleGuard],
-    data: { roles: ['cliente'] }
+    data: { roles: ["cliente"] },
   },
-  
+
   // Rutas del veterinario
-  { 
-    path: 'calendario', 
+  {
+    path: "calendario",
     component: CalendarioComponent,
     canActivate: [AuthGuard, RoleGuard],
-    data: { roles: ['veterinario'] }
+    data: { roles: ["veterinario"] },
   },
-  { 
-    path: 'mis-pacientes', 
+  {
+    path: "mis-pacientes",
     component: MisPacientesComponent,
     canActivate: [AuthGuard, RoleGuard],
-    data: { roles: ['veterinario'] }
+    data: { roles: ["veterinario"] },
   },
-  
+
   // Rutas del admin
-  { 
-    path: 'admin', 
-    loadChildren: () => import('./features/admin/admin.module').then(m => m.AdminModule),
+  {
+    path: "admin",
+    loadChildren: () =>
+      import("./features/admin/admin.module").then((m) => m.AdminModule),
     canActivate: [AuthGuard, RoleGuard],
-    data: { roles: ['admin'] }
-  }
+    data: { roles: ["admin"] },
+  },
 ];
 ```
 
 **Estado Global**:
+
 - NgRx para gestión de estado complejo
 - Estados por feature (auth, citas, mascotas, usuarios)
 - Effects para side effects y llamadas API
@@ -1296,7 +1342,7 @@ const routes: Routes = [
 **IMPRESCINDIBLE - Funcionalidades**:
 
 - ✅ **Auto-reparación de datos** (migrar lógica de integridad)
-- ✅ **Compresión automática de imágenes** 
+- ✅ **Compresión automática de imágenes**
 - ✅ **Exportación de reportes** (PDF, Excel, TXT)
 - ✅ **Sistema de pre-citas** del landing público
 - ✅ **Gestión de newsletter** completa
@@ -1306,6 +1352,7 @@ const routes: Routes = [
 - ✅ **Historial clínico** completo con seguimiento
 
 **MANTENER - Experiencia de Usuario**:
+
 - Navegación idéntica entre roles
 - Mismos colores y theme veterinario
 - Misma terminología y textos
@@ -1313,6 +1360,7 @@ const routes: Routes = [
 - Performance igual o superior al actual
 
 **MEJORAR - Aspectos Técnicos**:
+
 - Seguridad con JWT y HTTPS
 - Escalabilidad con base de datos real
 - Backup automático de datos
