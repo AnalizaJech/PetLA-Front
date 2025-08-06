@@ -255,7 +255,7 @@ export default function DashboardVeterinario() {
                     Panel Veterinario
                   </h1>
                   <p className="text-gray-600 flex items-center">
-                    <span>Bienvenido, Dr. {user.nombre}</span>
+                    <span>Bienvenido, {user.nombre}</span>
                     <Award className="w-4 h-4 ml-2 text-amber-500" />
                   </p>
                 </div>
