@@ -486,7 +486,7 @@ export default function DashboardVeterinario() {
                                       {propietario?.nombre || "Sin asignar"}
                                     </span>
                                   </div>
-                                  <p className="text-sm text-gray-500 mt-1">
+                                  <p className="text-sm text-vet-gray-500 mt-1">
                                     {cita.tipoConsulta} •{" "}
                                     {cita.motivo.length > 30
                                       ? `${cita.motivo.substring(0, 30)}...`
@@ -847,12 +847,12 @@ Generado automáticamente por PetLA
                                 </span>
                               </div>
                               <div className="flex items-center space-x-2 mb-1">
-                                <UserCheck className="w-3 h-3 text-gray-500" />
+                                <UserCheck className="w-3 h-3 text-vet-gray-500" />
                                 <span className="text-xs text-vet-gray-600">
                                   {propietario?.nombre || "Sin asignar"}
                                 </span>
                               </div>
-                              <p className="text-xs text-gray-500">
+                              <p className="text-xs text-vet-gray-500">
                                 {new Date(cita.fecha).toLocaleDateString(
                                   "es-ES",
                                 )}
@@ -977,12 +977,12 @@ Generado automáticamente por PetLA
                                   </div>
 
                                   {mascota.raza && (
-                                    <p className="text-xs text-gray-500">
+                                    <p className="text-xs text-vet-gray-500">
                                       Raza: {mascota.raza}
                                     </p>
                                   )}
                                   {ultimaCita && (
-                                    <p className="text-xs text-gray-500">
+                                    <p className="text-xs text-vet-gray-500">
                                       Última cita:{" "}
                                       {new Date(
                                         ultimaCita.fecha,
