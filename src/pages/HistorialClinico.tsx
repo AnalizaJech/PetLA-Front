@@ -1481,17 +1481,18 @@ export default function HistorialClinico() {
                               {servicio.tratamiento}
                             </p>
                           </div>
-                          {servicio.notas && (
-                            <div>
-                              <span className="font-medium text-vet-gray-700">
-                                Notas:
-                              </span>
-                              <p className="text-vet-gray-600">
-                                {servicio.notas}
-                              </p>
-                            </div>
-                          )}
                         </div>
+
+                        {servicio.notas && (
+                          <div className="mt-4 p-4 bg-vet-primary/5 rounded-lg border border-vet-primary/20">
+                            <h4 className="font-semibold text-vet-primary mb-2">
+                              Notas del veterinario
+                            </h4>
+                            <p className="text-vet-gray-700">
+                              {servicio.notas}
+                            </p>
+                          </div>
+                        )}
                       </CardContent>
                     </Card>
                   ))
@@ -1566,17 +1567,18 @@ export default function HistorialClinico() {
                               {servicio.tratamiento}
                             </p>
                           </div>
-                          {servicio.notas && (
-                            <div>
-                              <span className="font-medium text-vet-gray-700">
-                                Notas:
-                              </span>
-                              <p className="text-vet-gray-600">
-                                {servicio.notas}
-                              </p>
-                            </div>
-                          )}
                         </div>
+
+                        {servicio.notas && (
+                          <div className="mt-4 p-4 bg-vet-primary/5 rounded-lg border border-vet-primary/20">
+                            <h4 className="font-semibold text-vet-primary mb-2">
+                              Notas del veterinario
+                            </h4>
+                            <p className="text-vet-gray-700">
+                              {servicio.notas}
+                            </p>
+                          </div>
+                        )}
                       </CardContent>
                     </Card>
                   ))
@@ -1651,17 +1653,18 @@ export default function HistorialClinico() {
                               {servicio.tratamiento}
                             </p>
                           </div>
-                          {servicio.notas && (
-                            <div>
-                              <span className="font-medium text-vet-gray-700">
-                                Notas:
-                              </span>
-                              <p className="text-vet-gray-600">
-                                {servicio.notas}
-                              </p>
-                            </div>
-                          )}
                         </div>
+
+                        {servicio.notas && (
+                          <div className="mt-4 p-4 bg-vet-primary/5 rounded-lg border border-vet-primary/20">
+                            <h4 className="font-semibold text-vet-primary mb-2">
+                              Notas del veterinario
+                            </h4>
+                            <p className="text-vet-gray-700">
+                              {servicio.notas}
+                            </p>
+                          </div>
+                        )}
                       </CardContent>
                     </Card>
                   ))
@@ -1736,17 +1739,18 @@ export default function HistorialClinico() {
                               {servicio.tratamiento}
                             </p>
                           </div>
-                          {servicio.notas && (
-                            <div>
-                              <span className="font-medium text-vet-gray-700">
-                                Notas:
-                              </span>
-                              <p className="text-vet-gray-600">
-                                {servicio.notas}
-                              </p>
-                            </div>
-                          )}
                         </div>
+
+                        {servicio.notas && (
+                          <div className="mt-4 p-4 bg-vet-primary/5 rounded-lg border border-vet-primary/20">
+                            <h4 className="font-semibold text-vet-primary mb-2">
+                              Notas del veterinario
+                            </h4>
+                            <p className="text-vet-gray-700">
+                              {servicio.notas}
+                            </p>
+                          </div>
+                        )}
                       </CardContent>
                     </Card>
                   ))
@@ -1821,17 +1825,18 @@ export default function HistorialClinico() {
                               {servicio.tratamiento}
                             </p>
                           </div>
-                          {servicio.notas && (
-                            <div>
-                              <span className="font-medium text-vet-gray-700">
-                                Notas:
-                              </span>
-                              <p className="text-vet-gray-600">
-                                {servicio.notas}
-                              </p>
-                            </div>
-                          )}
                         </div>
+
+                        {servicio.notas && (
+                          <div className="mt-4 p-4 bg-vet-primary/5 rounded-lg border border-vet-primary/20">
+                            <h4 className="font-semibold text-vet-primary mb-2">
+                              Notas del veterinario
+                            </h4>
+                            <p className="text-vet-gray-700">
+                              {servicio.notas}
+                            </p>
+                          </div>
+                        )}
                       </CardContent>
                     </Card>
                   ))
