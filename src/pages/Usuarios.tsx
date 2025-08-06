@@ -298,7 +298,7 @@ export default function Usuarios() {
     switch (status) {
       case "recien_añadido":
         return (
-          <Badge className="bg-gray-100 text-gray-800 border-gray-200">
+          <Badge className="bg-blue-100 text-blue-800 border-blue-200">
             <UserPlus className="w-3 h-3 mr-1" />
             Recién Añadido
           </Badge>
@@ -748,12 +748,12 @@ export default function Usuarios() {
                           <div className="space-y-1">
                             {cliente.telefono && (
                               <div className="flex items-center space-x-2 text-sm text-vet-gray-600">
-                                <Phone className="w-3 h-3" />
+                                <Phone className="w-3 h-3 text-green-500" />
                                 <span>{cliente.telefono}</span>
                               </div>
                             )}
                             <div className="flex items-center space-x-2 text-sm text-vet-gray-600">
-                              <Mail className="w-3 h-3" />
+                              <Mail className="w-3 h-3 text-blue-500" />
                               <span>{cliente.email}</span>
                             </div>
                           </div>
@@ -765,7 +765,7 @@ export default function Usuarios() {
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center space-x-2 text-sm text-vet-gray-600">
-                            <Calendar className="w-3 h-3" />
+                            <Calendar className="w-3 h-3 text-purple-500" />
                             <span>
                               {cliente.fechaRegistro?.toLocaleDateString(
                                 "es-ES",

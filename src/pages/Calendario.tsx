@@ -53,6 +53,7 @@ import {
   Mail,
   Info,
   Activity,
+  Heart,
 } from "lucide-react";
 import {
   enhanceMultipleCitas,
@@ -68,12 +69,13 @@ import {
 const estadoColors = {
   pendiente_pago: "bg-yellow-100 text-yellow-800 border-yellow-300",
   en_validacion: "bg-blue-100 text-blue-800 border-blue-300",
-  aceptada: "bg-green-100 text-green-800 border-green-300",
-  atendida: "bg-emerald-100 text-emerald-800 border-emerald-300",
+  aceptada: "bg-green-100 text-green-800 border-green-300 hover:bg-green-100",
+  atendida: "bg-purple-100 text-purple-800 border-purple-300",
   cancelada: "bg-red-100 text-red-800 border-red-300",
   expirada: "bg-red-100 text-red-800 border-red-300",
   rechazada: "bg-red-100 text-red-800 border-red-300",
-  no_asistio: "bg-orange-100 text-orange-800 border-orange-300",
+  no_asistio:
+    "bg-orange-100 text-orange-800 border-orange-300 hover:bg-orange-100",
 };
 
 const estadoLabels = {
@@ -312,18 +314,18 @@ export default function Calendario() {
                 </div>
               </div>
 
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
+              <div className="flex flex-col lg:flex-row items-stretch lg:items-center space-y-2 lg:space-y-0 lg:space-x-2">
                 <div className="relative">
                   <Search className="absolute left-3 top-3 h-4 w-4 text-vet-gray-400" />
                   <Input
                     placeholder="Buscar paciente o motivo..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 w-full sm:w-64"
+                    className="pl-10 w-full lg:w-64"
                   />
                 </div>
                 <Select value={filterStatus} onValueChange={setFilterStatus}>
-                  <SelectTrigger className="w-full sm:w-auto">
+                  <SelectTrigger className="w-full lg:w-auto">
                     <Filter className="w-4 h-4 mr-2" />
                     <SelectValue />
                   </SelectTrigger>
@@ -619,7 +621,7 @@ export default function Calendario() {
                                     <div className="flex items-center justify-between mb-3">
                                       <div className="flex items-center space-x-2">
                                         <Clock className="w-4 h-4 text-vet-primary" />
-                                        <span className="font-bold text-vet-primary">
+                                        <span className="font-bold text-vet-primary text-sm sm:text-base">
                                           {new Date(
                                             cita.fecha,
                                           ).toLocaleTimeString("es-ES", {
@@ -628,7 +630,7 @@ export default function Calendario() {
                                           })}
                                         </span>
                                       </div>
-                                      <div className="flex items-center space-x-2">
+                                      <div className="flex flex-wrap items-center gap-1 sm:gap-2 ml-auto">
                                         <Badge
                                           variant="secondary"
                                           className={estadoColors[cita.estado]}
@@ -636,7 +638,6 @@ export default function Calendario() {
                                           <StatusIcon className="w-3 h-3 mr-1" />
                                           {estadoLabels[cita.estado]}
                                         </Badge>
-                                        {getUrgencyBadge(urgencyLevel)}
                                       </div>
                                     </div>
 
@@ -654,25 +655,6 @@ export default function Calendario() {
                                         )}
                                       </div>
 
-                                      {/* Información del propietario */}
-                                      <div className="bg-vet-gray-50 p-2 rounded">
-                                        <div className="flex items-center space-x-2 mb-1">
-                                          <UserCheck className="w-3 h-3 text-vet-primary" />
-                                          <span className="text-sm font-medium">
-                                            {propietario?.nombre ||
-                                              "Sin asignar"}
-                                          </span>
-                                        </div>
-                                        {propietario?.telefono && (
-                                          <div className="flex items-center space-x-2">
-                                            <Phone className="w-3 h-3 text-vet-gray-600" />
-                                            <span className="text-xs text-vet-gray-600">
-                                              {propietario.telefono}
-                                            </span>
-                                          </div>
-                                        )}
-                                      </div>
-
                                       {/* Motivo de la consulta */}
                                       <div className="flex items-start space-x-2">
                                         <FileText className="w-4 h-4 text-vet-gray-600 mt-0.5" />
@@ -684,7 +666,7 @@ export default function Calendario() {
                                       {/* Información adicional de la mascota */}
                                       {mascota?.raza && (
                                         <div className="flex items-center space-x-2">
-                                          <Info className="w-3 h-3 text-vet-gray-600" />
+                                          <Heart className="w-4 h-4 text-pink-500" />
                                           <span className="text-xs text-vet-gray-600">
                                             Raza: {mascota.raza}
                                           </span>
@@ -693,7 +675,46 @@ export default function Calendario() {
                                     </div>
 
                                     {/* Botones de acción */}
-                                    <div className="flex justify-end mt-3 space-x-2">
+                                    <div className="mt-3 space-y-1">
+                                      {/* Primera línea: 2 botones */}
+                                      <div className="flex gap-1">
+                                        <Button
+                                          size="sm"
+                                          variant="outline"
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleViewDetail(citaData);
+                                          }}
+                                          className="text-xs px-2 py-1 flex-1"
+                                        >
+                                          <Eye className="w-3 h-3 mr-1" />
+                                          Detalle
+                                        </Button>
+                                        <Button
+                                          size="sm"
+                                          variant="outline"
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            if (mascota) {
+                                              const propietario =
+                                                citaData.propietario;
+                                              navigate(
+                                                `/historial-clinico-veterinario?view=history&ownerId=${propietario?.id || "unknown"}&petId=${mascota.id}`,
+                                              );
+                                            } else {
+                                              // Fallback para mascotas no registradas
+                                              navigate(
+                                                `/historial-clinico-veterinario?view=history&petName=${encodeURIComponent(cita.mascota)}&especie=${encodeURIComponent(cita.especie)}`,
+                                              );
+                                            }
+                                          }}
+                                          className="text-xs px-2 py-1 flex-1"
+                                        >
+                                          <FileText className="w-3 h-3 mr-1" />
+                                          Historial
+                                        </Button>
+                                      </div>
+                                      {/* Segunda línea: botón azul */}
                                       {cita.estado === "aceptada" && (
                                         <Button
                                           size="sm"
@@ -701,45 +722,12 @@ export default function Calendario() {
                                             e.stopPropagation();
                                             handleAttendCita(citaData);
                                           }}
-                                          className="bg-vet-primary hover:bg-vet-primary-dark"
+                                          className="bg-vet-primary hover:bg-vet-primary-dark text-xs px-2 py-1 w-full"
                                         >
-                                          <Activity className="w-4 h-4 mr-1" />
+                                          <Activity className="w-3 h-3 mr-1" />
                                           Atender
                                         </Button>
                                       )}
-                                      <Button
-                                        size="sm"
-                                        variant="outline"
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          handleViewDetail(citaData);
-                                        }}
-                                      >
-                                        <Eye className="w-4 h-4 mr-1" />
-                                        Detalle de la Cita
-                                      </Button>
-                                      <Button
-                                        size="sm"
-                                        variant="outline"
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          if (mascota) {
-                                            const propietario =
-                                              selectedCita.propietario;
-                                            navigate(
-                                              `/historial-clinico-veterinario?view=history&ownerId=${propietario?.id || "unknown"}&petId=${mascota.id}`,
-                                            );
-                                          } else {
-                                            // Fallback para mascotas no registradas
-                                            navigate(
-                                              `/historial-clinico-veterinario?view=history&petName=${encodeURIComponent(cita.mascota)}&especie=${encodeURIComponent(cita.especie)}`,
-                                            );
-                                          }
-                                        }}
-                                      >
-                                        <FileText className="w-4 h-4 mr-1" />
-                                        Ver Historial
-                                      </Button>
                                     </div>
                                   </CardContent>
                                 </Card>
@@ -841,7 +829,6 @@ export default function Calendario() {
                                         <StatusIcon className="w-3 h-3 mr-1" />
                                         {estadoLabels[cita.estado]}
                                       </Badge>
-                                      {getUrgencyBadge(urgencyLevel)}
                                       {isToday && (
                                         <Badge
                                           variant="secondary"
@@ -850,31 +837,6 @@ export default function Calendario() {
                                           HOY
                                         </Badge>
                                       )}
-                                    </div>
-
-                                    {/* Información del propietario destacada */}
-                                    <div className="bg-vet-gray-50 p-3 rounded-lg mb-3">
-                                      <div className="flex items-center space-x-2 mb-2">
-                                        <UserCheck className="w-4 h-4 text-vet-primary" />
-                                        <span className="font-medium text-vet-gray-900">
-                                          Propietario:{" "}
-                                          {propietario?.nombre || "Sin asignar"}
-                                        </span>
-                                      </div>
-                                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-vet-gray-600">
-                                        {propietario?.telefono && (
-                                          <div className="flex items-center space-x-2">
-                                            <Phone className="w-3 h-3" />
-                                            <span>{propietario.telefono}</span>
-                                          </div>
-                                        )}
-                                        {propietario?.email && (
-                                          <div className="flex items-center space-x-2">
-                                            <Mail className="w-3 h-3" />
-                                            <span>{propietario.email}</span>
-                                          </div>
-                                        )}
-                                      </div>
                                     </div>
 
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
@@ -917,7 +879,7 @@ export default function Calendario() {
 
                                         {mascota?.raza && (
                                           <div className="flex items-center space-x-2">
-                                            <Info className="w-4 h-4 text-vet-gray-600" />
+                                            <Heart className="w-4 h-4 text-pink-500" />
                                             <span>
                                               <strong>Raza:</strong>{" "}
                                               {mascota.raza}

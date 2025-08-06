@@ -539,7 +539,7 @@ export default function GestionCitas() {
                         <TableCell>
                           <div className="space-y-1">
                             <div className="flex items-center space-x-2 text-sm">
-                              <Calendar className="w-3 h-3 text-vet-gray-400" />
+                              <Calendar className="w-3 h-3 text-purple-500" />
                               <span className="font-medium">
                                 {new Date(cita.fecha).toLocaleDateString(
                                   "es-ES",
@@ -552,7 +552,7 @@ export default function GestionCitas() {
                               </span>
                             </div>
                             <div className="flex items-center space-x-2 text-sm text-vet-gray-600">
-                              <Clock className="w-3 h-3" />
+                              <Clock className="w-3 h-3 text-blue-500" />
                               <span>
                                 {new Date(cita.fecha).toLocaleTimeString(
                                   "es-ES",
@@ -577,13 +577,13 @@ export default function GestionCitas() {
                         <TableCell>
                           <div className="space-y-1">
                             <div className="flex items-center space-x-2 text-sm">
-                              <MapPin className="w-3 h-3 text-vet-gray-400" />
+                              <MapPin className="w-3 h-3 text-red-500" />
                               <span className="font-medium">
                                 {cita.ubicacion}
                               </span>
                             </div>
                             <div className="flex items-center space-x-2 text-sm text-vet-gray-600">
-                              <Coins className="w-3 h-3 text-vet-gray-600" />
+                              <Coins className="w-3 h-3 text-yellow-600" />
                               <span className="font-semibold text-vet-gray-900">
                                 S/. {cita.precio.toLocaleString()}
                               </span>

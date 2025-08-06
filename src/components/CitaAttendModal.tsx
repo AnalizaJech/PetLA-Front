@@ -229,26 +229,119 @@ export default function CitaAttendModal({
 
   const { cita, mascota, propietario } = selectedCita;
 
+  // Service type configurations
+  const serviceConfigs = {
+    consulta_general: {
+      title: "Consulta General",
+      icon: Stethoscope,
+      color: "vet-primary",
+      description: "Examen médico general y evaluación de salud",
+      requiredVitals: ["peso", "temperatura"],
+      showMedications: true,
+      showExams: true,
+    },
+    vacunacion: {
+      title: "Vacunación",
+      icon: Pill,
+      color: "green-600",
+      description: "Aplicación de vacunas y refuerzos",
+      requiredVitals: ["peso", "temperatura"],
+      showMedications: false,
+      showExams: false,
+    },
+    emergencia: {
+      title: "Emergencia",
+      icon: AlertCircle,
+      color: "red-600",
+      description: "Atención médica de urgencia",
+      requiredVitals: [
+        "peso",
+        "temperatura",
+        "presionArterial",
+        "frecuenciaCardiaca",
+      ],
+      showMedications: true,
+      showExams: true,
+    },
+    grooming: {
+      title: "Grooming",
+      icon: Activity,
+      color: "purple-600",
+      description: "Servicios de estética y cuidado personal",
+      requiredVitals: ["peso"],
+      showMedications: false,
+      showExams: false,
+    },
+    cirugia: {
+      title: "Cirugía",
+      icon: Stethoscope,
+      color: "orange-600",
+      description: "Procedimiento quirúrgico",
+      requiredVitals: [
+        "peso",
+        "temperatura",
+        "presionArterial",
+        "frecuenciaCardiaca",
+      ],
+      showMedications: true,
+      showExams: true,
+    },
+    diagnostico: {
+      title: "Diagnóstico",
+      icon: Activity,
+      color: "blue-600",
+      description: "Exámenes diagnósticos y análisis",
+      requiredVitals: ["peso", "temperatura"],
+      showMedications: false,
+      showExams: true,
+    },
+  };
+
+  const serviceConfig =
+    serviceConfigs[cita.tipoConsulta] || serviceConfigs.consulta_general;
+  const ServiceIcon = serviceConfig.icon;
+
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-vet-primary/10 rounded-lg flex items-center justify-center">
-              <Activity className="w-5 h-5 text-vet-primary" />
+            <div
+              className={`w-10 h-10 bg-${serviceConfig.color}/10 rounded-lg flex items-center justify-center`}
+            >
+              <ServiceIcon className={`w-5 h-5 text-${serviceConfig.color}`} />
             </div>
             <div>
               <DialogTitle className="text-xl font-semibold text-vet-gray-900">
-                Registrar Atención Médica
+                Registrar {serviceConfig.title}
               </DialogTitle>
               <DialogDescription className="text-vet-gray-600">
-                Registra la consulta médica para {cita.mascota}
+                {serviceConfig.description} para {cita.mascota}
               </DialogDescription>
             </div>
           </div>
         </DialogHeader>
 
         <div className="space-y-6 pt-4">
+          {/* Service Type Information */}
+          <div
+            className={`bg-${serviceConfig.color}/5 border border-${serviceConfig.color}/20 rounded-lg p-4 mb-4`}
+          >
+            <div className="flex items-center space-x-3">
+              <ServiceIcon className={`w-6 h-6 text-${serviceConfig.color}`} />
+              <div>
+                <h4
+                  className={`font-semibold text-${serviceConfig.color} text-lg`}
+                >
+                  {serviceConfig.title}
+                </h4>
+                <p className="text-sm text-vet-gray-600 mt-1">
+                  {serviceConfig.description}
+                </p>
+              </div>
+            </div>
+          </div>
+
           {/* Patient Information */}
           <div className="bg-vet-gray-50 rounded-lg p-4">
             <h4 className="font-semibold text-vet-gray-900 mb-3 flex items-center">
@@ -350,15 +443,18 @@ export default function CitaAttendModal({
           {attended === true && (
             <div className="space-y-6">
               {/* Vital Signs */}
-              <div className="bg-blue-50 rounded-lg p-4">
-                <h4 className="font-semibold text-vet-gray-900 mb-3 flex items-center">
-                  <Heart className="w-4 h-4 mr-2 text-blue-600" />
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <h4 className="font-semibold text-blue-900 mb-4 flex items-center">
+                  <Heart className="w-5 h-5 mr-2 text-blue-600" />
                   Signos Vitales
                 </h4>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  <div>
-                    <Label htmlFor="peso" className="flex items-center">
-                      <Weight className="w-3 h-3 mr-1" />
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="bg-white rounded-md p-3 border border-blue-100">
+                    <Label
+                      htmlFor="peso"
+                      className="flex items-center text-sm font-medium text-blue-700 mb-2"
+                    >
+                      <Weight className="w-4 h-4 mr-2 text-blue-600" />
                       Peso (kg)
                     </Label>
                     <Input
@@ -368,11 +464,15 @@ export default function CitaAttendModal({
                         setFormData({ ...formData, peso: e.target.value })
                       }
                       placeholder="Ej: 5.2"
+                      className="border-blue-200 focus:border-blue-500 focus:ring-blue-500"
                     />
                   </div>
-                  <div>
-                    <Label htmlFor="temperatura" className="flex items-center">
-                      <Thermometer className="w-3 h-3 mr-1" />
+                  <div className="bg-white rounded-md p-3 border border-blue-100">
+                    <Label
+                      htmlFor="temperatura"
+                      className="flex items-center text-sm font-medium text-blue-700 mb-2"
+                    >
+                      <Thermometer className="w-4 h-4 mr-2 text-red-500" />
                       Temperatura (°C)
                     </Label>
                     <Input
@@ -385,10 +485,17 @@ export default function CitaAttendModal({
                         })
                       }
                       placeholder="Ej: 38.5"
+                      className="border-blue-200 focus:border-blue-500 focus:ring-blue-500"
                     />
                   </div>
-                  <div>
-                    <Label htmlFor="presionArterial">Presión Arterial</Label>
+                  <div className="bg-white rounded-md p-3 border border-blue-100">
+                    <Label
+                      htmlFor="presionArterial"
+                      className="flex items-center text-sm font-medium text-blue-700 mb-2"
+                    >
+                      <Activity className="w-4 h-4 mr-2 text-green-500" />
+                      Presión Arterial
+                    </Label>
                     <Input
                       id="presionArterial"
                       value={formData.presionArterial}
@@ -399,10 +506,15 @@ export default function CitaAttendModal({
                         })
                       }
                       placeholder="Ej: 120/80"
+                      className="border-blue-200 focus:border-blue-500 focus:ring-blue-500"
                     />
                   </div>
-                  <div>
-                    <Label htmlFor="frecuenciaCardiaca">
+                  <div className="bg-white rounded-md p-3 border border-blue-100">
+                    <Label
+                      htmlFor="frecuenciaCardiaca"
+                      className="flex items-center text-sm font-medium text-blue-700 mb-2"
+                    >
+                      <Heart className="w-4 h-4 mr-2 text-red-500" />
                       Frecuencia Cardíaca (bpm)
                     </Label>
                     <Input
@@ -415,6 +527,7 @@ export default function CitaAttendModal({
                         })
                       }
                       placeholder="Ej: 80"
+                      className="border-blue-200 focus:border-blue-500 focus:ring-blue-500"
                     />
                   </div>
                 </div>
@@ -431,7 +544,7 @@ export default function CitaAttendModal({
                       setFormData({ ...formData, diagnostico: e.target.value })
                     }
                     placeholder="Describe el diagnóstico médico..."
-                    rows={4}
+                    className="h-32 resize-none overflow-y-auto"
                     required
                   />
                 </div>
@@ -444,169 +557,177 @@ export default function CitaAttendModal({
                       setFormData({ ...formData, tratamiento: e.target.value })
                     }
                     placeholder="Describe el plan de tratamiento..."
-                    rows={4}
+                    className="h-32 resize-none overflow-y-auto"
                   />
                 </div>
               </div>
 
-              {/* Medications */}
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <Label className="text-base font-medium flex items-center">
-                    <Pill className="w-4 h-4 mr-2 text-vet-primary" />
-                    Medicamentos Recetados
-                  </Label>
-                  <Button
-                    type="button"
-                    onClick={addMedicamento}
-                    size="sm"
-                    variant="outline"
-                  >
-                    <Plus className="w-4 h-4 mr-1" />
-                    Agregar
-                  </Button>
-                </div>
-                {medicamentos.map((med, index) => (
-                  <div
-                    key={index}
-                    className="border border-vet-gray-200 rounded-lg p-4 mb-3"
-                  >
-                    <div className="flex justify-between items-start mb-3">
-                      <h5 className="font-medium text-vet-gray-900">
-                        Medicamento {index + 1}
-                      </h5>
-                      <Button
-                        type="button"
-                        onClick={() => removeMedicamento(index)}
-                        size="sm"
-                        variant="ghost"
-                      >
-                        <Trash2 className="w-4 h-4 text-red-500" />
-                      </Button>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      <div>
-                        <Label>Nombre del medicamento</Label>
-                        <Input
-                          value={med.nombre}
-                          onChange={(e) =>
-                            updateMedicamento(index, "nombre", e.target.value)
-                          }
-                          placeholder="Ej: Amoxicilina"
-                        />
-                      </div>
-                      <div>
-                        <Label>Dosis</Label>
-                        <Input
-                          value={med.dosis}
-                          onChange={(e) =>
-                            updateMedicamento(index, "dosis", e.target.value)
-                          }
-                          placeholder="Ej: 250mg"
-                        />
-                      </div>
-                      <div>
-                        <Label>Frecuencia</Label>
-                        <Input
-                          value={med.frecuencia}
-                          onChange={(e) =>
-                            updateMedicamento(
-                              index,
-                              "frecuencia",
-                              e.target.value,
-                            )
-                          }
-                          placeholder="Ej: Cada 8 horas"
-                        />
-                      </div>
-                      <div>
-                        <Label>Duración</Label>
-                        <Input
-                          value={med.duracion}
-                          onChange={(e) =>
-                            updateMedicamento(index, "duracion", e.target.value)
-                          }
-                          placeholder="Ej: 7 días"
-                        />
-                      </div>
-                      <div className="md:col-span-2">
-                        <Label>Indicaciones especiales</Label>
-                        <Input
-                          value={med.indicaciones}
-                          onChange={(e) =>
-                            updateMedicamento(
-                              index,
-                              "indicaciones",
-                              e.target.value,
-                            )
-                          }
-                          placeholder="Instrucciones adicionales..."
-                        />
-                      </div>
-                    </div>
+              {/* Medications - conditional based on service type */}
+              {serviceConfig.showMedications && (
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <Label className="text-base font-medium flex items-center">
+                      <Pill className="w-4 h-4 mr-2 text-vet-primary" />
+                      Medicamentos Recetados
+                    </Label>
+                    <Button
+                      type="button"
+                      onClick={addMedicamento}
+                      size="sm"
+                      variant="outline"
+                    >
+                      <Plus className="w-4 h-4 mr-1" />
+                      Agregar
+                    </Button>
                   </div>
-                ))}
-              </div>
+                  {medicamentos.map((med, index) => (
+                    <div
+                      key={index}
+                      className="border border-vet-gray-200 rounded-lg p-4 mb-3"
+                    >
+                      <div className="flex justify-between items-start mb-3">
+                        <h5 className="font-medium text-vet-gray-900">
+                          Medicamento {index + 1}
+                        </h5>
+                        <Button
+                          type="button"
+                          onClick={() => removeMedicamento(index)}
+                          size="sm"
+                          variant="ghost"
+                        >
+                          <Trash2 className="w-4 h-4 text-red-500" />
+                        </Button>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                          <Label>Nombre del medicamento</Label>
+                          <Input
+                            value={med.nombre}
+                            onChange={(e) =>
+                              updateMedicamento(index, "nombre", e.target.value)
+                            }
+                            placeholder="Ej: Amoxicilina"
+                          />
+                        </div>
+                        <div>
+                          <Label>Dosis</Label>
+                          <Input
+                            value={med.dosis}
+                            onChange={(e) =>
+                              updateMedicamento(index, "dosis", e.target.value)
+                            }
+                            placeholder="Ej: 250mg"
+                          />
+                        </div>
+                        <div>
+                          <Label>Frecuencia</Label>
+                          <Input
+                            value={med.frecuencia}
+                            onChange={(e) =>
+                              updateMedicamento(
+                                index,
+                                "frecuencia",
+                                e.target.value,
+                              )
+                            }
+                            placeholder="Ej: Cada 8 horas"
+                          />
+                        </div>
+                        <div>
+                          <Label>Duración</Label>
+                          <Input
+                            value={med.duracion}
+                            onChange={(e) =>
+                              updateMedicamento(
+                                index,
+                                "duracion",
+                                e.target.value,
+                              )
+                            }
+                            placeholder="Ej: 7 días"
+                          />
+                        </div>
+                        <div className="md:col-span-2">
+                          <Label>Indicaciones especiales</Label>
+                          <Input
+                            value={med.indicaciones}
+                            onChange={(e) =>
+                              updateMedicamento(
+                                index,
+                                "indicaciones",
+                                e.target.value,
+                              )
+                            }
+                            placeholder="Instrucciones adicionales..."
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
 
-              {/* Exams */}
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <Label className="text-base font-medium">
-                    Exámenes Realizados
-                  </Label>
-                  <Button
-                    type="button"
-                    onClick={addExamen}
-                    size="sm"
-                    variant="outline"
-                  >
-                    <Plus className="w-4 h-4 mr-1" />
-                    Agregar
-                  </Button>
-                </div>
-                {examenes.map((exam, index) => (
-                  <div
-                    key={index}
-                    className="border border-vet-gray-200 rounded-lg p-4 mb-3"
-                  >
-                    <div className="flex justify-between items-start mb-3">
-                      <h5 className="font-medium text-vet-gray-900">
-                        Examen {index + 1}
-                      </h5>
-                      <Button
-                        type="button"
-                        onClick={() => removeExamen(index)}
-                        size="sm"
-                        variant="ghost"
-                      >
-                        <Trash2 className="w-4 h-4 text-red-500" />
-                      </Button>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      <div>
-                        <Label>Tipo de examen</Label>
-                        <Input
-                          value={exam.tipo}
-                          onChange={(e) =>
-                            updateExamen(index, "tipo", e.target.value)
-                          }
-                          placeholder="Ej: Radiografía, Análisis de sangre"
-                        />
-                      </div>
-                      <div>
-                        <Label>Resultado</Label>
-                        <Input
-                          value={exam.resultado}
-                          onChange={(e) =>
-                            updateExamen(index, "resultado", e.target.value)
-                          }
-                          placeholder="Resultado del examen..."
-                        />
-                      </div>
-                    </div>
+              {/* Exams - conditional based on service type */}
+              {serviceConfig.showExams && (
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <Label className="text-base font-medium">
+                      Exámenes Realizados
+                    </Label>
+                    <Button
+                      type="button"
+                      onClick={addExamen}
+                      size="sm"
+                      variant="outline"
+                    >
+                      <Plus className="w-4 h-4 mr-1" />
+                      Agregar
+                    </Button>
                   </div>
-                ))}
-              </div>
+                  {examenes.map((exam, index) => (
+                    <div
+                      key={index}
+                      className="border border-vet-gray-200 rounded-lg p-4 mb-3"
+                    >
+                      <div className="flex justify-between items-start mb-3">
+                        <h5 className="font-medium text-vet-gray-900">
+                          Examen {index + 1}
+                        </h5>
+                        <Button
+                          type="button"
+                          onClick={() => removeExamen(index)}
+                          size="sm"
+                          variant="ghost"
+                        >
+                          <Trash2 className="w-4 h-4 text-red-500" />
+                        </Button>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                          <Label>Tipo de examen</Label>
+                          <Input
+                            value={exam.tipo}
+                            onChange={(e) =>
+                              updateExamen(index, "tipo", e.target.value)
+                            }
+                            placeholder="Ej: Radiografía, Análisis de sangre"
+                          />
+                        </div>
+                        <div>
+                          <Label>Resultado</Label>
+                          <Input
+                            value={exam.resultado}
+                            onChange={(e) =>
+                              updateExamen(index, "resultado", e.target.value)
+                            }
+                            placeholder="Resultado del examen..."
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
 
               {/* Observations and Follow-up */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -622,7 +743,7 @@ export default function CitaAttendModal({
                       })
                     }
                     placeholder="Observaciones adicionales sobre la consulta..."
-                    rows={4}
+                    className="h-32 resize-none overflow-y-auto"
                   />
                 </div>
                 <div>

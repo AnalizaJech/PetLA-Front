@@ -22,6 +22,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -55,8 +61,10 @@ import {
   Syringe,
   Mail,
   MapPin,
+  ChevronDown,
 } from "lucide-react";
 import jsPDF from "jspdf";
+import * as XLSX from "xlsx";
 
 export default function HistorialClinicoVeterinario() {
   const {
@@ -353,10 +361,15 @@ export default function HistorialClinicoVeterinario() {
       y += 8;
 
       doc.setFontSize(10);
-      doc.text(`Veterinario: Dr. ${record.veterinario}`, 30, y);
+      doc.text(`Veterinario: ${record.veterinario}`, 30, y);
       y += 6;
       doc.text(
-        `Tipo: ${record.tipoConsulta.replace("_", " ").toUpperCase()}`,
+        `Tipo: ${record.tipoConsulta
+          .replace("_", " ")
+          .toLowerCase()
+          .split(" ")
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(" ")}`,
         30,
         y,
       );
@@ -410,6 +423,80 @@ export default function HistorialClinicoVeterinario() {
     doc.save(
       `historial_${selectedPet.nombre}_${new Date().toISOString().split("T")[0]}.pdf`,
     );
+  };
+
+  // Download clinical history as Excel
+  const downloadHistorialExcel = () => {
+    if (!selectedPet || !historialMascota.length) return;
+
+    const data = historialMascota.map((record) => ({
+      Fecha: new Date(record.fecha).toLocaleDateString("es-ES"),
+      Veterinario: record.veterinario,
+      "Tipo de Consulta": record.tipoConsulta
+        .replace("_", " ")
+        .toLowerCase()
+        .split(" ")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" "),
+      Motivo: record.motivo || "Consulta médica",
+      Diagnóstico: record.diagnostico || "No especificado",
+      Tratamiento: record.tratamiento || "No especificado",
+      Peso: record.peso || "No registrado",
+      Temperatura: record.temperatura || "No registrada",
+      Estado: record.estado,
+      Observaciones: record.observaciones || "Sin observaciones",
+    }));
+
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Historial Clínico");
+
+    XLSX.writeFile(
+      wb,
+      `historial_${selectedPet.nombre}_${new Date().toISOString().split("T")[0]}.xlsx`,
+    );
+  };
+
+  // Download clinical history as TXT
+  const downloadHistorialTXT = () => {
+    if (!selectedPet || !historialMascota.length) return;
+
+    let content = `HISTORIAL CLÍNICO VETERINARIO\n`;
+    content += `Mascota: ${selectedPet.nombre}\n`;
+    content += `Especie: ${selectedPet.especie}\n`;
+    content += `Propietario: ${selectedOwner?.nombre || "No especificado"}\n`;
+    content += `Fecha de generación: ${new Date().toLocaleDateString("es-ES")}\n`;
+    content += `${"=".repeat(50)}\n\n`;
+
+    historialMascota.forEach((record, index) => {
+      content += `REGISTRO #${index + 1}\n`;
+      content += `Fecha: ${new Date(record.fecha).toLocaleDateString("es-ES")}\n`;
+      content += `Veterinario: ${record.veterinario}\n`;
+      content += `Tipo: ${record.tipoConsulta
+        .replace("_", " ")
+        .toLowerCase()
+        .split(" ")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ")}\n`;
+      content += `Motivo: ${record.motivo || "Consulta médica"}\n`;
+      content += `Diagnóstico: ${record.diagnostico || "No especificado"}\n`;
+      content += `Tratamiento: ${record.tratamiento || "No especificado"}\n`;
+      if (record.peso) content += `Peso: ${record.peso} kg\n`;
+      if (record.temperatura)
+        content += `Temperatura: ${record.temperatura}°C\n`;
+      content += `Estado: ${record.estado}\n`;
+      if (record.observaciones)
+        content += `Observaciones: ${record.observaciones}\n`;
+      content += `${"-".repeat(30)}\n\n`;
+    });
+
+    const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `historial_${selectedPet.nombre}_${new Date().toISOString().split("T")[0]}.txt`;
+    link.click();
+    URL.revokeObjectURL(url);
   };
 
   // Navigation functions
@@ -518,13 +605,29 @@ export default function HistorialClinicoVeterinario() {
               {currentView === "history" &&
                 selectedPet &&
                 historialMascota.length > 0 && (
-                  <Button
-                    onClick={downloadHistorialPDF}
-                    className="bg-vet-primary hover:bg-vet-primary-dark"
-                  >
-                    <Download className="w-4 h-4 mr-2" />
-                    Descargar PDF
-                  </Button>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button className="bg-vet-primary hover:bg-vet-primary-dark">
+                        <Download className="w-4 h-4 mr-2" />
+                        Descargar Historial
+                        <ChevronDown className="w-4 h-4 ml-2" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem onClick={downloadHistorialPDF}>
+                        <Download className="w-4 h-4 mr-2" />
+                        PDF
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={downloadHistorialExcel}>
+                        <Download className="w-4 h-4 mr-2" />
+                        Excel
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={downloadHistorialTXT}>
+                        <Download className="w-4 h-4 mr-2" />
+                        TXT
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 )}
             </div>
           </div>
@@ -889,13 +992,29 @@ export default function HistorialClinicoVeterinario() {
                 </div>
 
                 {historialMascota.length > 0 && (
-                  <Button
-                    onClick={downloadHistorialPDF}
-                    className="bg-vet-primary hover:bg-vet-primary-dark"
-                  >
-                    <Download className="w-4 h-4 mr-2" />
-                    Descargar PDF
-                  </Button>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button className="bg-vet-primary hover:bg-vet-primary-dark">
+                        <Download className="w-4 h-4 mr-2" />
+                        Descargar Historial
+                        <ChevronDown className="w-4 h-4 ml-2" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem onClick={downloadHistorialPDF}>
+                        <Download className="w-4 h-4 mr-2" />
+                        PDF
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={downloadHistorialExcel}>
+                        <Download className="w-4 h-4 mr-2" />
+                        Excel
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={downloadHistorialTXT}>
+                        <Download className="w-4 h-4 mr-2" />
+                        TXT
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 )}
               </div>
 
@@ -1120,7 +1239,16 @@ export default function HistorialClinicoVeterinario() {
                                     record.tipoConsulta,
                                   )}
                                 >
-                                  {record.tipoConsulta.replace("_", " ")}
+                                  {record.tipoConsulta
+                                    .replace("_", " ")
+                                    .toLowerCase()
+                                    .split(" ")
+                                    .map(
+                                      (word) =>
+                                        word.charAt(0).toUpperCase() +
+                                        word.slice(1),
+                                    )
+                                    .join(" ")}
                                 </Badge>
                               </div>
                               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-vet-gray-600 mb-3">
@@ -1134,7 +1262,7 @@ export default function HistorialClinicoVeterinario() {
                                 </div>
                                 <div className="flex items-center space-x-2">
                                   <Stethoscope className="w-4 h-4" />
-                                  <span>Dr. {record.veterinario}</span>
+                                  <span>{record.veterinario}</span>
                                 </div>
                                 <div className="flex items-center space-x-2">
                                   <CheckCircle className="w-4 h-4" />
@@ -1238,7 +1366,7 @@ export default function HistorialClinicoVeterinario() {
                         Veterinario
                       </Label>
                       <p className="text-vet-gray-900">
-                        Dr. {selectedRecord.veterinario}
+                        {selectedRecord.veterinario}
                       </p>
                     </div>
                     <div>
@@ -1248,7 +1376,15 @@ export default function HistorialClinicoVeterinario() {
                       <Badge
                         className={getBadgeVariant(selectedRecord.tipoConsulta)}
                       >
-                        {selectedRecord.tipoConsulta.replace("_", " ")}
+                        {selectedRecord.tipoConsulta
+                          .replace("_", " ")
+                          .toLowerCase()
+                          .split(" ")
+                          .map(
+                            (word) =>
+                              word.charAt(0).toUpperCase() + word.slice(1),
+                          )
+                          .join(" ")}
                       </Badge>
                     </div>
                     <div>
@@ -1313,7 +1449,7 @@ export default function HistorialClinicoVeterinario() {
                           Temperatura
                         </Label>
                         <p className="text-vet-gray-900">
-                          {selectedRecord.temperatura}°C
+                          {selectedRecord.temperatura}��C
                         </p>
                       </div>
                     )}
