@@ -435,11 +435,11 @@ export default function MisCitas() {
                               <img
                                 src={mascota.foto}
                                 alt={cita.mascota}
-                                className="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full object-cover border-2 border-vet-primary/20"
+                                className="w-20 h-20 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-full object-cover border-2 border-vet-primary/20"
                               />
                             ) : (
-                              <div className="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 bg-vet-primary/10 rounded-full flex items-center justify-center">
-                                <PawPrint className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 text-vet-primary" />
+                              <div className="w-20 h-20 md:w-28 md:h-28 lg:w-32 lg:h-32 bg-vet-primary/10 rounded-full flex items-center justify-center">
+                                <PawPrint className="w-10 h-10 md:w-14 md:h-14 lg:w-16 lg:h-16 text-vet-primary" />
                               </div>
                             );
                           })()}
@@ -472,7 +472,7 @@ export default function MisCitas() {
                             </p>
                             <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-6 md:space-x-8 text-sm sm:text-base md:text-lg text-vet-gray-500">
                               <div className="flex items-center space-x-2">
-                                <Calendar className="w-5 h-5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-vet-primary" />
+                                <Calendar className="w-6 h-6 sm:w-5 sm:h-5 md:w-7 md:h-7 lg:w-6 lg:h-6 text-vet-primary" />
                                 <span className="font-medium">
                                   {cita.fecha.toLocaleDateString("es-ES", {
                                     weekday: "short",
@@ -482,7 +482,7 @@ export default function MisCitas() {
                                 </span>
                               </div>
                               <div className="flex items-center space-x-2">
-                                <Clock className="w-5 h-5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-vet-primary" />
+                                <Clock className="w-6 h-6 sm:w-5 sm:h-5 md:w-7 md:h-7 lg:w-6 lg:h-6 text-vet-primary" />
                                 <span className="font-medium">
                                   {cita.fecha.toLocaleTimeString("es-ES", {
                                     hour: "2-digit",
@@ -491,7 +491,7 @@ export default function MisCitas() {
                                 </span>
                               </div>
                               <div className="flex items-center space-x-2">
-                                <MapPin className="w-5 h-5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-vet-primary" />
+                                <MapPin className="w-6 h-6 sm:w-5 sm:h-5 md:w-7 md:h-7 lg:w-6 lg:h-6 text-vet-primary" />
                                 <span className="font-medium">
                                   {cita.ubicacion}
                                 </span>
