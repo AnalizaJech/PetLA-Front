@@ -181,7 +181,7 @@ export default function FeaturesCarousel() {
   return (
     <section
       id="caracteristicas"
-      className="py-24 bg-vet-gray-50 relative overflow-hidden"
+      className="pt-24 pb-32 bg-vet-gray-50 relative overflow-hidden"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 overflow-hidden">
         {/* Header */}
