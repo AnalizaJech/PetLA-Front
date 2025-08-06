@@ -628,7 +628,7 @@ export default function Calendario() {
                                           })}
                                         </span>
                                       </div>
-                                      <div className="flex items-center space-x-2">
+                                      <div className="flex flex-wrap items-center gap-1 sm:gap-2">
                                         <Badge
                                           variant="secondary"
                                           className={estadoColors[cita.estado]}
