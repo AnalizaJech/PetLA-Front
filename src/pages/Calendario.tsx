@@ -53,6 +53,7 @@ import {
   Mail,
   Info,
   Activity,
+  Heart,
 } from "lucide-react";
 import {
   enhanceMultipleCitas,
@@ -68,7 +69,7 @@ import {
 const estadoColors = {
   pendiente_pago: "bg-yellow-100 text-yellow-800 border-yellow-300",
   en_validacion: "bg-blue-100 text-blue-800 border-blue-300",
-  aceptada: "bg-green-100 text-green-800 border-green-300",
+  aceptada: "bg-green-100 text-green-800 border-green-300 hover:bg-green-100",
   atendida: "bg-emerald-100 text-emerald-800 border-emerald-300",
   cancelada: "bg-red-100 text-red-800 border-red-300",
   expirada: "bg-red-100 text-red-800 border-red-300",
@@ -628,14 +629,7 @@ export default function Calendario() {
                                           })}
                                         </span>
                                       </div>
-                                      <div className="flex flex-wrap items-center gap-1 sm:gap-2">
-                                        <Badge
-                                          variant="secondary"
-                                          className={estadoColors[cita.estado]}
-                                        >
-                                          <StatusIcon className="w-3 h-3 mr-1" />
-                                          {estadoLabels[cita.estado]}
-                                        </Badge>
+                                      <div className="flex flex-wrap items-center gap-1 sm:gap-2 ml-auto">
                                         {getUrgencyBadge(urgencyLevel)}
                                       </div>
                                     </div>
@@ -684,7 +678,7 @@ export default function Calendario() {
                                       {/* Información adicional de la mascota */}
                                       {mascota?.raza && (
                                         <div className="flex items-center space-x-2">
-                                          <Info className="w-3 h-3 text-vet-gray-600" />
+                                          <Heart className="w-3 h-3 text-pink-500" />
                                           <span className="text-xs text-vet-gray-600">
                                             Raza: {mascota.raza}
                                           </span>
@@ -693,7 +687,7 @@ export default function Calendario() {
                                     </div>
 
                                     {/* Botones de acción */}
-                                    <div className="flex flex-col sm:flex-row justify-end mt-3 gap-2">
+                                    <div className="flex flex-wrap justify-end mt-3 gap-1 max-w-full">
                                       {cita.estado === "aceptada" && (
                                         <Button
                                           size="sm"
@@ -701,9 +695,9 @@ export default function Calendario() {
                                             e.stopPropagation();
                                             handleAttendCita(citaData);
                                           }}
-                                          className="bg-vet-primary hover:bg-vet-primary-dark w-full sm:w-auto"
+                                          className="bg-vet-primary hover:bg-vet-primary-dark text-xs px-2 py-1 flex-shrink-0"
                                         >
-                                          <Activity className="w-4 h-4 mr-1" />
+                                          <Activity className="w-3 h-3 mr-1" />
                                           Atender
                                         </Button>
                                       )}
@@ -714,10 +708,10 @@ export default function Calendario() {
                                           e.stopPropagation();
                                           handleViewDetail(citaData);
                                         }}
-                                        className="w-full sm:w-auto"
+                                        className="text-xs px-2 py-1 flex-shrink-0"
                                       >
-                                        <Eye className="w-4 h-4 mr-1" />
-                                        Detalle de la Cita
+                                        <Eye className="w-3 h-3 mr-1" />
+                                        Detalle
                                       </Button>
                                       <Button
                                         size="sm"
@@ -725,8 +719,7 @@ export default function Calendario() {
                                         onClick={(e) => {
                                           e.stopPropagation();
                                           if (mascota) {
-                                            const propietario =
-                                              selectedCita.propietario;
+                                            const propietario = citaData.propietario;
                                             navigate(
                                               `/historial-clinico-veterinario?view=history&ownerId=${propietario?.id || "unknown"}&petId=${mascota.id}`,
                                             );
@@ -737,10 +730,10 @@ export default function Calendario() {
                                             );
                                           }
                                         }}
-                                        className="w-full sm:w-auto"
+                                        className="text-xs px-2 py-1 flex-shrink-0"
                                       >
-                                        <FileText className="w-4 h-4 mr-1" />
-                                        Ver Historial
+                                        <FileText className="w-3 h-3 mr-1" />
+                                        Historial
                                       </Button>
                                     </div>
                                   </CardContent>
