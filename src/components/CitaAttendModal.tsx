@@ -439,7 +439,7 @@ export default function CitaAttendModal({
                       setFormData({ ...formData, diagnostico: e.target.value })
                     }
                     placeholder="Describe el diagnóstico médico..."
-                    rows={4}
+                    className="h-32 resize-none overflow-y-auto"
                     required
                   />
                 </div>
@@ -452,7 +452,7 @@ export default function CitaAttendModal({
                       setFormData({ ...formData, tratamiento: e.target.value })
                     }
                     placeholder="Describe el plan de tratamiento..."
-                    rows={4}
+                    className="h-32 resize-none overflow-y-auto"
                   />
                 </div>
               </div>
