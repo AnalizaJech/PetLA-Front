@@ -284,7 +284,7 @@ export default function DashboardVeterinario() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                   <div className="flex items-center space-x-2">
-                    <CalendarIcon className="w-5 h-5 text-blue-600" />
+                    <CalendarIcon className="w-5 h-5 text-vet-primary" />
                     <span className="font-medium text-gray-900">
                       {new Date().toLocaleDateString("es-ES", {
                         weekday: "long",
@@ -325,7 +325,7 @@ export default function DashboardVeterinario() {
                     <p className="text-3xl font-bold text-blue-900">
                       {stats.citasHoy}
                     </p>
-                    <p className="text-xs text-blue-600 mt-1">
+                    <p className="text-xs text-vet-primary mt-1">
                       {stats.citasPendientes} pendientes
                     </p>
                   </div>
@@ -474,7 +474,7 @@ export default function DashboardVeterinario() {
 
                                 <div className="flex-1">
                                   <div className="flex items-center space-x-2 mb-1">
-                                    <PawPrint className="w-4 h-4 text-blue-600" />
+                                    <PawPrint className="w-4 h-4 text-vet-primary" />
                                     <span className="font-medium text-gray-900">
                                       {cita.mascota}
                                     </span>
@@ -506,7 +506,7 @@ export default function DashboardVeterinario() {
                   ) : (
                     <div className="text-center py-12">
                       <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <Calendar className="w-8 h-8 text-blue-600" />
+                        <Calendar className="w-8 h-8 text-vet-primary" />
                       </div>
                       <h3 className="text-lg font-medium text-gray-900 mb-2">
                         Día libre
@@ -812,7 +812,7 @@ Generado automáticamente por PetLA
                 <CardHeader className="pb-4">
                   <CardTitle className="flex items-center space-x-2 text-xl">
                     <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                      <Heart className="w-4 h-4 text-blue-600" />
+                      <Heart className="w-4 h-4 text-vet-primary" />
                     </div>
                     <span>Pacientes Recientes</span>
                   </CardTitle>
@@ -841,7 +841,7 @@ Generado automáticamente por PetLA
                           >
                             <div className="flex-1">
                               <div className="flex items-center space-x-2 mb-1">
-                                <PawPrint className="w-3 h-3 text-blue-600" />
+                                <PawPrint className="w-3 h-3 text-vet-primary" />
                                 <span className="text-sm font-medium">
                                   {cita.mascota}
                                 </span>
@@ -885,7 +885,7 @@ Generado automáticamente por PetLA
               <DialogHeader>
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <Search className="w-5 h-5 text-blue-600" />
+                    <Search className="w-5 h-5 text-vet-primary" />
                   </div>
                   <div>
                     <DialogTitle className="text-xl font-semibold text-gray-900">
@@ -952,7 +952,7 @@ Generado automáticamente por PetLA
                               <div className="flex items-center justify-between">
                                 <div className="space-y-2">
                                   <div className="flex items-center space-x-2">
-                                    <PawPrint className="w-4 h-4 text-blue-600" />
+                                    <PawPrint className="w-4 h-4 text-vet-primary" />
                                     <span className="font-medium text-gray-900">
                                       {mascota.nombre}
                                     </span>
@@ -963,7 +963,7 @@ Generado automáticamente por PetLA
 
                                   <div className="bg-gray-50 p-2 rounded">
                                     <div className="flex items-center space-x-2 text-sm">
-                                      <UserCheck className="w-3 h-3 text-blue-600" />
+                                      <UserCheck className="w-3 h-3 text-vet-primary" />
                                       <span className="font-medium">
                                         {propietario?.nombre || "Sin asignar"}
                                       </span>
