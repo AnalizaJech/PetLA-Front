@@ -1397,6 +1397,66 @@ export default function HistorialClinicoVeterinario() {
                               </div>
                             )}
 
+                            {/* Exámenes realizados */}
+                            {record.examenes && record.examenes.length > 0 && (
+                              <div>
+                                <h5 className="font-medium text-vet-gray-900 mb-2 flex items-center">
+                                  <Activity className="w-4 h-4 mr-2 text-blue-600" />
+                                  Exámenes Realizados:
+                                </h5>
+                                <div className="space-y-2 ml-6">
+                                  {record.examenes.map((examen, index) => (
+                                    <div key={index} className="border border-vet-gray-200 rounded-lg p-3">
+                                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+                                        <div>
+                                          <strong>Tipo de Examen:</strong> {examen.tipo}
+                                        </div>
+                                        <div>
+                                          <strong>Resultado:</strong> {examen.resultado}
+                                        </div>
+                                        {examen.archivo && (
+                                          <div className="md:col-span-2">
+                                            <strong>Archivo:</strong>
+                                            <a href={examen.archivo} target="_blank" rel="noopener noreferrer"
+                                               className="text-vet-primary hover:underline ml-2">
+                                              Ver archivo adjunto
+                                            </a>
+                                          </div>
+                                        )}
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Vacunas aplicadas */}
+                            {record.vacunas && record.vacunas.length > 0 && (
+                              <div>
+                                <h5 className="font-medium text-vet-gray-900 mb-2 flex items-center">
+                                  <Syringe className="w-4 h-4 mr-2 text-green-600" />
+                                  Vacunas Aplicadas:
+                                </h5>
+                                <div className="space-y-2 ml-6">
+                                  {record.vacunas.map((vacuna, index) => (
+                                    <div key={index} className="border border-vet-gray-200 rounded-lg p-3">
+                                      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm">
+                                        <div>
+                                          <strong>Vacuna:</strong> {vacuna.nombre}
+                                        </div>
+                                        <div>
+                                          <strong>Lote:</strong> {vacuna.lote}
+                                        </div>
+                                        <div>
+                                          <strong>Próxima Dosis:</strong> {new Date(vacuna.proximaFecha).toLocaleDateString("es-ES")}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
                             {/* Servicios adicionales */}
                             {record.servicios && record.servicios.length > 0 && (
                               <div>
@@ -1416,9 +1476,19 @@ export default function HistorialClinicoVeterinario() {
                                             <strong>Precio:</strong> ${servicio.precio}
                                           </div>
                                         )}
+                                        {servicio.duracion && (
+                                          <div>
+                                            <strong>Duración:</strong> {servicio.duracion}
+                                          </div>
+                                        )}
                                         {servicio.descripcion && (
                                           <div className="md:col-span-2">
                                             <strong>Descripción:</strong> {servicio.descripcion}
+                                          </div>
+                                        )}
+                                        {servicio.notas && (
+                                          <div className="md:col-span-2">
+                                            <strong>Notas:</strong> {servicio.notas}
                                           </div>
                                         )}
                                       </div>
