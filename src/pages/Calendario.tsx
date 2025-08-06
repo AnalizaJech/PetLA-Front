@@ -277,7 +277,7 @@ export default function Calendario() {
     const Icon = config.icon;
 
     return (
-      <Badge className={config.color}>
+      <Badge className={`${config.color} hover:!bg-current hover:!text-current`}>
         <Icon className="w-3 h-3 mr-1" />
         {config.label}
       </Badge>
