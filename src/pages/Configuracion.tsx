@@ -887,6 +887,14 @@ export default function Configuracion() {
                 <span className="hidden sm:inline">Seguridad</span>
                 <span className="sm:hidden">Segur.</span>
               </TabsTrigger>
+              <TabsTrigger
+                value="data"
+                className="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm p-2 sm:p-3"
+              >
+                <Database className="w-3 h-3 sm:w-4 sm:h-4" />
+                <span className="hidden sm:inline">Datos</span>
+                <span className="sm:hidden">Datos</span>
+              </TabsTrigger>
             </TabsList>
 
             {/* Profile Tab */}
@@ -1921,7 +1929,7 @@ export default function Configuracion() {
                         <span className="text-red-600 font-bold mt-0.5">•</span>
                         <span>
                           <strong>
-                            Se cancelarán todas las citas pendientes
+                            Se cancelar��n todas las citas pendientes
                           </strong>{" "}
                           automáticamente
                         </span>
@@ -1962,7 +1970,7 @@ export default function Configuracion() {
                         mascotas
                       </p>
                       <p>
-                        ��� Si tienes citas programadas, se notificará a la
+                        • Si tienes citas programadas, se notificará a la
                         clínica automáticamente
                       </p>
                     </div>
