@@ -693,7 +693,7 @@ export default function Calendario() {
                                     </div>
 
                                     {/* Botones de acción */}
-                                    <div className="flex justify-end mt-3 space-x-2">
+                                    <div className="flex flex-col sm:flex-row justify-end mt-3 gap-2">
                                       {cita.estado === "aceptada" && (
                                         <Button
                                           size="sm"
