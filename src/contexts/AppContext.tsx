@@ -615,7 +615,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       // Log del uso para debugging (solo en desarrollo)
       if (process.env.NODE_ENV === "development") {
         console.log(
-          `📊 LocalStorage: ${currentUsage}% usado (${(total / 1024).toFixed(1)}KB)`,
+          `[STORAGE] LocalStorage: ${currentUsage}% usado (${(total / 1024).toFixed(1)}KB)`,
         );
       }
 
@@ -644,11 +644,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
         });
 
         console.log(
-          `✅ Liberado ${(cleanedSpace / 1024).toFixed(1)}KB de espacio`,
+          `[CLEANED] Liberado ${(cleanedSpace / 1024).toFixed(1)}KB de espacio`,
         );
       }
     } catch (error) {
-      console.error("❌ Error optimizando localStorage:", error);
+      console.error("[ERROR] Error optimizando localStorage:", error);
     }
   };
 
@@ -751,7 +751,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     );
 
     if (!hasRunAutoRepair && citas.length > 0 && usuarios.length > 0) {
-      console.log("🔧 Ejecutando reparación automática avanzada de datos...");
+      console.log("[REPAIR] Ejecutando reparación automática avanzada de datos...");
 
       let repairedCitas = 0;
       let createdMascotas = 0;
@@ -800,7 +800,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
             mascotasNombres.add(cita.mascota.toLowerCase());
             createdMascotas++;
             console.log(
-              `➕ Mascota creada: "${cita.mascota}" asignada a ${clienteAsignado.nombre}`,
+              `[CREATE] Mascota creada: "${cita.mascota}" asignada a ${clienteAsignado.nombre}`,
             );
           } else {
             errors.push(
@@ -833,7 +833,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
             if (propietario) {
               repairedCitas++;
               console.log(
-                `✅ Cita reparada: "${cita.mascota}" → ${propietario.nombre}`,
+                `[REPAIR] Cita reparada: "${cita.mascota}" -> ${propietario.nombre}`,
               );
 
               return {
@@ -873,7 +873,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
             const clienteAsignado = clientesDisponibles[0];
             repairedMascotas++;
             console.log(
-              `🔧 Mascota "${mascota.nombre}" asignada a ${clienteAsignado.nombre}`,
+              `[ASSIGN] Mascota "${mascota.nombre}" asignada a ${clienteAsignado.nombre}`,
             );
 
             return {
@@ -893,7 +893,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       const totalRepairs = repairedCitas + createdMascotas + repairedMascotas;
       if (totalRepairs > 0) {
         console.log(
-          `🎉 Reparación completada: ${repairedCitas} citas, ${createdMascotas} mascotas creadas, ${repairedMascotas} mascotas reparadas`,
+          `[COMPLETE] Reparación completada: ${repairedCitas} citas, ${createdMascotas} mascotas creadas, ${repairedMascotas} mascotas reparadas`,
         );
       }
 
@@ -941,7 +941,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       });
 
       console.log(
-        `✅ Comprobante guardado: ${(comprobanteData.size / 1024).toFixed(1)}KB`,
+        `[SAVED] Comprobante guardado: ${(comprobanteData.size / 1024).toFixed(1)}KB`,
       );
       return true;
     } catch (error) {
