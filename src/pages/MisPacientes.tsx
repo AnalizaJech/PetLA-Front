@@ -505,23 +505,6 @@ export default function MisPacientes() {
                 </Alert>
               )}
 
-              {/* Información sobre mascotas no registradas - Solo informativo */}
-              {stats.sinMascota > 0 && (
-                <Alert className="border-blue-200 bg-blue-50">
-                  <Info className="w-4 h-4 text-blue-600" />
-                  <AlertDescription className="text-blue-800">
-                    <div>
-                      <strong>
-                        {stats.sinMascota} citas tienen mascotas que requieren registro.
-                      </strong>
-                      <div className="mt-2 text-sm">
-                        Las mascotas deben ser registradas por sus propietarios antes de la consulta.
-                        Como veterinario, puede proceder con la atención utilizando los datos básicos de la cita.
-                      </div>
-                    </div>
-                  </AlertDescription>
-                </Alert>
-              )}
             </div>
           )}
 
