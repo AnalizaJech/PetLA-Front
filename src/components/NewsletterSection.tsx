@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import {
-  Heart,
+  Dog,
   Mail,
   CheckCircle,
   ArrowRight,
@@ -206,7 +206,7 @@ export default function NewsletterSection() {
             <div className="space-y-4 mb-8">
               <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 bg-vet-primary/10 rounded-full flex items-center justify-center">
-                  <Heart className="w-4 h-4 text-vet-primary" />
+                  <Dog className="w-4 h-4 text-vet-primary" />
                 </div>
                 <span className="text-vet-gray-700">
                   Consejos veterinarios semanales
@@ -325,7 +325,7 @@ export default function NewsletterSection() {
               <div className="bg-vet-gray-50 rounded-xl p-6 text-left">
                 <div className="flex items-center space-x-3 mb-4">
                   <div className="w-8 h-8 bg-vet-primary rounded-full flex items-center justify-center">
-                    <Heart className="w-4 h-4 text-white" />
+                    <Dog className="w-4 h-4 text-white" />
                   </div>
                   <div>
                     <p className="font-semibold text-vet-gray-900">
