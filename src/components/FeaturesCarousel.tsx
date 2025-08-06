@@ -365,7 +365,7 @@ export default function FeaturesCarousel() {
                     ? "bg-vet-primary scale-125"
                     : "bg-vet-gray-300 hover:bg-vet-primary/50"
                 }`}
-                style={{ WebkitTapHighlightColor: 'transparent' }}
+                style={{ WebkitTapHighlightColor: "transparent" }}
               />
             ))}
           </div>
