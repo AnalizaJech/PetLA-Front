@@ -1549,6 +1549,145 @@ export default function HistorialClinico() {
                               {servicio.tratamiento}
                             </p>
                           </div>
+
+                          {/* Signos vitales */}
+                          {(servicio.peso || servicio.temperatura || servicio.presionArterial || servicio.frecuenciaCardiaca) && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Signos Vitales:
+                              </span>
+                              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                                {servicio.peso && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">Peso:</span> {servicio.peso} kg
+                                  </div>
+                                )}
+                                {servicio.temperatura && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">Temp:</span> {servicio.temperatura}°C
+                                  </div>
+                                )}
+                                {servicio.presionArterial && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">P.A.:</span> {servicio.presionArterial}
+                                  </div>
+                                )}
+                                {servicio.frecuenciaCardiaca && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">F.C.:</span> {servicio.frecuenciaCardiaca} bpm
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Medicamentos */}
+                          {servicio.medicamentos && servicio.medicamentos.length > 0 && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Medicamentos Recetados:
+                              </span>
+                              <div className="space-y-2">
+                                {servicio.medicamentos.map((med, index) => (
+                                  <div key={index} className="border border-vet-gray-200 rounded-lg p-3">
+                                    <div className="text-sm">
+                                      <div><strong>Medicamento:</strong> {med.nombre}</div>
+                                      <div><strong>Dosis:</strong> {med.dosis}</div>
+                                      {med.frecuencia && <div><strong>Frecuencia:</strong> {med.frecuencia}</div>}
+                                      {med.duracion && <div><strong>Duración:</strong> {med.duracion}</div>}
+                                      {med.indicaciones && <div><strong>Indicaciones:</strong> {med.indicaciones}</div>}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Vacunas aplicadas */}
+                          {servicio.vacunas && servicio.vacunas.length > 0 && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Vacunas Aplicadas:
+                              </span>
+                              <div className="space-y-2">
+                                {servicio.vacunas.map((vacuna, index) => (
+                                  <div key={index} className="border border-vet-gray-200 rounded-lg p-3">
+                                    <div className="text-sm">
+                                      <div><strong>Vacuna:</strong> {vacuna.nombre}</div>
+                                      <div><strong>Lote:</strong> {vacuna.lote}</div>
+                                      <div><strong>Próxima Dosis:</strong> {new Date(vacuna.proximaFecha).toLocaleDateString("es-ES")}</div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Exámenes realizados */}
+                          {servicio.examenes && servicio.examenes.length > 0 && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Exámenes Realizados:
+                              </span>
+                              <div className="space-y-2">
+                                {servicio.examenes.map((examen, index) => (
+                                  <div key={index} className="bg-vet-gray-50 rounded-lg p-3">
+                                    <div className="text-sm">
+                                      <strong>{examen.tipo}:</strong> {examen.resultado}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Servicios adicionales */}
+                          {servicio.servicios && servicio.servicios.length > 0 && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Servicios Realizados:
+                              </span>
+                              <div className="space-y-2">
+                                {servicio.servicios.map((servicioItem, index) => (
+                                  <div key={index} className="bg-vet-gray-50 rounded-lg p-3">
+                                    <div className="text-sm">
+                                      <div><strong>Servicio:</strong> {servicioItem.nombre}</div>
+                                      {servicioItem.precio && <div><strong>Precio:</strong> S/{servicioItem.precio}</div>}
+                                      {servicioItem.descripcion && <div><strong>Descripción:</strong> {servicioItem.descripcion}</div>}
+                                      {servicioItem.duracion && <div><strong>Duración:</strong> {servicioItem.duracion}</div>}
+                                      {servicioItem.notas && <div><strong>Notas:</strong> {servicioItem.notas}</div>}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Archivos adjuntos */}
+                          {servicio.archivosAdjuntos && servicio.archivosAdjuntos.length > 0 && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Archivos Adjuntos:
+                              </span>
+                              <div className="space-y-2">
+                                {servicio.archivosAdjuntos.map((archivo, index) => (
+                                  <div key={index} className="border border-vet-gray-200 rounded-lg p-3">
+                                    <div className="flex items-center justify-between text-sm">
+                                      <div>
+                                        <strong>{archivo.nombre}</strong>
+                                        <span className="text-vet-gray-600 ml-2">({archivo.tipo})</span>
+                                      </div>
+                                      <a href={archivo.url} target="_blank" rel="noopener noreferrer"
+                                         className="text-vet-primary hover:underline">
+                                        <Download className="w-4 h-4 inline mr-1" />
+                                        Descargar
+                                      </a>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
                         </div>
 
                         {/* Resumen completo del servicio realizado */}
@@ -1702,6 +1841,145 @@ export default function HistorialClinico() {
                               {servicio.tratamiento}
                             </p>
                           </div>
+
+                          {/* Signos vitales */}
+                          {(servicio.peso || servicio.temperatura || servicio.presionArterial || servicio.frecuenciaCardiaca) && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Signos Vitales:
+                              </span>
+                              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                                {servicio.peso && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">Peso:</span> {servicio.peso} kg
+                                  </div>
+                                )}
+                                {servicio.temperatura && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">Temp:</span> {servicio.temperatura}°C
+                                  </div>
+                                )}
+                                {servicio.presionArterial && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">P.A.:</span> {servicio.presionArterial}
+                                  </div>
+                                )}
+                                {servicio.frecuenciaCardiaca && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">F.C.:</span> {servicio.frecuenciaCardiaca} bpm
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Medicamentos */}
+                          {servicio.medicamentos && servicio.medicamentos.length > 0 && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Medicamentos Recetados:
+                              </span>
+                              <div className="space-y-2">
+                                {servicio.medicamentos.map((med, index) => (
+                                  <div key={index} className="border border-vet-gray-200 rounded-lg p-3">
+                                    <div className="text-sm">
+                                      <div><strong>Medicamento:</strong> {med.nombre}</div>
+                                      <div><strong>Dosis:</strong> {med.dosis}</div>
+                                      {med.frecuencia && <div><strong>Frecuencia:</strong> {med.frecuencia}</div>}
+                                      {med.duracion && <div><strong>Duración:</strong> {med.duracion}</div>}
+                                      {med.indicaciones && <div><strong>Indicaciones:</strong> {med.indicaciones}</div>}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Vacunas aplicadas */}
+                          {servicio.vacunas && servicio.vacunas.length > 0 && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Vacunas Aplicadas:
+                              </span>
+                              <div className="space-y-2">
+                                {servicio.vacunas.map((vacuna, index) => (
+                                  <div key={index} className="border border-vet-gray-200 rounded-lg p-3">
+                                    <div className="text-sm">
+                                      <div><strong>Vacuna:</strong> {vacuna.nombre}</div>
+                                      <div><strong>Lote:</strong> {vacuna.lote}</div>
+                                      <div><strong>Próxima Dosis:</strong> {new Date(vacuna.proximaFecha).toLocaleDateString("es-ES")}</div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Exámenes realizados */}
+                          {servicio.examenes && servicio.examenes.length > 0 && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Exámenes Realizados:
+                              </span>
+                              <div className="space-y-2">
+                                {servicio.examenes.map((examen, index) => (
+                                  <div key={index} className="bg-vet-gray-50 rounded-lg p-3">
+                                    <div className="text-sm">
+                                      <strong>{examen.tipo}:</strong> {examen.resultado}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Servicios adicionales */}
+                          {servicio.servicios && servicio.servicios.length > 0 && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Servicios Realizados:
+                              </span>
+                              <div className="space-y-2">
+                                {servicio.servicios.map((servicioItem, index) => (
+                                  <div key={index} className="bg-vet-gray-50 rounded-lg p-3">
+                                    <div className="text-sm">
+                                      <div><strong>Servicio:</strong> {servicioItem.nombre}</div>
+                                      {servicioItem.precio && <div><strong>Precio:</strong> S/{servicioItem.precio}</div>}
+                                      {servicioItem.descripcion && <div><strong>Descripción:</strong> {servicioItem.descripcion}</div>}
+                                      {servicioItem.duracion && <div><strong>Duración:</strong> {servicioItem.duracion}</div>}
+                                      {servicioItem.notas && <div><strong>Notas:</strong> {servicioItem.notas}</div>}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Archivos adjuntos */}
+                          {servicio.archivosAdjuntos && servicio.archivosAdjuntos.length > 0 && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Archivos Adjuntos:
+                              </span>
+                              <div className="space-y-2">
+                                {servicio.archivosAdjuntos.map((archivo, index) => (
+                                  <div key={index} className="border border-vet-gray-200 rounded-lg p-3">
+                                    <div className="flex items-center justify-between text-sm">
+                                      <div>
+                                        <strong>{archivo.nombre}</strong>
+                                        <span className="text-vet-gray-600 ml-2">({archivo.tipo})</span>
+                                      </div>
+                                      <a href={archivo.url} target="_blank" rel="noopener noreferrer"
+                                         className="text-vet-primary hover:underline">
+                                        <Download className="w-4 h-4 inline mr-1" />
+                                        Descargar
+                                      </a>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
                         </div>
 
                         {/* Resumen completo del servicio realizado */}
@@ -1855,6 +2133,145 @@ export default function HistorialClinico() {
                               {servicio.tratamiento}
                             </p>
                           </div>
+
+                          {/* Signos vitales */}
+                          {(servicio.peso || servicio.temperatura || servicio.presionArterial || servicio.frecuenciaCardiaca) && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Signos Vitales:
+                              </span>
+                              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                                {servicio.peso && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">Peso:</span> {servicio.peso} kg
+                                  </div>
+                                )}
+                                {servicio.temperatura && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">Temp:</span> {servicio.temperatura}°C
+                                  </div>
+                                )}
+                                {servicio.presionArterial && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">P.A.:</span> {servicio.presionArterial}
+                                  </div>
+                                )}
+                                {servicio.frecuenciaCardiaca && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">F.C.:</span> {servicio.frecuenciaCardiaca} bpm
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Medicamentos */}
+                          {servicio.medicamentos && servicio.medicamentos.length > 0 && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Medicamentos Recetados:
+                              </span>
+                              <div className="space-y-2">
+                                {servicio.medicamentos.map((med, index) => (
+                                  <div key={index} className="border border-vet-gray-200 rounded-lg p-3">
+                                    <div className="text-sm">
+                                      <div><strong>Medicamento:</strong> {med.nombre}</div>
+                                      <div><strong>Dosis:</strong> {med.dosis}</div>
+                                      {med.frecuencia && <div><strong>Frecuencia:</strong> {med.frecuencia}</div>}
+                                      {med.duracion && <div><strong>Duración:</strong> {med.duracion}</div>}
+                                      {med.indicaciones && <div><strong>Indicaciones:</strong> {med.indicaciones}</div>}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Vacunas aplicadas */}
+                          {servicio.vacunas && servicio.vacunas.length > 0 && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Vacunas Aplicadas:
+                              </span>
+                              <div className="space-y-2">
+                                {servicio.vacunas.map((vacuna, index) => (
+                                  <div key={index} className="border border-vet-gray-200 rounded-lg p-3">
+                                    <div className="text-sm">
+                                      <div><strong>Vacuna:</strong> {vacuna.nombre}</div>
+                                      <div><strong>Lote:</strong> {vacuna.lote}</div>
+                                      <div><strong>Próxima Dosis:</strong> {new Date(vacuna.proximaFecha).toLocaleDateString("es-ES")}</div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Exámenes realizados */}
+                          {servicio.examenes && servicio.examenes.length > 0 && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Exámenes Realizados:
+                              </span>
+                              <div className="space-y-2">
+                                {servicio.examenes.map((examen, index) => (
+                                  <div key={index} className="bg-vet-gray-50 rounded-lg p-3">
+                                    <div className="text-sm">
+                                      <strong>{examen.tipo}:</strong> {examen.resultado}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Servicios adicionales */}
+                          {servicio.servicios && servicio.servicios.length > 0 && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Servicios Realizados:
+                              </span>
+                              <div className="space-y-2">
+                                {servicio.servicios.map((servicioItem, index) => (
+                                  <div key={index} className="bg-vet-gray-50 rounded-lg p-3">
+                                    <div className="text-sm">
+                                      <div><strong>Servicio:</strong> {servicioItem.nombre}</div>
+                                      {servicioItem.precio && <div><strong>Precio:</strong> S/{servicioItem.precio}</div>}
+                                      {servicioItem.descripcion && <div><strong>Descripción:</strong> {servicioItem.descripcion}</div>}
+                                      {servicioItem.duracion && <div><strong>Duración:</strong> {servicioItem.duracion}</div>}
+                                      {servicioItem.notas && <div><strong>Notas:</strong> {servicioItem.notas}</div>}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Archivos adjuntos */}
+                          {servicio.archivosAdjuntos && servicio.archivosAdjuntos.length > 0 && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Archivos Adjuntos:
+                              </span>
+                              <div className="space-y-2">
+                                {servicio.archivosAdjuntos.map((archivo, index) => (
+                                  <div key={index} className="border border-vet-gray-200 rounded-lg p-3">
+                                    <div className="flex items-center justify-between text-sm">
+                                      <div>
+                                        <strong>{archivo.nombre}</strong>
+                                        <span className="text-vet-gray-600 ml-2">({archivo.tipo})</span>
+                                      </div>
+                                      <a href={archivo.url} target="_blank" rel="noopener noreferrer"
+                                         className="text-vet-primary hover:underline">
+                                        <Download className="w-4 h-4 inline mr-1" />
+                                        Descargar
+                                      </a>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
                         </div>
 
                         {/* Resumen completo del servicio realizado */}
@@ -2008,6 +2425,145 @@ export default function HistorialClinico() {
                               {servicio.tratamiento}
                             </p>
                           </div>
+
+                          {/* Signos vitales */}
+                          {(servicio.peso || servicio.temperatura || servicio.presionArterial || servicio.frecuenciaCardiaca) && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Signos Vitales:
+                              </span>
+                              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                                {servicio.peso && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">Peso:</span> {servicio.peso} kg
+                                  </div>
+                                )}
+                                {servicio.temperatura && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">Temp:</span> {servicio.temperatura}°C
+                                  </div>
+                                )}
+                                {servicio.presionArterial && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">P.A.:</span> {servicio.presionArterial}
+                                  </div>
+                                )}
+                                {servicio.frecuenciaCardiaca && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">F.C.:</span> {servicio.frecuenciaCardiaca} bpm
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Medicamentos */}
+                          {servicio.medicamentos && servicio.medicamentos.length > 0 && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Medicamentos Recetados:
+                              </span>
+                              <div className="space-y-2">
+                                {servicio.medicamentos.map((med, index) => (
+                                  <div key={index} className="border border-vet-gray-200 rounded-lg p-3">
+                                    <div className="text-sm">
+                                      <div><strong>Medicamento:</strong> {med.nombre}</div>
+                                      <div><strong>Dosis:</strong> {med.dosis}</div>
+                                      {med.frecuencia && <div><strong>Frecuencia:</strong> {med.frecuencia}</div>}
+                                      {med.duracion && <div><strong>Duración:</strong> {med.duracion}</div>}
+                                      {med.indicaciones && <div><strong>Indicaciones:</strong> {med.indicaciones}</div>}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Vacunas aplicadas */}
+                          {servicio.vacunas && servicio.vacunas.length > 0 && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Vacunas Aplicadas:
+                              </span>
+                              <div className="space-y-2">
+                                {servicio.vacunas.map((vacuna, index) => (
+                                  <div key={index} className="border border-vet-gray-200 rounded-lg p-3">
+                                    <div className="text-sm">
+                                      <div><strong>Vacuna:</strong> {vacuna.nombre}</div>
+                                      <div><strong>Lote:</strong> {vacuna.lote}</div>
+                                      <div><strong>Próxima Dosis:</strong> {new Date(vacuna.proximaFecha).toLocaleDateString("es-ES")}</div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Exámenes realizados */}
+                          {servicio.examenes && servicio.examenes.length > 0 && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Exámenes Realizados:
+                              </span>
+                              <div className="space-y-2">
+                                {servicio.examenes.map((examen, index) => (
+                                  <div key={index} className="bg-vet-gray-50 rounded-lg p-3">
+                                    <div className="text-sm">
+                                      <strong>{examen.tipo}:</strong> {examen.resultado}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Servicios adicionales */}
+                          {servicio.servicios && servicio.servicios.length > 0 && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Servicios Realizados:
+                              </span>
+                              <div className="space-y-2">
+                                {servicio.servicios.map((servicioItem, index) => (
+                                  <div key={index} className="bg-vet-gray-50 rounded-lg p-3">
+                                    <div className="text-sm">
+                                      <div><strong>Servicio:</strong> {servicioItem.nombre}</div>
+                                      {servicioItem.precio && <div><strong>Precio:</strong> S/{servicioItem.precio}</div>}
+                                      {servicioItem.descripcion && <div><strong>Descripción:</strong> {servicioItem.descripcion}</div>}
+                                      {servicioItem.duracion && <div><strong>Duración:</strong> {servicioItem.duracion}</div>}
+                                      {servicioItem.notas && <div><strong>Notas:</strong> {servicioItem.notas}</div>}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Archivos adjuntos */}
+                          {servicio.archivosAdjuntos && servicio.archivosAdjuntos.length > 0 && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Archivos Adjuntos:
+                              </span>
+                              <div className="space-y-2">
+                                {servicio.archivosAdjuntos.map((archivo, index) => (
+                                  <div key={index} className="border border-vet-gray-200 rounded-lg p-3">
+                                    <div className="flex items-center justify-between text-sm">
+                                      <div>
+                                        <strong>{archivo.nombre}</strong>
+                                        <span className="text-vet-gray-600 ml-2">({archivo.tipo})</span>
+                                      </div>
+                                      <a href={archivo.url} target="_blank" rel="noopener noreferrer"
+                                         className="text-vet-primary hover:underline">
+                                        <Download className="w-4 h-4 inline mr-1" />
+                                        Descargar
+                                      </a>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
                         </div>
 
                         {/* Resumen completo del servicio realizado */}
@@ -2161,6 +2717,145 @@ export default function HistorialClinico() {
                               {servicio.tratamiento}
                             </p>
                           </div>
+
+                          {/* Signos vitales */}
+                          {(servicio.peso || servicio.temperatura || servicio.presionArterial || servicio.frecuenciaCardiaca) && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Signos Vitales:
+                              </span>
+                              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                                {servicio.peso && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">Peso:</span> {servicio.peso} kg
+                                  </div>
+                                )}
+                                {servicio.temperatura && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">Temp:</span> {servicio.temperatura}°C
+                                  </div>
+                                )}
+                                {servicio.presionArterial && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">P.A.:</span> {servicio.presionArterial}
+                                  </div>
+                                )}
+                                {servicio.frecuenciaCardiaca && (
+                                  <div className="bg-vet-gray-50 rounded-lg p-2">
+                                    <span className="font-medium">F.C.:</span> {servicio.frecuenciaCardiaca} bpm
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Medicamentos */}
+                          {servicio.medicamentos && servicio.medicamentos.length > 0 && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Medicamentos Recetados:
+                              </span>
+                              <div className="space-y-2">
+                                {servicio.medicamentos.map((med, index) => (
+                                  <div key={index} className="border border-vet-gray-200 rounded-lg p-3">
+                                    <div className="text-sm">
+                                      <div><strong>Medicamento:</strong> {med.nombre}</div>
+                                      <div><strong>Dosis:</strong> {med.dosis}</div>
+                                      {med.frecuencia && <div><strong>Frecuencia:</strong> {med.frecuencia}</div>}
+                                      {med.duracion && <div><strong>Duración:</strong> {med.duracion}</div>}
+                                      {med.indicaciones && <div><strong>Indicaciones:</strong> {med.indicaciones}</div>}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Vacunas aplicadas */}
+                          {servicio.vacunas && servicio.vacunas.length > 0 && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Vacunas Aplicadas:
+                              </span>
+                              <div className="space-y-2">
+                                {servicio.vacunas.map((vacuna, index) => (
+                                  <div key={index} className="border border-vet-gray-200 rounded-lg p-3">
+                                    <div className="text-sm">
+                                      <div><strong>Vacuna:</strong> {vacuna.nombre}</div>
+                                      <div><strong>Lote:</strong> {vacuna.lote}</div>
+                                      <div><strong>Próxima Dosis:</strong> {new Date(vacuna.proximaFecha).toLocaleDateString("es-ES")}</div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Exámenes realizados */}
+                          {servicio.examenes && servicio.examenes.length > 0 && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Exámenes Realizados:
+                              </span>
+                              <div className="space-y-2">
+                                {servicio.examenes.map((examen, index) => (
+                                  <div key={index} className="bg-vet-gray-50 rounded-lg p-3">
+                                    <div className="text-sm">
+                                      <strong>{examen.tipo}:</strong> {examen.resultado}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Servicios adicionales */}
+                          {servicio.servicios && servicio.servicios.length > 0 && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Servicios Realizados:
+                              </span>
+                              <div className="space-y-2">
+                                {servicio.servicios.map((servicioItem, index) => (
+                                  <div key={index} className="bg-vet-gray-50 rounded-lg p-3">
+                                    <div className="text-sm">
+                                      <div><strong>Servicio:</strong> {servicioItem.nombre}</div>
+                                      {servicioItem.precio && <div><strong>Precio:</strong> S/{servicioItem.precio}</div>}
+                                      {servicioItem.descripcion && <div><strong>Descripción:</strong> {servicioItem.descripcion}</div>}
+                                      {servicioItem.duracion && <div><strong>Duración:</strong> {servicioItem.duracion}</div>}
+                                      {servicioItem.notas && <div><strong>Notas:</strong> {servicioItem.notas}</div>}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Archivos adjuntos */}
+                          {servicio.archivosAdjuntos && servicio.archivosAdjuntos.length > 0 && (
+                            <div>
+                              <span className="font-medium text-vet-gray-700 mb-2 block">
+                                Archivos Adjuntos:
+                              </span>
+                              <div className="space-y-2">
+                                {servicio.archivosAdjuntos.map((archivo, index) => (
+                                  <div key={index} className="border border-vet-gray-200 rounded-lg p-3">
+                                    <div className="flex items-center justify-between text-sm">
+                                      <div>
+                                        <strong>{archivo.nombre}</strong>
+                                        <span className="text-vet-gray-600 ml-2">({archivo.tipo})</span>
+                                      </div>
+                                      <a href={archivo.url} target="_blank" rel="noopener noreferrer"
+                                         className="text-vet-primary hover:underline">
+                                        <Download className="w-4 h-4 inline mr-1" />
+                                        Descargar
+                                      </a>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
                         </div>
 
                         {/* Resumen completo del servicio realizado */}
