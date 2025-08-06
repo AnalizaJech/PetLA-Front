@@ -410,75 +410,7 @@ export default function HistorialClinico() {
     return fecha;
   };
 
-  // Funciones auxiliares para contenido por defecto basado en los 6 servicios oficiales
-  const getDiagnosticoDefecto = (tipoConsulta, estado) => {
-    if (estado === "pendiente_pago")
-      return "Servicio pendiente de confirmación de pago";
-    if (estado === "aceptada")
-      return "Servicio confirmado - Programado para atención";
-
-    const tipo = tipoConsulta.toLowerCase();
-    // Servicios oficiales de la veterinaria
-    if (tipo.includes("consulta general"))
-      return "Evaluación general completada - Estado de salud óptimo";
-    if (tipo.includes("vacunación") || tipo.includes("vacunacion"))
-      return "Vacunación aplicada exitosamente";
-    if (tipo.includes("emergencia"))
-      return "Atención de emergencia - Paciente estabilizado";
-    if (tipo.includes("grooming"))
-      return "Servicio de grooming completado - Mascota aseada y saludable";
-    if (tipo.includes("cirugía") || tipo.includes("cirugia"))
-      return "Procedimiento quirúrgico realizado exitosamente";
-    if (tipo.includes("diagnóstico") || tipo.includes("diagnostico"))
-      return "Exámenes diagnósticos completados - Resultados disponibles";
-    return "Servicio veterinario completado exitosamente";
-  };
-
-  const getTratamientoDefecto = (tipoConsulta, estado) => {
-    if (estado === "pendiente_pago")
-      return "Tratamiento será aplicado tras confirmación de pago";
-    if (estado === "aceptada")
-      return "Tratamiento programado según servicio seleccionado";
-
-    const tipo = tipoConsulta.toLowerCase();
-    // Tratamientos según los 6 servicios oficiales
-    if (tipo.includes("consulta general"))
-      return "Revisión médica general, peso, temperatura y cuidados preventivos";
-    if (tipo.includes("vacunación") || tipo.includes("vacunacion"))
-      return "Aplicación de vacuna según calendario de inmunización";
-    if (tipo.includes("emergencia"))
-      return "Tratamiento de emergencia inmediato - Estabilización y cuidados críticos";
-    if (tipo.includes("grooming"))
-      return "Baño completo, corte de pelo, limpieza de oídos y corte de uñas";
-    if (tipo.includes("cirugía") || tipo.includes("cirugia"))
-      return "Procedimiento quirúrgico especializado con anestesia y cuidados post-operatorios";
-    if (tipo.includes("diagnóstico") || tipo.includes("diagnostico"))
-      return "Exámenes de laboratorio y estudios diagnósticos especializados";
-    return "Tratamiento veterinario aplicado según protocolo del servicio";
-  };
-
-  const getNotasDefecto = (tipoConsulta, estado) => {
-    if (estado === "pendiente_pago")
-      return "Servicio agendado - Pendiente de confirmación de pago";
-    if (estado === "aceptada") return "Servicio confirmado y programado";
-
-    const tipo = tipoConsulta.toLowerCase();
-    // Notas específicas por servicio
-    if (tipo.includes("consulta general"))
-      return "Consulta general completada. Mascota en buen estado de salud. Continuar con cuidados preventivos.";
-    if (tipo.includes("vacunación") || tipo.includes("vacunacion"))
-      return "Vacunación aplicada exitosamente. Próxima dosis programada según calendario.";
-    if (tipo.includes("emergencia"))
-      return "Emergencia atendida exitosamente. Monitorear evolución en las próximas 24-48 horas.";
-    if (tipo.includes("grooming"))
-      return "Servicio de grooming completado. Mascota limpia y aseada. Recomendar mantenimiento cada 4-6 semanas.";
-    if (tipo.includes("cirugía") || tipo.includes("cirugia"))
-      return "Cirugía realizada exitosamente. Seguir indicaciones post-operatorias estrictamente.";
-    if (tipo.includes("diagnóstico") || tipo.includes("diagnostico"))
-      return "Exámenes diagnósticos completados. Resultados dentro de parámetros normales.";
-
-    return `${tipoConsulta} completada exitosamente. Seguir recomendaciones del veterinario tratante.`;
-  };
+  // Funciones auxiliares eliminadas - solo mostrar datos reales del veterinario
 
   const historialMascota = selectedMascota
     ? getHistorialReal(selectedMascota)
