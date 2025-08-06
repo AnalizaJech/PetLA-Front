@@ -241,11 +241,16 @@ export default function HistorialClinico() {
     }
   }, [availableMascotas]);
 
-  // Obtener historial real basado en citas completadas y atendidas
+  // Obtener historial real basado en citas que tienen registros del veterinario
   const getHistorialReal = (nombreMascota) => {
-    // Only include attended appointments that have been completed by the veterinarian
+    // Include appointments that have veterinary records (atendida, aceptada with notes, etc.)
     const citasRelevantes = citas.filter(
-      (cita) => cita.mascota === nombreMascota && cita.estado === "atendida", // Only show attended appointments in clinical history
+      (cita) =>
+        cita.mascota === nombreMascota &&
+        (cita.estado === "atendida" ||
+         cita.estado === "aceptada" ||
+         cita.estado === "en_validacion" ||
+         (cita.consulta && Object.keys(cita.consulta).length > 0)), // Include appointments with consultation data
     );
 
     // Agrupar por los 6 servicios específicos de la veterinaria
