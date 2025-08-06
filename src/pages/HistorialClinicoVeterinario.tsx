@@ -419,11 +419,23 @@ export default function HistorialClinicoVeterinario() {
         "Freq. Cardíaca": record.frecuenciaCardiaca || "",
       }));
 
+      // Crear hoja de información de la mascota
+      const wsInfo = XLSX.utils.json_to_sheet(mascotaInfo);
       const ws = XLSX.utils.json_to_sheet(data);
       const wb = XLSX.utils.book_new();
+
+      // Agregar hojas al libro
+      XLSX.utils.book_append_sheet(wb, wsInfo, "Información de la Mascota");
       XLSX.utils.book_append_sheet(wb, ws, `Historial ${selectedPet.nombre}`);
 
-      // Auto-size columns
+      // Auto-size columns para información
+      const colWidthsInfo = [
+        { wch: 25 }, // Campo
+        { wch: 40 }, // Valor
+      ];
+      wsInfo["!cols"] = colWidthsInfo;
+
+      // Auto-size columns para historial
       const colWidths = [
         { wch: 5 }, // #
         { wch: 12 }, // Fecha
@@ -432,6 +444,9 @@ export default function HistorialClinicoVeterinario() {
         { wch: 30 }, // Tratamiento
         { wch: 25 }, // Observaciones
         { wch: 20 }, // Veterinario
+        { wch: 8 }, // Peso
+        { wch: 12 }, // Temperatura
+        { wch: 12 }, // Freq. Cardíaca
       ];
       ws["!cols"] = colWidths;
 
