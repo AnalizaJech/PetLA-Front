@@ -1908,19 +1908,39 @@ export default function Configuracion() {
                     </div>
                   </div>
 
-                  {/* Confirmación de texto */}
-                  <div className="space-y-3">
-                    <div className="p-3 bg-vet-gray-50 border border-vet-gray-200 rounded">
-                      <p className="text-sm text-vet-gray-700 mb-2">
-                        Para confirmar, escribe <strong className="text-red-600">"ELIMINAR MI CUENTA"</strong> en el campo de abajo:
+                  {/* Confirmación de texto mejorada */}
+                  <div className="space-y-4">
+                    <div className="text-center space-y-3">
+                      <p className="text-sm text-vet-gray-700 font-medium">
+                        Para confirmar, escribe exactamente:
                       </p>
-                      <Input
-                        value={deleteConfirmationText}
-                        onChange={(e) => setDeleteConfirmationText(e.target.value)}
-                        placeholder="Escribe: ELIMINAR MI CUENTA"
-                        className="border-vet-gray-300 focus:border-red-500 focus:ring-red-500/20"
-                      />
+                      <div className="inline-block bg-vet-gray-100 px-4 py-2 rounded-lg border">
+                        <code className="text-red-600 font-bold">ELIMINAR MI CUENTA</code>
+                      </div>
                     </div>
+
+                    <Input
+                      value={deleteConfirmationText}
+                      onChange={(e) => setDeleteConfirmationText(e.target.value)}
+                      placeholder="Escribe la frase exacta aquí..."
+                      className="text-center border-2 border-vet-gray-300 focus:border-red-500 focus:ring-red-500/20 h-12 text-base"
+                    />
+
+                    {deleteConfirmationText.length > 0 && deleteConfirmationText !== "ELIMINAR MI CUENTA" && (
+                      <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                        <p className="text-xs text-red-600 text-center font-medium">
+                          La frase no coincide. Debe ser exactamente "ELIMINAR MI CUENTA"
+                        </p>
+                      </div>
+                    )}
+
+                    {deleteConfirmationText === "ELIMINAR MI CUENTA" && (
+                      <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                        <p className="text-xs text-green-700 text-center font-medium">
+                          Confirmación correcta. Puedes proceder.
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
