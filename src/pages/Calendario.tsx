@@ -648,24 +648,6 @@ export default function Calendario() {
                                         )}
                                       </div>
 
-                                      {/* Información del propietario */}
-                                      <div className="bg-vet-gray-50 p-2 rounded">
-                                        <div className="flex items-center space-x-2 mb-1">
-                                          <UserCheck className="w-3 h-3 text-vet-primary" />
-                                          <span className="text-sm font-medium">
-                                            {propietario?.nombre ||
-                                              "Sin asignar"}
-                                          </span>
-                                        </div>
-                                        {propietario?.telefono && (
-                                          <div className="flex items-center space-x-2">
-                                            <Phone className="w-3 h-3 text-vet-gray-600" />
-                                            <span className="text-xs text-vet-gray-600">
-                                              {propietario.telefono}
-                                            </span>
-                                          </div>
-                                        )}
-                                      </div>
 
                                       {/* Motivo de la consulta */}
                                       <div className="flex items-start space-x-2">
