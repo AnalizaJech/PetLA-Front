@@ -1007,12 +1007,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const logout = () => {
     setUserState(null);
-    // Clear user-specific data only
-    setMascotas([]);
-    // Force clear localStorage for user-specific data only
+
+    // Only clear user-specific localStorage data, not the general data
     localStorage.removeItem("user");
-    localStorage.removeItem("mascotas");
-    // Note: citas and preCitas are global system data and should not be cleared on logout
+
+    // Don't clear mascotas or citas from localStorage as they are system-wide data
+    // The UI will filter them based on the logged-in user
+    // Don't modify the mascotas state or localStorage - let them persist
+    // Note: citas, preCitas, mascotas are global system data and should persist in localStorage
   };
 
   const login = async (
