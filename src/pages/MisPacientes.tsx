@@ -860,7 +860,7 @@ export default function MisPacientes() {
                             onClick={() => handleViewDetail(citaData)}
                             className="h-9 w-full"
                           >
-                            <Eye className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                            <Eye className="w-4 h-4 mr-2" />
                             <span className="truncate">Ver Detalle</span>
                           </Button>
 
