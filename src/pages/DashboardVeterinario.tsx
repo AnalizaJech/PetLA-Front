@@ -456,7 +456,7 @@ export default function DashboardVeterinario() {
                           return (
                             <div
                               key={cita.id}
-                              className="flex items-center justify-between p-4 bg-gray-50/50 rounded-xl border border-gray-100 hover:bg-gray-50 transition-colors"
+                              className="flex items-center justify-between p-4 bg-vet-gray-50 rounded-xl border border-vet-gray-200 hover:bg-vet-gray-100 transition-colors"
                             >
                               <div className="flex items-center space-x-4 flex-1">
                                 <div className="flex flex-col items-center">
