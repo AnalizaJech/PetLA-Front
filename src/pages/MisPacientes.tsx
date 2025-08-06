@@ -595,14 +595,12 @@ export default function MisPacientes() {
                       <div className="mt-2 text-sm space-y-1">
                         {autoFixResults.newMascotas.length > 0 && (
                           <div>
-                            {autoFixResults.newMascotas.length} mascotas
-                            creadas
+                            {autoFixResults.newMascotas.length} mascotas creadas
                           </div>
                         )}
                         {autoFixResults.errors.length > 0 && (
                           <div>
-                            {autoFixResults.errors.length} errores
-                            encontrados
+                            {autoFixResults.errors.length} errores encontrados
                           </div>
                         )}
                       </div>

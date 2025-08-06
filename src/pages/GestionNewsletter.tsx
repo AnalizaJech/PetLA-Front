@@ -1276,9 +1276,7 @@ export default function GestionNewsletter() {
                         <div className={styles.footer}>
                           {selectedNewsletterToView.plantilla ===
                             "veterinaria" && (
-                            <p>
-                              PetLA - Cuidando a tus mascotas con amor
-                            </p>
+                            <p>PetLA - Cuidando a tus mascotas con amor</p>
                           )}
                           {selectedNewsletterToView.plantilla === "moderna" && (
                             <p>✨ Newsletter enviado con PetLA ✨</p>

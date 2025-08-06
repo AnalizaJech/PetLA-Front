@@ -92,7 +92,8 @@ const formatDateForInput = (date: any): string => {
 };
 
 export default function Configuracion() {
-  const { user, setUser, updateUsuario, deleteAccount, logout } = useAppContext();
+  const { user, setUser, updateUsuario, deleteAccount, logout } =
+    useAppContext();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [savedMessage, setSavedMessage] = useState("");
@@ -270,22 +271,39 @@ export default function Configuracion() {
         { error: "El nombre de usuario es obligatorio", field: "username" },
         { error: "Por favor ingresa un email válido", field: "email" },
         { error: "El teléfono es obligatorio", field: "telefono" },
-        { error: "La especialidad es obligatoria para veterinarios", field: "especialidad" },
-        { error: "El número de colegiatura es obligatorio para veterinarios", field: "colegiatura" }
+        {
+          error: "La especialidad es obligatoria para veterinarios",
+          field: "especialidad",
+        },
+        {
+          error: "El número de colegiatura es obligatorio para veterinarios",
+          field: "colegiatura",
+        },
       ];
 
-      const currentError = validationErrors.find(ve => errorMessage.includes(ve.error));
+      const currentError = validationErrors.find((ve) =>
+        errorMessage.includes(ve.error),
+      );
 
       if (currentError) {
-        const fieldValue = profileData[currentError.field as keyof typeof profileData];
+        const fieldValue =
+          profileData[currentError.field as keyof typeof profileData];
 
         // Si el campo está ahora completo, limpiar el error
         if (currentError.field === "email") {
           // Validación especial para email
-          if (fieldValue && typeof fieldValue === "string" && /\S+@\S+\.\S+/.test(fieldValue)) {
+          if (
+            fieldValue &&
+            typeof fieldValue === "string" &&
+            /\S+@\S+\.\S+/.test(fieldValue)
+          ) {
             setErrorMessage("");
           }
-        } else if (fieldValue && typeof fieldValue === "string" && fieldValue.trim()) {
+        } else if (
+          fieldValue &&
+          typeof fieldValue === "string" &&
+          fieldValue.trim()
+        ) {
           setErrorMessage("");
         }
       }
@@ -311,10 +329,12 @@ export default function Configuracion() {
         "Por favor ingresa un email válido",
         "El teléfono es obligatorio",
         "La especialidad es obligatoria para veterinarios",
-        "El número de colegiatura es obligatorio para veterinarios"
+        "El número de colegiatura es obligatorio para veterinarios",
       ];
 
-      const isValidationError = validationErrors.some(error => errorMessage.includes(error));
+      const isValidationError = validationErrors.some((error) =>
+        errorMessage.includes(error),
+      );
 
       if (!isValidationError) {
         // Solo los errores que no son de validación se limpian automáticamente
@@ -508,7 +528,9 @@ export default function Configuracion() {
       }
 
       if (securityData.newPassword.length < 8) {
-        showSecurityErrorAndScroll("La nueva contraseña debe tener al menos 8 caracteres");
+        showSecurityErrorAndScroll(
+          "La nueva contraseña debe tener al menos 8 caracteres",
+        );
         return;
       }
 
@@ -743,7 +765,9 @@ export default function Configuracion() {
     }
 
     if (deleteConfirmationText !== "ELIMINAR MI CUENTA") {
-      setErrorMessage("Debes escribir exactamente 'ELIMINAR MI CUENTA' para continuar");
+      setErrorMessage(
+        "Debes escribir exactamente 'ELIMINAR MI CUENTA' para continuar",
+      );
       return;
     }
 
@@ -762,7 +786,9 @@ export default function Configuracion() {
 
       if (success) {
         // Mostrar mensaje de éxito
-        setSavedMessage("Tu cuenta ha sido eliminada exitosamente. Serás redirigido al inicio.");
+        setSavedMessage(
+          "Tu cuenta ha sido eliminada exitosamente. Serás redirigido al inicio.",
+        );
 
         // Esperar un momento para que el usuario vea el mensaje
         await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -773,7 +799,9 @@ export default function Configuracion() {
         // Redireccionar al home
         navigate("/", { replace: true });
       } else {
-        setErrorMessage("Error al eliminar la cuenta. Por favor, inténtalo de nuevo o contacta soporte.");
+        setErrorMessage(
+          "Error al eliminar la cuenta. Por favor, inténtalo de nuevo o contacta soporte.",
+        );
         window.scrollTo({
           top: 0,
           behavior: "smooth",
@@ -781,7 +809,9 @@ export default function Configuracion() {
       }
     } catch (error) {
       console.error("Error eliminando cuenta:", error);
-      setErrorMessage("Error inesperado al eliminar la cuenta. Por favor, contacta soporte.");
+      setErrorMessage(
+        "Error inesperado al eliminar la cuenta. Por favor, contacta soporte.",
+      );
       window.scrollTo({
         top: 0,
         behavior: "smooth",
@@ -1664,8 +1694,10 @@ export default function Configuracion() {
                               Eliminar mi cuenta permanentemente
                             </h4>
                             <p className="text-sm text-red-700 mb-3 leading-relaxed">
-                              Esta acción eliminará permanentemente tu cuenta y todos los datos asociados.
-                              No podrás recuperar tu información, historial de citas o datos de tus mascotas.
+                              Esta acción eliminará permanentemente tu cuenta y
+                              todos los datos asociados. No podrás recuperar tu
+                              información, historial de citas o datos de tus
+                              mascotas.
                             </p>
                             <Button
                               variant="outline"
@@ -1828,8 +1860,14 @@ export default function Configuracion() {
           </Dialog>
 
           {/* Delete Account Confirmation Modal */}
-          <Dialog open={showDeleteAccountModal} onOpenChange={setShowDeleteAccountModal}>
-            <DialogContent className="max-w-lg w-full mx-4 max-h-[90vh] overflow-hidden flex flex-col rounded-3xl" hideCloseButton>
+          <Dialog
+            open={showDeleteAccountModal}
+            onOpenChange={setShowDeleteAccountModal}
+          >
+            <DialogContent
+              className="max-w-lg w-full mx-4 max-h-[90vh] overflow-hidden flex flex-col rounded-3xl"
+              hideCloseButton
+            >
               <DialogHeader className="flex-shrink-0 text-center space-y-4">
                 <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto">
                   <AlertTriangle className="w-8 h-8 text-red-600" />
@@ -1839,7 +1877,8 @@ export default function Configuracion() {
                     Eliminar cuenta permanentemente
                   </DialogTitle>
                   <DialogDescription className="text-vet-gray-600 mt-2 max-w-md mx-auto">
-                    Esta es una acción irreversible que eliminará todos tus datos.
+                    Esta es una acción irreversible que eliminará todos tus
+                    datos.
                   </DialogDescription>
                 </div>
               </DialogHeader>
@@ -1855,27 +1894,51 @@ export default function Configuracion() {
                     <ul className="space-y-2 text-sm text-red-800">
                       <li className="flex items-start space-x-2">
                         <span className="text-red-600 font-bold mt-0.5">•</span>
-                        <span><strong>Perderás todos tus datos personales</strong> (nombre, contacto, documentos)</span>
+                        <span>
+                          <strong>Perderás todos tus datos personales</strong>{" "}
+                          (nombre, contacto, documentos)
+                        </span>
                       </li>
                       <li className="flex items-start space-x-2">
                         <span className="text-red-600 font-bold mt-0.5">•</span>
-                        <span><strong>Se eliminarán todas tus mascotas registradas</strong> y su información</span>
+                        <span>
+                          <strong>
+                            Se eliminarán todas tus mascotas registradas
+                          </strong>{" "}
+                          y su información
+                        </span>
                       </li>
                       <li className="flex items-start space-x-2">
                         <span className="text-red-600 font-bold mt-0.5">•</span>
-                        <span><strong>Perderás el historial clínico completo</strong> de todas tus mascotas</span>
+                        <span>
+                          <strong>
+                            Perderás el historial clínico completo
+                          </strong>{" "}
+                          de todas tus mascotas
+                        </span>
                       </li>
                       <li className="flex items-start space-x-2">
                         <span className="text-red-600 font-bold mt-0.5">•</span>
-                        <span><strong>Se cancelarán todas las citas pendientes</strong> automáticamente</span>
+                        <span>
+                          <strong>
+                            Se cancelarán todas las citas pendientes
+                          </strong>{" "}
+                          automáticamente
+                        </span>
                       </li>
                       <li className="flex items-start space-x-2">
                         <span className="text-red-600 font-bold mt-0.5">•</span>
-                        <span><strong>No podrás recuperar fotos</strong> de tus mascotas guardadas</span>
+                        <span>
+                          <strong>No podrás recuperar fotos</strong> de tus
+                          mascotas guardadas
+                        </span>
                       </li>
                       <li className="flex items-start space-x-2">
                         <span className="text-red-600 font-bold mt-0.5">•</span>
-                        <span><strong>Perderás acceso a notificaciones</strong> y recordatorios de vacunas</span>
+                        <span>
+                          <strong>Perderás acceso a notificaciones</strong> y
+                          recordatorios de vacunas
+                        </span>
                       </li>
                     </ul>
                   </div>
@@ -1887,10 +1950,21 @@ export default function Configuracion() {
                       Información importante
                     </h4>
                     <div className="text-sm text-amber-800 space-y-1">
-                      <p>• Esta acción es <strong>irreversible</strong></p>
-                      <p>• Tendrás que crear una nueva cuenta para volver a usar nuestros servicios</p>
-                      <p>• Los veterinarios perderán acceso al historial de tus mascotas</p>
-                      <p>• Si tienes citas programadas, se notificará a la clínica automáticamente</p>
+                      <p>
+                        • Esta acción es <strong>irreversible</strong>
+                      </p>
+                      <p>
+                        • Tendrás que crear una nueva cuenta para volver a usar
+                        nuestros servicios
+                      </p>
+                      <p>
+                        • Los veterinarios perderán acceso al historial de tus
+                        mascotas
+                      </p>
+                      <p>
+                        • Si tienes citas programadas, se notificará a la
+                        clínica automáticamente
+                      </p>
                     </div>
                   </div>
 
@@ -1901,10 +1975,22 @@ export default function Configuracion() {
                       ¿Consideraste estas alternativas?
                     </h4>
                     <div className="text-sm text-blue-800 space-y-1">
-                      <p>• <strong>Actualizar tus datos</strong> en lugar de eliminar la cuenta</p>
-                      <p>• <strong>Cambiar tu contraseña</strong> si hay problemas de seguridad</p>
-                      <p>• <strong>Contactar soporte</strong> si tienes problemas con el servicio</p>
-                      <p>• <strong>Desactivar notificaciones</strong> sin eliminar tu cuenta</p>
+                      <p>
+                        • <strong>Actualizar tus datos</strong> en lugar de
+                        eliminar la cuenta
+                      </p>
+                      <p>
+                        • <strong>Cambiar tu contraseña</strong> si hay
+                        problemas de seguridad
+                      </p>
+                      <p>
+                        • <strong>Contactar soporte</strong> si tienes problemas
+                        con el servicio
+                      </p>
+                      <p>
+                        • <strong>Desactivar notificaciones</strong> sin
+                        eliminar tu cuenta
+                      </p>
                     </div>
                   </div>
 
@@ -1915,29 +2001,36 @@ export default function Configuracion() {
                         Para confirmar, escribe exactamente:
                       </p>
                       <div className="inline-block bg-vet-gray-100 px-6 py-3 rounded-xl border shadow-sm">
-                        <code className="text-red-600 font-bold">ELIMINAR MI CUENTA</code>
+                        <code className="text-red-600 font-bold">
+                          ELIMINAR MI CUENTA
+                        </code>
                       </div>
                     </div>
 
                     <Input
                       value={deleteConfirmationText}
-                      onChange={(e) => setDeleteConfirmationText(e.target.value)}
+                      onChange={(e) =>
+                        setDeleteConfirmationText(e.target.value)
+                      }
                       placeholder="Escribe la frase exacta aquí..."
                       className="text-center border-2 border-vet-gray-300 focus:border-red-500 focus:ring-red-500/20 h-12 text-base rounded-xl"
                     />
 
-                    {deleteConfirmationText.length > 0 && deleteConfirmationText !== "ELIMINAR MI CUENTA" && (
-                      <div className="bg-red-50 border border-red-200 rounded-xl p-4 shadow-sm">
-                        <p className="text-sm text-red-600 text-center font-medium">
-                          La frase no coincide. Debe ser exactamente "ELIMINAR MI CUENTA"
-                        </p>
-                      </div>
-                    )}
+                    {deleteConfirmationText.length > 0 &&
+                      deleteConfirmationText !== "ELIMINAR MI CUENTA" && (
+                        <div className="bg-red-50 border border-red-200 rounded-xl p-4 shadow-sm">
+                          <p className="text-sm text-red-600 text-center font-medium">
+                            La frase no coincide. Debe ser exactamente "ELIMINAR
+                            MI CUENTA"
+                          </p>
+                        </div>
+                      )}
 
                     {deleteConfirmationText === "ELIMINAR MI CUENTA" && (
                       <div className="bg-red-50 border border-red-200 rounded-xl p-4 shadow-sm">
                         <p className="text-sm text-red-700 text-center font-medium">
-                          Confirmación correcta. Puedes proceder con la eliminación.
+                          Confirmación correcta. Puedes proceder con la
+                          eliminación.
                         </p>
                       </div>
                     )}
@@ -1949,7 +2042,10 @@ export default function Configuracion() {
                 <div className="flex flex-col w-full gap-4">
                   <Button
                     onClick={handleDeleteAccount}
-                    disabled={deleteConfirmationText !== "ELIMINAR MI CUENTA" || isLoading}
+                    disabled={
+                      deleteConfirmationText !== "ELIMINAR MI CUENTA" ||
+                      isLoading
+                    }
                     className="w-full bg-red-600 hover:bg-red-700 text-white h-12 text-base font-semibold disabled:bg-vet-gray-300 disabled:cursor-not-allowed transition-all rounded-xl shadow-lg"
                   >
                     {isLoading ? (

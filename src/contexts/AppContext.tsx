@@ -751,7 +751,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
     );
 
     if (!hasRunAutoRepair && citas.length > 0 && usuarios.length > 0) {
-      console.log("[REPAIR] Ejecutando reparación automática avanzada de datos...");
+      console.log(
+        "[REPAIR] Ejecutando reparación automática avanzada de datos...",
+      );
 
       let repairedCitas = 0;
       let createdMascotas = 0;
@@ -1028,11 +1030,17 @@ export function AppProvider({ children }: { children: ReactNode }) {
     // Find user by email, username, or phone
     const existingUser = usuarios.find((u) => {
       // Compare email (case-insensitive)
-      if (u.email && u.email.toLowerCase() === normalizedIdentifier.toLowerCase()) {
+      if (
+        u.email &&
+        u.email.toLowerCase() === normalizedIdentifier.toLowerCase()
+      ) {
         return true;
       }
       // Compare username (case-insensitive)
-      if (u.username && u.username.toLowerCase() === normalizedIdentifier.toLowerCase()) {
+      if (
+        u.username &&
+        u.username.toLowerCase() === normalizedIdentifier.toLowerCase()
+      ) {
         return true;
       }
       // Compare phone (exact match, trimmed)
@@ -1122,34 +1130,46 @@ export function AppProvider({ children }: { children: ReactNode }) {
         return false;
       }
 
-      console.log(`[DELETE] Iniciando eliminación de cuenta para usuario: ${userToDelete.nombre}`);
+      console.log(
+        `[DELETE] Iniciando eliminación de cuenta para usuario: ${userToDelete.nombre}`,
+      );
 
       // 1. Eliminar todas las mascotas del usuario
       const mascotasDelUsuario = mascotas.filter((m) => m.clienteId === userId);
-      console.log(`[PETS] Eliminando ${mascotasDelUsuario.length} mascotas del usuario`);
+      console.log(
+        `[PETS] Eliminando ${mascotasDelUsuario.length} mascotas del usuario`,
+      );
 
       setMascotas((prev) => prev.filter((m) => m.clienteId !== userId));
 
       // 2. Cancelar/eliminar todas las citas del usuario
       const citasDelUsuario = citas.filter((c) => c.clienteId === userId);
-      console.log(`[APPOINTMENTS] Cancelando ${citasDelUsuario.length} citas del usuario`);
+      console.log(
+        `[APPOINTMENTS] Cancelando ${citasDelUsuario.length} citas del usuario`,
+      );
 
       setCitas((prev) => prev.filter((c) => c.clienteId !== userId));
 
       // 3. Eliminar historial clínico de las mascotas del usuario
       const mascotaIds = mascotasDelUsuario.map((m) => m.id);
       const historialEliminado = historialClinico.filter((h) =>
-        mascotaIds.includes(h.mascotaId)
+        mascotaIds.includes(h.mascotaId),
       );
-      console.log(`[MEDICAL] Eliminando ${historialEliminado.length} entradas de historial clínico`);
+      console.log(
+        `[MEDICAL] Eliminando ${historialEliminado.length} entradas de historial clínico`,
+      );
 
       setHistorialClinico((prev) =>
-        prev.filter((h) => !mascotaIds.includes(h.mascotaId))
+        prev.filter((h) => !mascotaIds.includes(h.mascotaId)),
       );
 
       // 4. Eliminar notificaciones del usuario
-      const notificacionesDelUsuario = notificaciones.filter((n) => n.usuarioId === userId);
-      console.log(`[NOTIFICATIONS] Eliminando ${notificacionesDelUsuario.length} notificaciones del usuario`);
+      const notificacionesDelUsuario = notificaciones.filter(
+        (n) => n.usuarioId === userId,
+      );
+      console.log(
+        `[NOTIFICATIONS] Eliminando ${notificacionesDelUsuario.length} notificaciones del usuario`,
+      );
 
       setNotificaciones((prev) => prev.filter((n) => n.usuarioId !== userId));
 
@@ -1183,13 +1203,21 @@ export function AppProvider({ children }: { children: ReactNode }) {
       // 7. Finalmente, eliminar el usuario del sistema
       setUsuarios((prev) => prev.filter((u) => u.id !== userId));
 
-      console.log(`[SUCCESS] Cuenta eliminada exitosamente para ${userToDelete.nombre}`);
+      console.log(
+        `[SUCCESS] Cuenta eliminada exitosamente para ${userToDelete.nombre}`,
+      );
       console.log(`[SUMMARY] Resumen de eliminación:`);
-      console.log(`   - Usuario: ${userToDelete.nombre} (${userToDelete.email})`);
+      console.log(
+        `   - Usuario: ${userToDelete.nombre} (${userToDelete.email})`,
+      );
       console.log(`   - Mascotas eliminadas: ${mascotasDelUsuario.length}`);
       console.log(`   - Citas canceladas: ${citasDelUsuario.length}`);
-      console.log(`   - Historial clínico eliminado: ${historialEliminado.length} entradas`);
-      console.log(`   - Notificaciones eliminadas: ${notificacionesDelUsuario.length}`);
+      console.log(
+        `   - Historial clínico eliminado: ${historialEliminado.length} entradas`,
+      );
+      console.log(
+        `   - Notificaciones eliminadas: ${notificacionesDelUsuario.length}`,
+      );
 
       return true;
     } catch (error) {
@@ -1252,7 +1280,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
     const errors: string[] = [];
 
     try {
-      console.log("[REPAIR] Iniciando reparación completa de integridad de datos...");
+      console.log(
+        "[REPAIR] Iniciando reparación completa de integridad de datos...",
+      );
 
       const clientesDisponibles = usuarios.filter((u) => u.rol === "cliente");
 

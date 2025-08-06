@@ -492,13 +492,19 @@ export default function Login() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="register-tipoDocumento">Tipo de documento</Label>
+                    <Label htmlFor="register-tipoDocumento">
+                      Tipo de documento
+                    </Label>
                     <Select
                       value={registerData.tipoDocumento}
                       onValueChange={(value) =>
                         setRegisterData({
                           ...registerData,
-                          tipoDocumento: value as "dni" | "pasaporte" | "carnet_extranjeria" | "cedula",
+                          tipoDocumento: value as
+                            | "dni"
+                            | "pasaporte"
+                            | "carnet_extranjeria"
+                            | "cedula",
                         })
                       }
                     >
@@ -508,14 +514,18 @@ export default function Login() {
                       <SelectContent>
                         <SelectItem value="dni">DNI</SelectItem>
                         <SelectItem value="pasaporte">Pasaporte</SelectItem>
-                        <SelectItem value="carnet_extranjeria">Carnet de Extranjería</SelectItem>
+                        <SelectItem value="carnet_extranjeria">
+                          Carnet de Extranjería
+                        </SelectItem>
                         <SelectItem value="cedula">Cédula</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="register-documento">Número de documento</Label>
+                    <Label htmlFor="register-documento">
+                      Número de documento
+                    </Label>
                     <div className="relative">
                       <CreditCard className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-vet-gray-400" />
                       <Input

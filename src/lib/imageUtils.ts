@@ -186,7 +186,9 @@ export const optimizeStorageSpace = (): void => {
         localStorage.removeItem(key);
       }
 
-      console.log(`[FREED] Liberado ${(freedSpace / 1024).toFixed(1)}KB de espacio`);
+      console.log(
+        `[FREED] Liberado ${(freedSpace / 1024).toFixed(1)}KB de espacio`,
+      );
     }
   } catch (error) {
     console.error("[ERROR] Error optimizando localStorage:", error);
