@@ -1847,7 +1847,7 @@ export default function Configuracion() {
               <div className="flex-1 overflow-y-auto scrollbar-hide">
                 <div className="space-y-6 py-4 px-1">
                   {/* Advertencias principales */}
-                  <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                  <div className="bg-red-50 border border-red-200 rounded-2xl p-5">
                     <h4 className="font-semibold text-red-900 mb-3 flex items-center">
                       <AlertTriangle className="w-4 h-4 mr-2" />
                       ¿Qué pasará si elimino mi cuenta?
