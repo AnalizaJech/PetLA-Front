@@ -6,6 +6,7 @@ import React, {
   ReactNode,
 } from "react";
 import { compressImage, optimizeStorageSpace } from "@/lib/imageUtils";
+import { apiService } from "@/lib/api";
 import type { CompressedImage } from "@/lib/imageUtils";
 
 // Types
@@ -1008,13 +1009,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const logout = () => {
     setUserState(null);
 
-    // Only clear user-specific localStorage data, not the general data
+    // Limpiar tokens del backend
+    apiService.logout();
+
+    // Solo limpiar datos específicos del usuario, no datos del sistema
     localStorage.removeItem("user");
 
-    // Don't clear mascotas or citas from localStorage as they are system-wide data
-    // The UI will filter them based on the logged-in user
-    // Don't modify the mascotas state or localStorage - let them persist
-    // Note: citas, preCitas, mascotas are global system data and should persist in localStorage
+    console.log("[AUTH] Logout exitoso");
   };
 
   // Function to refresh data from localStorage - useful when data seems lost
@@ -1090,31 +1091,84 @@ export function AppProvider({ children }: { children: ReactNode }) {
     identifier: string,
     password: string,
   ): Promise<Usuario | null> => {
-    // Login supports three types of identifiers:
-    // 1. Email address (case-insensitive)
-    // 2. Username (case-insensitive)
-    // 3. Phone number (exact match)
+    try {
+      console.log("[AUTH] 🔑 Intentando login con backend...");
+      console.log("[AUTH] 📝 Identifier:", identifier);
+      
+      // Llamar al backend API
+      const response = await apiService.login({
+        identifier: identifier.trim(),
+        password,
+      });
 
-    // Normalize identifier (trim spaces and lowercase for email/username)
+      console.log("[AUTH] 📡 Respuesta del backend:", response);
+
+      if (response.success && response.data) {
+        console.log("[AUTH] ✅ Backend login exitoso!");
+        
+        // Convertir datos del backend al formato del frontend
+        const backendUser = response.data.user;
+        
+        const frontendUser: Usuario = {
+          id: backendUser.id,
+          nombre: backendUser.nombre,
+          apellidos: backendUser.apellidos,
+          username: backendUser.username,
+          email: backendUser.email,
+          telefono: backendUser.telefono,
+          direccion: backendUser.direccion,
+          fechaNacimiento: backendUser.fechaNacimiento ? new Date(backendUser.fechaNacimiento) : undefined,
+          genero: backendUser.genero,
+          rol: backendUser.rol as "admin" | "cliente" | "veterinario",
+          fechaRegistro: backendUser.fechaRegistro ? new Date(backendUser.fechaRegistro) : new Date(),
+          foto: backendUser.foto,
+          documento: backendUser.documento,
+          tipoDocumento: backendUser.tipoDocumento as "dni" | "pasaporte" | "carnet_extranjeria" | "cedula" | undefined,
+          especialidad: backendUser.especialidad,
+          experiencia: backendUser.experiencia,
+          colegiatura: backendUser.colegiatura,
+        };
+
+        setUserState(frontendUser);
+        console.log(`[AUTH] 🎉 Login exitoso: ${frontendUser.nombre} (${frontendUser.rol})`);
+        
+        // Cargar datos del usuario desde el backend
+        await loadUserDataFromBackend(frontendUser);
+        
+        return frontendUser;
+      } else {
+        console.warn("[AUTH] ❌ Backend login fallido:", response.error);
+        return null;
+      }
+    } catch (error) {
+      console.error("[AUTH] 💥 Error en login:", error);
+      
+      // NO USAR FALLBACK - devolver null para que aparezca el error real
+      console.log("[AUTH] 🚫 NO usando fallback local - mostrando error del backend");
+      return null;
+    }
+  };
+
+  // Función de login local como fallback
+  const loginLocal = async (
+    identifier: string,
+    password: string,
+  ): Promise<Usuario | null> => {
     const normalizedIdentifier = identifier.trim();
 
-    // Find user by email, username, or phone
     const existingUser = usuarios.find((u) => {
-      // Compare email (case-insensitive)
       if (
         u.email &&
         u.email.toLowerCase() === normalizedIdentifier.toLowerCase()
       ) {
         return true;
       }
-      // Compare username (case-insensitive)
       if (
         u.username &&
         u.username.toLowerCase() === normalizedIdentifier.toLowerCase()
       ) {
         return true;
       }
-      // Compare phone (exact match, trimmed)
       if (u.telefono && u.telefono.trim() === normalizedIdentifier) {
         return true;
       }
@@ -1122,67 +1176,122 @@ export function AppProvider({ children }: { children: ReactNode }) {
     });
 
     if (existingUser) {
-      // Check if user has a password set
       if (existingUser.password) {
-        // Validate password
         if (existingUser.password === password) {
           setUserState(existingUser);
-          // Refresh data from localStorage to ensure user sees their data
           setTimeout(() => refreshDataFromStorage(), 100);
           return existingUser;
         } else {
-          return null; // Wrong password
+          return null;
         }
       } else {
-        // For users without password (old client accounts), accept any password
-        // This is for backward compatibility with existing client accounts
         if (existingUser.rol === "cliente") {
           setUserState(existingUser);
-          // Refresh data from localStorage to ensure user sees their data
           setTimeout(() => refreshDataFromStorage(), 100);
           return existingUser;
         } else {
-          // Veterinarians and admins must have passwords
           return null;
         }
       }
     }
 
-    return null; // User not found
+    return null;
   };
 
   const register = async (
     userData: Omit<Usuario, "id" | "fechaRegistro"> & { password: string },
   ): Promise<Usuario | null> => {
-    // Check if user already exists
+    try {
+      console.log("[AUTH] Intentando registro con backend...");
+      
+      // Preparar datos para el backend
+      const backendUserData = {
+        nombre: userData.nombre,
+        apellidos: userData.apellidos,
+        username: userData.username,
+        email: userData.email,
+        telefono: userData.telefono,
+        direccion: userData.direccion,
+        fechaNacimiento: userData.fechaNacimiento ? userData.fechaNacimiento.toISOString().split('T')[0] : undefined,
+        genero: userData.genero,
+        documento: userData.documento,
+        tipoDocumento: userData.tipoDocumento,
+        password: userData.password,
+      };
+
+      const response = await apiService.register(backendUserData);
+
+      if (response.success && response.data) {
+        // Convertir datos del backend al formato del frontend
+        const backendUser = response.data.user;
+        
+        const frontendUser: Usuario = {
+          id: backendUser.id,
+          nombre: backendUser.nombre,
+          apellidos: backendUser.apellidos,
+          username: backendUser.username,
+          email: backendUser.email,
+          telefono: backendUser.telefono,
+          direccion: backendUser.direccion,
+          fechaNacimiento: backendUser.fechaNacimiento ? new Date(backendUser.fechaNacimiento) : undefined,
+          genero: backendUser.genero,
+          rol: backendUser.rol as "admin" | "cliente" | "veterinario",
+          fechaRegistro: backendUser.fechaRegistro ? new Date(backendUser.fechaRegistro) : new Date(),
+          foto: backendUser.foto,
+          documento: backendUser.documento,
+          tipoDocumento: backendUser.tipoDocumento as "dni" | "pasaporte" | "carnet_extranjeria" | "cedula" | undefined,
+          especialidad: backendUser.especialidad,
+          experiencia: backendUser.experiencia,
+          colegiatura: backendUser.colegiatura,
+        };
+
+        setUserState(frontendUser);
+        console.log(`[AUTH] Registro exitoso: ${frontendUser.nombre} (${frontendUser.rol})`);
+        
+        return frontendUser;
+      } else {
+        console.warn("[AUTH] Registro fallido:", response.error);
+        return null;
+      }
+    } catch (error) {
+      console.error("[AUTH] Error en registro:", error);
+      
+      // Fallback al sistema local si el backend no está disponible
+      console.log("[AUTH] Intentando registro local como fallback...");
+      return await registerLocal(userData);
+    }
+  };
+
+  // Función de registro local como fallback
+  const registerLocal = async (
+    userData: Omit<Usuario, "id" | "fechaRegistro"> & { password: string },
+  ): Promise<Usuario | null> => {
     const existingUser = usuarios.find((u) => u.email === userData.email);
     if (existingUser) {
-      return null; // User already exists
+      return null;
     }
 
-    // Create new user with ALL the provided fields
     const newUser: Usuario = {
       id: Date.now().toString(),
       nombre: userData.nombre,
-      apellidos: userData.apellidos, // Ahora se guarda
-      username: userData.username, // Ahora se guarda
+      apellidos: userData.apellidos,
+      username: userData.username,
       email: userData.email,
       rol: userData.rol,
       telefono: userData.telefono,
-      direccion: userData.direccion, // Ahora se guarda
-      fechaNacimiento: userData.fechaNacimiento, // Ahora se guarda
-      genero: userData.genero, // Ahora se guarda
-      documento: userData.documento, // Ahora se guarda
-      tipoDocumento: userData.tipoDocumento, // Ahora se guarda
-      password: userData.password, // También guardar la contraseña
+      direccion: userData.direccion,
+      fechaNacimiento: userData.fechaNacimiento,
+      genero: userData.genero,
+      documento: userData.documento,
+      tipoDocumento: userData.tipoDocumento,
+      password: userData.password,
       fechaRegistro: new Date(),
-      foto: userData.foto || null, // Incluir foto si existe
+      foto: userData.foto || null,
     };
 
     setUsuarios((prev) => [...prev, newUser]);
     setUserState(newUser);
 
-    // Generar notificación de bienvenida para nuevos clientes
     if (newUser.rol === "cliente") {
       addNotificacion({
         usuarioId: newUser.id,
@@ -1194,6 +1303,99 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
 
     return newUser;
+  };
+
+  // Función para cargar datos del usuario desde el backend
+  const loadUserDataFromBackend = async (user: Usuario) => {
+    try {
+      console.log("[DATA] Cargando datos del usuario desde backend...");
+
+      // Cargar mascotas del usuario si es cliente
+      if (user.rol === "cliente") {
+        const mascotasResponse = await apiService.getMascotas({ clienteId: user.id });
+        if (mascotasResponse.success && mascotasResponse.data) {
+          const backendMascotas = Array.isArray(mascotasResponse.data) 
+            ? mascotasResponse.data 
+            : (mascotasResponse.data as any)?.data || [];
+          
+          const frontendMascotas: Mascota[] = backendMascotas.map((m: any) => ({
+            id: m.id,
+            nombre: m.nombre,
+            especie: m.especie,
+            raza: m.raza,
+            sexo: m.genero,
+            fechaNacimiento: new Date(m.fechaNacimiento),
+            peso: m.peso?.toString(),
+            microchip: m.microchip,
+            estado: m.estado || "Activo",
+            clienteId: m.clienteId,
+            proximaCita: null, // Se calculará después
+            ultimaVacuna: null, // Se calculará después
+            foto: m.foto,
+          }));
+          
+          setMascotas(frontendMascotas);
+          console.log(`[DATA] Cargadas ${frontendMascotas.length} mascotas del backend`);
+        }
+
+        // Cargar citas del usuario
+        const citasResponse = await apiService.getCitas({ clienteId: user.id });
+        if (citasResponse.success && citasResponse.data) {
+          const backendCitas = Array.isArray(citasResponse.data) 
+            ? citasResponse.data 
+            : (citasResponse.data as any)?.data || [];
+          
+          const frontendCitas: Cita[] = backendCitas.map((c: any) => ({
+            id: c.id,
+            mascota: c.mascotaId ? "" : c.motivo, // Temporal, se resolverá después
+            mascotaId: c.mascotaId,
+            especie: "", // Se resolverá después
+            clienteId: c.clienteId,
+            clienteNombre: user.nombre,
+            fecha: new Date(c.fecha),
+            estado: c.estado,
+            veterinario: c.veterinarioId || "Dr. Asignado", // Se resolverá después
+            motivo: c.motivo,
+            tipoConsulta: c.tipoCita || "consulta",
+            ubicacion: "Clínica Principal", // Default
+            precio: c.precio || 0,
+            notas: c.notas,
+            comprobantePago: c.comprobante,
+            notasAdmin: c.notasAdmin,
+          }));
+          
+          setCitas(frontendCitas);
+          console.log(`[DATA] Cargadas ${frontendCitas.length} citas del backend`);
+        }
+
+        // Cargar notificaciones del usuario
+        const notificacionesResponse = await apiService.getNotificaciones(user.id);
+        if (notificacionesResponse.success && notificacionesResponse.data) {
+          const backendNotificaciones = Array.isArray(notificacionesResponse.data) 
+            ? notificacionesResponse.data 
+            : (notificacionesResponse.data as any)?.data || [];
+          
+          const frontendNotificaciones: Notificacion[] = backendNotificaciones.map((n: any) => ({
+            id: n.id,
+            usuarioId: n.usuarioId,
+            tipo: n.tipo as any,
+            titulo: n.titulo,
+            mensaje: n.mensaje,
+            fechaCreacion: new Date(n.fechaCreacion),
+            leida: n.leida,
+            datos: n.datos || {},
+          }));
+          
+          setNotificaciones(frontendNotificaciones);
+          console.log(`[DATA] Cargadas ${frontendNotificaciones.length} notificaciones del backend`);
+        }
+      }
+
+      console.log("[DATA] Datos del usuario cargados exitosamente");
+    } catch (error) {
+      console.error("[DATA] Error cargando datos del usuario:", error);
+      // En caso de error, mantener los datos locales
+    }
   };
 
   const deleteAccount = async (userId: string): Promise<boolean> => {
@@ -2092,7 +2294,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
     getCitaWithRelations,
     validateDataRelationships,
     getStats,
-    refreshDataFromStorage,
   };
 
   return (

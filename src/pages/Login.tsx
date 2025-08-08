@@ -76,19 +76,26 @@ export default function Login() {
     setError("");
 
     try {
+      console.log('🔍 Login: Attempting login with:', loginData.identifier);
+      
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       const user = await login(loginData.identifier, loginData.password);
 
+      console.log('🔍 Login: Got user result:', user);
+
       if (user) {
+        console.log('✅ Login: Success, navigating to dashboard');
         navigate("/dashboard");
       } else {
+        console.log('❌ Login: Failed, showing error');
         setError(
           "Credenciales inválidas. Verifica tu email/teléfono/usuario y contraseña.",
         );
       }
     } catch (error) {
+      console.error('❌ Login: Exception occurred:', error);
       setError("Error al iniciar sesión. Intenta nuevamente.");
     } finally {
       setIsLoading(false);

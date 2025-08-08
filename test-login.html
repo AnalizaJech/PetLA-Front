@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Login</title>
+</head>
+<body>
+    <h1>Test Login Debug</h1>
+    <div>
+        <label>Email: <input id="email" value="laura@example.com" /></label><br><br>
+        <label>Password: <input id="password" type="password" value="password" /></label><br><br>
+        <button onclick="testLogin()">Test Login</button>
+    </div>
+    <div id="result" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc;"></div>
+
+    <script>
+        async function testLogin() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const resultDiv = document.getElementById('result');
+            
+            try {
+                resultDiv.innerHTML = 'Testing login...';
+                
+                const response = await fetch('http://localhost:5000/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        identifier: email,
+                        password: password
+                    })
+                });
+
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <h3>Response Status: ${response.status}</h3>
+                    <h4>Response Data:</h4>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <h3>Error:</h3>
+                    <pre style="color: red;">${error.message}</pre>
+                `;
+            }
+        }
+
+        // Test CORS
+        async function testCors() {
+            try {
+                const response = await fetch('http://localhost:5000/health');
+                const data = await response.json();
+                console.log('CORS test successful:', data);
+            } catch (error) {
+                console.error('CORS test failed:', error);
+            }
+        }
+
+        // Run CORS test on load
+        testCors();
+    </script>
+</body>
+</html>

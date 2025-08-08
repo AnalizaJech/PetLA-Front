@@ -1,0 +1,53 @@
+services:
+  mongo:
+    image: mongo:7.0
+    container_name: petla-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      # Cambia estos valores vía variables de entorno o un archivo .env
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-petla}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-petla123}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE:-petla}
+    volumes:
+      - mongo-data:/data/db
+    # Healthcheck simple (mongo 7 incluye mongosh)
+    healthcheck:
+      test: ["CMD-SHELL", "echo 'db.runCommand({ ping: 1 }).ok' | mongosh --quiet -u \"$${MONGO_INITDB_ROOT_USERNAME}\" -p \"$${MONGO_INITDB_ROOT_PASSWORD}\" --authenticationDatabase admin localhost:27017/admin | grep 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: petla-backend
+    depends_on:
+      - mongo
+    environment:
+      MONGO_URI: mongodb://petla:petla123@mongo:27017/petla?authSource=admin
+      MONGO_DB: petla
+    ports:
+      - "8000:8000"
+
+  backend_flask:
+    build:
+      context: .
+      dockerfile: backend_flask/Dockerfile
+    container_name: petla-backend-flask
+    depends_on:
+      - mongo
+    environment:
+      MONGO_URI: mongodb://petla:petla123@mongo:27017/petla?authSource=admin
+      MONGO_DB: petla
+      JWT_SECRET: super_secret_change_me
+    volumes:
+      - ./backend_flask/uploads:/app/uploads
+    ports:
+      - "5000:5000"
+
+volumes:
+  mongo-data:
+    driver: local

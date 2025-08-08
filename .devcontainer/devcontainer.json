@@ -1,0 +1,20 @@
+{
+  "name": "PetLA Development",
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "forwardPorts": [5000, 8080, 27017],
+  "portsAttributes": {
+    "5000": {
+      "label": "Backend Flask",
+      "visibility": "public"
+    },
+    "8080": {
+      "label": "Frontend Vite", 
+      "visibility": "public"
+    },
+    "27017": {
+      "label": "MongoDB",
+      "visibility": "private"
+    }
+  },
+  "postCreateCommand": "npm install"
+}
