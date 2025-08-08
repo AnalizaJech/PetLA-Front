@@ -35,11 +35,13 @@ import {
   MapPin,
   Shield,
   X,
+  Database,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { UserRole } from "@/lib/types";
 import NewFooter from "@/components/NewFooter";
 import LogoutModal from "@/components/LogoutModal";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { useNotificationToast } from "@/hooks/useNotificationToast";
 
 interface LayoutProps {
@@ -292,6 +294,18 @@ export default function Layout({
                         <Stethoscope className="w-4 h-4" />
                         <span>Veterinarios</span>
                       </Link>
+                      <Link
+                        to="/gestion-base-datos"
+                        className={cn(
+                          "flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                          location.pathname === "/gestion-base-datos"
+                            ? "bg-vet-primary text-white"
+                            : "text-vet-gray-600 hover:text-vet-primary hover:bg-vet-gray-100",
+                        )}
+                      >
+                        <Database className="w-4 h-4" />
+                        <span>Base de Datos</span>
+                      </Link>
                     </>
                   ) : user.rol === "veterinario" ? (
                     // Veterinarian navigation
@@ -468,6 +482,9 @@ export default function Layout({
 
             {/* Right side */}
             <div className="flex items-center space-x-2 sm:space-x-4">
+              {/* Theme Toggle */}
+              <ThemeToggle />
+              
               {isUserAuthenticated ? (
                 <>
                   {/* Notifications */}
@@ -672,6 +689,10 @@ export default function Layout({
 
                         {/* Mobile menu actions */}
                         <div className="mt-6 pt-6 border-t border-vet-gray-200 space-y-2">
+                          <div className="flex items-center justify-between px-4 py-3">
+                            <span className="text-sm font-medium text-vet-gray-600">Tema</span>
+                            <ThemeToggle />
+                          </div>
                           <Link
                             to="/configuracion"
                             onClick={() => setIsMobileMenuOpen(false)}
