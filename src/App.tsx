@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AppProvider } from "./contexts/AppContext";
+import { ThemeProvider } from "./components/ThemeProvider";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
@@ -28,6 +29,7 @@ import Veterinarios from "./pages/Veterinarios";
 import Calendario from "./pages/Calendario";
 import MisPacientes from "./pages/MisPacientes";
 import HistorialClinicoVeterinario from "./pages/HistorialClinicoVeterinario";
+import GestionBaseDatos from "./pages/GestionBaseDatos";
 import AuthLayout from "./components/AuthLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import GuestRoute from "./components/GuestRoute";
@@ -42,11 +44,12 @@ import {
 } from "lucide-react";
 
 const App = () => (
-  <AppProvider>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
+  <ThemeProvider>
+    <AppProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
         <Routes>
           {/* Public routes */}
           <Route path="/" element={<Index />} />
@@ -237,6 +240,14 @@ const App = () => (
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/gestion-base-datos"
+            element={
+              <ProtectedRoute allowedRoles={["admin"]}>
+                <GestionBaseDatos />
+              </ProtectedRoute>
+            }
+          />
 
           {/* Additional routes */}
           <Route
@@ -262,6 +273,7 @@ const App = () => (
       </BrowserRouter>
     </TooltipProvider>
   </AppProvider>
+</ThemeProvider>
 );
 
 export default App;
